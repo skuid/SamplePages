@@ -1,0 +1,144 @@
+<skuidpage showheader="true" showsidebar="true">
+   <labels/>
+   <models>
+      <model sobject="Contact" createrowifnonefound="true" query="false" limit="100" id="NewContact">
+         <fields>
+            <field id="Birthdate"/>
+            <field id="Phone"/>
+            <field id="Email"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="LeadSource"/>
+            <field id="MailingCity"/>
+            <field id="MailingCountry"/>
+            <field id="MailingState"/>
+            <field id="MailingStreet"/>
+            <field id="MailingPostalCode"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model sobject="Case" createrowifnonefound="false" query="false" limit="100" id="NewCases">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="IsEscalated"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+         </fields>
+         <conditions>
+            <condition field="ContactId" model="NewContact" value="Id" operator="=" enclosevalueinquotes="true" type="modelmerge"/>
+         </conditions>
+      </model>
+      <model sobject="Event" createrowifnonefound="false" query="false" limit="100" id="NewEvents">
+         <fields>
+            <field id="Subject"/>
+            <field id="EndDateTime"/>
+            <field id="StartDateTime"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition field="WhoId" model="NewContact" value="Id" operator="=" enclosevalueinquotes="false" type="modelmerge" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="NewContact">
+         <maintitle>Create New Person</maintitle>
+         <actions/>
+      </pagetitle>
+      <wizard>
+         <steps>
+            <step steplabel="Person Information" stepid="step1">
+               <components>
+                  <basicfieldeditor mode="edit" model="NewContact" showheader="true" showsavecancel="false">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Profile Information">
+                                 <fields>
+                                    <field id="FirstName"/>
+                                    <field id="LastName"/>
+                                    <field id="LeadSource"/>
+                                    <field id="Birthdate"/>
+                                    <field id="Phone"/>
+                                    <field id="Email"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title="Address">
+                                 <fields>
+                                    <field id="MailingStreet"/>
+                                    <field id="MailingCity"/>
+                                    <field id="MailingState"/>
+                                    <field id="MailingPostalCode"/>
+                                    <field id="MailingCountry"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+               <actions>
+                  <action icon="ui-silk-control-repeat-blue" url="/apex/nexus__ui?page=NewPersonWizard" label="Start Over" type="navigate"/>
+                  <action stepid="step2" icon="ui-silk-resultset-next" label="Next Step" type="navigate"/>
+               </actions>
+            </step>
+            <step steplabel="Create Cases" stepid="step2">
+               <components>
+                  <skootable model="NewCases" createrecords="true" pagesize="10" showexportbuttons="false" searchmethod="server" searchbox="false" showsavecancel="false" showconditions="false">
+                     <fields>
+                        <field id="CaseNumber"/>
+                        <field id="Subject"/>
+                        <field id="Status"/>
+                        <field id="IsEscalated"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+                  <template allowhtml="true" multiple="false" model="NewContact">&lt;div class="nx-editor-header-title"&gt;Create Appointments&lt;/div&gt;&lt;div style="clear:both"&gt;&lt;/div&gt;</template>
+                  <skootable model="NewEvents" createrecords="true" pagesize="10" showexportbuttons="false" searchmethod="server" searchbox="false" showsavecancel="false" showconditions="false" mode="read">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="Description"/>
+                        <field id="StartDateTime"/>
+                        <field id="EndDateTime"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+               <actions>
+                  <action icon="ui-silk-resultset-previous" stepid="step1" label="Previous Step" type="navigate"/>
+                  <action url="/{{Id}}" icon="ui-silk-user-add" label="Finish" type="save">
+                     <models>
+                        <model>NewContact</model>
+                        <model>NewCases</model>
+                        <model>NewEvents</model>
+                     </models>
+                  </action>
+               </actions>
+            </step>
+         </steps>
+      </wizard>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>

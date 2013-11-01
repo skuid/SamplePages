@@ -1,0 +1,100 @@
+<skuidpage showsidebar="true" showheader="true">
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+   <models>
+      <model id="Opportunity" limit="100" query="true" createrowifnonefound="false" orderby="" sobject="Opportunity" type="aggregate">
+         <fields>
+            <field id="Amount" name="sumAmount" function="SUM"/>
+            <field id="Amount" name="avgAmount" function="AVG"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="CloseDate" operator="=" state="filterableoff" inactive="true" name="CloseDate"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OwnerId" state="filterableoff" inactive="true" name="OwnerId"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Account.Industry" state="filterableoff" inactive="true" name="Account.Industry"/>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="OwnerId_ME"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" state="filterableoff" inactive="true" name="StageName"/>
+         </conditions>
+         <groupby method="simple">
+            <field id="StageName" name="stageName"/>
+         </groupby>
+      </model>
+      <model id="OppOwners" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="User">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="!=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunity">
+         <maintitle>Opportunities by Stage</maintitle>
+         <actions/>
+         <subtitle>Report</subtitle>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Opportunity" mode="read">
+         <fields>
+            <field id="StageName" name="stageName"/>
+            <field id="Amount" name="sumAmount" columnwidth="AVG">
+               <summaries>
+                  <summary>sum</summary>
+               </summaries>
+               <label>SUM</label>
+            </field>
+            <field id="Amount" name="avgAmount"/>
+         </fields>
+         <rowactions/>
+         <massactions usefirstitemasdefault="true"/>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Close Date" createfilteroffoption="true" condition="CloseDate">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="Closed: Last Year" type="simple" value="LAST_YEAR"/>
+                        <option label="Closing: This Year" type="simple" value="THIS_YEAR"/>
+                        <option label="Closing: Next 30 Days" type="simple" value="NEXT_N_DAYS:30"/>
+                        <option label="Closing: Next 90 Days" type="simple" value="NEXT_N_DAYS:90"/>
+                        <option label="Closing: This Fiscal Quarter" type="simple" value="THIS_FISCAL_QUARTER"/>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Owner" createfilteroffoption="true" condition="OwnerId" label="Owner">
+               <sources>
+                  <source type="model" model="OppOwners">
+                     <valuetemplate>{{Id}}</valuetemplate>
+                     <labeltemplate>Owner: {{Name}}</labeltemplate>
+                  </source>
+                  <source type="manual" model="Opportunity">
+                     <options>
+                        <option label="My Opportunities" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="OwnerId_ME"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Industry" createfilteroffoption="true" condition="Account.Industry">
+               <sources>
+                  <source type="metadata" prefix="Industry: "/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" condition="StageName">
+               <sources>
+                  <source type="metadata"/>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+</skuidpage>

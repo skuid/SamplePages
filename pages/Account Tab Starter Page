@@ -1,0 +1,117 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Account">
+   <models>
+      <model id="AccountData" limit="100" query="true" createrowifnonefound="false" sobject="Account" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="BillingState"/>
+            <field id="Phone"/>
+            <field id="Type"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Industry"/>
+            <field id="Site"/>
+            <field id="AnnualRevenue"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="My Accounts"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:15" enclosevalueinquotes="false" field="LastModifiedDate" operator="gte" state="filterableoff" inactive="true" name="Recently Modified"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Industry" state="filterableoff" inactive="true" name="Industry"/>
+            <condition type="fieldvalue" value="THIS_WEEK" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="New This Week"/>
+            <condition type="fieldvalue" value="LAST_WEEK" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="New Last Week"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="AccountData">
+         <maintitle>
+            <template>{{Model.LabelPlural}}</template>
+         </maintitle>
+         <subtitle>
+            <template>Home</template>
+         </subtitle>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="AccountData" mode="read">
+         <fields>
+            <field id="Name" allowordering="true"/>
+            <field id="BillingState" allowordering="true"/>
+            <field id="Phone" allowordering="true">
+               <label>Phone</label>
+            </field>
+            <field id="Type" allowordering="true">
+               <label>Type</label>
+            </field>
+            <field id="AnnualRevenue" allowordering="true"/>
+            <field id="OwnerId" allowordering="true">
+               <label>Account Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massedit"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <actions defaultlabel="Options" defaulticon="ui-silk-text-list-bullets" usefirstitemasdefault="false">
+            <action type="redirect" label="New Account" url="apex/skuid__ui?page=NewAccount" icon="ui-silk-building-add"/>
+            <action type="redirect" label="Merge Accounts" url="/merge/accmergewizard.jsp?retURL=%2F001%2Fo" icon="ui-silk-arrow-merge"/>
+            <action type="redirect" label="Import Accounts" url="/apex/skuid__Import?obj=Account" icon="ui-silk-folder-go"/>
+            <action type="redirect" label="Transfer Accounts" url="https://na15.salesforce.com/p/own/BulkTransfer?retURL=%2F001%2Fo&amp;ent=Account" icon="ui-silk-building-go"/>
+            <action type="redirect" label="All Reports" url="/00O/o?entityType=00O" icon="ui-silk-report"/>
+            <action type="redirect" label="Contact Role Report" url="/00O/e?retURL=%2F001%2Fo&amp;sort=ACCOUNT.NAME&amp;scope=user&amp;t=titleContactRole&amp;details=yes&amp;c=MA&amp;c=PR&amp;c=RN&amp;c=FN&amp;c=LN&amp;c=DD&amp;c=AO&amp;c=AN&amp;c=A1SA&amp;c=TY&amp;c=RT&amp;c=UD&amp;edit=yes&amp;rt=69&amp;eirb=1" icon="ui-silk-page"/>
+            <action type="redirect" label="Account History Report" url="/00O?rt=111&amp;retURL=%2F001%2Fo&amp;sortdir=down&amp;sort=CD&amp;sdate=5%2F31%2F2013&amp;edate=5%2F31%2F2013&amp;break0=AN&amp;c=AN&amp;c=OW&amp;c=CR&amp;c=FD&amp;c=OV&amp;c=NV&amp;c=CD&amp;details=yes&amp;format=t" icon="ui-silk-page"/>
+            <action type="redirect" label="Active Accounts" url="/00O/e?retURL=%2F001%2Fo&amp;sort=ACCOUNT.NAME&amp;scope=user&amp;t=title1&amp;details=yes&amp;colDt_c=DUE_DATE&amp;c=AO&amp;c=AN&amp;c=A1SA&amp;c=TY&amp;c=RT&amp;c=IN&amp;c=CD&amp;colDt_s=5%2F24%2F2013&amp;edit=yes&amp;rt=1&amp;eirb=1" icon="ui-silk-page"/>
+            <action type="redirect" label="Accounts with Last Activity &gt; 30 Days" url="/00O/e?retURL=%2F001%2Fo&amp;t=title2&amp;sort=DUE_DATE&amp;scope=user&amp;details=yes&amp;c=DD&amp;c=AO&amp;c=AN&amp;c=A1SA&amp;c=TY&amp;c=RT&amp;c=UD&amp;colDt_c=DUE_DATE&amp;colDt_e=5%2F24%2F2013&amp;edit=yes&amp;rt=1&amp;eirb=1" icon="ui-silk-page"/>
+            <action type="redirect" label="Account Owners" url="/00O?rt=47&amp;retURL=%2F001%2Fo&amp;paramform=yes&amp;sort=ACCOUNT_NAME&amp;name_op=sw&amp;t=title1&amp;details=yes" icon="ui-silk-page"/>
+            <action type="redirect" label="Partner Accounts" url="/00O/e?retURL=%2F001%2Fo&amp;sort=ACCOUNT.NAME&amp;scope=user&amp;details=yes&amp;c=AO&amp;c=AN&amp;c=TY&amp;c=P_AN&amp;c=P_RO&amp;edit=yes&amp;rt=45&amp;eirb=1" icon="ui-silk-page"/>
+         </actions>
+         <filters>
+            <filter type="select" filteroffoptionlabel="View All Accounts" createfilteroffoption="true">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="My Accounts" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="My Accounts"/>
+                           </effects>
+                        </option>
+                        <option label="Recently Modified" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Recently Modified"/>
+                           </effects>
+                        </option>
+                        <option label="New This Week" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="New This Week"/>
+                           </effects>
+                        </option>
+                        <option label="New Last Week" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="New Last Week"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Industry" createfilteroffoption="true" condition="Industry">
+               <sources>
+                  <source type="metadata"/>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>

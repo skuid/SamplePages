@@ -1,0 +1,152 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Case">
+   <models>
+      <model id="CaseData" query="true" createrowifnonefound="false" sobject="Case">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="CreatedDate"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="Priority"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" field="Id" value="id"/>
+         </conditions>
+      </model>
+      <model id="Instances" limit="100" query="true" createrowifnonefound="false" sobject="ProcessInstance">
+         <fields>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Steps" limit="100" query="true" createrowifnonefound="false" sobject="ProcessInstanceStep" orderby="CreatedDate DESC">
+         <fields>
+            <field id="OriginalActorId"/>
+            <field id="OriginalActor.Name"/>
+            <field id="Comments"/>
+            <field id="ActorId"/>
+            <field id="Actor.Name"/>
+            <field id="CreatedDate"/>
+            <field id="Id"/>
+            <field id="StepStatus"/>
+            <field id="ProcessInstance.Status"/>
+            <field id="ProcessInstanceId"/>
+            <field id="ProcessInstance.Id"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ProcessInstance.TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Item" limit="100" query="true" createrowifnonefound="false" sobject="ProcessInstanceWorkitem" orderby="CreatedDate DESC">
+         <fields>
+            <field id="Id"/>
+            <field id="ActorId"/>
+            <field id="Actor.Name"/>
+            <field id="ProcessInstanceId"/>
+            <field id="ProcessInstance.Status"/>
+            <field id="CreatedDate"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ProcessInstance.TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <panelset type="standard">
+         <panels>
+            <panel type="left" width="225">
+               <components>
+                  <includepanel type="visualforce" pagename="c__SocialProfileViewer" querystring="?id={{$Model.CaseData.data.ContactId}}"/>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <pagetitle model="CaseData">
+                     <maintitle>{{CaseNumber}}</maintitle>
+                     <subtitle>
+                        <template>{{Model.Label}}</template>
+                     </subtitle>
+                     <actions>
+                        <action type="clone" label="New Action"/>
+                        <action type="share" label="New Action"/>
+                        <action type="delete" label="New Action"/>
+                        <action type="savecancel" label="New Action"/>
+                     </actions>
+                  </pagetitle>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+      <template model="CaseData" multiple="true" allowhtml="true">&lt;br&gt;</template>
+      <tabset rememberlastusertab="true" renderas="lefttabs">
+         <tabs>
+            <tab name="Basics" icon="ui-silk-bug">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="CaseData" mode="read">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Basics">
+                                 <fields>
+                                    <field id="CaseNumber"/>
+                                    <field id="Subject"/>
+                                    <field id="ContactId"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title="System Info">
+                                 <fields>
+                                    <field id="Priority"/>
+                                    <field id="Status"/>
+                                    <field id="CreatedDate"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </tab>
+            <tab name="Approval History" icon="ui-silk-thumb-up">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Steps" mode="read">
+                     <fields>
+                        <field id="ProcessInstance.Status"/>
+                        <field id="CreatedDate">
+                           <label>Date</label>
+                        </field>
+                        <field id="StepStatus">
+                           <label>Action</label>
+                        </field>
+                        <field id="ActorId">
+                           <label>User</label>
+                        </field>
+                        <field id="Comments"/>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <action type="redirect" label="Submit for Approval" url="/p/process/Submit?id={{$Param.id}}&amp;retURL=%2F{{$Param.id}}" icon="ui-silk-lock-go" window="self"/>
+                        <action type="redirect" label="Approve / Reject" url="/p/process/ProcessInstanceWorkitemWizardStageManager?id={{#$Model.Item.data}}{{Id}}{{/$Model.Item.data}}" icon="ui-silk-thumb-up" window="self"/>
+                     </actions>
+                  </skootable>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>

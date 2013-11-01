@@ -1,0 +1,117 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Lead">
+   <models>
+      <model id="LeadData" limit="100" query="true" createrowifnonefound="false" sobject="Lead" orderby="CreatedDate DESC">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="State"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="Phone"/>
+            <field id="Id"/>
+            <field id="LeadSource"/>
+            <field id="LastActivityDate"/>
+            <field id="Rating"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="Owner is me"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:15" enclosevalueinquotes="false" field="LastModifiedDate" state="filterableoff" inactive="true" name="Recently Modified"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="Lead Source"/>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Rating" operator="=" state="filterableoff" inactive="true" name="Rating"/>
+         </conditions>
+      </model>
+      <model id="EmailToSF" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
+         <fields>
+            <field id="LocalPart"/>
+            <field id="EmailDomainName"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="RunAsUserId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="EmailToSalesforce" enclosevalueinquotes="true" field="Function.FunctionName"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="LeadData">
+         <maintitle>
+            <template>{{Model.LabelPlural}}</template>
+         </maintitle>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="true" model="LeadData" mode="read">
+         <fields>
+            <field id="FirstName" allowordering="true"/>
+            <field id="LastName" allowordering="true"/>
+            <field id="Company" allowordering="true"/>
+            <field id="Phone"/>
+            <field type="COMBO">
+               <label>Email</label>
+               <template>{{#Email}}{{Email}} [&lt;a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to={{{Email}}}&amp;bcc=emailtosalesforce@{{#$Model.EmailToSF.data}}{{EmailDomainName}}{{/$Model.EmailToSF.data}}&amp;shva=1" target="ComposeGmail"&gt;&lt;img src="/img/google/gmail_M_icon.gif" alt=""/&gt; Gmail&lt;/a&gt;]{{/Email}}</template>
+            </field>
+            <field id="Status"/>
+            <field id="CreatedDate" allowordering="true"/>
+            <field id="LeadSource" allowordering="true"/>
+            <field id="LastActivityDate" allowordering="true"/>
+            <field id="OwnerId">
+               <label>Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="redirect" label="Find Duplicates" url="/lead/leadmergewizard.jsp?retURL=%2F{{Id}}%3D1&amp;id={{Id}}" icon="ui-silk-group-delete"/>
+            <action type="redirect" label="View Lead" url="/{{Id}}" icon="ui-silk-book-go"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Lead Source" createfilteroffoption="true" condition="Lead Source">
+               <sources>
+                  <source type="metadata" prefix="Source: "/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Rating" createfilteroffoption="true" condition="Rating">
+               <sources>
+                  <source type="metadata"/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+               <sources>
+                  <source type="metadata" prefix="Status: "/>
+               </sources>
+            </filter>
+            <filter type="toggle" createfilteroffoption="true" label="My Leads">
+               <effects>
+                  <effect action="activate" value="" condition="Owner is me"/>
+               </effects>
+            </filter>
+            <filter type="toggle" createfilteroffoption="true" label="Recently Modified">
+               <effects>
+                  <effect action="activate" value="" condition="Recently Modified"/>
+               </effects>
+            </filter>
+         </filters>
+         <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+            <action type="redirect" label="New Lead" url="/00Q/e?retURL=%2F00Q" icon="ui-silk-star"/>
+            <action type="redirect" label="Import Leads" url="/apex/skuid__Import?obj=Lead" icon="ui-silk-folder-star"/>
+         </actions>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>

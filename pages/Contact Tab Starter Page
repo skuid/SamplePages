@@ -1,0 +1,102 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="Contact">
+   <models>
+      <model id="ContactData" limit="200" query="true" createrowifnonefound="false" sobject="Contact" orderby="LastName, FirstName">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="CreatedDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Title"/>
+            <field id="Phone"/>
+            <field id="Email"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="Owner is Me"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:15" enclosevalueinquotes="false" field="LastModifiedDate" operator="=" state="filterableoff" inactive="true" name="LastModifiedDate"/>
+         </conditions>
+      </model>
+      <model id="EmailToSF" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
+         <fields>
+            <field id="LocalPart"/>
+            <field id="EmailDomainName"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="RunAsUserId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+            <condition type="fieldvalue" value="EmailToSalesforce" enclosevalueinquotes="true" field="Function.FunctionName"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="ContactData">
+         <maintitle>{{Model.LabelPlural}}</maintitle>
+         <subtitle>
+            <template>Home</template>
+         </subtitle>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="ContactData" mode="read">
+         <fields>
+            <field id="LastName" allowordering="true"/>
+            <field id="FirstName" allowordering="true"/>
+            <field id="AccountId" allowordering="true">
+               <label>Account</label>
+            </field>
+            <field id="Title"/>
+            <field id="Phone"/>
+            <field type="COMBO" allowhtml="true">
+               <label>Email</label>
+               <template>{{Email}}{{#Email}}[&lt;a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to={{{Email}}}&amp;bcc=emailtosalesforce@{{#$Model.EmailToSF.data}}{{EmailDomainName}}{{/$Model.EmailToSF.data}}&amp;shva=1" target="ComposeGmail"&gt;&lt;img src="/img/google/gmail_M_icon.gif" alt=""/&gt; Gmail&lt;/a&gt;]{{/Email}}</template>
+            </field>
+            <field id="OwnerId">
+               <label>Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="redirect" label="View Profile" url="/{{Id}}" icon="ui-silk-user-go"/>
+            <action type="redirect" label="Send Email" url="/_ui/core/email/author/EmailAuthor?p2_lkid={{Id}}&amp;rtype={{Model.KeyPrefix}}&amp;retURL=%2F{{Id}}" icon="ui-silk-email-edit"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+            <action type="redirect" label="New {{Model.Label}}" url="/{{Model.KeyPrefix}}/e" icon="ui-silk-user-add"/>
+            <action type="redirect" label="Import Contacts" url="/apex/skuid__Import?obj=Contact" icon="ui-silk-group-add"/>
+         </actions>
+         <filters>
+            <filter type="select" filteroffoptionlabel="All Contacts" createfilteroffoption="true">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="My Contacts" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Owner is Me"/>
+                           </effects>
+                        </option>
+                        <option label="Recently Modified" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="LastModifiedDate"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>

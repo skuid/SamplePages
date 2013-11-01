@@ -1,0 +1,186 @@
+<skuidpage showsidebar="true" showheader="true">
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+   <models>
+      <model id="Opportunity" limit="" query="false" createrowifnonefound="true" orderby="" sobject="Opportunity">
+         <fields>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="CloseDate"/>
+            <field id="StageName"/>
+            <field id="Description"/>
+            <field id="NextStep"/>
+            <field id="Name"/>
+            <field id="ForecastCategory"/>
+            <field id="LeadSource"/>
+            <field id="Type"/>
+            <field id="Probability"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="ContactRoles" limit="" query="false" createrowifnonefound="false" orderby="" sobject="OpportunityContactRole">
+         <fields>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="Role"/>
+            <field id="IsPrimary"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="OpportunityId" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Products" limit="100" query="false" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="OpportunityLineItem">
+         <fields>
+            <field id="PricebookEntryId"/>
+            <field id="PricebookEntry.Name"/>
+            <field id="Quantity"/>
+            <field id="TotalPrice"/>
+            <field id="UnitPrice"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="OpportunityId" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <wizard>
+         <steps>
+            <step stepid="step1" steplabel="Step 1: Choose Account">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="Opportunity" mode="edit">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Opportunity Name">
+                                 <fields>
+                                    <field id="Name"/>
+                                 </fields>
+                              </section>
+                              <section title="Which Account is this Opportunity for?">
+                                 <fields>
+                                    <field id="AccountId" required="true" fastsearch="true">
+                                       <label>Account</label>
+                                       <filters/>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title="Details">
+                                 <fields>
+                                    <field id="StageName"/>
+                                    <field id="CloseDate"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+               <actions>
+                  <action type="save" label="Next Step" icon="ui-silk-arrow-right" stepid="step2">
+                     <models>
+                        <model>Opportunity</model>
+                     </models>
+                  </action>
+               </actions>
+            </step>
+            <step stepid="step2" steplabel="Step 2: Describe Opportunity">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="Opportunity" mode="edit">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Enter some details">
+                                 <fields>
+                                    <field id="Probability"/>
+                                    <field id="Type"/>
+                                    <field id="Description"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title="More details">
+                                 <fields>
+                                    <field id="LeadSource"/>
+                                    <field id="NextStep"/>
+                                    <field id="ForecastCategory"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Products" mode="read">
+                     <fields>
+                        <field id="PricebookEntryId">
+                           <label>Product</label>
+                        </field>
+                        <field id="Quantity"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+               <actions>
+                  <action type="navigate" label="Previous Step" icon="ui-silk-arrow-left" stepid="step1"/>
+                  <action type="save" label="Next Step" icon="ui-silk-arrow-right" stepid="step3">
+                     <models>
+                        <model>Opportunity</model>
+                        <model>Products</model>
+                     </models>
+                  </action>
+               </actions>
+            </step>
+            <step stepid="step3" steplabel="Step 3: Choose Related People">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="ContactRoles" mode="edit">
+                     <fields>
+                        <field id="ContactId"/>
+                        <field id="Role"/>
+                        <field id="IsPrimary"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+               <actions>
+                  <action type="navigate" label="Previous Step" icon="ui-silk-arrow-left" stepid="step2"/>
+                  <action type="save" label="Save" icon="ui-silk-accept" stepid="" url="/{{Id}}">
+                     <models>
+                        <model>Opportunity</model>
+                        <model>ContactRoles</model>
+                        <model>Products</model>
+                     </models>
+                  </action>
+               </actions>
+            </step>
+         </steps>
+      </wizard>
+   </components>
+</skuidpage>

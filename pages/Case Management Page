@@ -1,0 +1,221 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="Case">
+   <models>
+      <model id="CaseData" limit="100" query="true" createrowifnonefound="false" sobject="Case" orderby="CaseNumber">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="CreatedDate"/>
+            <field id="Subject"/>
+            <field id="IsEscalated"/>
+            <field id="Status"/>
+         </fields>
+         <conditions>
+            <condition type="multiple" value="" field="Status" operator="in" enclosevalueinquotes="true" state="filterableon" inactive="false" name="IsOpen">
+               <values>
+                  <value>New</value>
+                  <value>Escalated</value>
+                  <value>On Hold</value>
+               </values>
+            </condition>
+         </conditions>
+      </model>
+      <model id="CaseDetail" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Case">
+         <fields>
+            <field id="Subject"/>
+            <field id="Description"/>
+            <field id="IsEscalated"/>
+            <field id="Status"/>
+            <field id="OwnerId"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="CaseNumber"/>
+            <field id="Owner.Name" targetobjects="User"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Contact.Phone"/>
+            <field id="Contact.Email"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" state="filterableon" inactive="false" name="CaseId"/>
+         </conditions>
+      </model>
+      <model id="CaseDetailComments" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="CaseComment">
+         <fields>
+            <field id="CommentBody"/>
+            <field id="CreatedById"/>
+            <field id="CreatedDate"/>
+            <field id="CreatedBy.Name" targetobjects="User"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ParentId" state="filterableon" inactive="false" name="CaseId"/>
+         </conditions>
+      </model>
+      <model id="CaseDetailTasks" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Task">
+         <fields>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="WhatId" state="filterableon" inactive="false" name="CaseId"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="CaseData">
+         <maintitle>{{Model.Label}} Management</maintitle>
+         <subtitle>Select a Case Below</subtitle>
+         <actions>
+            <action type="savecancel" label="New Action" afterSave="/apex/skuid__ui?page=CasesTab">
+               <models>
+                  <model>CaseDetail</model>
+                  <model>CaseDetailComments</model>
+                  <model>CaseDetailTasks</model>
+               </models>
+            </action>
+         </actions>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="CaseData" mode="read">
+         <fields>
+            <field id="CaseNumber" allowordering="true"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="IsEscalated"/>
+            <field id="CreatedDate" allowordering="true"/>
+         </fields>
+         <rowactions>
+            <action type="custom" label="View Case" icon="ui-silk-bug-go" snippet="ViewCase"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true"/>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="All Cases" createfilteroffoption="false" condition="">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="Open Cases" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="IsOpen"/>
+                           </effects>
+                        </option>
+                        <option label="All Cases" type="complex">
+                           <effects>
+                              <effect action="deactivate" value="" condition="IsOpen"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+      <tabset>
+         <tabs>
+            <tab name="New Tab">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="CaseDetail" mode="read">
+                     <columns>
+                        <column width="100%">
+                           <sections>
+                              <section title="Case Overview">
+                                 <fields>
+                                    <field id="CaseNumber"/>
+                                    <field id="Subject"/>
+                                    <field id="Description"/>
+                                    <field id="IsEscalated"/>
+                                    <field id="Status"/>
+                                 </fields>
+                              </section>
+                              <section title="Case Properties">
+                                 <fields>
+                                    <field id="OwnerId">
+                                       <label>Owner</label>
+                                    </field>
+                                    <field id="AccountId">
+                                       <label>Account</label>
+                                    </field>
+                                    <field id="ContactId">
+                                       <label>Contact</label>
+                                    </field>
+                                    <field id="Contact.Phone"/>
+                                    <field id="Contact.Email"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </tab>
+            <tab name="Comments" icon="ui-silk-comments">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="CaseDetailComments" mode="read">
+                     <fields>
+                        <field id="CommentBody"/>
+                        <field id="CreatedById"/>
+                        <field id="CreatedDate"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Tasks" icon="ui-silk-time">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="CaseDetailTasks" mode="read">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="Status"/>
+                        <field id="OwnerId"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Events" icon="ui-silk-calendar">
+               <components/>
+            </tab>
+            <tab name="Solutions" icon="ui-silk-lightbulb">
+               <components/>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="ViewCase" url="">var detailModel = skuid.model.getModel('CaseDetail');
+var detailCommentsModel = skuid.model.getModel('CaseDetailComments');
+var detailTasksModel = skuid.model.getModel('CaseDetailTasks');
+var detailCondition = detailModel.getConditionByName('CaseId');
+var detailCommentsCondition = detailCommentsModel.getConditionByName('CaseId');
+var detailTasksCondition = detailTasksModel.getConditionByName('CaseId');
+detailModel.setCondition(detailCondition,args.item.row.Id,true);
+detailCommentsModel.setCondition(detailCommentsCondition,args.item.row.Id,true);
+detailTasksModel.setCondition(detailTasksCondition,args.item.row.Id,true);
+skuid.model.updateData([detailModel,detailCommentsModel,detailTasksModel]);</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>

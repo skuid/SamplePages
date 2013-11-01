@@ -1,0 +1,442 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Lead">
+   <models>
+      <model id="LeadData" limit="100" query="true" createrowifnonefound="false" sobject="Lead" orderby="CreatedDate ASC">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="State"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="Phone"/>
+            <field id="Id"/>
+            <field id="LeadSource"/>
+            <field id="LastActivityDate"/>
+            <field id="Rating"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="Owner is me"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:15" enclosevalueinquotes="false" field="LastModifiedDate" state="filterableoff" inactive="true" name="Recently Modified"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="Lead Source"/>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Rating" operator="=" state="filterableoff" inactive="true" name="Rating"/>
+         </conditions>
+      </model>
+      <model id="EmailToSF" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
+         <fields>
+            <field id="LocalPart"/>
+            <field id="EmailDomainName"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="RunAsUserId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="EmailToSalesforce" enclosevalueinquotes="true" field="Function.FunctionName"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+      <model id="LeadDetail" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Lead">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="LeadSource"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="City"/>
+            <field id="State"/>
+            <field id="Street"/>
+            <field id="Country"/>
+            <field id="Phone"/>
+            <field id="MobilePhone"/>
+            <field id="Title"/>
+            <field id="IsConverted"/>
+            <field id="Description"/>
+            <field id="LastModifiedDate"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="LastActivityDate"/>
+            <field id="Rating"/>
+            <field id="PostalCode"/>
+            <field id="NumberOfEmployees"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" state="filterableon" inactive="false" name="LeadId"/>
+         </conditions>
+      </model>
+      <model id="TaskData" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Task">
+         <fields>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Subject"/>
+            <field id="ActivityDate"/>
+            <field id="Description"/>
+            <field id="Status"/>
+            <field id="Priority"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="IsClosed"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="WhoId" state="filterableon" inactive="false" name="WhoId"/>
+         </conditions>
+      </model>
+      <model id="Campaigns" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="CampaignMember">
+         <fields>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="Status"/>
+            <field id="HasResponded"/>
+            <field id="CreatedDate"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" field="LeadId" operator="=" enclosevalueinquotes="true" state="filterableon" inactive="false" name="LeadId"/>
+         </conditions>
+      </model>
+      <model id="TaskHistory" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Task">
+         <fields>
+            <field id="Subject"/>
+            <field id="Priority"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="Status"/>
+            <field id="Description"/>
+            <field id="ActivityDate"/>
+            <field id="IsClosed"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" field="WhoId" operator="=" enclosevalueinquotes="true" state="filterableon" inactive="false" name="WhoId"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="LeadData">
+         <actions>
+            <action type="savecancel" label="New Action">
+               <models>
+                  <model>LeadDetail</model>
+                  <model>TaskData</model>
+                  <model>Campaigns</model>
+                  <model>Licenses</model>
+                  <model>TaskHistory</model>
+               </models>
+            </action>
+         </actions>
+         <maintitle>{{Model.LabelPlural}}</maintitle>
+         <subtitle>Split View</subtitle>
+      </pagetitle>
+      <panelset type="standard">
+         <panels>
+            <panel type="left" width="700">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="true" model="LeadData" mode="read">
+                     <fields>
+                        <field id="FirstName" allowordering="true"/>
+                        <field id="LastName" allowordering="true"/>
+                        <field type="COMBO">
+                           <label>Email</label>
+                           <template>{{#Email}}{{Email}} [&lt;a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to={{{Email}}}&amp;bcc=emailtosalesforce@{{#$Model.EmailToSF.data}}{{EmailDomainName}}{{/$Model.EmailToSF.data}}&amp;shva=1" target="ComposeGmail"&gt;&lt;img src="/img/google/gmail_M_icon.gif" alt=""/&gt; Gmail&lt;/a&gt;]{{/Email}}</template>
+                        </field>
+                        <field id="CreatedDate" allowordering="true"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                        <action type="redirect" label="Find Duplicates" url="/lead/leadmergewizard.jsp?retURL=%2F{{Id}}%3D1&amp;id={{Id}}" icon="ui-silk-group-delete"/>
+                        <action type="redirect" label="All Details" url="/{{Id}}" icon="ui-silk-star"/>
+                        <action type="custom" label="Highlights" snippet="ViewLead" icon="ui-silk-book-go"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Lead Source" createfilteroffoption="true" condition="Lead Source">
+                           <sources>
+                              <source type="metadata" prefix=""/>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="Any Rating" createfilteroffoption="true" condition="Rating">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+                           <sources>
+                              <source type="metadata" prefix=""/>
+                           </sources>
+                        </filter>
+                        <filter type="toggle" createfilteroffoption="true" label="My Leads">
+                           <effects>
+                              <effect action="activate" value="" condition="Owner is me"/>
+                           </effects>
+                        </filter>
+                        <filter type="toggle" createfilteroffoption="true" label="Recently Modified">
+                           <effects>
+                              <effect action="activate" value="" condition="Recently Modified"/>
+                           </effects>
+                        </filter>
+                     </filters>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <action type="redirect" label="New Lead" url="/00Q/e?retURL=%2F00Q" icon="ui-silk-star"/>
+                        <action type="redirect" label="Import Leads" url="/apex/skuid__Import?obj=Lead" icon="ui-silk-folder-star"/>
+                     </actions>
+                  </skootable>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <!--
+                  <pagetitle model="LeadDetail">
+                  <maintitle>
+                     <template>{{Name}}</template>
+                  </maintitle>
+                  <subtitle>{{Company}}</subtitle>
+                  <actions>
+                     <action type="delete"/>
+                     <action type="share"/>
+                     <action type="clone"/>
+                  </actions>
+               </pagetitle>
+                  -->
+               <tabset>
+                  <tabs>
+                     <tab name="Profile" icon="ui-silk-book">
+                        <components>
+                           <basicfieldeditor showsavecancel="false" showheader="true" model="LeadDetail" mode="read">
+                              <columns>
+                                 <column width="50%">
+                                    <sections>
+                                       <section title="Basics">
+                                          <fields>
+                                             <field id="FirstName"/>
+                                             <field id="LastName"/>
+                                             <field id="Company"/>
+                                             <field id="Title"/>
+                                          </fields>
+                                       </section>
+                                       <section title="Contact Information">
+                                          <fields>
+                                             <field type="COMBO">
+                                                <label>Email</label>
+                                                <template>{{#Email}}{{Email}} [&lt;a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to={{{Email}}}&amp;bcc=emailtosalesforce@{{#$Model.EmailToSF.data}}{{EmailDomainName}}{{/$Model.EmailToSF.data}}&amp;shva=1" target="ComposeGmail"&gt;&lt;img src="/img/google/gmail_M_icon.gif" alt=""/&gt; Gmail&lt;/a&gt;]{{/Email}}</template>
+                                             </field>
+                                             <field id="Phone"/>
+                                             <field type="COMBO" allowhtml="true">
+                                                <label>Address</label>
+                                                <template>{{Street}}
+{{City}}{{#City}},{{/City}}{{State}} {{PostalCode}}
+{{Country}}</template>
+                                             </field>
+                                          </fields>
+                                       </section>
+                                    </sections>
+                                 </column>
+                                 <column width="50%">
+                                    <sections>
+                                       <section title="Info">
+                                          <fields>
+                                             <field id="Status"/>
+                                             <field id="Rating"/>
+                                             <field id="NumberOfEmployees"/>
+                                             <field id="Description"/>
+                                          </fields>
+                                       </section>
+                                       <section title="System Info">
+                                          <fields>
+                                             <field id="LeadSource"/>
+                                             <field id="CreatedDate"/>
+                                             <field id="OwnerId"/>
+                                             <field type="COMBO">
+                                                <label>Last Modified By</label>
+                                                <template>{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                             </field>
+                                          </fields>
+                                       </section>
+                                    </sections>
+                                 </column>
+                              </columns>
+                           </basicfieldeditor>
+                        </components>
+                     </tab>
+                     <tab name="Activities" icon="ui-silk-telephone">
+                        <components>
+                           <tabset>
+                              <tabs>
+                                 <tab name="Tasks" icon="ui-silk-tick">
+                                    <components>
+                                       <template model="TaskData" multiple="true" allowhtml="true">&lt;div class="nx-editor-header-title"&gt;Open Tasks&lt;/div&gt;</template>
+                                       <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="TaskData" mode="read">
+                                          <fields>
+                                             <field id="OwnerId" type="REFPICK">
+                                                <label>Assigned To</label>
+                                                <filters>
+                                                   <filter enclosevalueinquotes="false" type="fieldvalue" field="IsActive" value="true"/>
+                                                   <filter enclosevalueinquotes="true" type="fieldvalue" field="Profile.UserLicense.LicenseDefinitionKey" value="SFDC"/>
+                                                </filters>
+                                             </field>
+                                             <field id="Subject"/>
+                                             <field id="Status"/>
+                                             <field id="Priority"/>
+                                             <field id="Description" maxdisplaycharacters="400">
+                                                <label>Comments</label>
+                                             </field>
+                                             <field id="ActivityDate">
+                                                <label>Activity Date</label>
+                                             </field>
+                                          </fields>
+                                          <rowactions>
+                                             <action type="edit"/>
+                                             <action type="delete"/>
+                                             <action type="custom" label="Mark Completed" icon="ui-silk-tick" snippet="markCompleted"/>
+                                          </rowactions>
+                                          <massactions usefirstitemasdefault="true">
+                                             <action type="massupdate"/>
+                                             <action type="massdelete"/>
+                                             <action type="custom" label="Mark Completed" icon="ui-silk-tick" snippet="markCompleted"/>
+                                          </massactions>
+                                          <views>
+                                             <view type="standard"/>
+                                          </views>
+                                          <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                                             <action type="redirect" label="Send Email" url="/00T/e?title=Email%3A%20&amp;who_id={{#$Model.LeadDetail.data}}{{Id15}}{{/$Model.LeadDetail.data}}&amp;tsk5=Email%3A%20&amp;tsk10=Email&amp;retURL=%2F00Q" icon="ui-silk-email-go"/>
+                                          </actions>
+                                       </skootable>
+                                       <template model="TaskHistory" multiple="true" allowhtml="true">&lt;div class="nx-editor-header-title"&gt;Completed Tasks&lt;/div&gt;</template>
+                                       <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="TaskHistory" mode="read">
+                                          <fields>
+                                             <field id="OwnerId" type="REFPICK" required="true">
+                                                <label>Assigned To</label>
+                                                <filters>
+                                                   <filter enclosevalueinquotes="false" type="fieldvalue" field="IsActive" value="true"/>
+                                                   <filter enclosevalueinquotes="true" type="fieldvalue" field="Profile.UserLicense.LicenseDefinitionKey" value="SFDC"/>
+                                                </filters>
+                                             </field>
+                                             <field id="Subject"/>
+                                             <field id="Status"/>
+                                             <field id="Priority"/>
+                                             <field id="Description" maxdisplaycharacters="400">
+                                                <label>Comments</label>
+                                             </field>
+                                             <field id="ActivityDate">
+                                                <label>Activity Date</label>
+                                             </field>
+                                          </fields>
+                                          <rowactions>
+                                             <action type="edit"/>
+                                             <action type="delete"/>
+                                          </rowactions>
+                                          <massactions usefirstitemasdefault="true">
+                                             <action type="massupdate"/>
+                                             <action type="massdelete"/>
+                                          </massactions>
+                                          <views>
+                                             <view type="standard"/>
+                                          </views>
+                                          <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                                             <action type="redirect" label="Log a Call" url="/00T/e?title=Call&amp;who_id={{#$Model.LeadDetail.data}}{{Id15}}{{/$Model.LeadDetail.data}}&amp;followup=1&amp;tsk5=Call&amp;retURL=%2F00Q/o" icon="ui-silk-telephone-add"/>
+                                          </actions>
+                                       </skootable>
+                                    </components>
+                                 </tab>
+                                 <tab name="Campaign History" icon="ui-silk-script-go">
+                                    <components>
+                                       <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Campaigns" mode="read">
+                                          <fields>
+                                             <field id="CampaignId">
+                                                <label>Campaign</label>
+                                             </field>
+                                             <field id="Status"/>
+                                             <field id="HasResponded"/>
+                                             <field id="CreatedDate"/>
+                                          </fields>
+                                          <rowactions>
+                                             <action type="edit"/>
+                                             <action type="delete"/>
+                                          </rowactions>
+                                          <massactions usefirstitemasdefault="true">
+                                             <action type="massupdate"/>
+                                             <action type="massdelete"/>
+                                          </massactions>
+                                          <views>
+                                             <view type="standard"/>
+                                          </views>
+                                       </skootable>
+                                    </components>
+                                 </tab>
+                              </tabs>
+                           </tabset>
+                        </components>
+                     </tab>
+                  </tabs>
+               </tabset>
+            </components>
+         </panel>
+      </panels>
+   </panelset>
+</components>
+<resources>
+   <labels/>
+   <css/>
+   <javascript>
+      <jsitem location="inlinesnippet" name="ViewLead" url="">var detailModel = skuid.model.getModel('LeadDetail');
+var detailTasksModel = skuid.model.getModel('TaskData');
+var detailCampaignsModel = skuid.model.getModel('Campaigns');
+var detailTaskHistoryModel = skuid.model.getModel('TaskHistory');
+var detailCondition = detailModel.getConditionByName('LeadId');
+var detailTasksCondition = detailTasksModel.getConditionByName('WhoId');
+var detailCampaignsCondition = detailCampaignsModel.getConditionByName('LeadId');
+var detailTaskHistoryCondition = detailTaskHistoryModel.getConditionByName('WhoId');
+detailModel.setCondition(detailCondition,args.item.row.Id,true);
+detailTasksModel.setCondition(detailTasksCondition,args.item.row.Id,true);
+detailCampaignsModel.setCondition(detailCampaignsCondition,args.item.row.Id,true);
+detailTaskHistoryModel.setCondition(detailTaskHistoryCondition,args.item.row.Id,true);
+skuid.model.updateData([detailModel,detailTasksModel,detailCampaignsModel,detailTaskHistoryModel,]);</jsitem>
+      <jsitem location="inlinesnippet" name="markCompleted" url="">skuid.snippet.registerSnippet('tasks.markCompleted',function(params){
+                // Mark all selected items as closed,
+                // then save our 2 Tasks models
+                var model = params.model,
+                    list = params.list,
+                    selectedItems = params.item ? [params.item] : list.getSelectedItems();
+                if (selectedItems.length === 1 &amp;&amp; skuid.model.isNewId(selectedItems[0].row.Id)) {
+                    alert('Please finish creating this Task before marking it as completed.');
+                    return;
+                }
+                $j.each(selectedItems,function(i,item){
+                    model.updateRow(item.row,'Status','Completed');
+                });
+                // Block the list from having updates
+                list.element.block({
+                    css: list.blockUICSS, overlayCSS: list.blockOverlayCSS,
+                    message:'Marking Tasks as Completed...'
+                });
+            
+                var saveFinishes = model.save({callback:
+                    function(){
+                        var updateFinishes = skuid.model.updateData([model,skuid.model.getModel('TaskHistory')]);
+                        $j.when(updateFinishes).then(
+                            function(){ list.element.unblock(); },
+                            function(){ list.element.unblock(); }
+                        );
+                    }
+                });
+                
+            });</jsitem>
+   </javascript>
+</resources>
+</skuidpage>

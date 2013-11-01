@@ -1,0 +1,261 @@
+<skuidpage showsidebar="false" showheader="false" tabtooverride="">
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inline" name="MakeLinksAffectParent">(function(skuid){
+    var $ = skuid.$;
+    $(function(){
+        $('head').append(
+            $('&lt;base target="_parent"&gt;')
+        );
+    });
+})(skuid);</jsitem>
+      </javascript>
+      <css/>
+   </resources>
+   <models>
+      <model id="TopOpps" limit="5" query="true" createrowifnonefound="false" orderby="Amount DESC" sobject="Opportunity">
+         <fields>
+            <field id="Amount"/>
+            <field id="Name"/>
+            <field id="CloseDate"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="THIS_QUARTER" enclosevalueinquotes="false" field="CloseDate" operator="="/>
+         </conditions>
+      </model>
+      <model id="MyLeads" limit="10" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Lead">
+         <fields>
+            <field id="Name"/>
+            <field id="Status"/>
+            <field id="LeadSource"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="LastModifiedDate"/>
+            <field id="Rating"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Email"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="Contacted" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status" operator="!="/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Rating" state="filterableoff" inactive="true" name="Rating"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:3" enclosevalueinquotes="false" field="LastModifiedDate" state="filterableoff" inactive="true" name="LastModifiedDate"/>
+            <condition type="fieldvalue" value="LAST_N_DAYS:3" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="CreatedDate"/>
+         </conditions>
+      </model>
+      <model id="MyCases" limit="10" query="true" createrowifnonefound="false" orderby="CreatedDate DESC" sobject="Case">
+         <fields>
+            <field id="CreatedDate"/>
+            <field id="SuppliedName"/>
+            <field id="Status"/>
+            <field id="IsClosed"/>
+            <field id="CaseNumber"/>
+            <field id="Subject"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Description"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsClosed"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+         </conditions>
+      </model>
+      <model id="Tasks" limit="10" query="true" createrowifnonefound="false" orderby="ActivityDate ASC" sobject="Task">
+         <fields>
+            <field id="ActivityDate"/>
+            <field id="CreatedDate"/>
+            <field id="ReminderDateTime"/>
+            <field id="Subject"/>
+            <field id="Description"/>
+            <field id="Status"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="IsClosed"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="Priority"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsClosed"/>
+            <condition type="fieldvalue" value="Completed" enclosevalueinquotes="true" field="Status" operator="!="/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Priority" state="filterableoff" inactive="true" name="Priority"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <tabset>
+         <tabs>
+            <tab name="Top Opportunities This Quarter" icon="ui-silk-money">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="5" createrecords="false" model="TopOpps" mode="read">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="Amount">
+                           <summaries>
+                              <summary>sum</summary>
+                              <summary>avg</summary>
+                              <summary>max</summary>
+                           </summaries>
+                        </field>
+                        <field id="CloseDate"/>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="My Leads" icon="ui-silk-star">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="MyLeads" mode="read">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="Company"/>
+                        <field id="Email"/>
+                        <field id="Status"/>
+                        <field id="LeadSource"/>
+                        <field id="Rating"/>
+                        <field id="LastModifiedDate"/>
+                        <field id="CreatedDate"/>
+                        <field id="OwnerId">
+                           <label>Owner</label>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Leads" createfilteroffoption="true" condition="Rating">
+                           <sources>
+                              <source type="manual">
+                                 <options>
+                                    <option label="Hot" type="simple" value="Hot"/>
+                                    <option label="Warm" type="simple" value="Warm"/>
+                                    <option label="Not Contacted" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="Status"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="From Any Date" createfilteroffoption="true">
+                           <sources>
+                              <source type="manual">
+                                 <options>
+                                    <option label="Recently Modified" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="LastModifiedDate"/>
+                                       </effects>
+                                    </option>
+                                    <option label="Recently Created" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="CreatedDate"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                           </sources>
+                        </filter>
+                     </filters>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="My Unclosed Cases" icon="ui-silk-bug">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="MyCases" mode="read">
+                     <fields>
+                        <field id="CaseNumber"/>
+                        <field id="Status"/>
+                        <field id="ContactId">
+                           <label>Related To</label>
+                        </field>
+                        <field id="Subject"/>
+                        <field id="CreatedDate"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                     </filters>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="My Tasks" icon="ui-silk-tick">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Tasks" mode="read">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="WhoId">
+                           <label>Contact/Lead</label>
+                        </field>
+                        <field id="WhatId">
+                           <label>Opportunity/Account</label>
+                        </field>
+                        <field id="Status"/>
+                        <field id="Priority"/>
+                        <field id="ActivityDate">
+                           <label>Due Date</label>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Priority" createfilteroffoption="true" condition="Priority">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                     </filters>
+                  </skootable>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+</skuidpage>
