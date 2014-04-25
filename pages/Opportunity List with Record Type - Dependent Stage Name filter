@@ -1,0 +1,126 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="Opportunity">
+   <models>
+      <model id="Opportunity" limit="100" query="true" createrowifnonefound="false" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="StageName"/>
+            <field id="CloseDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Amount"/>
+            <field id="RecordTypeId"/>
+            <field id="RecordType.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" state="filterableoff" inactive="true" name="StageName"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="RecordTypeId" state="filterableoff" inactive="true" name="RecordTypeId"/>
+         </conditions>
+      </model>
+      <model id="OpportunityRecordTypes" limit="" query="true" createrowifnonefound="false" sobject="RecordType" orderby="Name">
+         <fields>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="Opportunity" enclosevalueinquotes="true" field="SobjectType"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunity">
+         <maintitle>
+            <template>{{Model.labelPlural}}</template>
+         </maintitle>
+         <subtitle>
+            <template>Home</template>
+         </subtitle>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Opportunity" mode="read">
+         <fields>
+            <field id="Name" allowordering="true"/>
+            <field id="RecordTypeId" type="REFPICK" required="true"/>
+            <field id="Amount"/>
+            <field id="AccountId"/>
+            <field id="CloseDate"/>
+            <field id="StageName"/>
+            <field id="CreatedDate" allowordering="true"/>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Record Type" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" condition="RecordTypeId">
+               <sources>
+                  <source type="model" effectsbehavior="justdefault" model="OpportunityRecordTypes">
+                     <labeltemplate>{{{Name}}}</labeltemplate>
+                     <valuetemplate>{{Id}}</valuetemplate>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" condition="StageName">
+               <sources>
+                  <source type="custom" effectsbehavior="justdefault" snippet="GetStageItemsForRecordType"/>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="GetStageItemsForRecordType" cachelocation="false">var $ = skuid.$;
+var RecordTypeModel = skuid.$M('OpportunityRecordTypes');
+var OpportunitiesModel = skuid.$M('Opportunity');
+var recordTypeIdCondition = OpportunitiesModel.getConditionByName('RecordTypeId');
+var validRecordTypeIds = {};
+var selectedRecordTypeId = recordTypeIdCondition.value;
+if (!selectedRecordTypeId){
+    // If we don't have a selected Record Type Id,
+    // then ALL Record Type Ids are valid
+    $.each(RecordTypeModel.data,function(){
+       validRecordTypeIds[this.Id]=1;
+    });
+} else {
+  // Otherwise, only the SELECTED Record Type Id is valid
+  validRecordTypeIds[selectedRecordTypeId]=1;
+}
+var filterItems = [];
+var validEntryValues = {};
+var d = skuid.utils.getAPIDescribeLayout('Opportunity');
+$.each(d.recordTypeMappings,function(i,rtm){
+    if (rtm.recordTypeId in validRecordTypeIds) {
+        $.each(rtm.picklistsForRecordType,function(j,picklist){
+           if (picklist.picklistName==='StageName'){
+               $.each(picklist.picklistValues,function(k,pv){
+                   if (pv.active==='true'){
+                       validEntryValues[pv.value]=1;
+                   }
+               });
+               // All we care about is the StageName picklist
+               return false;
+           }
+        });
+    }
+});
+
+$.each(OpportunitiesModel.getField('StageName').picklistEntries,function(i,pe){
+   if (pe.active &amp;&amp; (pe.value in validEntryValues)) {
+       filterItems.push(pe);
+   }
+});
+
+return filterItems;</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
