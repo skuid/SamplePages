@@ -1,0 +1,207 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="Topic">
+   <models>
+      <model id="TopicAssignment" limit="200" query="false" createrowifnonefound="false" sobject="TopicAssignment">
+         <fields>
+            <field id="TopicId"/>
+            <field id="Topic.Name"/>
+            <field id="EntityId"/>
+         </fields>
+         <conditions logic="">
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="EntityId" operator="gte" state="filterableoff" inactive="true" name="EntityIdGreaterThan"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="EntityId" state="filterableoff" inactive="true" name="EntityIdLessThan" operator="lt"/>
+         </conditions>
+      </model>
+      <model id="Topics" limit="20" query="false" createrowifnonefound="false" sobject="Topic" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="Description"/>
+            <field id="TalkingAbout"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="Id" operator="in" model="TopicAssignment" enclosevalueinquotes="true" mergefield="TopicId" novaluebehavior="noquery"/>
+         </conditions>
+      </model>
+      <model id="DummyTopicAssignment" limit="1" query="false" createrowifnonefound="true" sobject="TopicAssignment">
+         <fields>
+            <field id="EntityId"/>
+            <field id="Entity.Name"/>
+         </fields>
+         <conditions logic="">
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="EntityId" operator="gte" state="filterableoff" inactive="true" name="EntityIdGreaterThan"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="EntityId" state="filterableoff" inactive="true" name="EntityIdLessThan" operator="lt"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <template multiple="true" model="Topics" allowhtml="true">
+         <contents>&lt;div style="font-size:2em;"&gt;{{Model.labelPlural}} by Object&lt;/div&gt;</contents>
+      </template>
+      <panelset type="standard">
+         <panels>
+            <panel type="left" width="225">
+               <components>
+                  <basicfieldeditor showheader="true" showsavecancel="false" model="DummyTopicAssignment" buttonposition="" mode="edit" layout="above">
+                     <columns>
+                        <column width="100%">
+                           <sections>
+                              <section title="Select Object...">
+                                 <fields>
+                                    <field id="EntityId" type="CUSTOM" snippet="ObjectPicker">
+                                       <label>Object</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Topics" buttonposition="" mode="read">
+                     <fields>
+                        <field id="Name" allowordering="true"/>
+                        <field id="Description"/>
+                        <field id="TalkingAbout"/>
+                        <field id="CreatedById" allowordering="true">
+                           <label>Created By</label>
+                        </field>
+                        <field id="CreatedDate" allowordering="true"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inline" name="inline js" cachelocation="false" url="">(function(skuid){
+    var $ = skuid.$;
+    
+    // Define the possible target objects
+    var targetObjects = [
+        /*
+        'Account',
+        'Contact',
+        'Opportunity',
+        'Case',
+        'Contract'
+        */
+    ];
+    
+    function nextLetter(s){
+        return s.replace(/([a-zA-Z0-9])[^a-zA-Z0-9]*$/, function(a){
+            var c= a.charCodeAt(0);
+            switch(c){
+                case 57: return '0';
+                case 90: return 'A';
+                case 122: return 'a';
+                default: return String.fromCharCode(++c);
+            }
+        });
+    }
+    
+    skuid.snippet.registerSnippet('ObjectPicker',function(){
+        var field = arguments[0];
+        //  Build the Options for the PICKLIST
+        var entries = [];
+        
+        var metadata = field.model.getField('EntityId');
+        // Limit the set of target objects
+        var targets = [],
+            uniqueTargets = {};
+        $.each(metadata.referenceTo,function(i,r){
+            if (targetObjects &amp;&amp; targetObjects.length) {
+                if (
+                    ($.inArray(r.objectName,targetObjects) != -1)
+                &amp;&amp; (!uniqueTargets[r.objectName])
+                ) {
+                    targets.push(r);
+                    uniqueTargets[r.objectName] = r;
+                    if (targets.length == targetObjects.length) return false;
+                }    
+            } else {
+                targets.push(r);
+                uniqueTargets[r.objectName] = r;
+            }
+            
+        });
+        // Create custom picklist entries for each Object
+        $.each(targets,function(i,t){
+            entries.push({
+               value: t.objectName,
+               label: t.label
+            });
+        });
+        
+        //  Render the options as a PICKLIST
+        var customSelect = skuid.ui.renderers.PICKLIST.edit({
+            entries : entries,
+            required : false,
+            value : ''
+        }).change(function() {
+            
+            // Whenever our TopicAssignments model is updated,
+            // update our Topics Model as well
+            var TopicAssignment = skuid.model.getModel('TopicAssignment'),
+                StartCondition = TopicAssignment.getConditionByName('EntityIdGreaterThan'),
+                EndCondition = TopicAssignment.getConditionByName('EntityIdLessThan'),
+                Topics = skuid.model.getModel('Topics');
+            
+            var objName = $(this).val();
+            
+            // If we are NOT given an object name,
+            // then do NOT do a query
+            if (!objName) {
+                TopicAssignment.doQuery = false;
+                Topics.doQuery = false;
+            } else {
+                
+                TopicAssignment.doQuery = true;
+                Topics.doQuery = true;
+                
+                var keyPrefix = uniqueTargets[objName].keyPrefix,
+                    nextKeyPrefix = keyPrefix.substring(0,2) + nextLetter(keyPrefix.substring(2,3));
+                
+                //console.log('objName: ' + objName + ', key: ' + keyPrefix + ', NEXT: ' + nextKeyPrefix);
+                
+                // Update our Conditions
+                TopicAssignment.setCondition(StartCondition,keyPrefix+ '000000000000');
+                TopicAssignment.setCondition(EndCondition,nextKeyPrefix+ '000000000000');
+                
+            }
+            
+            // Update our Models
+            $.blockUI({
+                message: 'Loading Topics...'
+            });
+            skuid.model.updateData([TopicAssignment,Topics],function(){
+                $.unblockUI();
+            });
+        });
+        //  Append the PICKLIST to the DOM element
+        field.element.append(customSelect);
+    }); // end ObjectPicker snippet
+    
+})(skuid);</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
