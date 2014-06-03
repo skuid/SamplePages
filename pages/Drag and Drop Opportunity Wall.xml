@@ -217,14 +217,15 @@ element.html(
                 
                 var targetRow = targetModel.getRowById(sourceRowId);
                 
-                // Find the first Condition in our target Model,
-                // and apply it to our target row
+		// Find the first Condition in our target Model,
+                // and apply it to our target row.
+                // (that is, change the Stage of the dragged Opportunity)
                 var targetModelCondition = targetModel.conditions[0];
-                targetModel.updateRow(targetRow,targetModelCondition.field,targetModelCondition.value);
-                
-                if (SAVE_IMMEDIATELY) {
-                    targetModel.save();
-                }
+                targetModel.updateRow(
+                    targetRow,
+                    targetModelCondition.field,
+                    targetModelCondition.value
+                );
                 
                 // Re-render just the Source List and the Target List
                 sourceList.render();
