@@ -139,7 +139,7 @@ element.html(
     skuid.utils.merge('row',renderTemplate,mergeSettings,model,row)
 ).draggable({
     revert: 'invalid',
-    appendTo : '.nx-page',
+    appendTo : 'body',
 	helper : function() {
         var original = $(this);
         var helper = original.clone();
