@@ -1,3 +1,5 @@
+<!-- This page requires the presence of a static resource with name OpportunityJS.  This JS File is available in this REPO--> 
+
 <skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunities">
    <labels/>
    <models>
