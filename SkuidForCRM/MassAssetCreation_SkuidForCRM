@@ -1,0 +1,202 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunity">
+   <models>
+      <model id="Opportunity" query="true" createrowifnonefound="false" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="oppid" field="Id" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="ProtoAsset" limit="1" query="false" createrowifnonefound="true" sobject="Asset">
+         <fields>
+            <field id="Product2Id"/>
+            <field id="Product2.Name"/>
+            <field id="Name"/>
+            <field id="Description"/>
+            <field id="Quantity"/>
+            <field id="Price"/>
+            <field id="Status"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="PurchaseDate"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="NewAssets" limit="" query="false" createrowifnonefound="false" sobject="Asset">
+         <fields>
+            <field id="Product2Id"/>
+            <field id="Product2.Name"/>
+            <field id="Name"/>
+            <field id="Description"/>
+            <field id="Quantity"/>
+            <field id="Price"/>
+            <field id="Status"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="SerialNumber"/>
+            <field id="InstallDate"/>
+            <field id="PurchaseDate"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Description" state="filterableoff" inactive="true" name="Description"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="Quantity" state="filterableoff" inactive="true" name="Quantity"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="Price" state="filterableoff" inactive="true" name="Price"/>
+            <condition type="fieldvalue" value="Installed" enclosevalueinquotes="true" field="Status" operator="=" state="" inactive="false"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="AccountId" state="filterableoff" inactive="true" name="AccountId"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Product2.Name" state="filterableoff" inactive="true" name="Product2.Name"/>
+         </conditions>
+      </model>
+      <model id="LineItems" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem">
+         <fields>
+            <field id="PricebookEntryId"/>
+            <field id="PricebookEntry.Name"/>
+            <field id="Description"/>
+            <field id="Quantity"/>
+            <field id="TotalPrice"/>
+            <field id="Opportunity.AccountId"/>
+            <field id="Opportunity.Account.Name"/>
+            <field id="OpportunityId"/>
+            <field id="PricebookEntry.Product2Id"/>
+            <field id="PricebookEntry.Product2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="oppid" field="OpportunityId" operator="=" mergefield="Id" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunity">
+         <maintitle>Create New Assets for Opportunity: {{Name}}</maintitle>
+         <subtitle>
+            <template>{{Model.LabelPlural}}</template>
+         </subtitle>
+         <actions/>
+      </pagetitle>
+      <wizard>
+         <steps>
+            <step stepid="step1">
+               <components>
+                  <basicfieldeditor showheader="true" showsavecancel="false" model="ProtoAsset" mode="edit">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Select Asset Purchase Date">
+                                 <fields>
+                                    <field id="PurchaseDate"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title=" ">
+                                 <fields/>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+               <actions>
+                  <action type="navigate" label="Return to Opportunity" window="self" icon=" ui-silk-arrow-turn-left" url="/{{$Param.oppid}}"/>
+                  <action type="custom" label="Generate Assets" icon="ui-silk-application-cascade" snippet="generateAssets"/>
+               </actions>
+            </step>
+            <step stepid="step2">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="NewAssets" mode="edit">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="AccountId" required="false" readonly="true"/>
+                        <field id="Product2Id" required="true">
+                           <label>Product Name</label>
+                        </field>
+                        <field id="Quantity" readonly="true"/>
+                        <field id="Price" readonly="true"/>
+                        <field id="Status"/>
+                        <field id="InstallDate"/>
+                        <field id="SerialNumber"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+               <actions>
+                  <action type="cancel" label="Previous Step" window="self" icon="ui-silk-arrow-left" stepid="step1">
+                     <models>
+                        <model>NewAssets</model>
+                     </models>
+                  </action>
+                  <action type="save" label="Save Assets and Finish" window="self" icon="ui-silk-accept" url="/{{#$Model.Opportunity.data.0.AccountId}}{{{$Model.Opportunity.data.0.AccountId}}}#Assets{{/$Model.Opportunity.data.0.AccountId}}{{^$Model.Opportunity.data.0.AccountId}}{{$Param.oppid}}{{/$Model.Opportunity.data.0.AccountId}}">
+                     <models>
+                        <model>NewAssets</model>
+                     </models>
+                  </action>
+               </actions>
+            </step>
+         </steps>
+      </wizard>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="generateAssets" url="">var params = arguments[0];
+var step = params.step;
+var $ = skuid.$;
+
+// Get references to our three important Models
+var models = skuid.model.map();
+var lineItems = models.LineItems;
+var protoAsset = models.ProtoAsset;
+var newAssets = models.NewAssets;
+
+// Use the values specified in our protoAsset record
+// to set conditions on our newAsset model.
+// That way, when we auto-generate new statement records,
+// these conditions will be used to prepopulate each new Statement.
+
+var proto = protoAsset.getFirstRow();
+var protoStatus = protoAsset.getFieldValue(proto,'Status',true);
+var protoPurchaseDate = protoAsset.getFieldValue(proto,'PurchaseDate',true);
+
+var statusCondition = newAssets.getConditionByName('Status');
+newAssets.setCondition(statusCondition,protoStatus);
+
+
+// Now, auto-generate a new Asset record 
+// for each LineItem in this Opportunity.
+$.each(lineItems.data,function(){
+    var product = this.PricebookEntry.Product2;
+    var productName = product.Name;
+    var row = newAssets.createRow({
+        additionalConditions: [
+        //first field is the newAsset field,  second field is the LineItem field
+            { field: 'Product2Id', value: product.Id, operator: '=', nameFieldValue: productName },
+            { field: 'Name', value: productName, operator: '=' },
+            { field: 'Description', value: this.Description, operator: '=' },
+            { field: 'Quantity', value: this.Quantity, operator: '=' },
+            { field: 'Price', value: this.TotalPrice, operator: '=' },
+            { field: 'AccountId', value: this.Opportunity.AccountId, operator: '=', nameFieldValue: this.Opportunity.Account.Name },
+            { field: 'PurchaseDate', value: protoPurchaseDate, operator: '=' }
+        ]
+    });
+});
+// We're good to go - navigate our wizard to Step 2
+step.navigate('step2');</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
