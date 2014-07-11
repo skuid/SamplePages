@@ -1,0 +1,395 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Account">
+   <models>
+      <model id="AccountData" limit="1" query="true" createrowifnonefound="false" sobject="Account">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="Description"/>
+            <field id="Fax"/>
+            <field id="AccountNumber"/>
+            <field id="Phone"/>
+            <field id="BillingCity"/>
+            <field id="BillingCountry"/>
+            <field id="BillingState"/>
+            <field id="BillingStreet"/>
+            <field id="BillingPostalCode"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="NumberOfEmployees"/>
+            <field id="Industry"/>
+            <field id="LastActivityDate"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="LastModifiedDate"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="ParentId"/>
+            <field id="Parent.Name"/>
+            <field id="ShippingCity"/>
+            <field id="ShippingCountry"/>
+            <field id="ShippingState"/>
+            <field id="ShippingStreet"/>
+            <field id="ShippingPostalCode"/>
+            <field id="Website"/>
+            <field id="Type"/>
+            <field id="AnnualRevenue"/>
+            <field id="Rating"/>
+            <field id="TickerSymbol"/>
+            <field id="Ownership"/>
+            <field id="Site"/>
+            <field id="Sic"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="param" operator="=" field="Id" value="Id" mergefield="Id" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="Contact" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Contact">
+         <fields>
+            <field id="LastName"/>
+            <field id="FirstName"/>
+            <field id="Title"/>
+            <field id="Email"/>
+            <field id="Phone"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="AccountId" operator="=" model="AccountData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Opportunities" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Opportunity">
+         <fields>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="IsClosed"/>
+            <field id="TotalOpportunityQuantity"/>
+            <field id="StageName"/>
+            <field id="Name"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="AccountId" operator="=" model="AccountData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Cases" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Case">
+         <fields>
+            <field id="Account.Name"/>
+            <field id="Id"/>
+            <field id="Type"/>
+            <field id="Description"/>
+            <field id="CreatedDate"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="CaseNumber"/>
+            <field id="Priority"/>
+            <field id="AccountId"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="AccountId" operator="=" model="AccountData" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="OriginalAccount" limit="1" query="true" createrowifnonefound="false" sobject="Account">
+         <fields>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="id" field="Id" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="OriginalAccount">
+         <maintitle>New {{Model.Label}}</maintitle>
+         <subtitle>(Cloned from {{{Name}}})</subtitle>
+         <actions>
+            <action type="savecancel" label="New Action" afterSave=" /{{Id}}" afterCancel="/{{$Param.id}}" window="self">
+               <models>
+                  <model>AccountData</model>
+                  <model>Contact</model>
+                  <model>Opportunities</model>
+                  <model>Cases</model>
+               </models>
+            </action>
+         </actions>
+      </pagetitle>
+      <tabset>
+         <tabs>
+            <tab name="Profile" icon="ui-silk-building">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="AccountData" mode="edit">
+                     <columns>
+                        <column width="40%">
+                           <sections>
+                              <section title="General Info">
+                                 <fields>
+                                    <field id="Name"/>
+                                    <field id="ParentId">
+                                       <label>Parent Account</label>
+                                    </field>
+                                    <field id="AccountNumber"/>
+                                    <field id="Type">
+                                       <label>Type</label>
+                                    </field>
+                                    <field id="Industry"/>
+                                    <field id="Sic">
+                                       <label>SIC Code</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                              <section title="Description">
+                                 <fields>
+                                    <field id="Description">
+                                       <label/>
+                                    </field>
+                                 </fields>
+                              </section>
+                              <section title="Additional Information">
+                                 <fields>
+                                    <field id="TickerSymbol"/>
+                                    <field id="Site"/>
+                                    <field id="AnnualRevenue"/>
+                                    <field id="Ownership"/>
+                                    <field id="NumberOfEmployees"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="40%">
+                           <sections>
+                              <section title="Contact Information">
+                                 <fields>
+                                    <field id="Phone">
+                                       <label>Primary Phone</label>
+                                    </field>
+                                    <field id="BillingState"/>
+                                    <field id="Fax">
+                                       <label>Fax</label>
+                                    </field>
+                                    <field id="Website"/>
+                                 </fields>
+                              </section>
+                              <section title="Address">
+                                 <fields>
+                                    <field type="COMBO" allowhtml="true">
+                                       <label>Billing Address</label>
+                                       <template>{{BillingStreet}} &lt;br&gt; {{BillingCity}}{{#BillingCity}},{{/BillingCity}} {{BillingState}} &lt;br&gt; {{BillingCountry}} &lt;br&gt; {{BillingPostalCode}} 
+
+                                    </template>
+                                    </field>
+                                    <field type="COMBO" allowhtml="true">
+                                       <label>Shipping Address</label>
+                                       <template>{{ShippingStreet}} &lt;br&gt; {{ShippingCity}}{{#ShippingCity}},{{/ShippingCity}} {{ShippingState}} &lt;br&gt; {{ShippingCountry}} &lt;br&gt; {{ShippingPostalCode}}
+                                    </template>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="20%">
+                           <sections>
+                              <section title="Internal Information">
+                                 <fields>
+                                    <field id="Rating"/>
+                                 </fields>
+                              </section>
+                              <section title="System Information">
+                                 <fields>
+                                    <field id="OwnerId">
+                                       <label>Account Owner</label>
+                                       <filters/>
+                                    </field>
+                                    <field id="CreatedDate"/>
+                                    <field type="COMBO">
+                                       <label>Last Modified</label>
+                                       <template>By: {{LastModifiedById}} on {{LastModifiedDate}}</template>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </tab>
+            <tab name="Contacts" icon="ui-silk-group">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Contact" mode="edit">
+                     <fields>
+                        <field id="FirstName" allowordering="true"/>
+                        <field id="LastName" allowordering="true"/>
+                        <field id="Title"/>
+                        <field id="Email"/>
+                        <field id="Phone"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="All Contacts" createfilteroffoption="true">
+                           <sources>
+                              <source type="manual">
+                                 <options>
+                                    <option label="My Contacts" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="Owner is Me"/>
+                                       </effects>
+                                    </option>
+                                    <option label="Recently Modified" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="LastModifiedDate"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                           </sources>
+                        </filter>
+                     </filters>
+                  </skootable>
+               </components>
+               <components/>
+            </tab>
+            <tab name="Opportunities" icon="ui-silk-coins">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Opportunities" mode="edit">
+                     <fields>
+                        <field id="Name" allowordering="true"/>
+                        <field id="Amount"/>
+                        <field id="StageName"/>
+                        <field id="IsClosed"/>
+                        <field id="CloseDate" allowordering="true"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="toggle" filteroffoptionlabel="Closed &amp; Open" createfilteroffoption="true" condition="IsClosed" label="Open Opportunities">
+                           <effects>
+                              <effect action="activate" value="" condition="IsClosed"/>
+                           </effects>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="All Amounts" createfilteroffoption="true" condition="AmountCondition">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                     </filters>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Cases" icon="ui-silk-bug">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Cases" mode="edit">
+                     <fields>
+                        <field id="ContactId" allowordering="true">
+                           <label>Contact</label>
+                        </field>
+                        <field id="CaseNumber" allowordering="true">
+                           <label>Case</label>
+                        </field>
+                        <field id="Type"/>
+                        <field id="Description"/>
+                        <field id="Priority" allowordering="true"/>
+                        <field id="CreatedDate" allowordering="true">
+                           <label>Date Opened</label>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="All Types" createfilteroffoption="true" condition="Type">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="All Priorities" createfilteroffoption="true" condition="Priority">
+                           <sources>
+                              <source type="metadata" suffix=" Priority"/>
+                           </sources>
+                        </filter>
+                     </filters>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                  </skootable>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inline" name="markCompleted" url="">skuid.snippet.registerSnippet('tasks.markCompleted',function(params){
+                // Mark all selected items as closed,
+                // then save our 2 Tasks models
+                var model = params.model,
+                    list = params.list,
+                    selectedItems = params.item ? [params.item] : list.getSelectedItems();
+                if (selectedItems.length === 1 &amp;&amp; skuid.model.isNewId(selectedItems[0].row.Id)) {
+                    alert('Please finish creating this Task before marking it as completed.');
+                    return;
+                }
+                $j.each(selectedItems,function(i,item){
+                    model.updateRow(item.row,'Status','Completed');
+                });
+                // Block the list from having updates
+                list.element.block({
+                    css: list.blockUICSS, overlayCSS: list.blockOverlayCSS,
+                    message:'Marking Tasks as Completed...'
+                });
+            
+                var saveFinishes = model.save({callback:
+                    function(){
+                        var updateFinishes = skuid.model.updateData([model,skuid.model.getModel('TaskHistory')]);
+                        $j.when(updateFinishes).then(
+                            function(){ list.element.unblock(); },
+                            function(){ list.element.unblock(); }
+                        );
+                    }
+                });
+                
+            });</jsitem>
+         <jsitem location="inlinesnippet" name="NewOpportunity" url="">var params = arguments[0];
+var step = params.step;
+var $ = skuid.$;
+
+console.log(params);
+var models = skuid.model.map();
+var Opp = models.Opportunities;
+var Acc = models.AccountData;
+var NewOpp = models.NewOpportunity;
+
+var accId = Acc.getField('Id');
+
+var accCondition = NewOpp.getConditionByName('AccountId');
+NewOpp.setCondition(accCondition, accId);
+
+var row = NewOpp.createRow();
+NewOpp.updateRow(row,'Account', accId);
+console.log(row);
+console.log("Id is " + accId);
+
+// We're good to go - navigate our wizard to Step 2
+step.navigate('step2');</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
