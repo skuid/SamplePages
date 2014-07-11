@@ -1,0 +1,163 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Product2">
+   <models>
+      <model id="Pricebooks" limit="25" query="true" createrowifnonefound="false" orderby="Name" sobject="Pricebook2">
+         <fields>
+            <field id="Name"/>
+            <field id="IsActive"/>
+            <field id="IsStandard"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="Product2Data" limit="25" query="true" createrowifnonefound="false" sobject="Product2" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="PricebookEntries" type="childRelationship">
+               <fields>
+                  <field id="UnitPrice"/>
+               </fields>
+               <conditions>
+                  <condition enclosevalueinquotes="false" field="Pricebook2.IsStandard" value="true"/>
+               </conditions>
+            </field>
+            <field id="IsActive"/>
+            <field id="Description"/>
+            <field id="ProductCode"/>
+            <field id="Family"/>
+            <field id="skuidcrm__Product_Image__c"/>
+            <field id="skuidcrm__Product_Image__r.Name"/>
+            <field id="skuidcrm__Product_Image__r.skuid__AttachmentId__c"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Family" state="filterableoff" inactive="true" name="ProductFamily"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive" state="filterableoff" inactive="true" name="JustActiveProducts"/>
+         </conditions>
+      </model>
+      <model id="Assets" limit="10" query="true" createrowifnonefound="false" orderby="SystemModstamp DESC" sobject="Asset">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+            <field id="SerialNumber"/>
+            <field id="InstallDate"/>
+            <field id="Account.Name"/>
+            <field id="Contact.Id"/>
+            <field id="Product2.Name"/>
+         </fields>
+         <conditions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Product2Data">
+         <maintitle>
+            <template>{{Model.LabelPlural}}</template>
+         </maintitle>
+         <subtitle>
+            <template>Home</template>
+         </subtitle>
+         <actions>
+            <action type="redirect" label="Manage Price Books" url="/pbk/priceBookList.jsp" icon="ui-silk-book-edit"/>
+         </actions>
+      </pagetitle>
+      <tabset>
+         <tabs>
+            <tab name="Products" icon="ui-silk-cart">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Product2Data" mode="read">
+                     <fields>
+                        <field id="Name" allowordering="true"/>
+                        <field id="ProductCode"/>
+                        <field id="Description"/>
+                        <field id="Family"/>
+                        <field id="IsActive"/>
+                        <field id="CreatedDate" allowordering="true"/>
+                        <field type="COMBO">
+                           <label>Standard Price</label>
+                           <template>{{#PricebookEntries.records}}{{UnitPrice}}{{/PricebookEntries.records}}</template>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                        <action type="redirect" url="/setup/own/massdelete.jsp?ftype=Product2" label="Mass Delete Products" icon="ui-silk-delete" window="self"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                        <view type="photo" defaultphoto="org" photofield="skuidcrm__Product_Image__c" descriptionfield="Name" onclickurl="/{{Id}}"/>
+                     </views>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Product Family" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" condition="ProductFamily">
+                           <sources>
+                              <source type="metadata" effectsbehavior="justdefault" prefix="Family: "/>
+                           </sources>
+                        </filter>
+                        <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" label="Just Active Products">
+                           <effects>
+                              <effect action="activate" value="" condition="JustActiveProducts"/>
+                           </effects>
+                        </filter>
+                     </filters>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Pricebooks" icon="ui-silk-report">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Pricebooks" mode="read">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="IsActive"/>
+                        <field id="IsStandard"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <filters/>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Assets" icon="ui-silk-coins">
+               <components>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Assets" mode="read">
+                     <fields>
+                        <field id="Id"/>
+                        <field id="Name"/>
+                        <field id="SerialNumber"/>
+                        <field id="InstallDate"/>
+                        <field id="Account.Name"/>
+                        <field id="Contact.Id"/>
+                        <field id="Product2.Name"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>
