@@ -1,0 +1,634 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Lead">
+   <models>
+      <model id="LeadData" limit="100" query="true" createrowifnonefound="false" sobject="Lead" orderby="CreatedDate DESC">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="State"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="Phone"/>
+            <field id="Id"/>
+            <field id="LeadSource"/>
+            <field id="LastActivityDate"/>
+            <field id="Rating"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="IsUnreadByOwner"/>
+            <field id="Name"/>
+            <field id="Tasks" type="childRelationship" limit="1">
+               <conditions>
+                  <condition enclosevalueinquotes="false" operator="=" type="fieldvalue" field="IsClosed" value="false"/>
+               </conditions>
+            </field>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="Owner is me"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="Lead Source"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Rating" operator="=" state="filterableoff" inactive="true" name="Rating"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="IsUnreadByOwner" state="filterableoff" inactive="true" name="IsUnreadByOwner"/>
+            <condition type="fieldvalue" value="TODAY" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Today's Leads"/>
+            <condition type="fieldvalue" value="THIS_WEEK" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Leads This Week"/>
+            <condition type="fieldvalue" value="THIS_MONTH" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Leads This Month"/>
+            <condition type="fieldvalue" value="THIS_QUARTER" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Leads This Quarter"/>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Leads This Year"/>
+            <condition type="fieldvalue" value="THIS_FISCAL_YEAR" enclosevalueinquotes="false" field="CreatedDate" state="filterableoff" inactive="true" name="Leads This Fiscal Year"/>
+         </conditions>
+      </model>
+      <model id="NewLead" limit="1" query="false" createrowifnonefound="true" sobject="Lead">
+         <fields>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="Title"/>
+            <field id="LeadSource"/>
+            <field id="Industry"/>
+            <field id="AnnualRevenue"/>
+            <field id="Phone"/>
+            <field id="MobilePhone"/>
+            <field id="Fax"/>
+            <field id="Email"/>
+            <field id="Website"/>
+            <field id="Status"/>
+            <field id="Rating"/>
+            <field id="NumberOfEmployees"/>
+            <field id="Street"/>
+            <field id="City"/>
+            <field id="State"/>
+            <field id="PostalCode"/>
+            <field id="Country"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition type="blank" value="null" field="Id" operator="=" enclosevalueinquotes="false"/>
+         </conditions>
+      </model>
+      <model id="TaskHistory" limit="40" query="false" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC">
+         <fields>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Type"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="Priority"/>
+            <field id="ActivityDate"/>
+            <field id="Id"/>
+            <field id="IsClosed"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" field="WhoId" operator="=" mergefield="Id" enclosevalueinquotes="true" state="filterableoff" inactive="true" name="WhoId"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="LeadData">
+         <maintitle>
+            <template>{{Model.LabelPlural}}</template>
+         </maintitle>
+         <actions>
+            <action type="savecancel" label="New Action"/>
+            <action type="redirect" label="Leads Queue" url="/apex/skuid__ui?page=LeadQueue" icon="ui-silk-application-side-list" window="self"/>
+         </actions>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="true" model="LeadData" mode="read">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company" allowordering="true"/>
+            <field id="Phone"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="CreatedDate" allowordering="true"/>
+            <field id="LeadSource" allowordering="true"/>
+            <field id="OwnerId">
+               <label>Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="redirect" label="Find Duplicates" url="/lead/leadmergewizard.jsp?retURL=%2F00Q%2Fo&amp;id={{Id}}" icon="ui-silk-group-delete" window="self"/>
+            <action type="popup" window="self" label="View / Add Tasks for {{FirstName}} {{LastName}}{{#Tasks}} (1+ Open){{/Tasks}}" icon="ui-silk-telephone">
+               <popup title="View / Add Tasks for {{{FirstName}}} {{{LastName}}} - {{{Company}}}" width="80%">
+                  <components>
+                     <pagetitle model="LeadData">
+                        <maintitle>{{{Name}}} {{{Company}}}</maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions>
+                           <action type="savecancel" label="New Action">
+                              <models>
+                                 <model>TaskHistory</model>
+                              </models>
+                           </action>
+                        </actions>
+                        <conditions>
+                           <condition type="contextrow" field="Id" autocreated="true"/>
+                        </conditions>
+                     </pagetitle>
+                     <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="true" model="TaskHistory" mode="read">
+                        <fields>
+                           <field id="OwnerId" type="REFPICK"/>
+                           <field id="Subject" columnwidth="25%"/>
+                           <field id="Status"/>
+                           <field id="Priority"/>
+                           <field id="ActivityDate">
+                              <label>Due Date</label>
+                           </field>
+                        </fields>
+                        <rowactions>
+                           <action type="edit"/>
+                           <action type="delete"/>
+                        </rowactions>
+                        <massactions usefirstitemasdefault="true">
+                           <action type="massupdate"/>
+                           <action type="massdelete"/>
+                        </massactions>
+                        <views>
+                           <view type="standard"/>
+                        </views>
+                        <conditions/>
+                        <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                           <action type="custom" window="self" icon="ui-silk-email" snippet="EML" label="EML"/>
+                           <action type="custom" window="self" icon="ui-silk-phone-sound" snippet="PHC" label="PHC"/>
+                           <action type="custom" window="self" icon="ui-silk-computer-link" snippet="WBC" label="WBC"/>
+                           <action type="custom" window="self" icon="ui-silk-telephone-edit" label="VML" snippet="VML"/>
+                        </actions>
+                     </skootable>
+                     <custom name="LoadChildData"/>
+                  </components>
+               </popup>
+            </action>
+            <action type="redirect" label="Send Email" url="/_ui/core/email/author/EmailAuthor?p2_lkid={{Id}}&amp;rtype=00Q&amp;retURL=%2F00Q%2Fo" icon="ui-silk-email-edit" window="self"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Lead Source" createfilteroffoption="true" condition="Lead Source">
+               <sources>
+                  <source type="metadata" prefix="Source: "/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Rating" createfilteroffoption="true" condition="Rating">
+               <sources>
+                  <source type="metadata"/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+               <sources>
+                  <source type="metadata" prefix="Status: "/>
+               </sources>
+            </filter>
+            <filter type="toggle" createfilteroffoption="true" label="My Leads">
+               <effects>
+                  <effect action="activate" value="" condition="Owner is me"/>
+               </effects>
+            </filter>
+            <filter type="toggle" filteroffoptionlabel="Unread by Owner " createfilteroffoption="true" label="Unread by Owner">
+               <effects>
+                  <effect action="activate" value="" condition="IsUnreadByOwner"/>
+               </effects>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Show Leads from:" createfilteroffoption="true" affectcookies="true">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="Today's Leads" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Today's Leads"/>
+                           </effects>
+                        </option>
+                        <option label="Leads This Week" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Leads This Week"/>
+                           </effects>
+                        </option>
+                        <option label="Leads This Month" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Leads This Month"/>
+                           </effects>
+                        </option>
+                        <option label="Leads This Quarter" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Leads This Quarter"/>
+                           </effects>
+                        </option>
+                        <option label="Leads This Year" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Leads This Year"/>
+                           </effects>
+                        </option>
+                        <option label="Leads This Fiscal Year" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="Leads This Fiscal Year"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+         </filters>
+         <actions defaultlabel="Options" defaulticon="ui-silk-text-list-bullets" usefirstitemasdefault="true">
+            <action type="popup" window="self" label="Create New Lead in Pop-up" icon="ui-silk-star">
+               <popup title="Create New Lead" width="1000">
+                  <components>
+                     <pagetitle model="NewLead">
+                        <maintitle>
+                           <template>{{Name}}</template>
+                        </maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions>
+                           <action type="custom" label="Save" icon="ui-silk-accept" snippet="saveNewItemsInPopup"/>
+                        </actions>
+                     </pagetitle>
+                     <basicfieldeditor showheader="true" showsavecancel="false" model="NewLead" mode="edit">
+                        <columns>
+                           <column width="33.3%">
+                              <sections>
+                                 <section title="Personal">
+                                    <fields>
+                                       <field id="OwnerId"/>
+                                       <field id="FirstName"/>
+                                       <field id="LastName"/>
+                                       <field id="Company"/>
+                                       <field id="Title"/>
+                                       <field id="Industry"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="33.3%">
+                              <sections>
+                                 <section title="Contact">
+                                    <fields>
+                                       <field id="Phone"/>
+                                       <field id="MobilePhone"/>
+                                       <field id="Fax"/>
+                                       <field id="Email"/>
+                                       <field id="Website"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="33.3%">
+                              <sections>
+                                 <section title="Address">
+                                    <fields>
+                                       <field id="Street"/>
+                                       <field id="City"/>
+                                       <field id="State"/>
+                                       <field id="PostalCode"/>
+                                       <field id="Country"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                        </columns>
+                     </basicfieldeditor>
+                     <basicfieldeditor showheader="true" showsavecancel="false" model="NewLead" mode="edit">
+                        <columns>
+                           <column width="50%">
+                              <sections>
+                                 <section title="Company ">
+                                    <fields>
+                                       <field id="AnnualRevenue"/>
+                                       <field id="LeadSource"/>
+                                       <field id="Status"/>
+                                       <field id="Rating"/>
+                                       <field id="NumberOfEmployees"/>
+                                       <field id="ProductInterest__c"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="50%">
+                              <sections>
+                                 <section title="Description">
+                                    <fields>
+                                       <field id="Description"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                        </columns>
+                     </basicfieldeditor>
+                  </components>
+               </popup>
+            </action>
+            <action type="redirect" label="Create New Lead via Redirect" url="/{{Model.KeyPrefix}}/e" icon="ui-silk-star" window="self"/>
+            <action type="redirect" label="Import Leads" url="/apex/skuid__Import?obj=Lead" icon="ui-silk-folder-star" window="self"/>
+            <action type="redirect" label="Transfer Leads" url="/p/own/BulkTransfer?retURL=%2F00Q%2Fo&amp;ent=Lead" icon="ui-silk-transmit-go" window="self"/>
+            <action type="redirect" label="Mass Email Leads" url="/ui/massmail/MassMailStageManager?setupid=MassMailFilter&amp;ftype=L&amp;wizardRetUrl=%2F00Q%2Fo" icon="ui-silk-email" window="self"/>
+            <action type="popup" window="self" label="View Helpful Links" icon="ui-silk-application-link">
+               <popup title="Helpful {{Model.Label}} Links" width="400">
+                  <components>
+                     <pagetitle model="LeadData">
+                        <maintitle>Helpful Links</maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions/>
+                     </pagetitle>
+                     <panelset type="standard">
+                        <panels>
+                           <panel>
+                              <components>
+                                 <template model="LeadData" multiple="true" allowhtml="true">&lt;table class="nx-list nx-skootable-data" cellpadding="0" cellspacing="0"&gt;
+&lt;tbody class="nx-list-contents"&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=21&amp;retURL=%2F00O&amp;pc0=EMAIL_BOUNCED_REASON&amp;pn0=ne&amp;pv0=&amp;sort=EM&amp;c=FN&amp;c=LN&amp;c=CO&amp;c=EM&amp;c=OW&amp;c=EMAIL_BOUNCED_REASON&amp;c=EMAIL_BOUNCED_DATE&amp;details=yes"&gt;Lead List Report &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=96&amp;retURL=%2F00O&amp;sortdir=down&amp;sort=CD&amp;break0=LI&amp;c=FN&amp;c=LN&amp;c=OW&amp;c=CR&amp;c=FD&amp;c=OV&amp;c=NV&amp;c=CD&amp;details=yes&amp;format=t"&gt;Lead History Report&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=28&amp;retURL=%2F00O&amp;scope=use&amp;s=AM&amp;c=CD&amp;c=LS&amp;c=FN&amp;c=LN&amp;c=LU&amp;c=CA&amp;c=CND&amp;c=SU&amp;c=OW&amp;c=OP&amp;c=OA&amp;c=CLD&amp;c=OO&amp;details=yes"&gt;Lead Lifetime Report&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=20&amp;retURL=%2F00O&amp;function=c&amp;date=w&amp;break0=CREATED_DATE&amp;new_break=w_CREATED_DATE&amp;pivot=STATUS&amp;scope=user&amp;colDt=CREATED_DATE&amp;hidden=STREET_LINE1&amp;hidden=STREET_LINE2&amp;hidden=STREET_LINE3&amp;hidden=ANNUAL_REVENUE.CONVERT&amp;t=title_LeadChartReport&amp;details=no&amp;format=t"&gt;Lead Status Report &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=20&amp;retURL=%2F00O&amp;function=c&amp;date=d&amp;break0=LEAD_SOURCE&amp;new_break=LEAD_SOURCE&amp;pivot=STATUS&amp;scope=user&amp;colDt=CREATED_DATE&amp;hidden=STREET_LINE1&amp;hidden=STREET_LINE2&amp;hidden=STREET_LINE3&amp;hidden=ANNUAL_REVENUE.CONVERT&amp;t=title_LeadsBySourceReport&amp;details=no&amp;format=t"&gt;Lead By Source&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=21&amp;retURL=%2F00O&amp;pc0=LAST_ACTIVITY&amp;pn0=lt&amp;colDt=CREATED_DATE&amp;sort=LAST_ACTIVITY&amp;c=FN&amp;c=LN&amp;c=TI&amp;c=CO&amp;c=EM&amp;c=LS&amp;c=ST&amp;c=RT&amp;c=OW&amp;c=LA&amp;details=yes"&gt;Lead Last Activity &gt; 30 Days&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+
+&lt;/table&gt;</template>
+                              </components>
+                           </panel>
+                        </panels>
+                     </panelset>
+                  </components>
+               </popup>
+            </action>
+         </actions>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="NewCompletedTask" cachelocation="false" url="">var TaskModel = skuid.model.getModel('TaskHistory');
+
+var self = arguments[0];
+var $ = skuid.$;
+
+// Create a new Task in our Task Model
+var NewTask = TaskModel.createRow({ 
+  initiatorId : self.list._GUID,
+  additionalConditions : self.list.options.conditions
+});
+
+var defaults = {
+    'Priority':'Normal',
+    'Status':'Completed',
+    'OwnerId': skuid.utils.userInfo.userId,
+    'Owner.Name': skuid.utils.userInfo.userName,
+    'ActivityDate': skuid.time.getSFDate(new Date())
+};
+
+if (self.defaults) {
+    $.extend(defaults,self.defaults);
+}
+
+TaskModel.updateRow(NewTask,defaults);
+
+// Create a new Item in our Table (wrapper around the new Task row)
+var newItem = self.list.newItem(
+   NewTask,
+   { editModeForNewItems : true }
+);
+self.list.render({ 
+   resetPagination : true
+   ,refreshFields : false
+});
+
+// Focus on the Subject field
+$.each(newItem.fields,function(){
+    if (this.id === 'Subject'){
+        var inputElement = this.element.find(':input').first();
+        inputElement &amp;&amp; inputElement.focus();
+    }
+});
+</jsitem>
+         <jsitem location="inlinesnippet" name="PHC" cachelocation="false" url="">var params = arguments[0];
+
+// This is where you set the defaults you want
+params.defaults = {
+    'Subject':'Phone Call: '
+};
+
+skuid.snippet.getSnippet('NewCompletedTask')(params);</jsitem>
+         <jsitem location="inlinesnippet" name="EML" cachelocation="false" url="">var params = arguments[0];
+
+// This is where you set the defaults you want
+params.defaults = {
+    'Subject':'Email: '
+};
+
+skuid.snippet.getSnippet('NewCompletedTask')(params);</jsitem>
+         <jsitem location="inlinesnippet" name="WBC" cachelocation="false" url="">var params = arguments[0];
+
+// This is where you set the defaults you want
+params.defaults = {
+    'Subject':'Web Conference: '
+};
+
+skuid.snippet.getSnippet('NewCompletedTask')(params);</jsitem>
+         <jsitem location="inlinesnippet" name="VML" cachelocation="false" url="">var params = arguments[0];
+
+// This is where you set the defaults you want
+params.defaults = {
+    'Subject':'Voicemail: '
+};
+
+skuid.snippet.getSnippet('NewCompletedTask')(params);</jsitem>
+         <jsitem location="inlinesnippet" name="saveNewItemsInPopup" cachelocation="false" url="">var $ = skuid.$,
+    params = arguments[0],
+    component = params.component,
+    popup = component.editor.element.closest('.ui-dialog-content'),
+    modelsToSave = [],
+    objLabelsToSave = [],
+    uniqueModels = {};
+
+popup.children().each(function(){
+    var obj = $(this).data('object');
+    if (obj &amp;&amp; obj.model &amp;&amp; !uniqueModels[obj.model.id]) {
+        var model = obj.model;
+        modelsToSave.push(model);
+        if (model.data &amp;&amp; model.data.length) {
+            if (model.data.length&gt;1) {
+                objLabelsToSave.push(model.labelPlural);
+            } else {
+                objLabelsToSave.push(model.label);
+            }
+        }
+        uniqueModels[obj.model.id] = 1;
+    }
+});
+
+var message = 'Saving new ';
+if (objLabelsToSave.length &lt; 3) {
+    message += objLabelsToSave.join(' and ');
+} else {
+    var lastObj = objLabelsToSave.pop();
+    message += objLabelsToSave.join(', ');
+    message += ', and ' + lastObj;
+}
+message += '...';
+popup.block({
+    message: message
+});
+
+skuid.model.save(modelsToSave,{callback:function(result){
+    if (result.totalsuccess){
+
+        // Refresh the data in related Models on the page
+        var uniqueRelatedObjectsToCheck = {},
+            relatedModelsToUpdate = [];
+
+        $.each(modelsToSave,function(){
+            if (this.objectName &amp;&amp; !uniqueRelatedObjectsToCheck[this.objectName]) {
+                uniqueRelatedObjectsToCheck[this.objectName] = 1;
+            }
+        });
+
+        // Loop over all Models,
+        // including the Models we've already saved,
+        // and find ones that are on the same objects as the ones we've already saved.
+        // Update them if they do not have unsaved changes.
+        $.each(skuid.model.list(),function(){
+            if (uniqueRelatedObjectsToCheck[this.objectName]
+            &amp;&amp; !this.hasChanged) {
+                relatedModelsToUpdate.push(this);
+            }
+        });
+        
+        $.when(skuid.model.updateData(relatedModelsToUpdate)).then(function(){
+            $.each(popup.children(),function(){
+                var obj = $(this).data('component');
+                if (obj &amp;&amp; obj.unregister) obj.unregister();
+            });
+            popup.dialog('destroy');
+
+            // Create new Rows in our Models to Save,
+            // to prepare for the NEXT time someone creates a new record
+            $.each(modelsToSave,function(){
+                this.createRow();
+            });
+
+        });
+    } else {
+        popup.unblock();
+    }
+}});</jsitem>
+         <jsitem location="inline" name="LoadChildData" cachelocation="false">(function(skuid){
+
+    skuid.$(function(){
+
+        var isBefore321 = skuid.version &amp;&amp; (
+                (skuid.version.major &lt; 3) 
+            || ((skuid.version.major===3) &amp;&amp; (skuid.version.minor&lt;21))
+        );
+    
+        // Override of Custom Component renderer for Skuid 3.21
+        // to pass in context
+        if (isBefore321) {
+    
+            skuid.componentType.register('custom',function(element,xmlDef,component){
+                var name = xmlDef.attr('name');
+                if (name) {
+                	skuid.component.factory({
+            			element: element,
+            			definition: xmlDef,
+            			type: name,
+            			context: component.context
+            		});
+            	}
+            });
+        }
+    });
+
+    // Custom component that lets us Load in child data dynamically for the record in context
+    skuid.componentType.register('LoadChildData',function(element,xmlDef,component){
+
+        var CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS = {
+            'TaskHistory': 'WhoId'
+        };
+        var LOADING_MESSAGE = 'Loading data...';
+        
+        var context = component.context,
+            $ = skuid.$;
+
+        if (!context) return;
+
+        var contextRowId = context.row.Id;
+        
+        var modelsToUpdate = [];
+        $.each(CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS,function(modelId,conditionId){
+            var model = skuid.model.getModel(modelId);
+            if (model) {
+                var condition = model.getConditionByName(conditionId,true);
+                if (condition) {
+                    model.setCondition(condition,contextRowId,false);
+                }
+                modelsToUpdate.push(model);
+            }
+        });
+
+        var dfd = skuid.model.updateData(modelsToUpdate);
+
+    });
+
+})(skuid);
+
+
+
+
+
+</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
