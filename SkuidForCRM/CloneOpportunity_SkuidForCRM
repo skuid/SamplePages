@@ -1,0 +1,459 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunity">
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="quantityRenderer" url="">var field = arguments[0],
+    value = arguments[1];
+
+if (field.mode == 'read') {
+    skuid.ui.fieldRenderers.DOUBLE.read(field,value);
+} else {
+
+    skuid.ui.fieldRenderers.DOUBLE.edit(field,value);
+
+    skuid.utils.delayInputCallback(
+        field.element.find('input'),
+        function(newValue) {
+            // Force updates of the UnitPrice (Sales Price) field
+            field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice'));
+        }
+    );
+
+}</jsitem>
+         <jsitem location="inlinesnippet" name="pricebookEntryRenderer" url="">var field = arguments[0],
+    value = arguments[1],
+    renderer = skuid.ui.fieldRenderers[field.metadata.displaytype],
+    mode = field.mode;
+
+// Get the pricebook entries model we are using for the renderer
+var pricebookEntriesModel = skuid.model.getModel(field.options.optionmodel);
+
+if (mode == 'edit') {
+    // Specify that we want to display our field as a Picklist
+    field.options.type = 'REFPICK';
+}
+
+// Run standard renderer for the current mode
+// (applies to read/edit mode)
+renderer[mode](field,value);
+
+// Function that will update the value of our LineItem row's UnitPrice field
+// based on the selected PricebookEntry's ListPrice / UnitPrice
+var updateUnitPriceField = function(){
+
+    // Find the selected PricebookEntryId
+    var newEntryId = field.model.getFieldValue(field.row,'PricebookEntryId');
+    // Find the corresponding PricebookEntry record
+    var entry = pricebookEntriesModel.getRowById(newEntryId);
+    var newPrice = pricebookEntriesModel.getFieldValue(entry,'UnitPrice');
+
+    // Force updates of the UnitPrice (SalesPrice) field 
+    //with the newly-selected PricebookEntry's UnitPrice field
+    field.model.updateRow(field.row,'UnitPrice',newPrice);
+
+    // Rerender the UnitPrice field in the row,
+    // if that field has been rendered.
+    var item = field.editor.lists[0].renderedItems[field.row.Id];
+    if (item) {
+        $j.each(item.fields,function(i,f){
+            if (f.id == 'UnitPrice') {
+                f.render();
+                return false;
+            }
+        });
+    }
+};
+
+if (mode == 'edit') {
+
+    // If we do not yet have a value for our UnitPrice field,
+    // update it.
+    if (!field.model.getFieldValue(field.row,'UnitPrice')) {
+        updateUnitPriceField();
+    }
+
+    // Attach an event handler to our field's &lt;select&gt; picklist element
+    var select = field.element.find('select');
+    select.on('change',function(){
+        updateUnitPriceField();
+    });
+
+}</jsitem>
+         <jsitem location="inlinesnippet" name="cloneRecord" url="">var params = arguments[0],
+    item = params.item,
+    row = item.row,
+    model = params.model,
+    $ = skuid.$;
+
+// Create a new row in our table
+var newRow = model.createRow();
+
+// Put in default values from the fields in our current row
+if (row) {
+    $.each(row,function(fieldId,val) {
+        // Only allow fields that are Objects,
+        // or that are Createable
+        if ((fieldId != 'attributes') &amp;&amp; (val != null) &amp;&amp; (fieldId != 'Id') &amp;&amp; (fieldId != 'TotalPrice')) {
+    		var modelField = model.getField(fieldId);
+            if ((typeof val === 'object') 
+            || (modelField &amp;&amp; modelField.createable)) {
+                model.updateRow(newRow,fieldId,val);
+            }
+    	}
+    });
+}
+
+// Force all registered lists to put our row into edit mode
+$.each(model.registeredLists,function(){
+    // See if this item has been rendered in this list yet
+    var newItem = this.renderedItems[newRow.Id];
+    if (newItem) {
+        newItem.mode = 'edit';
+        newItem.refreshFields();
+    }
+});
+
+</jsitem>
+      </javascript>
+      <css/>
+   </resources>
+   <models>
+      <model id="Opportunity" limit="1" query="true" createrowifnonefound="false" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="StageName"/>
+            <field id="CloseDate"/>
+            <field id="Amount"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="CreatedById"/>
+            <field id="CreatedDate"/>
+            <field id="CreatedBy.Name"/>
+            <field id="Description"/>
+            <field id="HasOpportunityLineItem"/>
+            <field id="LeadSource"/>
+            <field id="NextStep"/>
+            <field id="Type"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Pricebook2Id"/>
+            <field id="Pricebook2.Name"/>
+            <field id="Probability"/>
+            <field id="TotalOpportunityQuantity"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedDate"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="IsPrivate"/>
+            <field id="ExpectedRevenue"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="Id"/>
+         </conditions>
+      </model>
+      <model id="PricebookEntries" limit="100" query="true" createrowifnonefound="false" orderby="" sobject="PricebookEntry">
+         <fields>
+            <field id="Id"/>
+            <field id="UnitPrice"/>
+            <field id="Product2Id"/>
+            <field id="Product2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+      <model id="OpportunityRoles" limit="100" query="true" createrowifnonefound="false" sobject="OpportunityContactRole" orderby="">
+         <fields>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="IsPrimary"/>
+            <field id="Role"/>
+            <field id="Contact.Phone"/>
+            <field id="Contact.Email"/>
+            <field id="Contact.AccountId"/>
+            <field id="Contact.Account.Name"/>
+            <field id="Contact.Title"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" operator="=" value="" field="Contact.AccountId" model="Opportunity" enclosevalueinquotes="true" mergefield="AccountId"/>
+         </conditions>
+      </model>
+      <model id="LineItems" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" orderby="SortOrder, PricebookEntry.Product2.Name">
+         <fields>
+            <field id="SortOrder"/>
+            <field id="UnitPrice"/>
+            <field id="Subtotal"/>
+            <field id="TotalPrice"/>
+            <field id="Quantity"/>
+            <field id="Description"/>
+            <field id="ListPrice"/>
+            <field id="ServiceDate"/>
+            <field id="PricebookEntry.Product2Id"/>
+            <field id="PricebookEntry.Product2.Name"/>
+            <field id="PricebookEntryId"/>
+            <field id="PricebookEntry.UnitPrice"/>
+            <field id="Discount"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="OpportunityId"/>
+         </conditions>
+      </model>
+      <model id="Attachments" limit="100" query="true" createrowifnonefound="false" sobject="Attachment" orderby="LastModifiedDate DESC">
+         <fields>
+            <field id="Name"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedBy.Name" targetobjects="User"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name" targetobjects="User"/>
+            <field id="LastModifiedDate"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="ParentId"/>
+         </conditions>
+      </model>
+      <model id="Notes" limit="" query="true" createrowifnonefound="false" sobject="Note" orderby="LastModifiedDate DESC">
+         <fields>
+            <field id="Body"/>
+            <field id="Title"/>
+            <field id="LastModifiedDate"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="ParentId"/>
+         </conditions>
+      </model>
+      <model id="OriginalOpportunity" limit="1" query="false" createrowifnonefound="true" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="Name" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Name" novaluebehavior="deactivate"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunity">
+         <maintitle>New {{Model.Label}}</maintitle>
+         <actions>
+            <action type="savecancel" label="New Action" window="self" afterCancel="{{#$Param.retURL}}{{$Param.retURL}}{{/$Param.retURL}}{{^$Param.retURL}}/{{Model.KeyPrefix}}/o{{/$Param.retURL}}" afterSave="/{{Id}}">
+               <models>
+                  <model>Opportunity</model>
+                  <model>OpportunityRoles</model>
+                  <model>LineItems</model>
+                  <model>Attachments</model>
+                  <model>Notes</model>
+               </models>
+            </action>
+         </actions>
+         <subtitle>(Cloned from {{$Model.OriginalOpportunity.data.0.Name}})</subtitle>
+      </pagetitle>
+      <tabset>
+         <tabs>
+            <tab name="Basics" icon="ui-silk-award-star-gold-2">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="Opportunity" mode="read">
+                     <columns>
+                        <column width="50%">
+                           <sections>
+                              <section title="Information">
+                                 <fields>
+                                    <field id="Name"/>
+                                    <field id="IsPrivate"/>
+                                    <field id="AccountId">
+                                       <label>Account</label>
+                                    </field>
+                                    <field id="Amount"/>
+                                    <field id="Type">
+                                       <label>Type</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                              <section title="Description">
+                                 <fields>
+                                    <field id="Description" maxdisplaycharacters="255">
+                                       <label/>
+                                    </field>
+                                 </fields>
+                              </section>
+                              <section title="New Section">
+                                 <fields>
+                                    <field id="LeadSource"/>
+                                    <field id="CampaignId">
+                                       <label>Primary Campaign Source</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="50%">
+                           <sections>
+                              <section title=" Forecast">
+                                 <fields>
+                                    <field id="StageName"/>
+                                    <field id="Probability"/>
+                                    <field id="NextStep"/>
+                                    <field id="CloseDate"/>
+                                 </fields>
+                              </section>
+                              <section title="System Information">
+                                 <fields>
+                                    <field id="OwnerId">
+                                       <label>Owner</label>
+                                    </field>
+                                    <field type="COMBO">
+                                       <label>Last Modified By</label>
+                                       <template model="Opportunity" multiple="false">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                    </field>
+                                    <field type="COMBO">
+                                       <label>Created By</label>
+                                       <template model="Opportunity" multiple="false">{{CreatedById}}, {{CreatedDate}}</template>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </tab>
+            <tab name="Products" icon="ui-silk-cart">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchbox="false" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="LineItems" mode="read">
+                     <fields>
+                        <field id="PricebookEntryId" type="CUSTOM" optionsource="model" optionmodel="PricebookEntries" displaytemplate="{{Product2.Name}} (List: {{UnitPrice}})" snippet="pricebookEntryRenderer" required="true">
+                           <label>Product</label>
+                        </field>
+                        <field id="ServiceDate" required="true"/>
+                        <field id="Quantity" type="CUSTOM" snippet="quantityRenderer"/>
+                        <field id="UnitPrice" required="true"/>
+                        <field id="Description"/>
+                        <field id="TotalPrice" readonly="true">
+                           <summaries>
+                              <summary>sum</summary>
+                           </summaries>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                        <action type="custom" snippet="cloneRecord" label="Clone Product" icon="ui-silk-arrow-divide"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massedit"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <!--<action type="redirect" label="Choose Pricebook" url="/oppitm/choosepricebook.jsp?id={{$Param.id}}&amp;retURL=%2F{{$Param.id}}&amp;sUrl=%2F{{$Param.id}}" icon="ui-silk-book-edit"/>-->
+                        <!--<action type="redirect" label="Add Product" url="/p/opp/SelectSearch?addTo={{$Param.id}}&amp;retURL=%2F{{$Param.id}}" icon="ui-silk-cart-put"/>-->
+                     </actions>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Key People" icon="ui-silk-group-key">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="OpportunityRoles" mode="read">
+                     <fields>
+                        <field id="ContactId">
+                           <label>Person</label>
+                        </field>
+                        <field id="Contact.AccountId">
+                           <label>Account</label>
+                        </field>
+                        <field id="Contact.Email"/>
+                        <field id="Contact.Phone"/>
+                        <field id="Contact.Title"/>
+                        <field id="Role" required="true"/>
+                        <field id="IsPrimary"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Documents" icon="ui-silk-report-add">
+               <components>
+                  <tabset>
+                     <tabs>
+                        <tab name="Attachments" icon="ui-silk-attach">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="false" model="Attachments" mode="read">
+                                 <fields>
+                                    <field id="Name"/>
+                                    <field type="COMBO" readonly="true">
+                                       <label>Last Modified By</label>
+                                       <template model="Attachments" multiple="true">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                    </field>
+                                    <field id="CreatedById">
+                                       <label>Created By</label>
+                                    </field>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                    <action type="redirect" label="View File" url="/servlet/servlet.FileDownload?file={{Id}}" icon="ui-silk-report-go"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                              </skootable>
+                           </components>
+                        </tab>
+                        <tab name="Notes" icon="ui-silk-note">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="Notes">
+                                 <fields>
+                                    <field id="Title"/>
+                                    <field id="Body"/>
+                                    <field id="OwnerId">
+                                       <label>Owner</label>
+                                    </field>
+                                    <field type="COMBO" readonly="true">
+                                       <label>Last Modified By</label>
+                                       <template model="Notes" multiple="true">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                    </field>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                              </skootable>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+</skuidpage>
