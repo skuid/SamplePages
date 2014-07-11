@@ -1,0 +1,526 @@
+//This File must be put into a Static Resource with name OpportunityJS in order for opportunity pages to work correctly
+
+(function( skuid ){
+	
+   var $ = skuid.$;
+   
+   // Generic snippet used to save all new items in a popup
+   // after blocking the UI with an appropriate "Saving new <Objects>..." message,
+   // then finding all "parent" models on the saved objects
+   // and updating them
+   skuid.snippet.registerSnippet('saveNewItemsInPopup',function(params){
+	  var component = params.component,
+		   popup = component.editor.element.closest('.ui-dialog-content'),
+		   modelsToSave = [],
+		   objLabelsToSave = [],
+		   uniqueModels = {};
+		
+		popup.children().each(function(){
+		   var obj = $(this).data('object');
+		   if (obj && obj.model && !uniqueModels[obj.model.id]) {
+		       var model = obj.model;
+		       modelsToSave.push(model);
+		       if (model.data && model.data.length) {
+		           if (model.data.length>1) {
+		               objLabelsToSave.push(model.labelPlural);
+		           } else {
+		               objLabelsToSave.push(model.label);
+		           }
+		       }
+		       uniqueModels[obj.model.id] = 1;
+		   }
+		});
+		
+		var message = 'Saving new ';
+		if (objLabelsToSave.length < 3) {
+		   message += objLabelsToSave.join(' and ');
+		} else {
+		   var lastObj = objLabelsToSave.pop();
+		   message += objLabelsToSave.join(', ');
+		   message += ', and ' + lastObj;
+		}
+		message += '...';
+		popup.block({
+		   message: message
+		});
+		
+		skuid.model.save(modelsToSave,{callback:function(result){
+		   if (result.totalsuccess){
+		
+		       // Refresh the data in related Models on the page
+		       var uniqueRelatedObjectsToCheck = {},
+		           relatedModelsToUpdate = [];
+		
+		       $.each(modelsToSave,function(){
+		           if (this.objectName && !uniqueRelatedObjectsToCheck[this.objectName]) {
+		               uniqueRelatedObjectsToCheck[this.objectName] = 1;
+		           }
+		       });
+		
+		       // Loop over all Models,
+		       // including the Models we've already saved,
+		       // and find ones that are on the same objects as the ones we've already saved.
+		       // Update them if they do not have unsaved changes.
+		       $.each(skuid.model.list(),function(){
+		           if (uniqueRelatedObjectsToCheck[this.objectName]
+		           && !this.hasChanged) {
+		               relatedModelsToUpdate.push(this);
+		           }
+		       });
+		       
+		       // Unregister the children of our popup component
+		       $.each(popup.children(),function(){
+		           // first unregister the component
+		           var obj = $(this).data('component');
+		           if (obj && obj.unregister) obj.unregister();
+		           // Then check the objects
+		           obj = $(this).data('object');
+		           if (obj && obj.model) {
+		               $.each(obj.model.registeredFields,function(){
+		                   this.unregister();
+		               });
+		           }
+		       });
+		
+		       $.when(skuid.model.updateData(relatedModelsToUpdate)).then(function(){
+		           
+		           popup.dialog('destroy');
+		
+		           // Create new Rows in our Models to Save,
+		           // to prepare for the NEXT time someone creates a new record
+		           $.each(modelsToSave,function(){
+		               this.createRow();
+		           });
+		
+		       });
+		   } else {
+		       popup.unblock();
+		   }
+		}});
+   }); // end snippet
+   
+   // Snippet for cloning a record in a table,
+   // particularly an Opportunity Line Items table,
+   // for which the TotalPrice field should NOT be cloned
+   // as we will be cloning SalesPrice
+   // and BOTH of the two cannot be set on the same insert/update call
+   skuid.snippet.registerSnippet('cloneRecord',function(){
+	   	var params = arguments[0],
+		    item = params.item,
+		    row = item.row,
+		    model = params.model,
+		    $ = skuid.$;
+	
+		// Create a new row in our table
+		var newRow = model.createRow();
+	
+		// Put in default values from the fields in our current row
+		if (row) {
+		    $.each(row,function(fieldId,val) {
+		        // Only allow fields that are Objects,
+		        // or that are Createable
+		        if ((fieldId !== 'attributes') && (val !== null) && (fieldId !== 'Id') && (fieldId !== 'TotalPrice')) {
+		            var modelField = model.getField(fieldId);
+		            if ((typeof val === 'object') 
+		            || (modelField && modelField.createable)) {
+		                model.updateRow(newRow,fieldId,val);
+		            }
+		        }
+		    });
+		}
+	
+		// Force all registered lists to put our row into edit mode
+		$.each(model.registeredLists,function(){
+		    // See if this item has been rendered in this list yet
+		    var newItem = this.renderedItems[newRow.Id];
+		    if (newItem) {
+		        newItem.mode = 'edit';
+		        newItem.refreshFields();
+		    }
+		});
+	
+ 
+   });
+   
+   // Convenience wrappers around the core pricebookEntryRenderer 
+   skuid.snippet.registerSnippet('pricebookEntryRenderer',function(field,value){
+	  skuid.snippet.getSnippet('_pricebookEntryRenderer')({
+		  field:field,
+		  value:value,
+		  renderAsPicklist:true
+	  }); 
+   });
+   
+   skuid.snippet.registerSnippet('pricebookEntryPicklistRenderer',function(field,value){
+	  skuid.snippet.getSnippet('_pricebookEntryRenderer')({
+		  field:field,
+		  value:value,
+		  renderAsPicklist:true
+	  }); 
+   });
+   
+   // Used for the PricebookEntryId field in a Line Items table
+   skuid.snippet.registerSnippet('_pricebookEntryRenderer',function(config){
+	   var field = config.field,
+			value = config.value,
+			renderer = skuid.ui.fieldRenderers[field.metadata.displaytype],
+			mode = field.mode,
+			$ = skuid.$,
+			listener,
+	
+		// Get the pricebook entries model we are using for the renderer
+			optionsModel = field.options.optionmodel,
+			pricebookEntriesModel;
+	   
+	   if (optionsModel) pricebookEntriesModel = skuid.model.getModel(optionsModel);
+		
+		if ((mode === 'edit') && (pricebookEntriesModel || config.renderAsPicklist)) {
+		    // Specify that we want to display our field as a Picklist
+		    field.options.type = 'REFPICK';
+		}
+		
+		// Run standard renderer for the current mode
+		// (applies to read/edit mode)
+		renderer[mode](field,value);
+		
+		// Function that will update the value of our LineItem row's UnitPrice field
+		// based on the selected PricebookEntry's ListPrice / UnitPrice
+		var updateUnitPriceField = function(){
+		
+		    // Find the selected PricebookEntryId
+		    var newEntryId = field.model.getFieldValue(field.row,'PricebookEntryId');
+		    // Find the corresponding PricebookEntry record,
+		    // from the Pricebook Entries MODEL if specified
+		    // otherwise from our current row itself
+		    var entry,
+		    	newPrice;
+		    if (pricebookEntriesModel){
+		    	entry = pricebookEntriesModel.getRowById(newEntryId);
+		    	newPrice = pricebookEntriesModel.getFieldValue(entry,'UnitPrice');
+		    } else {
+		    	entry = field.model.getFieldValue(field.row,'PricebookEntry');
+		    	newPrice = field.model.getFieldValue(field.row,'PricebookEntry.UnitPrice');
+		    }
+		
+		    // Force updates of the UnitPrice (SalesPrice) field 
+		    //with the newly-selected PricebookEntry's UnitPrice field
+		    field.model.updateRow(field.row,'UnitPrice',newPrice);
+		    
+		
+		    // Rerender the UnitPrice field in the row,
+		    // if that field has been rendered.
+		    var item = field.editor.lists[0].renderedItems[field.row.Id];
+		    if (item) {
+		        $.each(item.fields,function(i,f){
+		            if (f.id == 'UnitPrice') {
+		                f.render();
+		                return false;
+		            }
+		        });
+		    }
+		};
+		
+		if (mode == 'edit') {
+		
+		    // If we do not yet have a value for our UnitPrice field,
+		    // update it.
+		    if (!field.model.getFieldValue(field.row,'UnitPrice')) {
+		        updateUnitPriceField();
+		    }
+		
+		    listener = new skuid.ui.Field(field.row,field.model,null,{
+		        fieldId: 'PricebookEntryId',
+		        register: true
+		    });
+		    listener.handleChange = function(){
+		        updateUnitPriceField();
+		    };
+		
+		}
+   }); // end snippet
+   
+   // Used for the Quantity field in a Line Items table
+   skuid.snippet.registerSnippet('quantityRenderer',function(){
+	   var field = arguments[0],
+		   value = arguments[1];
+		
+		if (field.mode == 'read') {
+		   skuid.ui.fieldRenderers.DOUBLE.read(field,value);
+		} else {
+		
+		   skuid.ui.fieldRenderers.DOUBLE.edit(field,value);
+		
+		   skuid.utils.delayInputCallback(
+		       field.element.find('input'),
+		       function(newValue) {
+		           // Force updates of the UnitPrice (Sales Price) field
+		           field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice'));
+		       }
+		   );
+		
+		}
+   }); // end snippet
+   
+   // Used for the Quantity field in a Line Items table
+   skuid.snippet.registerSnippet('totalPriceRenderer',function(){
+		var FIELDS_TO_LISTEN_ON = ['Quantity','UnitPrice','Discount'];
+		
+		var field = arguments[0],
+		    value = arguments[1],
+		    row = field.row,
+		    listener;
+		
+		skuid.ui.fieldRenderers.DOUBLE[field.mode](field,value);
+		
+		// Register a listener so that if any of FIELDS_TO_LISTEN_ON are updated,
+		// then we will update ourself as well.
+		
+		if (!listener) {
+		    
+		    listener = new skuid.ui.Field(row,field.model,null,{register:false});
+		
+		    var showTotalPrice = function(){
+		
+		        var quantity = row.Quantity || 0,
+		            price = row.UnitPrice || 0.0,
+		            discount = row.Discount || 0.0,
+		            total = ((quantity * price) * (100 - discount)) / 100.0;
+		        
+		        field.model.updateRow(row,'TotalPrice',total);
+		
+		        field.element.empty();
+		        skuid.ui.fieldRenderers.DOUBLE.readonly(field,total);
+		        
+		        // Remove the changes entry for TotalPrice,
+		        // because Salesforce throws a fit if both UnitPrice and TotalPrice
+		        // are specified in an update call.
+		        var changesRow = field.model.changes[row.Id];
+		        if ('TotalPrice' in changesRow) {
+		            delete changesRow['TotalPrice'];
+		        }
+		    }
+		
+		    listener.handleChange = function(){ showTotalPrice(); };
+		    listener.render = function() {};
+		
+		    skuid.$.each(FIELDS_TO_LISTEN_ON,function(i,fieldToRegisterOn){
+		        field.model.registerField(listener,fieldToRegisterOn);
+		    });
+		
+		    setTimeout(function(){
+		        // If there is already a changes row for this item,
+		        // then calculate the total price
+		        if (field.model.changes[field.row.Id]) {
+		            showTotalPrice();
+		        }
+		    },100);
+		}
+   }); // end snippet
+   
+   // Core functionality for a Custom Basic Component
+   // that can be added into a  Skuid Page after a Line Items table.
+   // The purpose is to hide a Line Items table
+   // if an Opportunity's Pricebook has not been selected
+   skuid.snippet.registerSnippet('HideLineItemsTableIfNoPricebook_core',function(params){
+	   	var component = params.component,
+		   OppModel = params.OppModel,
+		   LineItemsModel = params.LineItemsModel,
+		   PricebookEntriesModel = skuid.model.getModel('PricebookEntries'),
+		   Opp = params.Opp ? params.Opp : (OppModel ? OppModel.getFirstRow() : null),
+		   listener;
+		
+		if (Opp) {
+		   
+		   var onPricebookChange = function(){
+		
+		       var LineItemsTable = $('#LineItemsTable');
+		
+		       // 1. If we have a value, show our LineItemsTable, 
+		       //      and Update our PricebookEntries model
+		       // 2. Otherwise hide the Table.
+		       var PricebookId = OppModel.getFieldValue(Opp,'Pricebook2Id',true);
+		       if (PricebookId) {
+		
+		           LineItemsTable.show();
+		
+		           var PbookCondition = PricebookEntriesModel.getConditionByName('Pricebook2Id');
+		
+		           if (PbookCondition.value !== PricebookId) {
+		               PricebookEntriesModel.setCondition(PbookCondition,PricebookId);
+		               PricebookEntriesModel.doQuery = true;
+		               PricebookEntriesModel.updateData(function(){
+		                  if (LineItemsModel) {
+		                       // If we are dealing with a NEW Opportunity,
+		                       // create a default Line Item
+		                       if (skuid.model.isNewId(Opp.Id) && !LineItemsModel.data.length){
+		                           LineItemsModel.createRow();
+		                       } else if (LineItemsModel.data.length) {
+		   
+		                           // If we have entries in our LineItems model already,
+		                           // remove the selected PricebookEntries from them,
+		                           // as they will be invalid.
+		                           $.each(LineItemsModel.data,function(i,lineItem){
+		                               if (lineItem.PricebookEntryId) {
+		                                   var currProductId = lineItem.PricebookEntry.Product2Id,
+		                                       foundMatchingProduct = false;
+		                                   // Try to find a matching Product record in our PricebookEntriesModel
+		                                   $.each(PricebookEntriesModel.data,function(){
+		                                       if (this.Product2Id === currProductId) {
+		                                           LineItemsModel.updateRow(lineItem,{
+		                                               'PricebookEntryId':this.Id,
+		                                               'PricebookEntry':this
+		                                           });
+		                                           foundMatchingProduct = true;
+		                                           return false;
+		                                       }
+		                                   });
+		                                   // If we did NOT find a matching product,
+		                                   // get rid of the current PricebookEntry for our LineItem
+		                                   if (!foundMatchingProduct) {
+		                                       LineItemsModel.updateRow(lineItem,{
+		                                           'PricebookEntryId':null,
+		                                           'PricebookEntry':null
+		                                       });
+		                                   }
+		                               }
+		                           });
+		                           
+		                       }
+		                   }
+		   
+		                   LineItemsTable.data('object').list.render({
+		                       refreshFields:true,
+		                       resetPagination:false
+		                   });
+		               });
+		
+		           }
+		
+		       } else {
+		           LineItemsTable.hide();
+		       }
+		
+		   };
+		   
+		   // Register a listener on the PricebookId field
+		   // so that when it changes,
+		   // we rerun our logic
+		   if (!listener) {
+		       listener = new skuid.ui.Field(Opp,OppModel,null,{
+		           fieldId: 'Pricebook2Id',
+		           register: true
+		       });
+		       listener.handleChange = function(){
+		           onPricebookChange();
+		       };
+		   }
+		
+		   // Run the logic initially
+		   setTimeout(function(){
+		
+		       // If we do not have a Pricebook selected yet,
+		       // check to see if there is only one Pricebook available.
+		       // If there's only one Pricebook,
+		       // then pick it.
+		       // Otherwise, we will expect our users to choose the Pricebook.
+		       // Then, if our Opportunity record is NEW,
+		       // pre-create a Line Items in it if we have a line items model
+		       var Pricebooks = skuid.model.getModel('Pricebooks');
+		       if ((!Opp.Pricebook2Id) && Pricebooks && Pricebooks.data && (Pricebooks.data.length===1)) {
+		           OppModel.updateRow(Opp,{
+		               'Pricebook2Id': Pricebooks.data[0].Id,
+		               'Pricebook2': Pricebooks.data[0]
+		           });
+		           if (LineItemsModel && skuid.model.isNewId(Opp.Id) && !LineItemsModel.data.length){
+		               LineItemsModel.createRow();
+		           }
+		           var fe = $('#SelectPricebook');
+		           if (fe) {
+		               var list = fe.data('object').list;
+		               list && list.render();
+		           }
+		       } else {
+		           onPricebookChange();
+		       }
+		   },200);
+		
+		}
+		
+		component.unregister = function(){
+		
+			skuid.component.Component.prototype.unregister.call(component);
+		
+		   // Unregister child fields on our LineItemsModel
+		   if (LineItemsModel) {
+		       $.each(LineItemsModel.registeredFields,function(){
+		           this.unregister();
+		       });
+		   }
+		};
+	}); // end snippet
+
+   // Core logic for a Custom Basic Component 
+   // which can be added to a Popup to load associated child data objects
+   // when the popup is loaded.
+   // An alternative approach is to use a Page Include.
+   skuid.snippet.registerSnippet('_LoadChildDataCore',function(config){
+	   
+	   var CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS 
+	   			= config.CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS,
+	   		LOADING_MESSAGE = config.loadingMessage || skuid.$L('loading'),
+	   		element = config.element,
+        	component = config.component,
+        	context = component.context,
+            popup = $('.ui-dialog-content'),
+            needToLookForPopup = true;
+
+        if (!context) return;
+
+        var contextRowId = context.row.Id,
+        	timer;
+        
+        var findPopup = function(){
+            clearTimeout(timer);
+            if (!needToLookForPopup) {
+                return;
+            } else {
+                popup = $('.ui-dialog-content');
+                if (!popup) {
+                    timer = setTimeout(findPopup,300);
+                } else {
+                    needToLookForPopup = false;
+                    popup.block({
+                        message: LOADING_MESSAGE
+                    });
+                }
+            }
+        }
+        
+        var modelsToUpdate = [];
+        $.each(CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS,function(modelId,conditionId){
+            var model = skuid.model.getModel(modelId);
+            if (model) {
+                var condition = model.getConditionByName(conditionId,true);
+                if (condition) {
+                    model.setCondition(condition,contextRowId,false);
+                }
+                modelsToUpdate.push(model);
+            }
+        });
+
+    	// Cancel any outstanding changes in our Models
+    	// to ensure our updateData succeeds
+        skuid.model.cancel(modelsToUpdate);
+        
+        var dfd = skuid.model.updateData(modelsToUpdate);
+
+        findPopup();
+
+        $.when(dfd).then(function(){
+            needToLookForPopup = false;
+            if (popup) popup.unblock();
+        });
+   })
+   
+    
+})(skuid);    
