@@ -1,0 +1,144 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Contact">
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inline" name="DatepickerSettingsOverride" cachelocation="false">skuid.$.datepicker.setDefaults({
+  changeMonth: true,
+  changeYear: true,
+  yearRange: "-75:-5"    
+});</jsitem>
+      </javascript>
+      <css/>
+   </resources>
+   <models>
+      <model id="OwnerPrefill" limit="100" query="true" createrowifnonefound="false" sobject="User">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+      <model id="Account" limit="1" query="true" createrowifnonefound="false" orderby="" sobject="Account">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="accid" field="Id" operator="=" userinfotype="userid" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="Contact" limit="1" query="false" createrowifnonefound="true" orderby="LastModifiedDate DESC" sobject="Contact">
+         <fields>
+            <field id="Phone"/>
+            <field id="Fax"/>
+            <field id="AssistantPhone"/>
+            <field id="Birthdate"/>
+            <field id="Description"/>
+            <field id="Title"/>
+            <field id="MobilePhone"/>
+            <field id="Email"/>
+            <field id="HomePhone"/>
+            <field id="MailingStreet"/>
+            <field id="MailingPostalCode"/>
+            <field id="MailingState"/>
+            <field id="MailingCountry"/>
+            <field id="MailingCity"/>
+            <field id="Department"/>
+            <field id="HasOptedOutOfFax"/>
+            <field id="HasOptedOutOfEmail"/>
+            <field id="DoNotCall"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="ReportsToId"/>
+            <field id="ReportsTo.Name"/>
+            <field id="AssistantName"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="AccountId" operator="=" mergefield="Id" novaluebehavior="deactivate" model="Account" enclosevalueinquotes="true"/>
+            <condition type="modelmerge" value="" field="OwnerId" operator="=" model="OwnerPrefill" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Contact">
+         <actions>
+            <action type="savecancel" label="New Action" afterSave="/{{Id}}" afterCancel="{{#$Param.retURL}}{{$Param.retURL}}{{/$Param.retURL}}{{^$Param.retURL}}/{{Model.KeyPrefix}}/o{{/$Param.retURL}}" window="self">
+               <models/>
+            </action>
+         </actions>
+         <maintitle>New {{Model.Label}}</maintitle>
+         <subtitle>{{#$Model.Account.data.length}}{{$Model.Account.data.0.Name}}{{/$Model.Account.data.length}}</subtitle>
+      </pagetitle>
+      <basicfieldeditor showsavecancel="false" showheader="true" model="Contact" mode="edit">
+         <columns>
+            <column width="33.3%">
+               <sections>
+                  <section title="Personal Information">
+                     <fields>
+                        <field id="FirstName"/>
+                        <field id="LastName"/>
+                        <field id="Birthdate"/>
+                     </fields>
+                  </section>
+                  <section title="Description">
+                     <fields>
+                        <field id="Description">
+                           <label> </label>
+                        </field>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Contact Information">
+                     <fields>
+                        <field id="DoNotCall"/>
+                        <field id="Email"/>
+                        <field id="Phone"/>
+                        <field id="HomePhone"/>
+                        <field id="AssistantPhone"/>
+                        <field id="Fax"/>
+                     </fields>
+                  </section>
+                  <section title="Address">
+                     <fields>
+                        <field id="MailingStreet"/>
+                        <field id="MailingCity"/>
+                        <field id="MailingState"/>
+                        <field id="MailingPostalCode"/>
+                        <field id="MailingCountry"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Employment">
+                     <fields>
+                        <field id="AccountId" type="" optionsource="" optionmodel="Account">
+                           <filters/>
+                        </field>
+                        <field id="Title"/>
+                        <field id="Department"/>
+                        <field id="ReportsToId"/>
+                        <field id="AssistantName"/>
+                     </fields>
+                  </section>
+                  <section title="System Information">
+                     <fields>
+                        <field id="OwnerId"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+         </columns>
+      </basicfieldeditor>
+   </components>
+</skuidpage>
