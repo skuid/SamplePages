@@ -1,0 +1,1225 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Campaigns">
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="CampaignMemberStatus" url="">var field = arguments[0],
+    value = skuid.utils.decodeHTML(arguments[1]),
+    $ = skuid.$,
+    StatusModel,
+    hasResponded = field.row.HasResponded || false,
+    isMassUpdate = (typeof field.row.HasResponded === 'undefined');
+
+// Find the CampaignMemberStatus model
+$.each(skuid.model.list(),function(){
+   if (this.objectName === 'CampaignMemberStatus') {
+      StatusModel = this;
+      return false;
+   }
+});
+
+if (field.mode!=='edit'){
+   skuid.ui.fieldRenderers[field.metadata.displaytype][field.mode](field,value);
+} else {
+
+   var entries = $.map(StatusModel.data,function(item){
+       return {
+            label: item.Label,
+            value: item.Label,
+            defaultValue: item.IsDefaultValue,
+            isActive: true
+       };
+   });
+    field.element.append(skuid.ui.renderers.PICKLIST.edit({
+    	value : value,
+		entries : entries,
+		renderas : field.options.type,
+		onChange : function(value) {
+			field.model.updateRow(field.row,field.id,value,{ initiatorId : field._GUID});
+		},
+		required : field.required,
+		addNoneOption: field.options.addNoneOption,
+		mode : field.mode,
+		buttonSetName : field.id + '_' + field._GUID,
+		noneLabel : field.options.noneLabel
+	}));
+}</jsitem>
+         <jsitem location="inline" name="Task.MarkCompleted">skuid.snippet.registerSnippet('task.markCompleted',function(params){
+                // Mark all selected items as closed,
+                // then save our 2 Tasks models
+                var model = params.model,
+                    list = params.list,
+                    selectedItems = params.item ? [params.item] : list.getSelectedItems();
+                if (selectedItems.length === 1 &amp;&amp; skuid.model.isNewId(selectedItems[0].row.Id)) {
+                    alert('Please finish creating this Task before marking it as completed.');
+                    return;
+                }
+                $j.each(selectedItems,function(i,item){
+                    model.updateRow(item.row,'Status','Completed');
+                });
+                // Block the list from having updates
+                list.element.block({
+                    css: list.blockUICSS, overlayCSS: list.blockOverlayCSS,
+                    message:'Marking Tasks as Completed...'
+                });
+            
+                var saveFinishes = model.save({callback:
+                    function(){
+                        var updateFinishes = skuid.model.updateData([model,skuid.model.getModel('TaskHistory')]);
+                        $j.when(updateFinishes).then(
+                            function(){ list.element.unblock(); },
+                            function(){ list.element.unblock(); }
+                        );
+                    }
+                });
+                
+            });</jsitem>
+         <jsitem location="inlinesnippet" name="saveNewItemsInPopup" cachelocation="false" url="">var $ = skuid.$,
+    params = arguments[0],
+    component = params.component,
+    popup = component.editor.element.closest('.ui-dialog-content'),
+    modelsToSave = [],
+    objLabelsToSave = [],
+    uniqueModels = {};
+
+popup.children().each(function(){
+    var obj = $(this).data('object');
+    if (obj &amp;&amp; obj.model &amp;&amp; !uniqueModels[obj.model.id]) {
+        var model = obj.model;
+        modelsToSave.push(model);
+        if (model.data &amp;&amp; model.data.length) {
+            if (model.data.length&gt;1) {
+                objLabelsToSave.push(model.labelPlural);
+            } else {
+                objLabelsToSave.push(model.label);
+            }
+        }
+        uniqueModels[obj.model.id] = 1;
+    }
+});
+
+var message = 'Saving new ';
+if (objLabelsToSave.length &lt; 3) {
+    message += objLabelsToSave.join(' and ');
+} else {
+    var lastObj = objLabelsToSave.pop();
+    message += objLabelsToSave.join(', ');
+    message += ', and ' + lastObj;
+}
+message += '...';
+popup.block({
+    message: message
+});
+
+skuid.model.save(modelsToSave,{callback:function(result){
+    if (result.totalsuccess){
+
+        // Refresh the data in related Models on the page
+        var uniqueRelatedObjectsToCheck = {},
+            relatedModelsToUpdate = [];
+
+        $.each(modelsToSave,function(){
+            if (this.objectName &amp;&amp; !uniqueRelatedObjectsToCheck[this.objectName]) {
+                uniqueRelatedObjectsToCheck[this.objectName] = 1;
+            }
+        });
+
+        // Loop over all Models,
+        // including the Models we've already saved,
+        // and find ones that are on the same objects as the ones we've already saved.
+        // Update them if they do not have unsaved changes.
+        $.each(skuid.model.list(),function(){
+            if (uniqueRelatedObjectsToCheck[this.objectName]
+            &amp;&amp; !this.hasChanged) {
+                relatedModelsToUpdate.push(this);
+            }
+        });
+        
+        $.when(skuid.model.updateData(relatedModelsToUpdate)).then(function(){
+            $.each(popup.children(),function(){
+                var obj = $(this).data('object');
+                if (obj &amp;&amp; obj.unregister) obj.unregister();
+            });
+            popup.dialog('destroy');
+
+            // Create new Rows in our Models to Save,
+            // to prepare for the NEXT time someone creates a new record
+            $.each(modelsToSave,function(){
+                this.createRow();
+            });
+
+        });
+    } else {
+        popup.unblock();
+    }
+}});</jsitem>
+         <jsitem location="inlinesnippet" name="AddMembers" cachelocation="false">var params = arguments[0],
+   $ = skuid.$,
+   objectName = params.model.objectName,
+   items = params.item ? [params.item] : params.list.getSelectedItems(),
+   MembersModel = skuid.model.getModel('CampaignMembers_'+objectName),
+   StatusModel = skuid.model.getModel('DummyMemberStatus'),
+   Status = StatusModel.getFieldValue(StatusModel.getFirstRow(),'Status',true);
+
+var newRowIds = {};
+
+$.each(items,function(i,item){
+    var row = MembersModel.createRow({
+        additionalConditions: [
+            {
+                field: objectName+'Id',
+                value:item.row.Id
+            },
+            {
+                field: 'Status',
+                value: Status
+            }
+        ]    
+   });
+   MembersModel.updateRow(row,objectName,item.row);
+   newRowIds[row.Id]=1;
+});
+
+// Refresh the fields in the Members model
+// so that they will show the related field data, e.g. Lead.Email, Lead.Title
+$.each(MembersModel.registeredLists,function(i,list){
+   $.each(list.renderedItems,function(rowId,item){
+      if (rowId in newRowIds) {
+          item.refreshFields();
+      } 
+   });
+});
+
+
+   
+</jsitem>
+         <jsitem location="inlinecomponent" name="CampaignHierarchy" cachelocation="false" url="">var element = arguments[0],
+   $ = skuid.$;
+
+// Add our Parent Campaign into our Child Campaigns table,
+// so that we have a single Model to interact with
+var CCModel = skuid.model.getModel('ChildCampaigns');
+var MainModel = skuid.model.getModel('Campaign');
+var copyRow = $.extend({},MainModel.getFirstRow());
+CCModel.adoptRow(copyRow,{doAppend:false});
+
+//
+// Html fragments
+//
+
+var mergeRowAsHtml = function(row,template){
+  return CCModel.mergeRow(row,template).html();  
+};
+var mergeGlobalAsHtml = function(template){
+  return skuid.utils.merge('global',template,{createFields:true,registerFields:false}).html();  
+};
+
+var numberCells = function(row){
+    return '&lt;td&gt;' + mergeRowAsHtml(row,'{{NumberOfConvertedLeads}}') + '&lt;/td&gt;&lt;td&gt;' + mergeRowAsHtml(row,'{{AmountWonOpportunities}}') + '&lt;/td&gt;';
+};    
+    
+var mainRowBody = function(row,indent) {
+    return '&lt;tr class="nx-item"&gt;'
+        // NAME cell
+        + '&lt;td&gt;&lt;div class="nx-field ' + indent + '"&gt;&lt;div class="nx-field-text"&gt;'
+        + mergeRowAsHtml(row,'{{Name}}')
+        + '&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;'
+        // NUMBER CELLS
+        + numberCells(row)
+        + '&lt;/tr&gt;';
+};        
+
+var template = 
+
+    '&lt;table class="nx-skootable-data hierarchy-table"&gt;'
+
+    //
+    // BODY
+    //
+    + '&lt;tbody&gt;'
+
+    //
+    // Row for the PRIMARY CAMPAIGN
+    //
+
+    + '&lt;tr class="nx-item campaign-hierarchy-row1"&gt;'
+    
+    // NAME CELL
+    + '&lt;td&gt;'
+    + mergeRowAsHtml(CCModel.getFirstRow(),
+        '&lt;div&gt;{{Name}}'
+        // If we have a parent Campaign,
+        // add a link to view that Parent
+        + '{{#ParentId}}'
+        + '&lt;div style="display:inline-block;"&gt; (&lt;a href="/{{{ParentId}}}"&gt;View Parent&lt;/a&gt;)&lt;/div&gt;'
+        + '{{/ParentId}}'
+        + '&lt;/div&gt;'
+    )
+    
+    + '&lt;/td&gt;'
+    
+    // NUMBERS CELLS
+    + numberCells(CCModel.getFirstRow())
+    
+    + '&lt;/tr&gt;';
+
+    //
+    // Rows for the Child/Grand-child Campaigns
+    //
+$.each(CCModel.data,function(i,row){
+    if (i===0)return true;// Skip the first row
+    template += mainRowBody(row,"indent1");
+    if (row.ChildCampaigns &amp;&amp; row.ChildCampaigns.records) {
+        $.each(row.ChildCampaigns.records,function(i,cc){
+           template += mainRowBody(cc,"indent2");
+        });
+    }
+});
+
+template += 
+    '&lt;/tbody&gt;';
+    
+    // HEADER
+    //
+template += '&lt;thead&gt;'
+    + '&lt;tr&gt;'
+    + '{{#$Model.ChildCampaigns}}'
+    + '&lt;th&gt;{{fieldsMap.Name.label}}&lt;/th&gt;'
+    + '&lt;th&gt;{{fieldsMap.NumberOfConvertedLeads.label}}&lt;/th&gt;'
+    + '&lt;th&gt;{{fieldsMap.AmountWonOpportunities.label}}&lt;/th&gt;'
+    + '{{/$Model.ChildCampaigns}}'
+    + '&lt;/tr&gt;'
+    + '&lt;/thead&gt;'
+
+    //
+    // TFOOT
+    //
+    + '&lt;tfoot&gt;'
+    + '&lt;tr&gt;'
+    + '&lt;th&gt;Hierarchy Total&lt;/th&gt;'
+    + '&lt;th&gt;'+mergeRowAsHtml(CCModel.getFirstRow(),'{{HierarchyNumberOfConvertedLeads}}')+'&lt;/th&gt;'
+    + '&lt;th&gt;'+mergeRowAsHtml(CCModel.getFirstRow(),'{{HierarchyAmountWonOpportunities}}')+'&lt;/th&gt;'
+    + '&lt;/tr&gt;'
+    + '&lt;/tfoot&gt;';
+    
+template += '&lt;/table&gt;';
+
+element.html(skuid.utils.merge('global',template,{createFields:true}).html());</jsitem>
+      </javascript>
+      <css>
+         <cssitem location="inline" name="hierarchy table" cachelocation="false">.hierarchy-table .indent1 {
+    padding-left: 3.0em;
+}
+
+.hierarchy-table .indent2 {
+    padding-left: 6.0em;
+}
+
+.hierarchy-table tfoot {
+    background-color: #f2e7d1;
+}
+
+.campaign-hierarchy-row1 .nx-field {
+    display:inline-block;
+}
+
+.nx-skootable-data tbody .nx-item.campaign-hierarchy-row1 td {
+    background-color: #fffcf3;
+}</cssitem>
+      </css>
+   </resources>
+   <models>
+      <model id="Campaign" limit="1" query="true" createrowifnonefound="false" orderby="" sobject="Campaign">
+         <fields>
+            <field id="Name"/>
+            <field id="Type"/>
+            <field id="Status"/>
+            <field id="StartDate"/>
+            <field id="EndDate"/>
+            <field id="ExpectedRevenue"/>
+            <field id="BudgetedCost"/>
+            <field id="ActualCost"/>
+            <field id="ExpectedResponse"/>
+            <field id="NumberSent"/>
+            <field id="Parent.Name"/>
+            <field id="Description"/>
+            <field id="NumberOfLeads"/>
+            <field id="NumberOfConvertedLeads"/>
+            <field id="NumberOfContacts"/>
+            <field id="HierarchyNumberOfOpportunities"/>
+            <field id="NumberOfOpportunities"/>
+            <field id="NumberOfWonOpportunities"/>
+            <field id="AmountAllOpportunities"/>
+            <field id="AmountWonOpportunities"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="NumberOfResponses"/>
+            <field id="CreatedBy.Name"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="CreatedById"/>
+            <field id="LastModifiedById"/>
+            <field id="ParentId"/>
+            <field id="IsActive"/>
+            <field id="LastModifiedDate"/>
+            <field id="Id"/>
+            <field id="CreatedDate"/>
+            <field id="HierarchyNumberOfConvertedLeads"/>
+            <field id="HierarchyAmountWonOpportunities"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="Id" field="Id" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="Opportunity" limit="20" query="true" createrowifnonefound="false" orderby="" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="Amount"/>
+            <field id="StageName"/>
+            <field id="Probability"/>
+            <field id="CloseDate"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="Id" field="CampaignId" operator="=" mergefield="Id" userinfotype="userid" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="CampaignMemberStatuses" limit="" query="true" createrowifnonefound="false" sobject="CampaignMemberStatus" orderby="SortOrder, Label">
+         <fields>
+            <field id="IsDefault"/>
+            <field id="Label"/>
+            <field id="HasResponded"/>
+            <field id="SortOrder"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="CampaignId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+         </conditions>
+      </model>
+      <model id="RelevantEvents" limit="" query="false" createrowifnonefound="false" orderby="" sobject="Event">
+         <fields>
+            <field id="EndDateTime"/>
+            <field id="StartDateTime"/>
+            <field id="Subject"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="Type"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="Id" field="WhatId" operator="=" enclosevalueinquotes="true" novaluebehavior="noquery"/>
+         </conditions>
+      </model>
+      <model id="OpenTask" limit="20" query="true" createrowifnonefound="false" sobject="Task">
+         <fields>
+            <field id="Subject"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="Priority"/>
+            <field id="Status"/>
+            <field id="ActivityDate"/>
+            <field id="ReminderDateTime"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="RecurrenceEndDateOnly"/>
+            <field id="RecurrenceType"/>
+            <field id="Type"/>
+            <field id="SystemModstamp"/>
+            <field id="IsReminderSet"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="WhatId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+            <condition type="fieldvalue" value="Completed" enclosevalueinquotes="true" field="Status" operator="!="/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" operator="!="/>
+         </conditions>
+      </model>
+      <model id="TaskHistory" limit="20" query="true" createrowifnonefound="false" sobject="Task">
+         <fields>
+            <field id="Subject"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="ActivityDate"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="WhatId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+            <condition type="fieldvalue" value="Completed" enclosevalueinquotes="true" field="Status"/>
+         </conditions>
+      </model>
+      <model id="Attachment" limit="10" query="true" createrowifnonefound="false" sobject="Attachment">
+         <fields>
+            <field id="Id"/>
+            <field id="Description"/>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="IsPrivate"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="ContentType"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ParentId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+         </conditions>
+      </model>
+      <model id="Notes" limit="10" query="true" createrowifnonefound="false" sobject="Note">
+         <fields>
+            <field id="CreatedDate"/>
+            <field id="Id"/>
+            <field id="IsPrivate"/>
+            <field id="Title"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ParentId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+         </conditions>
+      </model>
+      <model id="User" limit="1" query="true" createrowifnonefound="false" sobject="User">
+         <fields/>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+      <model id="NewTask" limit="1" query="false" createrowifnonefound="true" sobject="Task">
+         <fields>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Subject"/>
+            <field id="ActivityDate"/>
+            <field id="Priority"/>
+            <field id="Status"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="Description"/>
+            <field id="IsRecurrence"/>
+            <field id="ReminderDateTime"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" operator="="/>
+         </conditions>
+      </model>
+      <model id="NewOpportunity" limit="1" query="false" createrowifnonefound="true" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="IsPrivate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Amount"/>
+            <field id="Type"/>
+            <field id="LeadSource"/>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="StageName"/>
+            <field id="Probability"/>
+            <field id="NextStep"/>
+            <field id="CloseDate"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="CampaignId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+      <model id="Contacts" limit="10" query="true" createrowifnonefound="false" sobject="Contact" orderby="LastName, FirstName">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Title"/>
+            <field id="Email"/>
+         </fields>
+         <conditions>
+            <condition type="join" value="" field="Id" operator="not in" enclosevalueinquotes="true" joinobject="CampaignMember" joinfield="ContactId" state="filterableon" inactive="false" name="ContactsNotInCampaign">
+               <conditions>
+                  <condition type="modelmerge" value="" field="CampaignId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+               </conditions>
+            </condition>
+         </conditions>
+      </model>
+      <model id="Leads" limit="10" query="true" createrowifnonefound="false" sobject="Lead" orderby="LastName, FirstName">
+         <fields>
+            <field id="Company"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="LeadSource"/>
+            <field id="Title"/>
+            <field id="Email"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="LeadSource"/>
+            <condition type="join" value="" field="Id" operator="not in" enclosevalueinquotes="true" joinobject="CampaignMember" joinfield="LeadId" state="filterableon" inactive="false" name="LeadsNotInCampaign">
+               <conditions>
+                  <condition type="modelmerge" value="" field="CampaignId" operator="=" model="Campaign" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+               </conditions>
+            </condition>
+         </conditions>
+      </model>
+      <model id="CampaignMembers_Lead" limit="50" query="true" createrowifnonefound="false" orderby="Lead.LastName,Lead.FirstName" sobject="CampaignMember">
+         <fields>
+            <field id="Status"/>
+            <field id="HasResponded"/>
+            <field id="LeadId"/>
+            <field id="Lead.Company"/>
+            <field id="Lead.Title"/>
+            <field id="Lead.FirstName"/>
+            <field id="Lead.LastName"/>
+            <field id="Lead.Email"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="Id" field="CampaignId" operator="=" enclosevalueinquotes="true"/>
+            <condition type="blank" value="null" field="ContactId" operator="=" enclosevalueinquotes="false"/>
+         </conditions>
+      </model>
+      <model id="CampaignMembers_Contact" limit="50" query="true" createrowifnonefound="false" orderby="Contact.LastName,Contact.FirstName" sobject="CampaignMember">
+         <fields>
+            <field id="ContactId"/>
+            <field id="Contact.Email"/>
+            <field id="Status"/>
+            <field id="HasResponded"/>
+            <field id="Contact.Title"/>
+            <field id="Contact.AccountId"/>
+            <field id="Contact.Account.Name"/>
+            <field id="Contact.FirstName"/>
+            <field id="Contact.LastName"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="Id" field="CampaignId" operator="=" enclosevalueinquotes="true"/>
+            <condition type="blank" value="null" field="LeadId" operator="=" enclosevalueinquotes="false"/>
+         </conditions>
+      </model>
+      <model id="DummyMemberStatus" limit="0" query="false" createrowifnonefound="true" sobject="CampaignMember">
+         <fields>
+            <field id="Status"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="ChildCampaigns" limit="" query="true" createrowifnonefound="false" sobject="Campaign" orderby="Id">
+         <fields>
+            <field id="NumberOfContacts"/>
+            <field id="NumberOfLeads"/>
+            <field id="NumberOfConvertedLeads"/>
+            <field id="NumberOfOpportunities"/>
+            <field id="NumberOfWonOpportunities"/>
+            <field id="AmountWonOpportunities"/>
+            <field id="NumberOfResponses"/>
+            <field id="Name"/>
+            <field id="ChildCampaigns" type="childRelationship">
+               <fields>
+                  <field id="Id"/>
+                  <field id="NumberOfConvertedLeads"/>
+                  <field id="Name"/>
+                  <field id="NumberSent"/>
+                  <field id="NumberOfOpportunities"/>
+                  <field id="NumberOfWonOpportunities"/>
+                  <field id="ParentId"/>
+                  <field id="NumberOfLeads"/>
+                  <field id="NumberOfResponses"/>
+                  <field id="AmountAllOpportunities"/>
+                  <field id="NumberOfContacts"/>
+               </fields>
+               <conditions/>
+            </field>
+         </fields>
+         <conditions logic="">
+            <condition type="modelmerge" value="" field="ParentId" operator="=" novaluebehavior="noquery" model="Campaign" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Campaign">
+         <maintitle>
+            <template>{{Name}}</template>
+         </maintitle>
+         <subtitle>
+            <template>{{Model.Label}}</template>
+         </subtitle>
+         <actions>
+            <action type="delete"/>
+            <action type="share"/>
+            <action type="clone"/>
+            <action type="savecancel" label="New Action" window="self">
+               <models>
+                  <model>Opportunity</model>
+                  <model>CampaignMemberStatuses</model>
+                  <model>RelevantEvents</model>
+                  <model>OpenTask</model>
+                  <model>TaskHistory</model>
+                  <model>Attachment</model>
+                  <model>Notes</model>
+                  <model>CampaignsForHierarchy</model>
+                  <model>User</model>
+                  <model>NewTask</model>
+                  <model>CampaignMembers_Lead</model>
+                  <model>CampaignMembers_Contact</model>
+               </models>
+            </action>
+         </actions>
+      </pagetitle>
+      <tabset rememberlastusertab="true" defertabrendering="true">
+         <tabs>
+            <tab name="Profile" icon="ui-silk-book">
+               <components>
+                  <panelset type="custom">
+                     <panels>
+                        <panel width="50%">
+                           <components>
+                              <basicfieldeditor showsavecancel="false" showheader="true" model="Campaign" mode="read" layout="">
+                                 <columns>
+                                    <column width="100%">
+                                       <sections>
+                                          <section title="General Information">
+                                             <fields>
+                                                <field id="Name"/>
+                                                <field id="IsActive"/>
+                                                <field id="Type"/>
+                                                <field id="Status"/>
+                                                <field id="ParentId">
+                                                   <label>Parent Campaign</label>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                          <section title="Description">
+                                             <fields>
+                                                <field id="Description" maxdisplaycharacters="100">
+                                                   <label/>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                          <section title="System Information">
+                                             <fields>
+                                                <field id="OwnerId">
+                                                   <label>Owner</label>
+                                                </field>
+                                                <field type="COMBO" allowhtml="true">
+                                                   <label>Created By:</label>
+                                                   <template>{{CreatedById}} on {{CreatedDate}}</template>
+                                                </field>
+                                                <field type="COMBO">
+                                                   <label>Last Modified By:</label>
+                                                   <template>{{LastModifiedById}} on {{LastModifiedDate}}</template>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                 </columns>
+                              </basicfieldeditor>
+                           </components>
+                        </panel>
+                        <panel width="50%">
+                           <components>
+                              <basicfieldeditor showsavecancel="false" showheader="true" model="Campaign" mode="read" layout="">
+                                 <columns>
+                                    <column width="60%">
+                                       <sections>
+                                          <section title="Planning">
+                                             <fields>
+                                                <field id="StartDate"/>
+                                                <field id="EndDate"/>
+                                                <field id="NumberSent"/>
+                                                <field id="ExpectedRevenue"/>
+                                                <field id="ExpectedResponse"/>
+                                                <field id="BudgetedCost"/>
+                                                <field id="ActualCost"/>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                    <column width="40%">
+                                       <sections>
+                                          <section title="Statistics">
+                                             <fields>
+                                                <field id="NumberOfResponses"/>
+                                                <field id="NumberOfLeads"/>
+                                                <field id="NumberOfConvertedLeads"/>
+                                                <field id="NumberOfContacts"/>
+                                                <field id="NumberOfOpportunities"/>
+                                                <field id="NumberOfWonOpportunities"/>
+                                                <field id="AmountAllOpportunities"/>
+                                                <field id="AmountWonOpportunities"/>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                 </columns>
+                              </basicfieldeditor>
+                           </components>
+                        </panel>
+                     </panels>
+                  </panelset>
+               </components>
+            </tab>
+            <tab name="Members" icon="ui-silk-group">
+               <components>
+                  <tabset rememberlastusertab="true" defertabrendering="true">
+                     <tabs>
+                        <tab name="Leads" icon="ui-silk-user">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="false" model="CampaignMembers_Lead" mode="read">
+                                 <fields>
+                                    <field id="Status" type="CUSTOM" snippet="CampaignMemberStatus"/>
+                                    <field id="Lead.FirstName" allowordering="true"/>
+                                    <field id="Lead.LastName" allowordering="true"/>
+                                    <field id="Lead.Title" allowordering="true"/>
+                                    <field id="Lead.Company" allowordering="true"/>
+                                    <field id="HasResponded"/>
+                                    <field id="Lead.Email"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="" defaulticon="" usefirstitemasdefault="true">
+                                    <action type="popup" label="Add Leads to Campaign" icon="ui-silk-group-add">
+                                       <popup title="Add Leads to Campaign" width="60%">
+                                          <components>
+                                             <pagetitle model="Campaign">
+                                                <maintitle>Add Leads to Campaign: {{Name}}</maintitle>
+                                                <subtitle/>
+                                                <actions/>
+                                             </pagetitle>
+                                             <basicfieldeditor showheader="true" showsavecancel="false" model="DummyMemberStatus" buttonposition="" mode="edit">
+                                                <columns>
+                                                   <column width="33%">
+                                                      <sections>
+                                                         <section title="With...">
+                                                            <fields>
+                                                               <field id="Status" type="CUSTOM" snippet="CampaignMemberStatus" required="true"/>
+                                                            </fields>
+                                                         </section>
+                                                      </sections>
+                                                   </column>
+                                                </columns>
+                                             </basicfieldeditor>
+                                             <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Leads" buttonposition="" mode="read" tokenizesearch="true">
+                                                <fields>
+                                                   <field id="FirstName" allowordering="true"/>
+                                                   <field id="LastName" allowordering="true"/>
+                                                   <field id="Company" allowordering="true"/>
+                                                   <field id="LeadSource" allowordering="true"/>
+                                                </fields>
+                                                <rowactions>
+                                                   <action type="custom" label="Add {{FirstName}} {{LastName}} to Campaign" icon="ui-silk-cart-add" snippet="AddMembers">
+                                                      <renderconditions/>
+                                                   </action>
+                                                </rowactions>
+                                                <massactions usefirstitemasdefault="true">
+                                                   <action type="custom" label="Add selected Leads to Campaign" icon="ui-silk-cart-add" snippet="AddMembers"/>
+                                                </massactions>
+                                                <views>
+                                                   <view type="standard"/>
+                                                </views>
+                                                <filters>
+                                                   <filter type="select" filteroffoptionlabel="Any Lead Source" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" condition="LeadSource">
+                                                      <sources>
+                                                         <source type="metadata" effectsbehavior="justdefault" prefix="Source: "/>
+                                                      </sources>
+                                                   </filter>
+                                                </filters>
+                                             </skootable>
+                                          </components>
+                                       </popup>
+                                    </action>
+                                    <action type="redirect" label="Add Members - Search" url="/ui/campaign/CampaignManageMembersAddTab?campaignId=701i0000000OAuJ" icon="ui-silk-user-go" window="self"/>
+                                    <action type="redirect" label="Add Members - Import" url="/setup/wiz/wizard.jsp?wizardUrl=/camp/campaignimport.jsp?id=701i0000000OAuJ&amp;wizardPageTitle=ImportWizardTitle" icon="ui-silk-folder-add" window="self"/>
+                                    <action type="redirect" label="Edit Members - Search" url="/ui/campaign/CampaignManageMembersExistingTab?campaignId=701i0000000OAuJ" icon="ui-silk-group-edit" window="self"/>
+                                    <action type="redirect" label="Update and Add Members - Import File" url="/setup/wiz/wizard.jsp?wizardUrl=/camp/campaignimport.jsp?id=701i0000000OAuJ&amp;wizardPageTitle=ImportWizardTitle" icon="ui-silk-folder-edit" window="self"/>
+                                 </actions>
+                              </skootable>
+                           </components>
+                        </tab>
+                        <tab name="Contacts" loadlazypanels="true" icon="ui-silk-user-green">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="false" model="CampaignMembers_Contact" mode="read">
+                                 <fields>
+                                    <field id="Status" type="CUSTOM" snippet="CampaignMemberStatus"/>
+                                    <field id="Contact.FirstName" allowordering="true"/>
+                                    <field id="Contact.LastName" allowordering="true"/>
+                                    <field id="Contact.Title" allowordering="true"/>
+                                    <field id="Contact.Account.Name" allowordering="true"/>
+                                    <field id="HasResponded"/>
+                                    <field id="Contact.Email"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="" defaulticon="" usefirstitemasdefault="true">
+                                    <action type="popup" label="Add Contacts to Campaign" icon="ui-silk-group-add">
+                                       <popup title="Add Contacts to Campaign" width="60%">
+                                          <components>
+                                             <pagetitle model="Campaign">
+                                                <maintitle>Add Contacts to Campaign: {{Name}}</maintitle>
+                                                <subtitle/>
+                                                <actions/>
+                                             </pagetitle>
+                                             <basicfieldeditor showheader="true" showsavecancel="false" model="DummyMemberStatus" buttonposition="" mode="edit">
+                                                <columns>
+                                                   <column width="33%">
+                                                      <sections>
+                                                         <section title="With...">
+                                                            <fields>
+                                                               <field id="Status" type="CUSTOM" snippet="CampaignMemberStatus" required="true"/>
+                                                            </fields>
+                                                         </section>
+                                                      </sections>
+                                                   </column>
+                                                </columns>
+                                             </basicfieldeditor>
+                                             <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Contacts" buttonposition="" mode="read" tokenizesearch="true">
+                                                <fields>
+                                                   <field id="FirstName" allowordering="true"/>
+                                                   <field id="LastName" allowordering="true"/>
+                                                   <field id="AccountId" allowordering="true"/>
+                                                </fields>
+                                                <rowactions>
+                                                   <action type="custom" label="Add {{FirstName}} {{LastName}} to Campaign" icon="ui-silk-cart-add" snippet="AddMembers"/>
+                                                </rowactions>
+                                                <massactions usefirstitemasdefault="true">
+                                                   <action type="custom" label="Add selected Contacts to Campaign" icon="ui-silk-cart-add" snippet="AddMembers"/>
+                                                </massactions>
+                                                <views>
+                                                   <view type="standard"/>
+                                                </views>
+                                             </skootable>
+                                          </components>
+                                       </popup>
+                                    </action>
+                                    <action type="redirect" label="Add Members - Search" url="/ui/campaign/CampaignManageMembersAddTab?campaignId=701i0000000OAuJ" icon="ui-silk-user-go" window="self"/>
+                                    <action type="redirect" label="Add Members - Import" url="/setup/wiz/wizard.jsp?wizardUrl=/camp/campaignimport.jsp?id=701i0000000OAuJ&amp;wizardPageTitle=ImportWizardTitle" icon="ui-silk-folder-add" window="self"/>
+                                    <action type="redirect" label="Edit Members - Search" url="/ui/campaign/CampaignManageMembersExistingTab?campaignId=701i0000000OAuJ" icon="ui-silk-group-edit" window="self"/>
+                                    <action type="redirect" label="Update and Add Members - Import File" url="/setup/wiz/wizard.jsp?wizardUrl=/camp/campaignimport.jsp?id=701i0000000OAuJ&amp;wizardPageTitle=ImportWizardTitle" icon="ui-silk-folder-edit" window="self"/>
+                                 </actions>
+                              </skootable>
+                           </components>
+                        </tab>
+                        <tab name="Manage Member Status options" icon="ui-silk-cog">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="CampaignMemberStatuses" buttonposition="" mode="read">
+                                 <fields>
+                                    <field id="Label"/>
+                                    <field id="HasResponded"/>
+                                    <field id="IsDefault"/>
+                                    <field id="SortOrder" allowordering="true"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                              </skootable>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </tab>
+            <tab name="Opportunities" icon="ui-silk-coins">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Opportunity" mode="read">
+                     <fields>
+                        <field id="Name">
+                           <label>Opportunity Name</label>
+                        </field>
+                        <field id="AccountId">
+                           <label>Account</label>
+                        </field>
+                        <field id="StageName"/>
+                        <field id="Amount"/>
+                        <field id="Probability"/>
+                        <field id="CloseDate"/>
+                        <field id="OwnerId">
+                           <label>Owner</label>
+                        </field>
+                     </fields>
+                     <rowactions>
+                        <action type="edit" window="self"/>
+                        <action type="delete" window="self"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <action type="popup" window="self" label="New Opportunity" icon="ui-silk-coins-add">
+                           <popup title="New Opportunity" width="80%">
+                              <components>
+                                 <pagetitle model="NewOpportunity">
+                                    <actions>
+                                       <action type="custom" label="Save" snippet="saveNewItemsInPopup" icon="ui-silk-accept"/>
+                                    </actions>
+                                 </pagetitle>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="NewOpportunity" mode="edit">
+                                    <columns>
+                                       <column width="33.3%">
+                                          <sections>
+                                             <section title="Basics">
+                                                <fields>
+                                                   <field id="Name"/>
+                                                   <field id="IsPrivate"/>
+                                                   <field id="AccountId"/>
+                                                   <field id="Amount"/>
+                                                   <field id="Type"/>
+                                                   <field id="LeadSource"/>
+                                                   <field id="CampaignId">
+                                                      <label>Source Campaign</label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="33.3%">
+                                          <sections>
+                                             <section title="Basics">
+                                                <fields>
+                                                   <field id="StageName"/>
+                                                   <field id="Probability"/>
+                                                   <field id="NextStep"/>
+                                                   <field id="CloseDate"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="33.3%">
+                                          <sections>
+                                             <section title="Other Information">
+                                                <fields>
+                                                   <field id="Description"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                 </basicfieldeditor>
+                              </components>
+                           </popup>
+                        </action>
+                     </actions>
+                  </skootable>
+               </components>
+            </tab>
+            <tab name="Activities" icon="ui-silk-telephone">
+               <components>
+                  <tabset rememberlastusertab="true">
+                     <tabs>
+                        <tab name="Activities">
+                           <components>
+                              <template model="OpenTask" multiple="true" allowhtml="true">
+                                 <contents>&lt;h2 style="color: #299FC5"&gt;Open Tasks&lt;/&gt;</contents>
+                              </template>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="OpenTask" mode="read">
+                                 <fields>
+                                    <field id="Subject"/>
+                                    <field type="COMBO">
+                                       <label>Related To:</label>
+                                       <template>{{WhoId}},{{WhatId}}</template>
+                                    </field>
+                                    <field id="Priority"/>
+                                    <field id="Status"/>
+                                    <field id="ActivityDate">
+                                       <label>Due Date</label>
+                                    </field>
+                                    <field id="OwnerId"/>
+                                    <field id="RecurrenceType"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                    <action type="custom" window="self" icon="ui-silk-tick" snippet="Task.MarkCompleted" label="Mark Completed"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                    <action type="custom" label="Mark Completed" icon="ui-silk-tick" snippet="Task.MarkCompleted"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                                    <action type="popup" window="self" label="New Task" icon="ui-silk-add">
+                                       <popup title="New Task" width="800">
+                                          <components>
+                                             <pagetitle model="NewTask">
+                                                <maintitle>{{Subject}}</maintitle>
+                                                <subtitle>New Task:</subtitle>
+                                                <actions>
+                                                   <action type="savecancel" label="New Action" window="self" afterSave="" afterCancel="">
+                                                      <models>
+                                                         <model>OpenTask</model>
+                                                      </models>
+                                                   </action>
+                                                </actions>
+                                             </pagetitle>
+                                             <basicfieldeditor showheader="true" showsavecancel="false" model="NewTask" mode="edit">
+                                                <columns>
+                                                   <column width="50%">
+                                                      <sections>
+                                                         <section title="Basic Information">
+                                                            <fields>
+                                                               <field id="OwnerId"/>
+                                                               <field id="Subject"/>
+                                                               <field id="ActivityDate"/>
+                                                               <field id="Priority"/>
+                                                               <field id="Status"/>
+                                                               <field id="WhoId">
+                                                                  <label>Related Contact</label>
+                                                               </field>
+                                                            </fields>
+                                                         </section>
+                                                      </sections>
+                                                   </column>
+                                                   <column width="50%">
+                                                      <sections>
+                                                         <section title="Additional Information">
+                                                            <fields>
+                                                               <field id="Description"/>
+                                                               <field id="IsRecurrence"/>
+                                                               <field id="ReminderDateTime"/>
+                                                            </fields>
+                                                         </section>
+                                                      </sections>
+                                                   </column>
+                                                </columns>
+                                             </basicfieldeditor>
+                                          </components>
+                                       </popup>
+                                    </action>
+                                 </actions>
+                              </skootable>
+                              <template model="OpenTask" multiple="true" allowhtml="true">
+                                 <contents>&lt;hr&gt;
+&lt;h2 style="color: #299FC5"&gt;Completed Tasks&lt;/&gt;</contents>
+                              </template>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="TaskHistory" mode="read">
+                                 <fields>
+                                    <field id="Subject"/>
+                                    <field type="COMBO">
+                                       <label>Related To:</label>
+                                       <template>{{WhatId}}{{WhoId}},</template>
+                                    </field>
+                                    <field id="ActivityDate">
+                                       <label>Due Date</label>
+                                    </field>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+                              </skootable>
+                           </components>
+                        </tab>
+                        <tab name="Events Calendar">
+                           <components>
+                              <skoocal rememberdate="true" rememberview="true" rangemodel="Campaign">
+                                 <sources>
+                                    <eventsource name="Relevant Events" model="RelevantEvents" namefield="Subject" startfield="StartDateTime" endfield="EndDateTime" groupfield="WhoId" createable="true" updateable="true" deleteable="true" eventclickhandler="autopopup">
+                                       <eventtemplate>{{Subject}}</eventtemplate>
+                                    </eventsource>
+                                 </sources>
+                                 <views>
+                                    <eventview type="week"/>
+                                    <eventview type="month"/>
+                                 </views>
+                              </skoocal>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </tab>
+            <tab name="Hierarchy" icon="ui-silk-chart-organisation">
+               <components>
+                  <custom name="CampaignHierarchy"/>
+               </components>
+            </tab>
+            <tab name="Documents" icon="ui-silk-page-attach">
+               <components>
+                  <tabset rememberlastusertab="true">
+                     <tabs>
+                        <tab name="Notes" icon="ui-silk-note">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Notes" mode="read">
+                                 <fields>
+                                    <field id="Title"/>
+                                    <field id="CreatedDate"/>
+                                    <field id="IsPrivate"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                              </skootable>
+                           </components>
+                        </tab>
+                        <tab name="Attachments" icon="ui-silk-attach">
+                           <components>
+                              <file storeas="record" displayas="filename" model="Campaign" label="Upload Attachments..."/>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Attachment" mode="read">
+                                 <fields>
+                                    <field id="Name"/>
+                                    <field id="Description"/>
+                                    <field id="ContentType"/>
+                                    <field id="CreatedDate"/>
+                                    <field id="IsPrivate"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="edit"/>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                              </skootable>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+</skuidpage>
