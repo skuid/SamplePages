@@ -1,0 +1,111 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Case">
+   <models>
+      <model id="CaseData" limit="100" query="true" createrowifnonefound="false" sobject="Case" orderby="CaseNumber">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="CreatedDate"/>
+            <field id="Subject"/>
+            <field id="IsEscalated"/>
+            <field id="Status"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="multiple" value="" field="Status" operator="in" enclosevalueinquotes="true" state="filterableoff" inactive="true" name="IsOpen">
+               <values>
+                  <value>New</value>
+                  <value>Escalated</value>
+                  <value>On Hold</value>
+               </values>
+            </condition>
+            <condition type="multiple" value="" field="IsClosed" operator="in" enclosevalueinquotes="false" state="filterableoff" inactive="true" name="IsClosed">
+               <values/>
+            </condition>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="OwnerId"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <panelset type="standard" scroll="variable" offset="220">
+         <panels>
+            <panel width="225" type="left">
+               <components>
+                  <queue tagrendertype="template" querystring="caseid={{{Id}}}" defaultitemparameter="" clickactiontype="updatepanel" searchbox="true" model="CaseData" title="Cases" pagename="CaseConsole_Detail" actionpanel="CaseConsole_Detail">
+                     <rendertemplate>&lt;Div class="queueListTitle"&gt;{{#IsEscalated}}&lt;img src="/img/func_icons/util/escalation12.gif"/&gt;&amp;nbsp;{{/IsEscalated}}{{{CaseNumber}}}&lt;/Div&gt; 
+{{{Subject}}}</rendertemplate>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="All Cases" createfilteroffoption="true" affectcookies="true">
+                           <sources>
+                              <source type="manual">
+                                 <options>
+                                    <option label="My Open Cases" type="complex">
+                                       <effects>
+                                          <effect action="set" value="FALSE" condition="IsClosed"/>
+                                          <effect action="activate" value="" condition="OwnerId"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All My Cases" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="OwnerId"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All Open Cases" type="complex">
+                                       <effects>
+                                          <effect action="set" value="FALSE" condition="IsClosed"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All Closed Cases" type="complex">
+                                       <effects>
+                                          <effect action="set" value="TRUE" condition="IsClosed"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                           </sources>
+                        </filter>
+                     </filters>
+                  </queue>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <includepanel type="skuid" pagename="CaseConsole_Detail" querystring="caseid={{{$Model.CaseData.data.0.Id}}}" uniqueid="CaseConsole_Detail" lazyload="false" module="SkuidCRM"/>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="QueueItemHeader" cachelocation="false">.queueListTitle {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #299FC5;
+    }</cssitem>
+      </css>
+      <javascript>
+         <jsitem location="inlinesnippet" name="ViewCase" url="">var detailModel = skuid.model.getModel('CaseDetail');
+var detailCommentsModel = skuid.model.getModel('CaseDetailComments');
+var detailTasksModel = skuid.model.getModel('CaseDetailTasks');
+var detailCondition = detailModel.getConditionByName('CaseId');
+var detailCommentsCondition = detailCommentsModel.getConditionByName('CaseId');
+var detailTasksCondition = detailTasksModel.getConditionByName('CaseId');
+detailModel.setCondition(detailCondition,args.item.row.Id,true);
+detailCommentsModel.setCondition(detailCommentsCondition,args.item.row.Id,true);
+detailTasksModel.setCondition(detailTasksCondition,args.item.row.Id,true);
+skuid.model.updateData([detailModel,detailCommentsModel,detailTasksModel]);</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
