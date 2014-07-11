@@ -1,0 +1,398 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Cases">
+   <labels/>
+   <models>
+      <model id="Cases" limit="100" query="true" createrowifnonefound="false" sobject="Case" orderby="LastModifiedDate DESC">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="Status"/>
+            <field id="IsEscalated"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="Subject"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="AccountId" state="filterableoff" inactive="true" name="AccountId"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ContactId" state="filterableoff" inactive="true" name="ContactId"/>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid" state="filterableoff" inactive="true" name="Owner"/>
+            <condition type="multiple" value="" field="IsClosed" state="filterableoff" operator="in" enclosevalueinquotes="false" name="Closed">
+               <values/>
+            </condition>
+         </conditions>
+      </model>
+      <model id="RelatedAccounts" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Account">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="RelatedContacts" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="Contact">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="NewCaseComments" limit="" query="false" createrowifnonefound="false" sobject="CaseComment">
+         <fields>
+            <field id="CommentBody"/>
+            <field id="ParentId"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="EscalationReason" limit="" query="false" createrowifnonefound="false" sobject="CaseComment">
+         <fields>
+            <field id="CommentBody"/>
+         </fields>
+         <conditions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Cases">
+         <maintitle>{{Model.LabelPlural}}</maintitle>
+         <actions>
+            <action type="redirect" label="Queue View" window="self" icon="ui-silk-application-side-list" url="/apex/skuid__ui?page=CaseConsole"/>
+            <action type="savecancel" label="New Action"/>
+         </actions>
+         <subtitle>Home</subtitle>
+      </pagetitle>
+      <panelset type="vertical">
+         <panels>
+            <panel width="225">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" createrecords="false" model="Cases" pagesize="10" mode="read">
+                     <fields>
+                        <field type="COMBO" readonly="readonly" columnwidth="10%">
+                           <label>Case Number</label>
+                           <template model="Cases" multiple="multiple">{{#IsEscalated}}&lt;img src="/img/func_icons/util/escalation12.gif"/&gt;&amp;nbsp;{{/IsEscalated}}{{CaseNumber}}</template>
+                        </field>
+                        <field id="Subject" columnwidth="40%"/>
+                        <field id="AccountId" columnwidth="15%">
+                           <label>Account</label>
+                        </field>
+                        <field id="ContactId" type="REFPICK" columnwidth="15%">
+                           <filters>
+                              <filter type="dependent" field="AccountId" value="" operator="=" enclosevalueinquotes="true" depfield="AccountId"/>
+                           </filters>
+                           <label>Contact</label>
+                        </field>
+                        <field id="Status" columnwidth="10%"/>
+                        <field id="IsEscalated" columnwidth="10%"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                        <action type="custom" window="self" label="Escalate" snippet="ShowEscalationPopup" icon="ui-silk-arrow-up"/>
+                     </rowactions>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="Any Account" createfilteroffoption="true" condition="AccountId">
+                           <sources>
+                              <source type="model" model="RelatedAccounts">
+                                 <valuetemplate>{{Id}}</valuetemplate>
+                                 <labeltemplate>{{Name}}</labeltemplate>
+                              </source>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="Any Contact" createfilteroffoption="true" condition="ContactId">
+                           <sources>
+                              <source type="model" model="RelatedContacts">
+                                 <valuetemplate>{{Id}}</valuetemplate>
+                                 <labeltemplate>{{Name}}</labeltemplate>
+                              </source>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="All Cases" createfilteroffoption="true" affectcookies="true">
+                           <sources>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All My Cases" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="Owner"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All Open Cases" type="complex">
+                                       <effects>
+                                          <effect action="set" value="FALSE" condition="Closed"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="All Closed Cases" type="complex">
+                                       <effects>
+                                          <effect action="set" value="TRUE" condition="Closed"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                              <source type="manual">
+                                 <options>
+                                    <option label="My Open Cases" type="complex">
+                                       <effects>
+                                          <effect action="activate" value="" condition="Owner"/>
+                                          <effect action="set" value="FALSE" condition="Closed"/>
+                                       </effects>
+                                    </option>
+                                 </options>
+                              </source>
+                           </sources>
+                        </filter>
+                        <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+                           <sources>
+                              <source type="metadata"/>
+                           </sources>
+                        </filter>
+                     </filters>
+                     <massactions defaultlabel="Mass Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="custom" label="Mass Escalate" icon="ui-silk-arrow-up" snippet="ShowEscalationPopup"/>
+                     </massactions>
+                     <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                        <action type="redirect" label="Create New Case" url="/{{Model.KeyPrefix}}/e" icon="ui-silk-bug-add" window="self"/>
+                        <action type="redirect" label="Mass Email Cases" url="/ui/massmail/MassMailStageManager?setupid=MassMailFilter&amp;ftype=T&amp;wizardRetUrl=%2F500%2Fo" icon="ui-silk-email-go" window="self"/>
+                        <action type="redirect" label="Mass Delete Cases" url="/setup/own/massdelete.jsp?ftype=t&amp;retURL=%2F500%2Fo" icon="ui-silk-bug-delete" window="self"/>
+                        <action type="popup" window="self" label="View Helpful Links" icon="ui-silk-application-link">
+                           <popup title="Helpful {{Model.Label}} Links" width="400">
+                              <components>
+                                 <pagetitle model="Cases">
+                                    <maintitle>Helpful Links</maintitle>
+                                    <subtitle>
+                                       <template>{{Model.Label}}</template>
+                                    </subtitle>
+                                    <actions/>
+                                 </pagetitle>
+                                 <panelset type="standard">
+                                    <panels>
+                                       <panel>
+                                          <components>
+                                             <template model="Cases" multiple="true" allowhtml="true">&lt;table class="nx-list nx-skootable-data" cellpadding="0" cellspacing="0"&gt;
+&lt;tbody class="nx-list-contents"&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=10&amp;retURL=%2F500%2Fo&amp;closed=open&amp;type=te&amp;scope=user&amp;units=h&amp;t=title1&amp;c=OW&amp;c=AN&amp;c=SU&amp;c=CDT&amp;c=AGE&amp;c=CO&amp;c=CF&amp;details=yes
+"&gt;Total Cases Created&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=10&amp;retURL=%2F500%2Fo&amp;scope=organization&amp;t=title2&amp;break0=OWNER&amp;closed=open&amp;type=te&amp;units=h&amp;c=OW&amp;c=AN&amp;c=SU&amp;c=CDT&amp;c=AGE&amp;c=CO&amp;c=CF&amp;details=no&amp;format=t"&gt;Total Cases Created by Agent &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=10&amp;retURL=%2F500%2Fo&amp;t=title3&amp;pc0=OPEN&amp;pn0=eq&amp;pv0=1&amp;scope=organization&amp;break0=OWNER&amp;closed=open&amp;type=te&amp;units=h&amp;c=OW&amp;c=AN&amp;c=SU&amp;c=CDT&amp;c=AGE&amp;c=CO&amp;c=CF&amp;details=no&amp;format=t"&gt;Total Open Cases by Agent &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=101&amp;retURL=%2F500%2Fo&amp;t=titleCaseContactRole&amp;format=t&amp;colDt_q=last30&amp;break0=CASE_NUMBER&amp;c=SU&amp;c=CA&amp;c=ST&amp;c=PR&amp;c=CN&amp;c=CE&amp;c=CCR_CN&amp;c=RN&amp;c=CCR_CE&amp;c=CCR_PH&amp;details=yes"&gt;Contact Role Report &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=91&amp;retURL=%2F500%2Fo&amp;sortdir=down&amp;sort=CD&amp;break0=CN&amp;c=OW&amp;c=CR&amp;c=FD&amp;c=OV&amp;c=NV&amp;c=CD&amp;details=yes&amp;format=t"&gt;Case History Report &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+
+&lt;/table&gt;
+</template>
+                                          </components>
+                                       </panel>
+                                    </panels>
+                                 </panelset>
+                              </components>
+                           </popup>
+                        </action>
+                     </actions>
+                  </skootable>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="ShowEscalationPopup" cachelocation="false" url="">var params = arguments[0],
+    $ = skuid.$,
+    list = params.list,
+    model = params.model,
+    $xml = skuid.utils.makeXMLDoc,
+    selectedItems = params.item ? [params.item] : list.getSelectedItems(),
+    NewCaseCommentsModel = skuid.model.getModel('NewCaseComments'),
+    EscalationReasonModel = skuid.model.getModel('EscalationReason'),
+    CasesModel = skuid.model.getModel('Cases');
+
+if (!CasesModel || !CasesModel.fieldsMap.IsEscalated.editable){
+    alert('You do not have permission to Escalate Cases.\n\nPlease ask your System Administrator to grant you edit rights on the IsEscalated field.');
+    return;
+}
+
+// Cancel any preexisting changes to our CaseComments model
+// and our EscalationReason model
+skuid.model.cancel([
+    NewCaseCommentsModel,
+    EscalationReasonModel
+]);
+
+var selectedCaseNumbers = [];
+var casesAlreadyEscalated = [];
+
+$.each(selectedItems,function(i,item){
+
+    var caseRow = item.row;
+
+    // If one of the Cases is ALREADY Escalated,
+    // then we will complain.
+    if (caseRow.IsEscalated || caseRow.Status=='Escalated') {
+        casesAlreadyEscalated.push(caseRow.CaseNumber);
+        return true;
+    }
+
+    selectedCaseNumbers.push(caseRow.CaseNumber);
+
+    // Create a new row in our NewCaseComments model
+    // for each selected item
+    NewCaseCommentsModel.createRow({ additionalConditions: [
+        { field: 'ParentId', value: caseRow.Id }
+    ]});
+
+});
+
+if (!selectedCaseNumbers.length){
+    alert('All of the selected Cases are already Escalated.');
+    return;
+}
+
+// And create a new row in our EscalationReason model
+EscalationReasonModel.createRow();
+
+// Build the XML of your popup.
+// If you already have a reference to this xml string stored somewhere else,
+// then you don't need to create it here.
+
+var label = (selectedCaseNumbers.length===1) ? model.label : model.labelPlural;
+
+var popupXMLString = 
+  '&lt;popup width="50%" title="Escalate '+label+'"&gt;'
+        + '&lt;components&gt;'
+            + '&lt;pagetitle model="EscalationReason"&gt;'
+                + '&lt;maintitle&gt;Escalate '+label+': ' + selectedCaseNumbers.join(', ') + '&lt;/maintitle&gt;'
+                + '&lt;actions&gt;'
+                    + '&lt;action type="custom" snippet="FinishCaseEscalation" label="Complete Escalation" icon="ui-silk-accept"/&gt;'
+                + '&lt;/actions&gt;'
+            +'&lt;/pagetitle&gt;'
+            + '&lt;basicfieldeditor model="EscalationReason" mode="edit" showsavecancel="false"&gt;'
+                + '&lt;columns&gt;'
+                    + '&lt;column width="100%"&gt;'
+                        + '&lt;sections&gt;'
+                            + '&lt;section title="Escalation Reason"&gt;'
+                                + '&lt;fields&gt;'
+                                    + '&lt;field id="CommentBody" required="true"/&gt;'
+                                + '&lt;/fields&gt;'
+                            + '&lt;/section&gt;'
+                        + '&lt;/sections&gt;'
+                    + '&lt;/column&gt;'
+                + '&lt;/columns&gt;'
+            + '&lt;/basicfieldeditor&gt;'
+        + '&lt;/components&gt;'
++ '&lt;/popup&gt;';
+
+
+var popupXML = $xml(popupXMLString);
+
+var context = {
+
+};
+
+// Launch a Popup asking the user to provide an Escalation reason
+var popup = skuid.utils.createPopupFromPopupXML(popupXML,context);
+
+
+
+</jsitem>
+         <jsitem location="inlinesnippet" name="FinishCaseEscalation" cachelocation="false" url="">var params = arguments[0],
+    $ = skuid.$,
+    EscalationReasonModel = params.model,
+    escalationReason = params.model.getFieldValue(params.row,'CommentBody',true),
+    CasesModel = skuid.model.getModel('Cases'),
+    NewCaseCommentsModel = skuid.model.getModel('NewCaseComments'),
+    EscalationReasonModel = skuid.model.getModel('EscalationReason');
+
+// If we weren't given an escalation reason 
+// that is at least 5 characters long,
+// don't do anything
+if (!escalationReason || escalationReason.length&lt;5){
+    alert('Please provide an Escalation Reason that is at least 5 characters.');
+    return;
+}
+
+// Apply the Escalation Reason specified 
+// to all of our new case comment records
+// which were created behind-the-scenes
+// when we showed our popup
+
+var selectedCaseNumbers = [];
+
+$.each(NewCaseCommentsModel.data,function(i,newCommentRow){
+    
+    var parentCase = CasesModel.getRowById(newCommentRow.ParentId);
+
+    // Update the Status of all of our selected Items to be "escalated"
+    if (parentCase) {
+        CasesModel.updateRow(parentCase,'Status','Escalated');
+        CasesModel.updateRow(parentCase,'IsEscalated',true);
+        NewCaseCommentsModel.updateRow(newCommentRow,'CommentBody',escalationReason);
+    } else {
+        NewCaseCommentsModel.deleteRow(newCommentRow);
+    }
+});
+
+var label = (selectedCaseNumbers.length===1) ? CasesModel.label : CasesModel.labelPlural;
+
+// Block the UI while we're saving.
+$.blockUI({
+    message: 'Escalating ' + label + '...'
+});
+
+// Save our Case Escalations first,
+// then save our new Case Comments ONLY
+// if the Case Escalations all succeeded
+
+CasesModel.save({callback: function(result){
+    if (result.totalsuccess) {
+        // Now save our Case Comments
+        NewCaseCommentsModel.save({callback: function(result2){
+            $.unblockUI();
+            if (result2.totalsuccess) {
+                // Close the popup
+                $('.ui-dialog-content').dialog('close');
+            }
+        }});
+    } else {
+        $.unblockUI();
+    }
+}});</jsitem>
+      </javascript>
+      <css/>
+   </resources>
+</skuidpage>
