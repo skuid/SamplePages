@@ -1,0 +1,117 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="Case">
+   <models>
+      <model id="OwnerPrefill" limit="100" query="true" createrowifnonefound="false" sobject="User">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+      <model id="Contact" limit="1" query="true" createrowifnonefound="false" sobject="Contact">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="contactid" field="Id" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="Account" limit="1" query="true" createrowifnonefound="false" sobject="Account">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="accid" field="Id" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+      </model>
+      <model id="Case" limit="1" query="false" createrowifnonefound="true" sobject="Case">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Description"/>
+            <field id="Type"/>
+            <field id="Reason"/>
+            <field id="Origin"/>
+            <field id="Priority"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ContactId" operator="=" model="Contact" enclosevalueinquotes="true" mergefield="Id"/>
+            <condition type="modelmerge" value="" field="AccountId" operator="=" model="Account" enclosevalueinquotes="true" mergefield="Id"/>
+            <condition type="modelmerge" value="" field="OwnerId" operator="=" model="OwnerPrefill" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Case">
+         <maintitle>
+            <template>New {{Model.label}}</template>
+         </maintitle>
+         <subtitle>{{#AccountId}}{{Account.Name}}{{/AccountId}}</subtitle>
+         <actions>
+            <action type="savecancel" afterCancel="{{#$Param.retURL}}{{$Param.retURL}}{{/$Param.retURL}}{{^$Param.retURL}}/{{Model.KeyPrefix}}/o{{/$Param.retURL}}" afterSave="/{{Id}}" window="self" saveLabel=""/>
+         </actions>
+      </pagetitle>
+      <basicfieldeditor showsavecancel="false" showheader="true" model="Case" mode="edit" buttonposition="left">
+         <columns>
+            <column width="30%">
+               <sections>
+                  <section title="Case Information">
+                     <fields>
+                        <field id="ContactId">
+                           <label>Contact</label>
+                        </field>
+                        <field id="AccountId">
+                           <label>Account</label>
+                        </field>
+                     </fields>
+                  </section>
+                  <section title="System Information">
+                     <fields>
+                        <field id="OwnerId">
+                           <label>Owner</label>
+                        </field>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="50%">
+               <sections>
+                  <section title="Description">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="Description"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="20%">
+               <sections>
+                  <section title="Additional Information">
+                     <fields>
+                        <field id="Status"/>
+                        <field id="Type"/>
+                        <field id="Priority"/>
+                        <field id="Origin"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+         </columns>
+      </basicfieldeditor>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>
