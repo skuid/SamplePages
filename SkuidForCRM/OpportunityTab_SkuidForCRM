@@ -1,0 +1,608 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunities">
+   <labels/>
+   <models>
+      <model id="OwnerData" limit="101" query="true" createrowifnonefound="false" sobject="User" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+      <model id="opportunities" limit="25" query="true" createrowifnonefound="false" orderby="Name" sobject="Opportunity">
+         <fields>
+            <field id="AccountId"/>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="IsClosed"/>
+            <field id="Account.Name"/>
+            <field id="NextStep"/>
+            <field id="Name"/>
+            <field id="Probability"/>
+            <field id="StageName"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="LeadSource"/>
+            <field id="Owner.Email"/>
+            <field id="CreatedDate"/>
+            <field id="Account.Phone"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="OpportunityLineItems" type="childRelationship">
+               <fields>
+                  <field id="TotalPrice"/>
+                  <field id="PricebookEntry.Product2.Name"/>
+                  <field id="Quantity"/>
+                  <field id="UnitPrice"/>
+               </fields>
+            </field>
+            <field id="Type"/>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="Description"/>
+            <field id="TotalOpportunityQuantity"/>
+            <field id="Pricebook2Id"/>
+            <field id="Pricebook2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" enclosevalueinquotes="true" operator="=" value="" field="StageName" name="OppStage" state="filterableoff" inactive="true"/>
+            <condition type="fieldvalue" enclosevalueinquotes="true" operator="=" value="" field="LeadSource" name="OppLeadSource" state="filterableoff" inactive="true"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Type" state="filterableoff" inactive="true" name="Type"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="CloseDate" state="filterableoff" inactive="true" name="CloseDate"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OwnerId" state="filterableoff" inactive="true" name="OwnerId"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" state="filterableoff" inactive="true" name="IsClosedTrue"/>
+         </conditions>
+      </model>
+      <model id="LineItems" limit="30" query="false" createrowifnonefound="false" sobject="OpportunityLineItem">
+         <fields>
+            <field id="PricebookEntryId"/>
+            <field id="PricebookEntry.Name"/>
+            <field id="UnitPrice"/>
+            <field id="Quantity"/>
+            <field id="OpportunityId"/>
+            <field id="Opportunity.Name"/>
+            <field id="PricebookEntry.UnitPrice"/>
+            <field id="TotalPrice"/>
+            <field id="ServiceDate"/>
+            <field id="Discount"/>
+            <field id="Description"/>
+            <field id="PricebookEntry.Product2Id"/>
+            <field id="PricebookEntry.Product2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OpportunityId" state="filterableoff" inactive="true" name="OpportunityId"/>
+         </conditions>
+      </model>
+      <model id="Pricebooks" limit="25" query="true" createrowifnonefound="false" sobject="Pricebook2" orderby="Name">
+         <fields>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+      </model>
+      <model id="PricebookEntries" limit="200" query="false" createrowifnonefound="false" sobject="PricebookEntry" orderby="Name">
+         <fields>
+            <field id="Product2Id"/>
+            <field id="Product2.Name"/>
+            <field id="UnitPrice"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Pricebook2Id" state="filterableoff" inactive="true" name="Pricebook2Id"/>
+         </conditions>
+      </model>
+      <model id="NewOpportunity" limit="" query="false" createrowifnonefound="true" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="StageName"/>
+            <field id="CloseDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Type"/>
+            <field id="Description"/>
+            <field id="IsPrivate"/>
+            <field id="LeadSource"/>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="NextStep"/>
+            <field id="Pricebook2Id"/>
+            <field id="Pricebook2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="blank" value="null" field="Id" operator="=" enclosevalueinquotes="false"/>
+            <condition type="userinfo" value="" field="OwnerId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+      <model id="NewLineItems" limit="" query="false" createrowifnonefound="false" sobject="OpportunityLineItem">
+         <fields>
+            <field id="PricebookEntryId"/>
+            <field id="PricebookEntry.Name"/>
+            <field id="UnitPrice"/>
+            <field id="Quantity"/>
+            <field id="OpportunityId"/>
+            <field id="Opportunity.Name"/>
+            <field id="PricebookEntry.UnitPrice"/>
+            <field id="TotalPrice"/>
+            <field id="ServiceDate"/>
+            <field id="Discount"/>
+            <field id="Description"/>
+            <field id="PricebookEntry.Product2Id"/>
+            <field id="PricebookEntry.Product2.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="OpportunityId" operator="=" model="NewOpportunity" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="opportunities">
+         <actions>
+            <!--
+            <action type="redirect" label="Standard Page" window="self" icon="ui-silk-application-form" url="/{{Model.KeyPrefix}}/o?nooverride=1"/>
+            -->
+            <action type="savecancel" label="New Action"/>
+         </actions>
+         <subtitle>Home</subtitle>
+         <maintitle>{{Model.LabelPlural}}</maintitle>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" createrecords="true" model="opportunities" pagesize="10" showexportbuttons="true" mode="read">
+         <fields>
+            <field id="Name" allowordering="true" columnwidth="20%"/>
+            <field id="Type"/>
+            <field id="Amount" countBlanks="false" allowordering="true">
+               <summaries>
+                  <summary>sum</summary>
+                  <summary>avg</summary>
+               </summaries>
+            </field>
+            <field id="TotalOpportunityQuantity" allowordering="true" readonly="true">
+               <summaries>
+                  <summary>sum</summary>
+                  <summary>avg</summary>
+               </summaries>
+            </field>
+            <field id="AccountId" allowordering="true" type="REFPICK">
+               <label>Company Name</label>
+            </field>
+            <field id="StageName" allowordering="true" type=""/>
+            <field id="Probability"/>
+            <field id="CloseDate" allowordering="true"/>
+            <field id="OwnerId">
+               <label>Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="redirect" label="Email Owner" url="/_ui/core/email/author/EmailAuthor?rtype=003&amp;p24={{{Owner.Email}}}&amp;p3_lkid={{{Id}}}&amp;retURL=%2F006%2Fo" icon="ui-silk-email-go" window="self"/>
+            <action type="popup" window="self" icon="ui-silk-application" label="View Opportunity Details">
+               <popup title="{{Name}}" width="90%">
+                  <components>
+                     <pagetitle model="opportunities">
+                        <maintitle>{{{Name}}}</maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions>
+                           <action type="redirect" window="self" label="Open Full Detail" icon="ui-silk-application-go" url="/{{{Id}}}"/>
+                           <action type="savecancel" label="" snippet="" icon="">
+                              <models>
+                                 <model>LineItems</model>
+                              </models>
+                           </action>
+                        </actions>
+                        <conditions>
+                           <condition type="contextrow" field="Id" autocreated="true"/>
+                        </conditions>
+                     </pagetitle>
+                     <tabset rememberlastusertab="true" defertabrendering="true">
+                        <tabs>
+                           <tab name="Basics" icon="ui-silk-award-star-gold-2">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="opportunities" mode="read" layout="above" buttonposition="">
+                                    <columns>
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="Opportunity Details">
+                                                <fields>
+                                                   <field id="AccountId">
+                                                      <label>Company</label>
+                                                   </field>
+                                                   <field id="Amount"/>
+                                                   <field id="OwnerId">
+                                                      <label>Owner</label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                             <section title="Line Items">
+                                                <fields>
+                                                   <field id="OpportunityLineItems" type="CHILDREL" limit="100" delimiter="&lt;br/&gt;">
+                                                      <label>Quantity of Product at Sales Price</label>
+                                                      <template>{{Quantity}} {{PricebookEntry.Product2.Name}} @ {{UnitPrice}}</template>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="Status">
+                                                <fields>
+                                                   <field id="CloseDate"/>
+                                                   <field id="NextStep"/>
+                                                   <field id="Probability"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions>
+                                       <condition type="contextrow" field="Id" autocreated="true"/>
+                                    </conditions>
+                                 </basicfieldeditor>
+                              </components>
+                           </tab>
+                           <tab name="Line Items" icon="ui-silk-cart">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="opportunities" mode="read" uniqueid="SelectPricebook">
+                                    <columns>
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="Opportunity Pricebook">
+                                                <fields>
+                                                   <field id="Pricebook2Id" required="false" type="REFPICK" optionsource="model" optionmodel="Pricebooks" displaytemplate="{{Name}}">
+                                                      <filters/>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions>
+                                       <condition type="contextrow" field="Id"/>
+                                    </conditions>
+                                 </basicfieldeditor>
+                                 <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="all" createrecords="true" model="LineItems" mode="read" uniqueid="LineItemsTable">
+                                    <fields>
+                                       <field id="PricebookEntryId" type="CUSTOM" optionsource="model" optionmodel="PricebookEntries" displaytemplate="{{Product2.Name}} (List: {{UnitPrice}})" snippet="pricebookEntryRenderer" required="true">
+                                          <label>Product</label>
+                                          <filters/>
+                                       </field>
+                                       <field id="ServiceDate" required="false"/>
+                                       <field id="Quantity" type="CUSTOM" snippet="quantityRenderer" allowordering="true"/>
+                                       <field id="UnitPrice" required="true"/>
+                                       <field id="Description"/>
+                                       <field id="TotalPrice" readonly="true" type="CUSTOM" snippet="totalPriceRenderer" allowordering="true">
+                                          <summaries>
+                                             <summary>sum</summary>
+                                          </summaries>
+                                       </field>
+                                    </fields>
+                                    <rowactions>
+                                       <action type="edit"/>
+                                       <action type="delete"/>
+                                       <action type="custom" snippet="cloneRecord" label="Clone Product" icon="ui-silk-arrow-divide"/>
+                                    </rowactions>
+                                    <massactions usefirstitemasdefault="true">
+                                       <action type="massupdate"/>
+                                       <action type="massedit"/>
+                                       <action type="massdelete"/>
+                                    </massactions>
+                                    <views>
+                                       <view type="standard"/>
+                                    </views>
+                                    <actions/>
+                                    <conditions>
+                                       <condition type="contextrow" field="OpportunityId" mergefield="Id"/>
+                                    </conditions>
+                                 </skootable>
+                                 <custom name="HideLineItemsTableIfNoPricebook_ExistingOpp"/>
+                              </components>
+                           </tab>
+                        </tabs>
+                     </tabset>
+                     <custom name="LoadChildData"/>
+                  </components>
+               </popup>
+            </action>
+            <action type="redirect" label="Clone" url="/{{Id}}/e?clone=1" icon="ui-silk-arrow-branch" window="self"/>
+         </rowactions>
+         <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+            <action type="popup" window="self" label="Create New Opportunity in Pop-up" icon="ui-silk-add">
+               <popup title="Create New Opportunity" width="90%">
+                  <components>
+                     <pagetitle model="NewOpportunity">
+                        <maintitle>New Opportunity and Line Items</maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions>
+                           <action type="custom" label="Save All" icon="ui-silk-accept" snippet="saveNewItemsInPopup"/>
+                        </actions>
+                     </pagetitle>
+                     <basicfieldeditor showheader="true" showsavecancel="false" model="NewOpportunity" mode="edit">
+                        <columns>
+                           <column width="50%">
+                              <sections>
+                                 <section title="Basic Information">
+                                    <fields>
+                                       <field id="Name"/>
+                                       <field id="AccountId" type="" required="true">
+                                          <label>Account</label>
+                                          <filters/>
+                                       </field>
+                                       <field id="Type"/>
+                                       <field id="Description"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="25%">
+                              <sections>
+                                 <section title="Sales Process">
+                                    <fields>
+                                       <field id="StageName"/>
+                                       <field id="CloseDate"/>
+                                       <field id="NextStep"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="25%">
+                              <sections>
+                                 <section title="System Information">
+                                    <fields>
+                                       <field id="IsPrivate"/>
+                                       <field id="LeadSource"/>
+                                       <field id="CampaignId">
+                                          <label>Source Campaign</label>
+                                       </field>
+                                       <field id="OwnerId"/>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                        </columns>
+                     </basicfieldeditor>
+                     <basicfieldeditor showheader="true" showsavecancel="false" model="NewOpportunity" mode="edit" uniqueid="SelectPricebook">
+                        <columns>
+                           <column width="50%">
+                              <sections>
+                                 <section title="Select Pricebook">
+                                    <fields>
+                                       <field id="Pricebook2Id" type="REFPICK" optionsource="model" optionmodel="Pricebooks" displaytemplate="{{Name}}">
+                                          <filters/>
+                                       </field>
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                        </columns>
+                     </basicfieldeditor>
+                     <template model="NewOpportunity" multiple="true" allowhtml="true">
+                        <contents>&lt;div class="nx-editor-header-title"&gt;Line Items&lt;/div&gt;</contents>
+                     </template>
+                     <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="true" model="NewLineItems" mode="edit" uniqueid="LineItemsTable">
+                        <fields>
+                           <field id="PricebookEntryId" type="CUSTOM" required="true" snippet="pricebookEntryRenderer" optionsource="model" optionmodel="PricebookEntries" displaytemplate="{{Product2.Name}} (List: {{UnitPrice}})">
+                              <label>Product</label>
+                              <filters/>
+                           </field>
+                           <field id="ServiceDate"/>
+                           <field id="Quantity" type="CUSTOM" snippet="quantityRenderer"/>
+                           <field id="UnitPrice">
+                              <label>List Price</label>
+                           </field>
+                           <field id="Description"/>
+                           <field id="TotalPrice" readonly="true" type="CUSTOM" snippet="totalPriceRenderer">
+                              <summaries>
+                                 <summary>sum</summary>
+                              </summaries>
+                           </field>
+                        </fields>
+                        <rowactions>
+                           <action type="edit"/>
+                           <action type="delete"/>
+                           <action type="custom" window="self" label="Clone Line Item" icon="ui-silk-arrow-divide" snippet="cloneRecord"/>
+                        </rowactions>
+                        <massactions usefirstitemasdefault="true">
+                           <action type="massupdate"/>
+                           <action type="massdelete"/>
+                        </massactions>
+                        <views>
+                           <view type="standard"/>
+                        </views>
+                     </skootable>
+                     <custom name="HideLineItemsTableIfNoPricebook_NewOpp"/>
+                  </components>
+               </popup>
+            </action>
+            <action type="redirect" label="Create New Opportunity via Redirect" url="/{{Model.KeyPrefix}}/e" icon="ui-silk-add" window="self"/>
+            <action type="redirect" label="Import Opportunities" url="/apex/skuid__Import?obj=Opportunity" icon="ui-silk-money-dollar" window="self"/>
+            <action type="popup" window="self" label="View Helpful Links" icon="ui-silk-application-link">
+               <popup title="Helpful {{Model.Label}} Links" width="400">
+                  <components>
+                     <pagetitle model="opportunities">
+                        <maintitle>Helpful Links</maintitle>
+                        <subtitle>
+                           <template>{{Model.Label}}</template>
+                        </subtitle>
+                        <actions/>
+                     </pagetitle>
+                     <panelset type="standard">
+                        <panels>
+                           <panel>
+                              <components>
+                                 <template model="OwnerData" multiple="true" allowhtml="true">
+                                    <contents>&lt;table class="nx-list nx-skootable-data" cellpadding="0" cellspacing="0"&gt;
+&lt;tbody class="nx-list-contents"&gt;
+
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=22&amp;retURL=%2F006%2Fo&amp;open=open&amp;break0=STAGE_NAME&amp;t=title5&amp;c=RD&amp;c=FN&amp;c=AN&amp;c=ON&amp;c=SN&amp;c=FQ&amp;c=PB&amp;c=AG&amp;c=CD&amp;c=CR&amp;c=NS&amp;c=LS&amp;c=TY&amp;s=AM&amp;s=EA&amp;a=AG&amp;details=yes&amp;format=t"&gt;Opportunity Pipeline&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=22&amp;retURL=%2F006%2Fo&amp;open=open&amp;break0=STAGE_NAME&amp;sort=STAGE_DURATION&amp;sortdir=down&amp;t=title7&amp;c=FN&amp;c=AN&amp;c=ON&amp;c=SN&amp;c=FQ&amp;c=PB&amp;c=CD&amp;c=TY&amp;s=AM&amp;a=AG&amp;a=SD&amp;details=yes&amp;format=t"&gt;Stuck Opportunities &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=22&amp;retURL=%2F006%2Fo&amp;open=closedwon&amp;t=title9&amp;c=FN&amp;c=AN&amp;c=ON&amp;c=SN&amp;c=FQ&amp;c=CD&amp;c=TY&amp;s=AM&amp;a=AG&amp;details=yes"&gt;Closed Opportunities &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="nx-item"&gt;
+&lt;td&gt;&lt;div style="white-space: nowrap; margin: 3px;"&gt;&lt;div class="buttonicon ui-silk-report ui-silk inline"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;div class="nx-field"&gt;
+&lt;div class="nx-fieldtext"&gt;
+&lt;a href="/00O?rt=114&amp;retURL=%2F006%2Fo&amp;sortdir=down&amp;sort=CD&amp;include=all&amp;break0=ON&amp;c=ON&amp;c=OW&amp;c=CR&amp;c=FD&amp;c=OV&amp;c=NV&amp;c=CD&amp;details=yes&amp;format=t"&gt;Opportunity Field History Report &lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+
+&lt;/table&gt;
+</contents>
+                                 </template>
+                              </components>
+                           </panel>
+                        </panels>
+                     </panelset>
+                  </components>
+               </popup>
+            </action>
+         </actions>
+         <massactions defaultlabel="Mass Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+            <action type="massedit"/>
+         </massactions>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Close Date" createfilteroffoption="true" condition="CloseDate">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="Closing: This Month" type="simple" value="THIS_MONTH"/>
+                        <option label="Closing: Next 30 Days" type="simple" value="NEXT_N_DAYS:30"/>
+                        <option label="Closing: Next 90 Days" type="simple" value="NEXT_N_DAYS:90"/>
+                        <option label="Closing: This Fiscal Quarter" type="simple" value="THIS_FISCAL_QUARTER"/>
+                        <option label="Closing: Next Fiscal Quarter" type="simple" value="NEXT_FISCAL_QUARTER"/>
+                        <option label="Closing: This Year" type="simple" value="THIS_YEAR"/>
+                        <option label="Closing: Last 30 Days" type="simple" value="LAST_N_DAYS:30"/>
+                        <option label="Closing: Last 90 Days" type="simple" value="LAST_N_DAYS:90"/>
+                        <option label="Closing: Last Year" type="simple" value="LAST_YEAR"/>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" condition="OppStage">
+               <sources>
+                  <source type="metadata" effectsbehavior="justdefault"/>
+                  <source type="manual">
+                     <options>
+                        <option label="Random Group" type="complex">
+                           <effects>
+                              <effect action="set" value="Prospecting" condition="OppStage"/>
+                              <effect action="set" value="Qualification" condition="OppStage"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Type" createfilteroffoption="true" condition="Type">
+               <sources>
+                  <source type="metadata" prefix="Type: "/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Owner" createfilteroffoption="true" affectcookies="true" condition="OwnerId">
+               <sources>
+                  <source type="model" model="OwnerData" effectsbehavior="justdefault">
+                     <labeltemplate>Owner: {{{Name}}}</labeltemplate>
+                     <valuetemplate>{{Id}}</valuetemplate>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" label="Just Closed Opportunities">
+               <effects>
+                  <effect action="activate" value="" condition="IsClosedTrue"/>
+               </effects>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="staticresource" name="OpportunityJS" cachelocation="false" url="" namespace="skuidcrm">var params = arguments[0],
+   $ = skuid.$;
+</jsitem>
+         <jsitem location="inline" name="LoadChildData" cachelocation="false">(function(skuid){
+
+    // Custom component that lets us Load in child data dynamically for the record in context
+    skuid.componentType.register('LoadChildData',function(element,xmlDef,component){
+        skuid.snippet.getSnippet('_LoadChildDataCore')({
+            element:element,
+            xmlDef:xmlDef,
+            component:component,
+            CHILD_MODELS_TO_UPDATE_AND_CONTEXT_CONDITION_IDS: {
+                'LineItems':'OpportunityId'
+            }
+        });
+    });
+
+})(skuid);</jsitem>
+         <jsitem location="inline" name="SynchModels" cachelocation="false">skuid.$(function(){ 
+    
+    // Update the model names in the next two lines.  
+    // First is the model that will be changing .
+    // Second is the model that you want to listen for changes.  
+    // Make no further changes
+    
+    var changeModel = skuid.model.getModel('LineItems'), 
+        updateModel = skuid.model.getModel('opportunities'); 
+    
+    if (changeModel &amp;&amp; updateModel){
+        var listener = new skuid.ui.Editor(); 
+        
+        listener.handleSave = function() { 
+            if (!updateModel.hasChanged) { 
+                updateModel.updateData(); 
+            } 
+        }; 
+        
+        listener.registerModel(changeModel); 
+    }
+    
+}); </jsitem>
+         <jsitem location="inlinecomponent" name="HideLineItemsTableIfNoPricebook_NewOpp" cachelocation="false" url="">var component = arguments[2],
+    ctx = component.context;
+
+return skuid.snippet.getSnippet('HideLineItemsTableIfNoPricebook_core')({
+    OppModel: skuid.model.getModel('NewOpportunity'),
+    LineItemsModel: skuid.model.getModel('NewLineItems'),
+    component: component
+});</jsitem>
+         <jsitem location="inlinecomponent" name="HideLineItemsTableIfNoPricebook_ExistingOpp" cachelocation="false" url="">var component = arguments[2],
+    ctx = component.context;
+
+return skuid.snippet.getSnippet('HideLineItemsTableIfNoPricebook_core')({
+    OppModel: ctx.model,
+    Opp: ctx.row,
+    LineItemsModel: skuid.model.getModel('LineItems'),
+    component: component
+});</jsitem>
+      </javascript>
+      <css/>
+   </resources>
+</skuidpage>
