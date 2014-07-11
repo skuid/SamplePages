@@ -1,0 +1,125 @@
+<skuidpage showheader="true" showsidebar="false" tabtooverride="Lead">
+   <labels/>
+   <models>
+      <model id="OwnerPrefill" limit="100" query="true" createrowifnonefound="false" sobject="User">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+      </model>
+      <model id="Lead" limit="100" query="false" createrowifnonefound="true" orderby="LastModifiedDate DESC" sobject="Lead">
+         <fields>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="Title"/>
+            <field id="LeadSource"/>
+            <field id="Industry"/>
+            <field id="AnnualRevenue"/>
+            <field id="Phone"/>
+            <field id="MobilePhone"/>
+            <field id="Fax"/>
+            <field id="Email"/>
+            <field id="Website"/>
+            <field id="Status"/>
+            <field id="Rating"/>
+            <field id="NumberOfEmployees"/>
+            <field id="Street"/>
+            <field id="City"/>
+            <field id="State"/>
+            <field id="PostalCode"/>
+            <field id="Country"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="OwnerId" operator="=" userinfotype="userid" model="OwnerPrefill" enclosevalueinquotes="true" mergefield="Id"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Lead">
+         <maintitle>New Lead</maintitle>
+         <actions>
+            <action type="savecancel" label="New Action" afterSave="/{{Id}}" afterCancel="{{#$Param.retURL}}{{$Param.retURL}}{{/$Param.retURL}}{{^$Param.retURL}}/{{Model.KeyPrefix}}/o{{/$Param.retURL}}" window="self" saveLabel="">
+               <models>
+                  <model>Lead</model>
+               </models>
+            </action>
+         </actions>
+      </pagetitle>
+      <basicfieldeditor showsavecancel="false" showheader="true" model="Lead" mode="edit">
+         <columns>
+            <column width="33.3%">
+               <sections>
+                  <section title="Personal Information">
+                     <fields>
+                        <field id="FirstName"/>
+                        <field id="LastName"/>
+                        <field id="Company"/>
+                        <field id="Title"/>
+                     </fields>
+                  </section>
+                  <section title="Contact Information">
+                     <fields>
+                        <field id="Email"/>
+                        <field id="Phone">
+                           <label>Business Phone</label>
+                        </field>
+                        <field id="MobilePhone"/>
+                        <field id="Fax"/>
+                     </fields>
+                  </section>
+                  <section title="Address">
+                     <fields>
+                        <field id="Street"/>
+                        <field id="City"/>
+                        <field id="State"/>
+                        <field id="PostalCode"/>
+                        <field id="Country"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Lead Information">
+                     <fields>
+                        <field id="Description"/>
+                        <field id="LeadSource"/>
+                        <field id="Status"/>
+                        <field id="Rating"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Company Information">
+                     <fields>
+                        <field id="Website"/>
+                        <field id="Industry"/>
+                        <field id="NumberOfEmployees"/>
+                        <field id="AnnualRevenue"/>
+                     </fields>
+                  </section>
+                  <section title="System Information">
+                     <fields>
+                        <field id="OwnerId"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+         </columns>
+      </basicfieldeditor>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>
