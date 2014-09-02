@@ -1,0 +1,195 @@
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true">
+   <models>
+      <model id="Users" limit="" query="true" createrowifnonefound="false" sobject="User" orderby="Name">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Contacts" limit="20" query="true" createrowifnonefound="false" sobject="Contact" orderby="Name">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+      <model id="CalendarEvents" limit="" query="false" createrowifnonefound="false" sobject="Event">
+         <fields>
+            <field id="Subject"/>
+            <field id="Location"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="EndDateTime"/>
+            <field id="StartDateTime"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OwnerId" state="filterableoff" inactive="true" name="OwnerId"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="WhoId" state="filterableoff" inactive="true" name="WhoId"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <panelset type="standard">
+         <panels>
+            <panel type="left" width="300">
+               <components>
+                  <tabset rememberlastusertab="true" defertabrendering="true">
+                     <tabs>
+                        <tab name="Users">
+                           <components>
+                              <pagetitle model="CalendarEvents">
+                                 <actions>
+                                    <action type="multi" label="Reset Filter" window="self" icon="sk-icon-cancel">
+                                       <actions>
+                                          <action type="blockUI" message="Deactivating User filter on Calendar events..."/>
+                                          <action type="deactivateCondition" model="CalendarEvents" condition="OwnerId"/>
+                                          <action type="requeryModel" model="CalendarEvents">
+                                             <onerroractions>
+                                                <action type="blockUI" message="Unable to clear filters. Please save Calendar data, then try again." timeout="3000"/>
+                                             </onerroractions>
+                                          </action>
+                                          <action type="unblockUI"/>
+                                       </actions>
+                                    </action>
+                                 </actions>
+                              </pagetitle>
+                              <queue tagrendertype="template" querystring="id={{Id}}" defaultitemparameter="id" clickactiontype="multi" searchbox="true" model="Users" title="Filter by User...">
+                                 <rendertemplate>{{{FirstName}}} {{{LastName}}}</rendertemplate>
+                                 <actions>
+                                    <action type="blockUI" message="Applying Filter..."/>
+                                    <action type="setCondition" model="CalendarEvents" condition="OwnerId" value="{{{Id}}}"/>
+                                    <action type="requeryModel" model="CalendarEvents">
+                                       <onerroractions>
+                                          <action type="blockUI" message="Unable to refresh Calendar data. Please save all Calendar then try again." timeout="3000"/>
+                                       </onerroractions>
+                                    </action>
+                                    <action type="unblockUI"/>
+                                 </actions>
+                              </queue>
+                           </components>
+                        </tab>
+                        <tab name="Contacts" loadlazypanels="true">
+                           <components>
+                              <pagetitle model="CalendarEvents">
+                                 <actions>
+                                    <action type="multi" label="Reset Filter" window="self" icon="sk-icon-cancel">
+                                       <actions>
+                                          <action type="blockUI" message="Deactivating Contact filter on Calendar events..."/>
+                                          <action type="deactivateCondition" model="CalendarEvents" condition="WhoId"/>
+                                          <action type="requeryModel" model="CalendarEvents">
+                                             <onerroractions>
+                                                <action type="blockUI" message="Unable to clear filters. Please save Calendar data, then try again." timeout="3000"/>
+                                             </onerroractions>
+                                          </action>
+                                          <action type="unblockUI"/>
+                                       </actions>
+                                    </action>
+                                 </actions>
+                              </pagetitle>
+                              <queue tagrendertype="template" querystring="id={{Id}}" defaultitemparameter="id" clickactiontype="multi" searchbox="true" model="Contacts" title="Filter by Contact...">
+                                 <rendertemplate>{{{FirstName}}} {{{LastName}}}</rendertemplate>
+                                 <actions>
+                                    <action type="blockUI" message="Refreshing Calendar data..."/>
+                                    <action type="setCondition" model="CalendarEvents" condition="WhoId" value="{{{Id}}}"/>
+                                    <action type="requeryModel" model="CalendarEvents">
+                                       <onerroractions>
+                                          <action type="blockUI" message="Unable to refresh Calendar data. Please save all Calendar data and try again." timeout="3000"/>
+                                       </onerroractions>
+                                    </action>
+                                    <action type="unblockUI"/>
+                                 </actions>
+                              </queue>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <skoocal rememberdate="true" rememberview="true">
+                     <sources>
+                        <eventsource name="UserEvents" createable="true" deleteable="true" updateable="true" eventclickhandler="custompopup" showdefaultbuttons="true" model="CalendarEvents" namefield="Subject" startfield="StartDateTime" endfield="EndDateTime" groupfield="OwnerId">
+                           <eventtemplate>{{Subject}}
+{{OwnerId}}</eventtemplate>
+                           <onclickpopup title="Edit Event" width="80%" showdefaultbuttons="true">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="CalendarEvents" buttonposition="" mode="read" layout="above">
+                                    <columns>
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="Event Details" collapsible="no">
+                                                <fields>
+                                                   <field id="Subject"/>
+                                                   <field id="Description"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Where / When" collapsible="no">
+                                                <fields>
+                                                   <field id="Location"/>
+                                                   <field id="StartDateTime"/>
+                                                   <field id="EndDateTime"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Related To" collapsible="no">
+                                                <fields>
+                                                   <field id="OwnerId">
+                                                      <label>Assigned To</label>
+                                                   </field>
+                                                   <field id="WhoId">
+                                                      <label>Who</label>
+                                                   </field>
+                                                   <field id="WhatId">
+                                                      <label>What</label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions>
+                                       <condition type="contextrow" field="Id" mergefield="Id" autocreated="true"/>
+                                    </conditions>
+                                 </basicfieldeditor>
+                              </components>
+                           </onclickpopup>
+                        </eventsource>
+                     </sources>
+                     <views>
+                        <eventview type="month"/>
+                        <eventview type="week"/>
+                        <eventview type="dayscheduling" searchbox="true" searchmethod="client" groupingmodel="Users" starthour="8" endhour="18" divisionsperhour="4">
+                           <groupingtemplate>{{FirstName}} {{LastName}}</groupingtemplate>
+                        </eventview>
+                     </views>
+                  </skoocal>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>
