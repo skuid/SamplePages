@@ -1,0 +1,112 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Lead">
+   <models>
+      <model id="LeadData" limit="100" query="true" createrowifnonefound="false" sobject="Lead" orderby="CreatedDate DESC">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company"/>
+            <field id="CreatedDate"/>
+            <field id="State"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="Phone"/>
+            <field id="Id"/>
+            <field id="LeadSource"/>
+            <field id="LastActivityDate"/>
+            <field id="Rating"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="IsUnreadByOwner"/>
+            <field id="Name"/>
+            <field id="Tasks" type="childRelationship" limit="1">
+               <conditions>
+                  <condition enclosevalueinquotes="false" operator="=" type="fieldvalue" field="IsClosed" value="false"/>
+               </conditions>
+            </field>
+            <field id="Owner.Alias"/>
+            <field id="DoNotCall"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="Lead Source"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Rating" operator="=" state="filterableoff" inactive="true" name="Rating"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="LeadData">
+         <maintitle>
+            <template>{{Model.LabelPlural}}</template>
+         </maintitle>
+         <actions>
+            <action type="savecancel" label="New Action"/>
+         </actions>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="true" model="LeadData" mode="read">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Company" allowordering="true"/>
+            <field id="DoNotCall" type="CUSTOM" snippet="HighlightRow"/>
+            <field id="Phone"/>
+            <field id="Email"/>
+            <field id="Status"/>
+            <field id="CreatedDate" allowordering="true"/>
+            <field id="LeadSource" allowordering="true"/>
+            <field id="OwnerId" optionsource="" displaytemplate="{{Alias}}">
+               <label>Owner</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Lead Source" createfilteroffoption="true" condition="Lead Source">
+               <sources>
+                  <source type="metadata" prefix="Source: "/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Rating" createfilteroffoption="true" condition="Rating">
+               <sources>
+                  <source type="metadata"/>
+               </sources>
+            </filter>
+            <filter type="select" filteroffoptionlabel="Any Status" createfilteroffoption="true" condition="Status">
+               <sources>
+                  <source type="metadata" prefix="Status: "/>
+               </sources>
+            </filter>
+         </filters>
+         <actions defaultlabel="Options" defaulticon="ui-silk-text-list-bullets" usefirstitemasdefault="true"/>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="HightlightRow" cachelocation="false"> table.nx-skootable-data tbody tr.LeadTab_highlighted-row td {    
+   background-color: LightCoral;
+}
+</cssitem>
+      </css>
+      <javascript>
+         <jsitem location="inlinesnippet" name="HighlightRow" cachelocation="false">var field = arguments[0], 
+value = skuid.utils.decodeHTML(arguments[1]); 
+skuid.ui.fieldRenderers[field.metadata.displaytype][field.mode](field,value); 
+if (field.mode == 'read' &amp;&amp; value === true) 
+    { 
+        field.item.element.addClass("LeadTab_highlighted-row");
+
+    }</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
