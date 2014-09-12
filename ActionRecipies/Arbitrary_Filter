@@ -1,0 +1,194 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Contact">
+   <models>
+      <model id="ContactPicker" limit="1" query="false" createrowifnonefound="true" sobject="OpportunityContactRole">
+<fields>
+   <field id="ContactId"/>
+   <field id="Contact.Name"/>
+</fields>
+<conditions/>
+<actions>
+   <action>
+      <actions>
+         <action type="setCondition" model="ContactData" condition="Id" value="{{ContactId}}"/>
+         <action type="requeryModel" model="ContactData"/>
+      </actions>
+      <events>
+         <event>row.updated</event>
+      </events>
+   </action>
+</actions>
+</model>
+<model id="ContactData" limit="1" query="false" createrowifnonefound="false" sobject="Contact">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="CreatedDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Email"/>
+            <field id="MailingCity"/>
+            <field id="MailingCountry"/>
+            <field id="MailingState"/>
+            <field id="MailingStreet"/>
+            <field id="MailingPostalCode"/>
+            <field id="Phone"/>
+            <field id="MobilePhone"/>
+            <field id="HomePhone"/>
+            <field id="AssistantPhone"/>
+            <field id="OtherPhone"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="LastModifiedById"/>
+            <field id="LastModifiedBy.Name"/>
+            <field id="LastModifiedDate"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="ReportsToId"/>
+            <field id="ReportsTo.Name"/>
+            <field id="Title"/>
+            <field id="Fax"/>
+            <field id="OtherCity"/>
+            <field id="OtherCountry"/>
+            <field id="OtherState"/>
+            <field id="OtherStreet"/>
+            <field id="OtherPostalCode"/>
+            <field id="AssistantName"/>
+            <field id="LeadSource"/>
+            <field id="Department"/>
+            <field id="Description"/>
+            <field id="Birthdate"/>
+            <field id="Id"/>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" operator="=" field="Id" value="" enclosevalueinquotes="true" state="filterableoff" inactive="true" name="Id"/>
+         </conditions>
+      <actions/>
+    </model>
+</models>
+<components>
+<panelset type="custom">
+   <panels>
+      <panel width="50%">
+         <components>
+            <basicfieldeditor showheader="true" showsavecancel="false" model="ContactPicker" buttonposition="" mode="edit">
+               <columns>
+                  <column width="100%">
+                     <sections>
+                        <section title="Choose a Contact" collapsible="no">
+                           <fields>
+                              <field id="ContactId"/>
+                           </fields>
+                        </section>
+                     </sections>
+                  </column>
+               </columns>
+            </basicfieldeditor>
+         </components>
+      </panel>
+      <panel width="50%">
+         <components>
+            <pagetitle model="ContactData">
+         <actions>
+            <action type="delete"/>
+            <action type="savecancel" label="New Action" afterSave="">
+               <models>
+               </models>
+            </action>
+         </actions>
+         <maintitle>{{FirstName}} {{LastName}}</maintitle>
+         <subtitle>{{Model.Label}}</subtitle>
+      </pagetitle>
+         </components>
+      </panel>
+   </panels>
+</panelset>
+<basicfieldeditor showheader="true" showsavecancel="false" model="ContactData" mode="read">
+                                             <columns>
+                                                <column width="40%">
+                                                   <sections>
+                                                      <section title="Personal">
+                                                         <fields>
+                                                            <field id="FirstName"/>
+                                                            <field id="LastName"/>
+                                                            <field id="Email"/>
+                                                            <field id="Birthdate"/>
+                                                            <field id="Description">
+                                                               <label>Description</label>
+                                                            </field>
+                                                         </fields>
+                                                      </section>
+                                                   </sections>
+                                                </column>
+                                                <column width="30%">
+                                                   <sections>
+                                                      <section title="Phone Numbers">
+                                                         <fields>
+                                                            <field id="Phone"/>
+                                                            <field id="MobilePhone"/>
+                                                            <field id="HomePhone"/>
+                                                            <field id="AssistantPhone"/>
+                                                            <field id="Fax"/>
+                                                         </fields>
+                                                      </section>
+                                                   </sections>
+                                                </column>
+                                                <column width="30%">
+                                                   <sections>
+                                                      <section title="System Info">
+                                                         <fields>
+                                                            <field id="OwnerId"/>
+                                                            <field type="COMBO">
+                                                               <label>Created By</label>
+                                                               <template>{{CreatedById}} on {{CreatedDate}}</template>
+                                                            </field>
+                                                            <field type="COMBO">
+                                                               <label>Last Modified By</label>
+                                                               <template>{{LastModifiedById}} on {{LastModifiedDate}}</template>
+                                                            </field>
+                                                         </fields>
+                                                      </section>
+                                                   </sections>
+                                                </column>
+                                             </columns>
+                                          </basicfieldeditor>
+<basicfieldeditor showsavecancel="false" showheader="true" model="ContactData" mode="read">
+                                             <columns>
+                                                <column width="50%">
+                                                   <sections>
+                                                      <section title="Employment Info">
+                                                         <fields>
+                                                            <field id="AccountId"/>
+                                                            <field id="Title"/>
+                                                            <field id="Department"/>
+                                                            <field id="ReportsToId"/>
+                                                            <field id="AssistantName"/>
+                                                         </fields>
+                                                      </section>
+                                                   </sections>
+                                                </column>
+                                                <column width="50%">
+                                                   <sections>
+                                                      <section title="Addresses">
+                                                         <fields>
+                                                            <field type="COMBO" allowhtml="true">
+                                                               <label>Mailing Address</label>
+                                                               <template>{{MailingStreet}} &lt;br&gt; {{MailingCity}}{{#MailingCity}},{{/MailingCity}} {{MailingState}} &lt;br&gt; {{MailingCountry}} &lt;br&gt; {{MailingPostalCode}}</template>
+                                                            </field>
+                                                            <field type="COMBO" allowhtml="true">
+                                                               <label>Other Address</label>
+                                                               <template>{{OtherStreet}} &lt;br&gt; {{OtherCity}}{{#OtherCity}},{{/OtherCity}} {{OtherState}} &lt;br&gt; {{OtherCountry}}&lt;br&gt; {{OtherPostalCode}}</template>
+                                                            </field>
+                                                         </fields>
+                                                      </section>
+                                                   </sections>
+                                                </column>
+                                             </columns>
+                                          </basicfieldeditor>
+   </components>
+<resources>
+   <labels/>
+   <javascript/>
+   <css/>
+</resources>
+</skuidpage>
