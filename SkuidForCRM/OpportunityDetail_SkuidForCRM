@@ -4,7 +4,7 @@
    <resources>
       <labels/>
       <javascript>
-         <jsitem location="staticresource" name="OpportunityJS" cachelocation="false" url="" namespace="skuidcrm">var params = arguments[0],
+         <jsitem location="staticresource" name="OpportunityJS" cachelocation="false" url="" namespace="">var params = arguments[0],
    $ = skuid.$;
 </jsitem>
          <jsitem location="inline" name="markCompleted" url="">skuid.snippet.registerSnippet('tasks.markCompleted',function(params){
