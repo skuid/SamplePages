@@ -1,0 +1,162 @@
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true" tabtooverride="Account">
+   <models>
+      <model id="Account" limit="100" query="true" createrowifnonefound="false" sobject="Account">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="Type"/>
+            <field id="RecordTypeId"/>
+            <field id="RecordType.Name"/>
+            <field id="NumberOfEmployees"/>
+            <field id="Phone"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="ParentId"/>
+            <field id="Parent.Name"/>
+            <field id="Website"/>
+            <field id="Geographic_Location__c"/>
+            <field id="Description"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+      <model id="Contacts" limit="" query="false" createrowifnonefound="false" sobject="Contact" doclone="" type="">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Email"/>
+            <field id="Phone"/>
+            <field id="Title"/>
+            <field id="Hat_Size__c"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="AccountId" state="filterableoff" inactive="true" name="AccountId"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Account" mode="read">
+         <fields>
+            <field id="Name" valuehalign="" type=""/>
+            <field id="RecordTypeId" valuehalign="" type=""/>
+            <field id="Type"/>
+            <field id="NumberOfEmployees"/>
+            <field id="CreatedDate" allowordering="true" valuehalign="" type=""/>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="drawer" label="Additional Details" icon="sk-icon-partners">
+               <drawer title="Drawer Area" width="800" closehandle="true">
+                  <components>
+                     <tabset rememberlastusertab="true" defertabrendering="true" renderas="">
+                        <tabs>
+                           <tab name="Additional Details" icon="sk-icon-listview">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="Account" buttonposition="" mode="read" layout="above">
+                                    <columns>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Contact" collapsible="no">
+                                                <fields>
+                                                   <field id="Phone"/>
+                                                   <field id="Geographic_Location__c" valuehalign="" type=""/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Onwership" collapsible="no">
+                                                <fields>
+                                                   <field id="OwnerId" valuehalign="" type=""/>
+                                                   <field id="ParentId" valuehalign="" type=""/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Additional Information" collapsible="no">
+                                                <fields>
+                                                   <field id="Website" valuehalign="" type=""/>
+                                                   <field id="NumberOfEmployees" valuehalign="" type=""/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="25%">
+                                          <sections>
+                                             <section title="Description" collapsible="no">
+                                                <fields>
+                                                   <field id="Description" valuehalign="" type="" maxdisplaycharacters="250">
+                                                      <label> </label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions/>
+                                 </basicfieldeditor>
+                              </components>
+                           </tab>
+                           <tab name="Contacts" loadlazypanels="true" icon="ui-silk-group">
+                              <components>
+                                 <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="Contacts" buttonposition="" mode="read">
+                                    <fields>
+                                       <field id="FirstName"/>
+                                       <field id="LastName"/>
+                                       <field id="Email"/>
+                                       <field id="Phone"/>
+                                       <field id="Title"/>
+                                       <field id="Hat_Size__c"/>
+                                    </fields>
+                                    <rowactions>
+                                       <action type="edit"/>
+                                       <action type="delete"/>
+                                    </rowactions>
+                                    <massactions usefirstitemasdefault="true">
+                                       <action type="massupdate"/>
+                                       <action type="massdelete"/>
+                                    </massactions>
+                                    <views>
+                                       <view type="standard"/>
+                                    </views>
+                                    <conditions>
+                                       <condition type="contextrow" field="AccountId" mergefield="Id"/>
+                                    </conditions>
+                                    <searchfields/>
+                                 </skootable>
+                              </components>
+                           </tab>
+                        </tabs>
+                     </tabset>
+                  </components>
+                  <beforeload>
+                     <action type="blockUI" message="Retrieving Contacts"/>
+                     <action type="setCondition" model="Contacts" condition="AccountId" value="{{Id}}"/>
+                     <action type="requeryModel" model="Contacts" behavior="loadmore"/>
+                     <action type="unblockUI"/>
+                  </beforeload>
+               </drawer>
+            </action>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>
