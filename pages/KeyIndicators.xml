@@ -1,0 +1,338 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Skuid Dashboard" theme="" unsavedchangeswarning="">
+   <models>
+      <model id="Accounts" limit="" query="true" createrowifnonefound="false" sobject="Account" type="aggregate">
+         <fields>
+            <field id="Id" name="countId" function="COUNT"/>
+         </fields>
+         <conditions/>
+         <groupby method="simple"/>
+         <actions/>
+      </model>
+      <model id="ProductCustomers" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" type="aggregate">
+         <fields>
+            <field id="TotalPrice" name="sumTotalPrice" function="SUM"/>
+            <field id="Opportunity.Name" name="countdistinctOpportunityN" function="COUNT_DISTINCT"/>
+         </fields>
+         <conditions>
+            <condition type="multiple" value="" field="Opportunity.StageName" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
+               <values>
+                  <value>Closed Won</value>
+                  <value>Invoiced</value>
+               </values>
+            </condition>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="Opportunity.CloseDate"/>
+         </conditions>
+         <groupby method="simple"/>
+         <actions/>
+      </model>
+      <model id="ProfSvcsCustomers" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" type="aggregate">
+         <fields>
+            <field id="TotalPrice" name="sumTotalPrice" function="SUM"/>
+            <field id="Opportunity.Name" name="countdistinctOpportunityN" function="COUNT_DISTINCT"/>
+         </fields>
+         <conditions>
+            <condition type="multiple" value="" field="PricebookEntry.Name" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
+               <values>
+                  <value>Professional Services Block 80</value>
+                  <value>Professional Services Hourly</value>
+               </values>
+            </condition>
+            <condition type="multiple" value="" field="Opportunity.StageName" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
+               <values>
+                  <value>Closed Won</value>
+                  <value>Invoice</value>
+               </values>
+            </condition>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="Opportunity.CloseDate"/>
+         </conditions>
+         <groupby method="simple"/>
+         <actions/>
+      </model>
+      <model id="License MRR" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate">
+         <fields>
+            <field id="Amount" name="sumAmount" function="SUM"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="Renewal" enclosevalueinquotes="true" field="Name" operator="contains"/>
+            <condition type="multiple" value="" field="StageName" operator="not in" enclosevalueinquotes="true">
+               <values>
+                  <value>Closed Won</value>
+                  <value>Closed Lost</value>
+               </values>
+            </condition>
+         </conditions>
+         <groupby method="simple"/>
+         <actions/>
+      </model>
+      <model id="HotLeads" limit="" query="true" createrowifnonefound="false" sobject="Lead" type="aggregate" orderby="">
+         <fields>
+            <field id="Id" name="countId" function="COUNT"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
+         </conditions>
+         <groupby method="simple"/>
+         <actions/>
+      </model>
+      <model id="Opportunities" limit="100" query="true" createrowifnonefound="false" sobject="Opportunity" orderby="StageName">
+         <fields>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Amount"/>
+            <field id="CreatedDate"/>
+            <field id="StageName"/>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="New Business" enclosevalueinquotes="true" field="Type"/>
+            <condition type="fieldvalue" value="LAST_N_MONTHS:6" enclosevalueinquotes="false" field="CreatedDate"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Opportunies by Month" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" orderby="CALENDAR_MONTH(CreatedDate)">
+         <fields>
+            <field id="Id" name="countId" function="COUNT"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CloseDate"/>
+            <condition type="fieldvalue" value="New Business" enclosevalueinquotes="true" field="Type"/>
+         </conditions>
+         <groupby method="simple">
+            <field id="CreatedDate" name="cmCreatedDate" function="CALENDAR_MONTH"/>
+         </groupby>
+         <actions/>
+      </model>
+      <model id="Leads" limit="100" query="true" createrowifnonefound="false" sobject="Lead">
+         <fields>
+            <field id="Name"/>
+            <field id="Company"/>
+            <field id="Email"/>
+            <field id="CreatedDate"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="OppsByYear" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate">
+         <fields>
+            <field id="Amount" name="sumAmount" function="SUM"/>
+         </fields>
+         <conditions/>
+         <groupby method="simple">
+            <field id="CloseDate" name="cyCloseDate" function="CALENDAR_YEAR"/>
+         </groupby>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Accounts">
+         <maintitle>Management Dashboard</maintitle>
+         <actions>
+            <action type="delete"/>
+            <action type="share"/>
+            <action type="clone"/>
+         </actions>
+      </pagetitle>
+      <panelset type="custom" scroll="">
+         <panels>
+            <panel width="20%">
+               <components>
+                  <pagetitle model="ProfSvcsCustomers">
+                     <actions/>
+                     <maintitle>Key Statistics</maintitle>
+                  </pagetitle>
+                  <template model="Accounts" multiple="false" allowhtml="true">
+                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=CustomerAccountDetail"&gt;
+&lt;div class = "box"&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; Number of Accounts: &lt;/div&gt;
+&lt;div class = "nx-pagetitle-maintitle"&gt;
+{{countId}}
+&lt;/div&gt;
+&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
+&lt;/div&gt;&lt;/a&gt;</contents>
+                  </template>
+                  <template model="HotLeads" multiple="false" allowhtml="true">
+                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
+&lt;div class = "box"&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; Hot Leads: &lt;/div&gt;
+&lt;div class = "nx-pagetitle-maintitle"&gt;
+{{countId}}
+&lt;/div&gt;
+&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
+&lt;/div&gt;&lt;/a&gt;</contents>
+                  </template>
+                  <template model="Accounts" multiple="false" allowhtml="true">
+                     <contents>&lt;a href="/apex/skuid__ui?page=AccountTab&amp;Oportunites_Won__c=-on-"&gt;
+&lt;div class = "box"&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; Customer Accounts 
+&lt;/div&gt;
+&lt;div class = "nx-pagetitle-maintitle"&gt;
+{{countId}}
+&lt;/div&gt;
+&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
+
+
+&lt;/div&gt;&lt;/a&gt;</contents>
+                  </template>
+                  <template model="ProductCustomers" multiple="false" allowhtml="true">
+                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
+&lt;div class = "box"&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; License Opportunities Won: Current Year &lt;/div&gt;
+&lt;div class = "nx-pagetitle-maintitle"&gt;
+{{countdistinctOpportunityN}}
+&lt;/div&gt;
+&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
+&lt;/div&gt;&lt;/a&gt;</contents>
+                  </template>
+                  <template model="ProductCustomers" multiple="false" allowhtml="true">
+                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
+&lt;div class = "box"&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; License Revenue Won: Current Year &lt;/div&gt;
+&lt;div class = "nx-pagetitle-maintitle"&gt;
+{{sumTotalPrice}}
+&lt;/div&gt;
+&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
+&lt;/div&gt;&lt;/a&gt;</contents>
+                  </template>
+                  <custom name="block"/>
+                  <pagetitle model="OppsByYear">
+                     <maintitle>Opps by Year</maintitle>
+                     <actions/>
+                  </pagetitle>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="OppsByYear" mode="readonly" buttonposition="left" cssclass="hidetablefooter">
+                     <fields>
+                        <field id="CloseDate" name="cyCloseDate" valuehalign="" type="">
+                           <label>Year</label>
+                        </field>
+                        <field id="Amount" name="sumAmount" decimalplaces="" valuehalign="" type="">
+                           <label>Amount</label>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </panel>
+            <panel width="80%">
+               <components>
+                  <template model="Accounts" multiple="true" allowhtml="true">
+                     <contents>&lt;div class = "nx-pagetitle-maintitle"&gt;
+Leads
+&lt;/div&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; Hot Leads from past 7 days &lt;/div&gt;
+
+&lt;/div&gt;</contents>
+                  </template>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="false" model="Leads" mode="read" buttonposition="" cssclass="hidetablefooter">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="Email"/>
+                        <field id="Company"/>
+                        <field id="CreatedDate"/>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+                  <template model="Accounts" multiple="true" allowhtml="true">
+                     <contents>&lt;div class = "nx-pagetitle-maintitle"&gt;
+Opportunities
+&lt;/div&gt;
+&lt;div class = "nx-pagetitle-subtitle"&gt; New Business - Created in last 30 days&lt;/div&gt;
+
+&lt;/div&gt;</contents>
+                  </template>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="false" model="Opportunities" mode="read" buttonposition="" cssclass="hidetablefooter">
+                     <fields>
+                        <field id="Name"/>
+                        <field id="AccountId"/>
+                        <field id="CreatedDate" type="CUSTOM" snippet="ShortDate"/>
+                        <field id="StageName"/>
+                        <field id="Amount">
+                           <summaries>
+                              <summary>sum</summary>
+                           </summaries>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="box">.box{
+        padding:8px;
+        background-color: LightBlue; 
+        border-width: 2px;
+        border-color: Navy;
+        height: 75px;
+        margin: 4px;
+        position: relative;
+}
+
+.bottomtext {
+    text-decoration:underline;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: left;
+}</cssitem>
+         <cssitem location="inline" name="hidefooter" cachelocation="false">.hidetablefooter .nx-list-footer {	
+    display:none;</cssitem>
+      </css>
+      <javascript>
+         <jsitem location="inlinesnippet" name="ShortDate" url="">var $ = skuid.$;
+var field = arguments[0];
+var value = arguments[1];
+var jsdate = new Date();
+
+//use skuid util to change SF date to JS date
+jsdate = skuid.time.parseSFDate(value);
+
+//uses jQuery UI Datepicker.formatDate tools
+skuid.ui.fieldRenderers.TEXT[field.mode](field, $.datepicker.formatDate( "mm/dd", jsdate));
+</jsitem>
+         <jsitem location="inline" name="MRRCalcBoxDisplay">skuid.componentType.register('block',function(element){
+var $ = skuid.$;
+var m = skuid.model.getModel('ProductCustomers');
+var row = m.getFirstRow();
+annual = row.sumTotalPrice
+var monthly = (annual / 120).toFixed(2)
+monthly = addCommas(monthly);
+var text = 
+    "&lt;a href='https://skuid.na2.visual.force.com/apex/skuid__ui?page=MRR_Detail'&gt;&lt;div class= 'box ui-widget'&gt;&lt;div class='nx-pagetitle-subtitle'&gt; License MRR &lt;/div&gt;&lt;div class = 'nx-pagetitle-maintitle'&gt;$"
+    + monthly 
+    +"&lt;/div&gt;&lt;div class='bottomtext'&gt;Details&lt;/div&gt;&lt;/div&gt;&lt;/a&gt;";
+element.append(
+    m.mergeRow(row,text)
+);
+});
+
+ var addCommas = function(str) {
+        str += '';
+        x = str.split('.');
+        x1 = x[0];
+        x2 = x.length &gt; 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    };</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
