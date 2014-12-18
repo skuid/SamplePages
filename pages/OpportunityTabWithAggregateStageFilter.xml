@@ -1,0 +1,77 @@
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true" tabtooverride="Opportunity">
+   <models>
+      <model id="Opportunity" limit="100" query="true" createrowifnonefound="false" sobject="Opportunity">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="StageName"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" state="filterableoff" inactive="true" name="StageName"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Stages" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" doclone="" type="aggregate">
+         <fields>
+            <field id="Id" name="numberInStage" function="COUNT"/>
+         </fields>
+         <conditions/>
+         <actions/>
+         <groupby method="simple">
+            <field id="StageName" name="stageName"/>
+         </groupby>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunity">
+         <maintitle>
+            <template>{{Model.labelPlural}}</template>
+         </maintitle>
+         <subtitle>
+            <template>Home</template>
+         </subtitle>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Opportunity" mode="read">
+         <fields>
+            <field id="Name" allowordering="true"/>
+            <field id="AccountId" valuehalign="" type="">
+               <label>Account</label>
+            </field>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="StageName"/>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" condition="StageName">
+               <sources>
+                  <source type="model" effectsbehavior="justdefault" model="Stages">
+                     <labeltemplate>Stage: {{{stageName}}} ({{{numberInStage}}})</labeltemplate>
+                     <valuetemplate>{{{stageName}}}</valuetemplate>
+                  </source>
+               </sources>
+            </filter>
+         </filters>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+</skuidpage>
