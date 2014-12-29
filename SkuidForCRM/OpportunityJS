@@ -204,11 +204,12 @@
 		
 		    // Force updates of the UnitPrice (SalesPrice) field 
 		    //with the newly-selected PricebookEntry's UnitPrice field
-		    field.model.updateRow(field.row,'UnitPrice',newPrice);
+		    field.model.updateRow(field.row,'UnitPrice',newPrice,{ initiatorId: field._GUID });
 		    
 		
 		    // Rerender the UnitPrice field in the row,
 		    // if that field has been rendered.
+		    /* NOT NECESSARY AS OF SUMMER 14 
 		    var item = field.editor.lists[0].renderedItems[field.row.Id];
 		    if (item) {
 		        $.each(item.fields,function(i,f){
@@ -218,6 +219,7 @@
 		            }
 		        });
 		    }
+		    */
 		};
 		
 		if (mode == 'edit') {
@@ -254,7 +256,7 @@
 		       field.element.find('input'),
 		       function(newValue) {
 		           // Force updates of the UnitPrice (Sales Price) field
-		           field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice'));
+		           field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice',true),{ initiatorId: field._GUID });
 		       }
 		   );
 		
@@ -286,7 +288,7 @@
 		            discount = row.Discount || 0.0,
 		            total = ((quantity * price) * (100 - discount)) / 100.0;
 		        
-		        field.model.updateRow(row,'TotalPrice',total);
+		        field.model.updateRow(row,'TotalPrice',total,{ initiatorId: field._GUID });
 		
 		        field.element.empty();
 		        skuid.ui.fieldRenderers.DOUBLE.readonly(field,total);
@@ -387,7 +389,7 @@
 		                           
 		                       }
 		                   }
-		   
+		                  
 		                   LineItemsTable.data('object').list.render({
 		                       refreshFields:true,
 		                       resetPagination:false
