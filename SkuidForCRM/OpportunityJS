@@ -1,9 +1,20 @@
-//This File must be put into a Static Resource with name OpportunityJS in order for opportunity pages to work correctly
+//Note: Opportunity pages will not work correctly unless you do the following:  //
+//1. Copy code below into a file named OpportunityJS.js.  Save this on your machine//
+//2. Uploaded this file into a Static Resource with name OpportunityJS//
 
 (function( skuid ){
-	
+
+    // CONFIG - begin
+   var FIELDS_TO_LISTEN_ON = [
+       'Quantity',
+       'UnitPrice',
+       'Discount',
+       'Adds_Months_till_renewal__c'
+   ];
+    // CONFIG - end
+    
    var $ = skuid.$;
-   
+    
    // Generic snippet used to save all new items in a popup
    // after blocking the UI with an appropriate "Saving new <Objects>..." message,
    // then finding all "parent" models on the saved objects
@@ -256,16 +267,60 @@
 		       field.element.find('input'),
 		       function(newValue) {
 		           // Force updates of the UnitPrice (Sales Price) field
-		           field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice',true),{ initiatorId: field._GUID });
+		           field.model.changes[field.row.Id].UnitPrice = 
+                		field.model.getFieldValue(field.row,'UnitPrice',true);
 		       }
 		   );
 		
 		}
    }); // end snippet
    
+   // Used for the Adds_months_till_renewal field renderer
+    skuid.snippet.registerSnippet('monthsTillRenewalRenderer',function(){
+       var field = arguments[0],
+            value = skuid.utils.decodeHTML(arguments[1]),
+            renderer = skuid.ui.fieldRenderers[field.metadata.displaytype],
+            mode = field.mode,
+            $ = skuid.$,
+            listener;
+        
+        // Run standard renderer for the current mode
+        // (applies to read/edit mode)
+        renderer[mode](field,value);
+        
+        var updateUnitPriceField = function(){
+        
+            var listPrice = field.model.getFieldValue(field.row,'PricebookEntry.UnitPrice',true),
+                months = field.model.getFieldValue(field.row,field.id,true),
+                newUnitPrice = listPrice * (parseInt(months,10) / 12);
+        
+            // Force updates of the UnitPrice (SalesPrice) field 
+            // based on the selected Months till Renewal
+            field.model.updateRow(field.row,'UnitPrice',newUnitPrice, {initiatorId: field._GUID });
+        
+        };
+        
+        if (mode == 'edit') {
+        
+            // If we do not yet have a value for our UnitPrice field,
+            // update it.
+            if (!field.model.getFieldValue(field.row,'UnitPrice')) {
+                updateUnitPriceField();
+            }
+        
+            listener = new skuid.ui.Field(field.row,field.model,null,{
+                fieldId: field.id,
+                register: true
+            });
+            listener.handleChange = function(){
+                updateUnitPriceField();
+            };
+        
+        } 
+    });
+    
    // Used for the Quantity field in a Line Items table
    skuid.snippet.registerSnippet('totalPriceRenderer',function(){
-		var FIELDS_TO_LISTEN_ON = ['Quantity','UnitPrice','Discount'];
 		
 		var field = arguments[0],
 		    value = arguments[1],
