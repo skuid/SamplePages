@@ -1,0 +1,240 @@
+<skuidpage showsidebar="true" showheader="true" tabtooverride="CampaignMember" unsavedchangeswarning="">
+   <models>
+      
+      <model id="CampaignStatus" limit="100" query="true" createrowifnonefound="false" sobject="CampaignMemberStatus" orderby="SortOrder, Label">
+         <fields>
+            <field id="Label"/>
+            <field id="HasResponded"/>
+            <field id="IsDefault"/>
+         </fields>
+         <conditions>
+            <condition type="param" value="id" field="CampaignId" operator="=" enclosevalueinquotes="true"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="CampaignMember" limit="" query="true" createrowifnonefound="false" sobject="CampaignMember" orderby="Priority_Display_Order__c">
+         <fields>
+            <field id="CreatedDate"/>
+            <field id="CampaignId"/>
+            <field id="Campaign.Name"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="FirstRespondedDate"/>
+            
+            
+            <field id="Status"/>
+            <field id="SystemModstamp"/>
+            <field id="LeadId"/>
+            <field id="Lead.Name"/>
+            <field id="Contact.LastName"/>
+            <field id="Id"/>
+            <field id="Contact.Account.Type"/>
+            <field id="Contact.AccountId"/>
+            <field id="Contact.Account.Name"/>
+            <field id="Contact.Email"/>
+            <field id="Contact.Phone"/>
+            <field id="Contact.OwnerId"/>
+            <field id="Contact.Owner.Name"/>
+            <field id="Lead.OwnerId"/>
+            <field id="Lead.Owner.Name"/>
+            <field id="Lead.Email"/>
+            <field id="Lead.Phone"/>
+            
+            
+            
+            
+            
+            
+            
+            <field id="HasResponded"/>
+            
+            
+            
+            <field id="Contact.Owner.Alias"/>
+            <field id="Lead.Owner.Alias"/>
+            
+            
+         </fields>
+         <conditions>
+            <condition type="param" value="id" field="CampaignId" operator="=" enclosevalueinquotes="true"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
+            
+            <condition type="blank" value="null" field="ContactId" operator="!=" enclosevalueinquotes="false" state="filterableoff" inactive="true" name="YesContactID"/>
+            <condition type="blank" value="null" field="ContactId" operator="=" enclosevalueinquotes="false" state="filterableoff" inactive="true" name="NoContactId"/>
+            
+            
+            
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="CampaignMember">
+         <subtitle>{{Model.LabelPlural}}</subtitle>
+         <actions>
+            <action type="redirect" label="Campaign Detail" window="blank" url="/{{CampaignId}}"/>
+         </actions>
+         <maintitle>{{Campaign.Name}}</maintitle>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="true" pagesize="10" createrecords="false" model="CampaignMember" mode="read">
+         <fields>
+            <field type="COMBO" allowhtml="false" columnwidth="10%" valuehalign="">
+               <label>Contact or Lead</label>
+               <template>{{#ContactId}}{{ContactId}}{{/ContactId}}{{^ContactId}}{{LeadId}}{{/ContactId}}</template>
+            </field>
+            
+            
+            <field id="Status" allowordering="true" columnwidth="10%" type="CUSTOM" snippet="CampaignMemberStatus"/>
+            <field type="COMBO" columnwidth="10%" valuehalign="">
+               <label>Email</label>
+               <template>{{#ContactId}}{{Contact.Email}}{{/ContactId}}{{^ContactId}}{{Lead.Email}}{{/ContactId}}</template>
+            </field>
+            <field type="COMBO" columnwidth="15%" valuehalign="">
+               <label>Phone / Mobile</label>
+               <template>{{#ContactId}}P:&amp;nbsp;{{Contact.Phone}}&lt;BR&gt;M:&amp;nbsp;{{Contact.Mobile_Phone__c}}{{/ContactId}}{{^ContactId}}Phone:&amp;nbsp;{{Lead.Phone}}{{/ContactId}}
+</template>
+            </field>
+            <field id="Contact.AccountId" allowordering="true" columnwidth="10%" valuehalign="" type=""/>
+            <field type="COMBO" columnwidth="10%" allowordering="true" orderfield="MemberType__c" valuehalign="">
+               <label>Type</label>
+               <template>{{#ContactId}}{{Contact.Account.Type}}{{/ContactId}}</template>
+            </field>
+            <field type="COMBO" columnwidth="5%" allowordering="true" valuehalign="">
+               <label>Owner</label>
+               <template>{{#ContactId}}{{Contact.Owner.Alias}}{{/ContactId}}{{^ContactId}}{{Lead.Owner.Alias}}{{/ContactId}}</template>
+            </field>
+            
+            
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+            <action type="redirect" label="View Campaign Member Details" icon="ui-silk-application-form-magnify" window="blank" url="/{{Id}}/e">
+               <popup width="80%" title="Viewing {{Model.label}}: {{Id}}">
+                  <components>
+                     <basicfieldeditor showheader="true" showsavecancel="true" mode="edit" model="CampaignMember">
+                        <conditions>
+                           <condition type="contextrow" field="Id" autocreated="true"/>
+                        </conditions>
+                        <columns>
+                           <column width="50%">
+                              <sections>
+                                 <section title="Campaign Member">
+                                    <fields>
+                                       <field xmlns="http://www.w3.org/1999/xhtml" id="HasResponded">
+                                       </field>
+                                       <field xmlns="http://www.w3.org/1999/xhtml" id="FirstRespondedDate">
+                                       </field>
+                                       
+                                       <field xmlns="http://www.w3.org/1999/xhtml" id="Status">
+                                       </field>
+                                       
+                                       
+                                       
+                                    </fields>
+                                 </section>
+                              </sections>
+                           </column>
+                           <column width="50%">
+                              <sections/>
+                           </column>
+                        </columns>
+                     </basicfieldeditor>
+                  </components>
+               </popup>
+            </action>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+         <filters>
+            <filter type="select" filteroffoptionlabel="All Members" createfilteroffoption="true" affectcookies="true" conditionsource="manual" labelmode="no">
+               <sources>
+                  <source type="manual">
+                     <options>
+                        <option label="Contacts" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="YesContactID"/>
+                           </effects>
+                        </option>
+                        <option label="Leads" type="complex">
+                           <effects>
+                              <effect action="activate" value="" condition="NoContactId"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+               </sources>
+            </filter>
+            
+            
+            
+            <filter type="select" filteroffoptionlabel="All Status" createfilteroffoption="true" affectcookies="true" condition="Status" conditionsource="manual" labelmode="no">
+               <sources>
+                  <source type="model" model="CampaignStatus" effectsbehavior="justdefault">
+                     <valuetemplate>{{{Label}}}</valuetemplate>
+                     <labeltemplate>{{{Label}}}</labeltemplate>
+                  </source>
+               </sources>
+            </filter>
+            
+         </filters>
+      <exportproperties usetablecolumns="true"/>
+</skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="newcss" cachelocation="false">.nx-list-loadmore {
+    background-color: #006666;
+}</cssitem>
+      </css>
+      <javascript>
+         <jsitem location="inlinesnippet" name="CampaignMemberStatus" cachelocation="false" url="">var field = arguments[0],
+    value = skuid.utils.decodeHTML(arguments[1]),
+    $ = skuid.$,
+    StatusModel,
+    hasResponded = field.row.HasResponded || false,
+    isMassUpdate = (typeof field.row.HasResponded === 'undefined');
+
+// Find the CampaignMemberStatus model
+$.each(skuid.model.list(),function(){
+   if (this.objectName === 'CampaignMemberStatus') {
+      StatusModel = this;
+      return false;
+   }
+});
+
+if (field.mode!=='edit'){
+   skuid.ui.fieldRenderers[field.metadata.displaytype][field.mode](field,value);
+} else {
+
+   var entries = $.map(StatusModel.data,function(item){
+       return {
+            label: item.Label,
+            value: item.Label,
+            defaultValue: item.IsDefaultValue,
+            isActive: true
+       };
+   });
+    field.element.append(skuid.ui.renderers.PICKLIST.edit({
+        value : value,
+		entries : entries,
+		renderas : field.options.type,
+		onChange : function(value) {
+			field.model.updateRow(field.row,field.id,value,{ initiatorId : field._GUID});
+		},
+		required : field.required,
+		addNoneOption: field.options.addNoneOption,
+		mode : field.mode,
+		buttonSetName : field.id + '_' + field._GUID,
+		noneLabel : field.options.noneLabel
+	}));
+}</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
