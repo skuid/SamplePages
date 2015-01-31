@@ -20,8 +20,6 @@
             <field id="ContactId"/>
             <field id="Contact.Name"/>
             <field id="FirstRespondedDate"/>
-            
-            
             <field id="Status"/>
             <field id="SystemModstamp"/>
             <field id="LeadId"/>
@@ -39,31 +37,15 @@
             <field id="Lead.Owner.Name"/>
             <field id="Lead.Email"/>
             <field id="Lead.Phone"/>
-            
-            
-            
-            
-            
-            
-            
             <field id="HasResponded"/>
-            
-            
-            
             <field id="Contact.Owner.Alias"/>
             <field id="Lead.Owner.Alias"/>
-            
-            
          </fields>
          <conditions>
             <condition type="param" value="id" field="CampaignId" operator="=" enclosevalueinquotes="true"/>
             <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Status" state="filterableoff" inactive="true" name="Status"/>
-            
             <condition type="blank" value="null" field="ContactId" operator="!=" enclosevalueinquotes="false" state="filterableoff" inactive="true" name="YesContactID"/>
             <condition type="blank" value="null" field="ContactId" operator="=" enclosevalueinquotes="false" state="filterableoff" inactive="true" name="NoContactId"/>
-            
-            
-            
          </conditions>
          <actions/>
       </model>
@@ -82,8 +64,6 @@
                <label>Contact or Lead</label>
                <template>{{#ContactId}}{{ContactId}}{{/ContactId}}{{^ContactId}}{{LeadId}}{{/ContactId}}</template>
             </field>
-            
-            
             <field id="Status" allowordering="true" columnwidth="10%" type="CUSTOM" snippet="CampaignMemberStatus"/>
             <field type="COMBO" columnwidth="10%" valuehalign="">
                <label>Email</label>
@@ -103,45 +83,11 @@
                <label>Owner</label>
                <template>{{#ContactId}}{{Contact.Owner.Alias}}{{/ContactId}}{{^ContactId}}{{Lead.Owner.Alias}}{{/ContactId}}</template>
             </field>
-            
-            
          </fields>
          <rowactions>
             <action type="edit"/>
             <action type="delete"/>
             <action type="redirect" label="View Campaign Member Details" icon="ui-silk-application-form-magnify" window="blank" url="/{{Id}}/e">
-               <popup width="80%" title="Viewing {{Model.label}}: {{Id}}">
-                  <components>
-                     <basicfieldeditor showheader="true" showsavecancel="true" mode="edit" model="CampaignMember">
-                        <conditions>
-                           <condition type="contextrow" field="Id" autocreated="true"/>
-                        </conditions>
-                        <columns>
-                           <column width="50%">
-                              <sections>
-                                 <section title="Campaign Member">
-                                    <fields>
-                                       <field xmlns="http://www.w3.org/1999/xhtml" id="HasResponded">
-                                       </field>
-                                       <field xmlns="http://www.w3.org/1999/xhtml" id="FirstRespondedDate">
-                                       </field>
-                                       
-                                       <field xmlns="http://www.w3.org/1999/xhtml" id="Status">
-                                       </field>
-                                       
-                                       
-                                       
-                                    </fields>
-                                 </section>
-                              </sections>
-                           </column>
-                           <column width="50%">
-                              <sections/>
-                           </column>
-                        </columns>
-                     </basicfieldeditor>
-                  </components>
-               </popup>
             </action>
          </rowactions>
          <massactions usefirstitemasdefault="true">
@@ -170,9 +116,6 @@
                   </source>
                </sources>
             </filter>
-            
-            
-            
             <filter type="select" filteroffoptionlabel="All Status" createfilteroffoption="true" affectcookies="true" condition="Status" conditionsource="manual" labelmode="no">
                <sources>
                   <source type="model" model="CampaignStatus" effectsbehavior="justdefault">
@@ -181,7 +124,6 @@
                   </source>
                </sources>
             </filter>
-            
          </filters>
       <exportproperties usetablecolumns="true"/>
 </skootable>
