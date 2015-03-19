@@ -1,1 +1,0 @@
-Three Files in this folder that allow companies to report effectivley on the number of users who have skuid licenses who are logging into thier salesforce environment. 
