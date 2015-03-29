@@ -1,0 +1,174 @@
+<skuidpage unsavedchangeswarning="">
+   <models>
+      <model id="IndustryPicker" limit="1" query="false" createrowifnonefound="true" doclone="" sobject="Account">
+         <fields>
+            <field id="Industry"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="AllAccounts" limit="20" query="true" createrowifnonefound="false" sobject="Account">
+         <fields>
+            <field id="Id"/>
+            <field id="Name"/>
+            <field id="Rating"/>
+            <field id="Industry"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" operator="=" state="filterableoff" field="Industry" inactive="true" name="Industry"/>
+         </conditions>
+      </model>
+   </models>
+   <components>
+      <skuidmobile>
+         <mobilepanels>
+            <mobilepanel minwidth="200" uniqueid="AllAccounts">
+               <components>
+                  <mobiledeck showsavecancel="true" searchmethod="server" searchbox="true" tokenizesearch="true" createrecords="true" precision="1" minwidth="400" model="AllAccounts" mode="read" emptysearchbehavior="query" cssclass="hide-edit-icon">
+                     <components>
+                        <mobilefield id="Name"/>
+                        <mobilefield id="Id"/>
+                        <mobilefield id="Industry" valuehalign="" type="">
+                           <renderconditions logictype="and" onhidedatabehavior="keep"/>
+                        </mobilefield>
+                     </components>
+                     <title>Account</title>
+                     <cardinteractions>
+                        <interaction type="doubletap">
+                           <actions>
+                              <action type="setCondition" snippet="SetAccount" model="IndustryPicker" condition="AccountId" value="{{Id}}"/>
+                              <action type="requeryModel" panel="Contacts" model="IndustryPicker" behavior="standard"/>
+                              <action type="setMainPanel" panel="Contacts"/>
+                           </actions>
+                        </interaction>
+                        <interaction type="tap">
+                           <actions>
+                              <action type="setCondition" model="IndustryPicker" condition="SelectedAccountId" value="{{Id}}"/>
+                              <action type="requeryModel" model="IndustryPicker" behavior="standard"/>
+                           </actions>
+                        </interaction>
+                     </cardinteractions>
+                     <searchfields/>
+                     <aftersaveactions/>
+                     <renderconditions logictype="and"/>
+                     <cardtitle>Account</cardtitle>
+                  </mobiledeck>
+               </components>
+            </mobilepanel>
+            <mobilepanel minwidth="200" uniqueid="Nav">
+               <components>
+                  <mobiledeck showsavecancel="false" searchmethod="server" searchbox="true" tokenizesearch="true" createrecords="false" precision="1" minwidth="400" model="IndustryPicker" mode="edit" emptysearchbehavior="query">
+                     <components>
+                        <mobilefield id="Industry" valuehalign="" type="">
+                           <renderconditions logictype="and" onhidedatabehavior="keep"/>
+                        </mobilefield>
+                        <mobilegrid precision="2" minwidth="100">
+                           <divisions>
+                              <division size="1">
+                                 <components>
+                                    <mobilebutton label="Filter" style="nav" icon="fa-filter">
+                                       <actions>
+                                          <action type="setCondition" model="AllAccounts" condition="Industry" value="{{Industry}}"/>
+                                          <action type="requeryModel" model="AllAccounts" behavior="standard"/>
+                                          <action type="setMainPanel" panel="AllAccounts"/>
+                                       </actions>
+                                       <renderconditions logictype="and"/>
+                                    </mobilebutton>
+                                 </components>
+                                 <renderconditions logictype="and"/>
+                              </division>
+                              <division size="1">
+                                 <components>
+                                    <mobilebutton label="Reset" style="nav" icon="sk-icon-cancel">
+                                       <actions>
+                                          <action type="deactivateCondition" model="AllAccounts" condition="Industry"/>
+                                          <action type="requeryModel" model="AllAccounts" behavior="standard"/>
+                                          <action type="setMainPanel" panel="AllAccounts"/>
+                                       </actions>
+                                       <renderconditions logictype="and"/>
+                                    </mobilebutton>
+                                 </components>
+                              </division>
+                           </divisions>
+                        </mobilegrid>
+                     </components>
+                     <searchfields/>
+                     <aftersaveactions/>
+                     <renderconditions logictype="and"/>
+                     <title>Choose Industry</title>
+                     <cardinteractions>
+                        <interaction type="tap">
+                           <actions/>
+                        </interaction>
+                     </cardinteractions>
+                  </mobiledeck>
+               </components>
+               <interactions>
+                  <interaction type="doubletap">
+                     <actions>
+                        <action type="hideLeftPanel"/>
+                     </actions>
+                  </interaction>
+               </interactions>
+            </mobilepanel>
+         </mobilepanels>
+         <mobilenavs>
+            <mobilenav>
+               <components>
+                  <mobilegrid precision="4" minwidth="100">
+                     <divisions>
+                        <division size="1">
+                           <components>
+                              <mobilebutton label="Filter" style="nav">
+                                 <actions>
+                                    <action type="toggleLeftPanel" panel="Nav"/>
+                                 </actions>
+                                 <renderconditions logictype="and"/>
+                              </mobilebutton>
+                           </components>
+                           <renderconditions logictype="and"/>
+                        </division>
+                        <division size="2">
+                           <components>
+                              <mobiletitle>
+                                 <renderconditions logictype="and"/>
+                                 <contents>Account Information</contents>
+                              </mobiletitle>
+                           </components>
+                           <renderconditions logictype="and"/>
+                        </division>
+                        <division size="1">
+                           <components>
+                              <mobilebutton label="Setup" style="nav">
+                                 <actions>
+                                    <action type="toggleSetupMenu"/>
+                                 </actions>
+                                 <renderconditions logictype="and"/>
+                              </mobilebutton>
+                           </components>
+                           <renderconditions logictype="and"/>
+                        </division>
+                     </divisions>
+                  </mobilegrid>
+               </components>
+               <interactions>
+                  <interaction type="swipedown">
+                     <actions>
+                        <action type="toggleSetupMenu"/>
+                     </actions>
+                  </interaction>
+                  <interaction type="swipeup">
+                     <actions>
+                        <action type="toggleSetupMenu"/>
+                     </actions>
+                  </interaction>
+               </interactions>
+            </mobilenav>
+         </mobilenavs>
+      </skuidmobile>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>
