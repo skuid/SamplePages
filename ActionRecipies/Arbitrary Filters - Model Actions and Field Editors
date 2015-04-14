@@ -1,0 +1,282 @@
+<skuidpage unsavedchangeswarning="" showsidebar="false" showheader="false" tabtooverride="">
+   <models>
+      <model id="Opportunity" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" doclone="" type="">
+         <fields>
+            <field id="Name"/>
+            <field id="CreatedDate"/>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="Type"/>
+            <field id="LeadSource"/>
+            <field id="StageName"/>
+            <field id="Probability"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Account.Industry"/>
+            <field id="Account.BillingCountry"/>
+            <field id="Account.BillingState"/>
+            <field id="Account.BillingCity"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="0.0" enclosevalueinquotes="false" field="Amount" operator="gte" state="filterableon" inactive="false" name="AmountGreaterThanOrEqual"/>
+            <condition type="blank" value="null" field="Account.BillingCountry" state="" operator="!=" enclosevalueinquotes="false"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Account.BillingCountry" state="filterableoff" inactive="true" name="Account.BillingCountry"/>
+            <condition type="fieldvalue" value="0" enclosevalueinquotes="false" field="Probability" operator="gte" state="filterableoff" inactive="true" name="ProbabilityGreaterThanOrEqual"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" state="filterableoff" inactive="true" name="StageName"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="false" field="CloseDate" operator="gte" state="filterableoff" inactive="true" name="CloseDateOnOrAfter"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Filters" limit="" query="false" createrowifnonefound="true" sobject="Opportunity" doclone="" type="">
+         <fields>
+            <field id="StageName"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="LeadSource"/>
+            <field id="CloseDate"/>
+            <field id="Amount"/>
+            <field id="Probability"/>
+         </fields>
+         <conditions/>
+         <actions>
+            <action>
+               <actions>
+                  <action type="setCondition" model="Opportunity" condition="AmountGreaterThanOrEqual" value="{{$Model.Filters.data.0.Amount}}"/>
+                  <action type="requeryModel" model="Opportunity" behavior="standard"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>Amount</field>
+               </fields>
+            </action>
+            <action>
+               <actions>
+                  <action type="custom" snippet="CheckBlanks">
+                     <onerroractions>
+                        <action type="deactivateCondition" message="There was an error" timeout="3000" model="Opportunity" condition="ProbabilityGreaterThanOrEqual"/>
+                        <action type="requeryModel" message="There was an error" timeout="3000" model="Opportunity" behavior="standard"/>
+                     </onerroractions>
+                  </action>
+                  <action type="setCondition" model="Opportunity" condition="ProbabilityGreaterThanOrEqual" value="{{$Model.Filters.data.0.Probability}}"/>
+                  <action type="requeryModel" model="Opportunity" behavior="standard"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>Probability</field>
+               </fields>
+            </action>
+            <action>
+               <actions>
+                  <action type="custom" snippet="CheckBlanks">
+                     <onerroractions>
+                        <action type="deactivateCondition" message="There was an error" timeout="3000" model="Opportunity" condition="CloseDateOnOrAfter"/>
+                        <action type="requeryModel" message="There was an error" timeout="3000" model="Opportunity" behavior="standard"/>
+                     </onerroractions>
+                  </action>
+                  <action type="setCondition" model="Opportunity" condition="CloseDateOnOrAfter" value="{{$Model.Filters.data.0.CloseDate}}"/>
+                  <action type="requeryModel" model="Opportunity" behavior="standard"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>CloseDate</field>
+               </fields>
+            </action>
+            <action>
+               <actions>
+                  <action type="custom" snippet="CheckBlanks">
+                     <onerroractions>
+                        <action type="deactivateCondition" message="There was an error" timeout="3000" model="Opportunity" condition="StageName"/>
+                        <action type="requeryModel" message="There was an error" timeout="3000" model="Opportunity" behavior="standard"/>
+                     </onerroractions>
+                  </action>
+                  <action type="setCondition" model="Opportunity" condition="StageName" value="{{$Model.Filters.data.0.StageName}}"/>
+                  <action type="requeryModel" model="Opportunity" behavior="standard">
+                     <models>
+                        <model>Opportunity</model>
+                     </models>
+                  </action>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>StageName</field>
+               </fields>
+            </action>
+         </actions>
+      </model>
+   </models>
+   <components>
+      <panelset type="standard" scroll="">
+         <panels>
+            <panel width="300" type="left">
+               <components>
+                  <pagetitle model="Opportunity">
+                     <maintitle>Revenue Analytics</maintitle>
+                     <actions/>
+                  </pagetitle>
+                  <basicfieldeditor showheader="true" showsavecancel="false" model="Filters" buttonposition="" mode="edit" layout="above">
+                     <columns>
+                        <column width="100%">
+                           <sections>
+                              <section title="Filters" collapsible="open">
+                                 <fields>
+                                    <field id="Probability" decimalplaces="" valuehalign="" type="">
+                                       <label>Probability &gt;= to</label>
+                                    </field>
+                                    <field id="Amount" decimalplaces="" valuehalign="" type="">
+                                       <label>Amount &gt;= to</label>
+                                    </field>
+                                    <field id="CloseDate" valuehalign="" type="">
+                                       <label>Closing on or after</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                              <section title="Stage Filters" collapsible="collapsed">
+                                 <fields>
+                                    <field id="StageName" valuehalign="" type="RADIO_BUTTONS" addnoneoption="true"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+                  <pagetitle model="Filters">
+                     <actions>
+                        <action type="multi" label="Reset Filters" icon="sk-icon-cancel">
+                           <actions>
+                              <action type="deactivateCondition" model="Opportunity" condition="AmountGreaterThanOrEqual"/>
+                              <action type="deactivateCondition" model="Opportunity" condition="Account.BillingCountry"/>
+                              <action type="deactivateCondition" model="Opportunity" condition="ProbabilityGreaterThanOrEqual"/>
+                              <action type="deactivateCondition" model="Opportunity" condition="StageName"/>
+                              <action type="deactivateCondition" model="Opportunity" condition="CloseDateOnOrAfter"/>
+                              <action type="requeryModel" model="Opportunity" behavior="standard"/>
+                           </actions>
+                        </action>
+                     </actions>
+                  </pagetitle>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <tabset rememberlastusertab="true" defertabrendering="true" renderas="">
+                     <tabs>
+                        <tab name="Analytics" icon="sk-icon-world">
+                           <components>
+                              <skuidvis__chart model="Opportunity" maintitle="Revenue Pipeline" type="column" stacking="true">
+                                 <dataaxes>
+                                    <axis id="axis1"/>
+                                 </dataaxes>
+                                 <categoryaxes>
+                                    <axis id="categories" categorytype="field" field="CloseDate" fillvals="true" dategranularity="calquarter">
+                                       <allowedgranularities>
+                                          <type>calmonth</type>
+                                          <type>calquarter</type>
+                                          <type>calyear</type>
+                                       </allowedgranularities>
+                                    </axis>
+                                 </categoryaxes>
+                                 <serieslist>
+                                    <series valuefield="Amount" splittype="field" modelId="Opportunity" splitfield="StageName" aggfunction="sum"/>
+                                 </serieslist>
+                                 <colors>
+                                    <value>#ffcc80</value>
+                                    <value>#ffb74d</value>
+                                    <value>#ffa726</value>
+                                    <value>#ff9800</value>
+                                    <value>#fb8c00</value>
+                                    <value>#f57c00</value>
+                                    <value>#ef6c00</value>
+                                    <value>#ffcc80</value>
+                                    <value>#ffb74d</value>
+                                    <value>#ffa726</value>
+                                    <value>#ff9800</value>
+                                    <value>#fb8c00</value>
+                                    <value>#f57c00</value>
+                                    <value>#ef6c00</value>
+                                 </colors>
+                                 <legend layout="horizontal" halign="center" valign="bottom"/>
+                              </skuidvis__chart>
+                              <skuidvis__geochart model="Opportunity" maintitle="Revenue by Location" maptype="world-highres" height="400px" backgroundcolor="lightblue" nullcolor="#0288d1" rbwidth="0" dlcolor="white" dlbold="false" subtitle="" dlformat="sk-off" dlstrokewidth="3" hovercolor="white" mapgroup="global">
+                                 <colors>
+                                    <value>#ffcc80</value>
+                                    <value>#ffb74d</value>
+                                    <value>#ffa726</value>
+                                    <value>#ff9800</value>
+                                    <value>#fb8c00</value>
+                                    <value>#f57c00</value>
+                                    <value>#ef6c00</value>
+                                 </colors>
+                                 <legend layout="horizontal" halign="center" valign="bottom"/>
+                                 <serieslist>
+                                    <series joinBy="hc-key" valueField="Amount" countryfield="Account.BillingCountry" modelId="Opportunity" aggFunction="sum" statefield="Account.BillingState"/>
+                                 </serieslist>
+                                 <buckets/>
+                              </skuidvis__geochart>
+                           </components>
+                        </tab>
+                        <tab name="List View" loadlazypanels="true" icon="sk-icon-listview">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="Opportunity" mode="read" allowscrollbars="true" floatheader="true" tablescrollheight="600px" emptysearchbehavior="query">
+                                 <fields>
+                                    <field id="Name" allowordering="true"/>
+                                    <field id="AccountId" valuehalign="" type="" allowordering="true">
+                                       <label>Account</label>
+                                    </field>
+                                    <field id="Amount" decimalplaces="" valuehalign="" type="" allowordering="true">
+                                       <summaries>
+                                          <summary>sum</summary>
+                                          <summary>avg</summary>
+                                       </summaries>
+                                    </field>
+                                    <field id="Probability" decimalplaces="" valuehalign="" type=""/>
+                                    <field id="CloseDate"/>
+                                    <field id="StageName"/>
+                                 </fields>
+                                 <rowactions/>
+                                 <massactions usefirstitemasdefault="true"/>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <filters/>
+                                 <searchfields/>
+                              </skootable>
+                           </components>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="newcss" cachelocation="false">body {
+    font-size: 75%;
+}</cssitem>
+      </css>
+      <javascript>
+         <jsitem location="inlinesnippet" name="CheckBlanks" cachelocation="false">var params = arguments[0],
+    updates = params.updates,
+    updatedFields = Object.keys(updates),
+	$ = skuid.$;
+	
+// If only one field was updated,
+// check to see if its updated value is null or empty.
+// If it is, then return false,
+// which will force Action Framework into "on error actions"
+if (updatedFields.length===1 &amp;&amp; !updates[updatedFields[0]]) return false;
+
+	
+</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>
