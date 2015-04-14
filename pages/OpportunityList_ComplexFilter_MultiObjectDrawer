@@ -1,0 +1,302 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunities" theme="Classic" unsavedchangeswarning="">
+   <labels/>
+   <models>
+      <model id="OwnerData" limit="101" query="true" createrowifnonefound="false" sobject="User" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+            <field id="AccountId"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive" state=""/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Opportunities" limit="100" query="true" createrowifnonefound="false" orderby="Name" sobject="Opportunity" doclone="" type="">
+         <fields>
+            <field id="AccountId"/>
+            <field id="Amount"/>
+            <field id="CloseDate"/>
+            <field id="IsClosed"/>
+            <field id="Account.Name"/>
+            <field id="NextStep"/>
+            <field id="Name"/>
+            <field id="Probability"/>
+            <field id="StageName"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="LeadSource"/>
+            <field id="Owner.Email"/>
+            <field id="CreatedDate"/>
+            <field id="Account.Phone"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="Type"/>
+            <field id="CampaignId"/>
+            <field id="Description"/>
+            <field id="TotalOpportunityQuantity"/>
+            <field id="Pricebook2Id"/>
+            <field id="Pricebook2.Name"/>
+            <field id="PartnerAccountId"/>
+            <field id="PartnerAccount.Name"/>
+            <field id="ExpectedRevenue"/>
+            <field id="ForecastCategory"/>
+            <field id="ForecastCategoryName"/>
+            <field id="LastActivityDate"/>
+            <field id="LastModifiedDate"/>
+            <field id="OpportunityLineItems" type="childRelationship" limit="10">
+               <fields>
+                  <field id="Product2Id"/>
+                  <field id="Product2.Name"/>
+               </fields>
+            </field>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" operator="=" value="" field="StageName" name="OppStage" state="filterableoff" inactive="true" novaluebehavior="" enclosevalueinquotes="true"/>
+            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" state="filterableoff" inactive="true" name="IsClosedTrue"/>
+            <condition type="fieldvalue" field="OwnerId" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__OwnerId" state="filterableoff" value=""/>
+            <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="OpportunityLineItem" joinfield="OpportunityId" state="filterableoff" inactive="true" name="Id">
+               <conditions>
+                  <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Product2Id" state="filterableoff" inactive="true" name="Product2.Name"/>
+               </conditions>
+            </condition>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="ProductsForFilter" limit="20" query="true" createrowifnonefound="false" sobject="Product2" doclone="" type="" orderby="Name ASC">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+      <model id="Account" limit="20" query="false" createrowifnonefound="false" sobject="Account" doclone="" type="">
+         <fields>
+            <field id="Description"/>
+            <field id="Id"/>
+            <field id="Name"/>
+            <field id="AccountNumber"/>
+            <field id="Phone"/>
+            <field id="Rating"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" state="filterableoff" inactive="true" name="Id"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="ContactRoles" limit="20" query="true" createrowifnonefound="false" sobject="OpportunityContactRole">
+         <fields>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="IsPrimary"/>
+            <field id="Role"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OpportunityId" state="filterableoff" inactive="true" name="OpportunityId"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Opportunities">
+         <actions/>
+         <subtitle>Home</subtitle>
+         <maintitle>{{Model.LabelPlural}}</maintitle>
+      </pagetitle>
+      <skuidvis__chart model="Opportunities" maintitle="{{Model.labelPlural}}" type="column" stacking="true">
+         <dataaxes>
+            <axis id="axis1" title="Amount"/>
+         </dataaxes>
+         <categoryaxes>
+            <axis id="categories" field="CloseDate" title="Stage" categorytype="field" fillvals="true" dategranularity="calmonth">
+               <allowedgranularities>
+                  <type>calquarter</type>
+                  <type>calyear</type>
+               </allowedgranularities>
+            </axis>
+         </categoryaxes>
+         <serieslist>
+            <series aggfunction="sum" valuefield="Amount" type="" splittype="template" splitfield="AccountId" splittemplate="{{StageName}}"/>
+         </serieslist>
+         <colors/>
+         <legend layout="vertical" halign="right" valign="middle"/>
+      </skuidvis__chart>
+      <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" createrecords="true" model="Opportunities" pagesize="10" showexportbuttons="true" mode="read">
+         <fields>
+            <field id="Name" valuehalign="" type=""/>
+            <field id="AccountId"/>
+            <field id="OpportunityLineItems" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br&gt;" columnwidth="20%">
+               <label>Line Items</label>
+               <template>{{Product2.Name}}</template>
+            </field>
+            <field id="Amount"/>
+            <field id="ExpectedRevenue"/>
+            <field id="LeadSource"/>
+            <field id="NextStep"/>
+            <field id="CreatedDate" valuehalign="" type=""/>
+            <field id="CloseDate" valuehalign="" type=""/>
+         </fields>
+         <rowactions>
+            <action type="drawer" icon="ui-silk-application" label="View Opportunity Details" openicon="sk-icon-cancel">
+               <drawer title="Drawer Area" width="800" closehandle="true">
+                  <components>
+                     <pagetitle model="Opportunities">
+                        <maintitle>
+                           <template>{{Name}}</template>
+                        </maintitle>
+                        <subtitle>
+                           <template>{{Model.label}}</template>
+                        </subtitle>
+                        <actions>
+                           <action type="savecancel">
+                              <models>
+                                 <model>Account</model>
+                                 <model>ContactRoles</model>
+                              </models>
+                           </action>
+                        </actions>
+                     </pagetitle>
+                     <panelset type="custom" scroll="">
+                        <panels>
+                           <panel width="30%">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="Opportunities" buttonposition="" mode="read" layout="above">
+                                    <columns>
+                                       <column width="100%">
+                                          <sections>
+                                             <section title="Opportunity Data" collapsible="no">
+                                                <fields>
+                                                   <field id="OwnerId" valuehalign="" type=""/>
+                                                   <field id="Description" valuehalign="" type=""/>
+                                                   <field id="NextStep" valuehalign="" type=""/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions>
+                                       <condition type="contextrow" field="Id" mergefield="Id"/>
+                                    </conditions>
+                                 </basicfieldeditor>
+                              </components>
+                           </panel>
+                           <panel width="30%">
+                              <components>
+                                 <basicfieldeditor showheader="true" showsavecancel="false" model="Account" buttonposition="" mode="read" layout="above">
+                                    <columns>
+                                       <column width="100%">
+                                          <sections>
+                                             <section title="Account Data" collapsible="no">
+                                                <fields>
+                                                   <field id="Name"/>
+                                                   <field id="AccountNumber"/>
+                                                   <field id="Phone"/>
+                                                   <field id="Rating"/>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                    <conditions>
+                                       <condition type="contextrow" field="Id" mergefield="AccountId"/>
+                                    </conditions>
+                                 </basicfieldeditor>
+                              </components>
+                           </panel>
+                           <panel width="40%">
+                              <components>
+                                 <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="ContactRoles" buttonposition="" mode="read" emptysearchbehavior="query">
+                                    <fields>
+                                       <field id="ContactId" valuehalign="" type=""/>
+                                       <field id="IsPrimary" type="" valuehalign=""/>
+                                       <field id="Role" valuehalign="" type=""/>
+                                    </fields>
+                                    <rowactions>
+                                       <action type="edit"/>
+                                       <action type="delete"/>
+                                    </rowactions>
+                                    <massactions usefirstitemasdefault="true">
+                                       <action type="massupdate"/>
+                                       <action type="massdelete"/>
+                                    </massactions>
+                                    <views>
+                                       <view type="standard"/>
+                                    </views>
+                                    <searchfields/>
+                                    <conditions>
+                                       <condition type="contextrow" field="OpportunityId" mergefield="Id"/>
+                                    </conditions>
+                                 </skootable>
+                              </components>
+                           </panel>
+                        </panels>
+                     </panelset>
+                  </components>
+                  <beforeload>
+                     <action type="blockUI" message="Loading Data"/>
+                     <action type="setCondition" model="Account" condition="Id" value="{{AccountId}}"/>
+                     <action type="setCondition" model="ContactRoles" condition="OpportunityId" value="{{Id}}"/>
+                     <action type="requeryModels" behavior="loadmore">
+                        <models>
+                           <model>Account</model>
+                           <model>ContactRoles</model>
+                        </models>
+                     </action>
+                     <action type="unblockUI"/>
+                  </beforeload>
+               </drawer>
+            </action>
+            <action type="delete"/>
+            <action type="edit"/>
+         </rowactions>
+         <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true"/>
+         <massactions defaultlabel="Mass Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+            <action type="massedit"/>
+         </massactions>
+         <filters>
+            <filter type="select" filteroffoptionlabel="New Filter" createfilteroffoption="false" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="no" condition="Product2.Name">
+               <sources>
+                  <source type="manual" effectsbehavior="justdefault">
+                     <options>
+                        <option label="All Products" type="complex">
+                           <effects>
+                              <effect action="deactivate" value="" condition="Id"/>
+                              <effect action="deactivate" value="" condition="Product2.Name"/>
+                           </effects>
+                        </option>
+                     </options>
+                  </source>
+                  <source type="model" effectsbehavior="defaultandothers" model="ProductsForFilter">
+                     <labeltemplate>{{{Name}}}</labeltemplate>
+                     <valuetemplate>{{Id}}</valuetemplate>
+                     <effects>
+                        <effect action="activate" value="{{Id}}" condition="Id"/>
+                     </effects>
+                  </source>
+               </sources>
+            </filter>
+            <filter type="daterange" filteroffoptionlabel="Any Close Date" createfilteroffoption="true" condition="MinCloseDate" conditionsource="auto" conditionfield="CloseDate" startcondition="MinCloseDate" endcondition="MaxCloseDate" affectcookies="false"/>
+            <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" condition="OppStage" conditionsource="manual" labelmode="no">
+               <sources>
+                  <source type="metadata" effectsbehavior="justdefault"/>
+               </sources>
+            </filter>
+            <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" label="Just Closed Opportunities" conditionsource="manual">
+               <effects>
+                  <effect action="activate" value="" condition="IsClosedTrue"/>
+               </effects>
+            </filter>
+            <filter type="select" filteroffoptionlabel="All Owners" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="auto" labelmode="no" conditionfield="OwnerId"/>
+         </filters>
+         <exportproperties usetablecolumns="true"/>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>
