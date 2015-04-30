@@ -117,7 +117,7 @@ skuid.componentType.register('LeadTotal',function(element){
 	$ = skuid.$;
 var field = arguments[0],	
    value = arguments[1];
-skuid.ui.fieldRenderers.TEXT.readonly(field,value ? skuid.time.monthNames[value] : '');</jsitem>
+skuid.ui.fieldRenderers.TEXT.readonly(field,value ? skuid.time.monthNames[value-1] : '');</jsitem>
       </javascript>
       <css>
          <cssitem location="inline" name="box" cachelocation="false">.box{
