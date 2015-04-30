@@ -1,0 +1,170 @@
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true">
+   <models>
+      <model id="LeadAnalysis" limit="" query="true" createrowifnonefound="false" sobject="Lead" doclone="" type="aggregate" orderby="CALENDAR_YEAR(CreatedDate) ASC, CALENDAR_MONTH(CreatedDate) ASC">
+         <fields>
+            <field id="Id" name="countId" function="COUNT"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
+            <condition type="fieldvalue" field="Status" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Status" state="filterableoff" value=""/>
+         </conditions>
+         <actions/>
+         <groupby method="simple">
+            <field id="CreatedDate" name="cmCreatedDate" function="CALENDAR_MONTH"/>
+            <field id="CreatedDate" name="cyCreatedDateLd" function="CALENDAR_YEAR"/>
+         </groupby>
+      </model>
+   </models>
+   <components>
+      <panelset type="custom" scroll="">
+         <panels>
+            <panel width="33.3%">
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="false" model="LeadAnalysis" buttonposition="" mode="readonly" emptysearchbehavior="query">
+                     <fields>
+                        <field id="CreatedDate" name="cmCreatedDate" valuehalign="" type="CUSTOM" snippet="showMonth">
+                           <label>Month</label>
+                        </field>
+                        <field id="CreatedDate" name="wyCreatedDateLd" valuehalign="" type="">
+                           <label>Year</label>
+                        </field>
+                        <field id="Id" name="countId" valuehalign="" type="">
+                           <label>Leads</label>
+                           <summaries>
+                              <summary>sum</summary>
+                              <summary>avg</summary>
+                           </summaries>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <searchfields/>
+                     <filters>
+                        <filter type="select" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="auto" labelmode="auto" conditionfield="Status"/>
+                     </filters>
+                  </skootable>
+                  <custom name="LeadTotal"/>
+               </components>
+            </panel>
+            <panel width="33.3%">
+               <components/>
+            </panel>
+            <panel width="33.3%">
+               <components/>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inline" name="LeadTotal" cachelocation="false" url="">// Annual Recurring Revenue - no decimal places
+
+
+skuid.componentType.register('LeadTotal',function(element){
+    var $ = skuid.$;
+    var m = skuid.model.getModel('LeadAnalysis');
+    var render = function(){
+        element.empty();
+        var row = m.getFirstRow();
+        var data = 0;
+    
+        $.each(m.data, function (i, row){	
+            data += row.countId; 
+        });
+        
+    //    console.log(data);
+        data = addCommas(data);
+        var text = 
+            "&lt;a href='/apex/skuid__ui?page=MRR_Detail' class='metric'&gt;&lt;div class= 'box ui-widget'&gt;&lt;div class='kpi-title'&gt; Total Leads &lt;/div&gt;&lt;div class = 'kpi'&gt;"
+            + data 
+            +"&lt;/div&gt;&lt;div class='bottomtext'&gt;Details&lt;/div&gt;&lt;/div&gt;&lt;/a&gt;";
+        element.append(
+            m.mergeRow(row,text)
+        );
+    
+    };
+
+    skuid.events.subscribe('models.loaded',function(updateResult){
+       if (updateResult.models.LeadAnalysis)  {
+           render();
+       }
+    });
+
+
+
+    render();
+    
+});    
+
+
+
+ var addCommas = function(str) {
+        str += '';
+        x = str.split('.');
+        x1 = x[0];
+        x2 = x.length &gt; 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    };
+</jsitem>
+         <jsitem location="inlinesnippet" name="showMonth" cachelocation="false">var params = arguments[0],
+	$ = skuid.$;
+var field = arguments[0],	
+   value = arguments[1];
+skuid.ui.fieldRenderers.TEXT.readonly(field,value ? skuid.time.monthNames[value] : '');</jsitem>
+      </javascript>
+      <css>
+         <cssitem location="inline" name="box" cachelocation="false">.box{
+        padding : 10px;
+        background-color: #0088bb; 
+        border-width: 2px;
+        border-color: #0088bb;
+        height: 100px;
+        margin-top:10px;
+        margin-bottom:10px;
+        position: relative;
+        text-decoration: none;
+}
+
+.kpi{
+        font-size: 35pt;
+        color: #ffffff;
+        letter-spacing: -2pt;
+        text-decoration: none;
+        line-height:40pt;
+        margin-top:5px;
+        margin-bottom:5px;
+}
+
+.kpi-title{
+    font-size: 14pt;
+    color: #ffffff;
+    opacity: .9;
+    text-decoration: none;
+}
+
+.bottomtext {
+    font-size: 10pt;
+    color: #ffffff;
+    opacity: .7;
+    text-decoration:none;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+.metric {
+        text-decoration:none;
+}
+</cssitem>
+      </css>
+   </resources>
+</skuidpage>
