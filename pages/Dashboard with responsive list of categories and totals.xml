@@ -61,7 +61,7 @@
    <resources>
       <labels/>
       <javascript>
-         <jsitem location="inline" name="LeadTotal" cachelocation="false" url="">// Annual Recurring Revenue - no decimal places
+         <jsitem location="inline" name="LeadTotal" cachelocation="false" url="">// Total Leads
 
 
 skuid.componentType.register('LeadTotal',function(element){
@@ -76,7 +76,6 @@ skuid.componentType.register('LeadTotal',function(element){
             data += row.countId; 
         });
         
-    //    console.log(data);
         data = addCommas(data);
         var text = 
             "&lt;a href='/apex/skuid__ui?page=MRR_Detail' class='metric'&gt;&lt;div class= 'box ui-widget'&gt;&lt;div class='kpi-title'&gt; Total Leads &lt;/div&gt;&lt;div class = 'kpi'&gt;"
