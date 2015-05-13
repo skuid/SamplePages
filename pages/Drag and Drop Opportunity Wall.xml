@@ -174,7 +174,7 @@ element.html(
         var queueList;
         $.each(skuid.model.list(),function(i,model){
            $.each(model.registeredEditors,function(){
-              if (this.element.is(queueElement)) {
+              if (this.element && this.element.is && this.element.is(queueElement)) {
                   queueList = this.lists[0];
                   return false;
               } 
