@@ -184,7 +184,7 @@ element.html(
         return queueList;
     };
    
-   $(function(){
+   $(document.body).one('pageload',function(){
       $('.nx-queue').each(function(){
          var queue = $(this);
          var listContents = queue.find('.nx-list-contents');
