@@ -1,0 +1,260 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Case" unsavedchangeswarning="" theme="" personalizationmode="server">
+   <models>
+      <model id="CaseData" query="true" createrowifnonefound="false" sobject="Case" adapter="" type="">
+         <fields>
+            <field id="CaseNumber"/>
+            <field id="CreatedDate"/>
+            <field id="ContactId"/>
+            <field id="Contact.Name"/>
+            <field id="Subject"/>
+            <field id="Status"/>
+            <field id="Priority"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Origin"/>
+            <field id="Reason"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Description"/>
+            <field id="Approval_Auto_Submit__c"/>
+         </fields>
+         <conditions>
+            <condition type="param" enclosevalueinquotes="true" operator="=" field="Id" value="id"/>
+         </conditions>
+         <actions>
+            <action>
+               <actions>
+                  <action type="requeryModels" model="CaseData" behavior="standard">
+                     <models>
+                        <model>CaseData</model>
+                        <model>FieldHistory</model>
+                     </models>
+                  </action>
+               </actions>
+               <events>
+                  <event>models.saved</event>
+               </events>
+            </action>
+         </actions>
+      </model>
+      <model id="ApprovalInstances" limit="100" query="true" createrowifnonefound="false" sobject="ProcessInstance" adapter="" type="" orderby="CreatedDate DESC">
+         <fields>
+            <field id="Id"/>
+            <field id="Status"/>
+            <field id="CompletedDate"/>
+            <field id="CreatedDate"/>
+            <field id="TargetObjectId"/>
+            <field id="TargetObject.Name"/>
+            <field id="TargetObject.Type"/>
+            <field id="ProcessDefinition.Description"/>
+            <field id="ProcessDefinition.Name"/>
+            <field id="Steps" type="childRelationship" limit="10" orderby="CreatedDate ASC">
+               <fields>
+                  <field id="Comments"/>
+                  <field id="ActorId"/>
+                  <field id="StepStatus"/>
+                  <field id="Actor.Name"/>
+                  <field id="CreatedDate"/>
+               </fields>
+            </field>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="CurrentWorkItem" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="ProcessInstanceWorkitem">
+         <fields>
+            <field id="ActorId"/>
+            <field id="Actor.Name"/>
+            <field id="CreatedDate"/>
+            <field id="ProcessInstanceId"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="ProcessInstanceId" operator="in" model="ApprovalInstances" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="CaseData" uniqueid="sk-ACPoX-196">
+         <maintitle>{{Subject}}</maintitle>
+         <subtitle>
+            <template>{{Model.Label}}</template>
+         </subtitle>
+         <actions>
+            <action type="savecancel" label="New Action" window="self" cancelLabel="" saveLabel="">
+               <models/>
+            </action>
+         </actions>
+      </pagetitle>
+      <tabset rememberlastusertab="true" renderas="" uniqueid="sk-ACPoY-203">
+         <tabs>
+            <tab name="Case Details" icon="sk-icon-case">
+               <components>
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="CaseData" mode="read" layout="above" buttonposition="" uniqueid="sk-ACPoY-205">
+                     <columns>
+                        <column width="25%">
+                           <sections>
+                              <section title="Basics" collapsible="no">
+                                 <fields>
+                                    <field id="CaseNumber"/>
+                                    <field id="Subject"/>
+                                    <field id="OwnerId"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="25%">
+                           <sections>
+                              <section title="Status / Priority">
+                                 <fields>
+                                    <field id="Status"/>
+                                    <field id="Priority"/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="25%">
+                           <sections>
+                              <section title="Who">
+                                 <fields>
+                                    <field id="ContactId">
+                                       <label>Contact</label>
+                                    </field>
+                                    <field id="AccountId">
+                                       <label>Account</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="25%">
+                           <sections>
+                              <section title="Origin / Source" collapsible="no">
+                                 <fields>
+                                    <field id="Origin"/>
+                                    <field id="Reason"/>
+                                    <field id="Approval_Auto_Submit__c" valuehalign="" type=""/>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </tab>
+            <tab name="Approvals" loadlazypanels="true" icon="sk-icon-save">
+               <components>
+                  <pagetitle model="ApprovalInstances" uniqueid="sk-ADpvf-437">
+                     <maintitle>Approval History</maintitle>
+                     <actions>
+                        <action type="multi" label="Request Approval via Process">
+                           <actions>
+                              <action type="blockUI" message="Submitting for Approval - Based on Field Update and Process Flow"/>
+                              <action type="updateRow" fieldmodel="CaseData" field="Approval_Auto_Submit__c" enclosevalueinquotes="false" value="true"/>
+                              <action type="save">
+                                 <models>
+                                    <model>CaseData</model>
+                                 </models>
+                              </action>
+                              <action type="requeryModels" model="ApprovalInstances" behavior="standard">
+                                 <models>
+                                    <model>ApprovalInstances</model>
+                                    <model>CurrentWorkItem</model>
+                                    <model>CurrentStep</model>
+                                 </models>
+                              </action>
+                              <action type="unblockUI"/>
+                           </actions>
+                           <renderconditions logictype="and">
+                              <rendercondition fieldmodel="CurrentWorkItem" sourcetype="modelproperty" nosourcerowbehavior="skipandnorender" userinfotype="userid" sourceproperty="hasNoRows"/>
+                           </renderconditions>
+                           <enableconditions/>
+                        </action>
+                        <action type="multi" label="Request Approval via Redirect">
+                           <renderconditions logictype="and">
+                              <rendercondition fieldmodel="CurrentWorkItem" sourcetype="modelproperty" sourceproperty="hasNoRows"/>
+                           </renderconditions>
+                           <enableconditions/>
+                        </action>
+                        <action type="redirect" label="Approve / Reject" window="self" url="/p/process/ProcessInstanceWorkitemWizardStageManager?id={{$Model.CurrentWorkItem.data.0.Id}}">
+                           <renderconditions logictype="and">
+                              <rendercondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" sourceproperty="hasRows"/>
+                              <rendercondition type="userinfo" operator="=" fieldmodel="CurrentWorkItem" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="ActorId" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+                           </renderconditions>
+                           <enableconditions/>
+                        </action>
+                        <action type="redirect" label="Reassign" window="self" url="/{{$Model.CurrentWorkItem.data.0.Id}}/e?et=REASSIGN&amp;retURL=%2F{{$Param.id}}">
+                           <renderconditions logictype="and">
+                              <rendercondition type="userinfo" operator="=" fieldmodel="CurrentWorkItem" sourcetype="fieldvalue" nosourcerowbehavior="skipandnorender" field="ActorId" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+                           </renderconditions>
+                           <enableconditions/>
+                           <actions/>
+                        </action>
+                     </actions>
+                  </pagetitle>
+                  <panelset type="custom" uniqueid="sk-AS_pb-1086" scroll="">
+                     <panels>
+                        <panel width="50%">
+                           <components>
+                              <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="CurrentWorkItem" buttonposition="" uniqueid="sk-APkaG-924" mode="readonly">
+                                 <columns>
+                                    <column width="100%">
+                                       <sections>
+                                          <section title="Pending Approvals" collapsible="no">
+                                             <fields>
+                                                <field id="Actor.Name" valuehalign="" type="">
+                                                   <label>Assigned To</label>
+                                                </field>
+                                                <field id="CreatedDate" valuehalign="" type="">
+                                                   <label>Requested Date</label>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                 </columns>
+                              </basicfieldeditor>
+                           </components>
+                        </panel>
+                        <panel width="50%">
+                           <components/>
+                        </panel>
+                     </panels>
+                     <renderconditions logictype="and">
+                        <rendercondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+                     </renderconditions>
+                  </panelset>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="ApprovalInstances" buttonposition="" mode="readonly" uniqueid="sk-7UCgP-97" emptysearchbehavior="query">
+                     <fields>
+                        <field id="ProcessDefinition.Name" valuehalign="" type="" columnwidth="15%"/>
+                        <field id="Status" valuehalign="" type="" columnwidth="15%"/>
+                        <field id="CompletedDate" valuehalign="" type="" columnwidth="15%"/>
+                        <field type="COMBO" valuehalign="" columnwidth="55%" allowhtml="true">
+                           <label>Approval Steps</label>
+                           <template>{{#Steps.records}}{{StepStatus}} by  {{Actor.Name}} on {{CreatedDate}} ({{Comments}})&lt;br&gt;{{/Steps.records}}</template>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <searchfields/>
+                     <actions defaultlabel="Global Actions" defaulticon="sk-icon-magic" usefirstitemasdefault="true"/>
+                  </skootable>
+               </components>
+            </tab>
+         </tabs>
+      </tabset>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript/>
+   </resources>
+   <styles>
+      <styleitem type="background" bgtype="none"/>
+   </styles>
+</skuidpage>
