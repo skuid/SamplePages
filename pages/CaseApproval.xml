@@ -57,6 +57,8 @@
                   <field id="CreatedDate"/>
                </fields>
             </field>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
          </fields>
          <conditions>
             <condition type="modelmerge" value="" field="TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
@@ -191,6 +193,12 @@
                            </renderconditions>
                            <enableconditions/>
                            <actions/>
+                        </action>
+                        <action type="redirect" label="Recall" window="self" url="/{{$Model.CurrentWorkItem.data.0.Id}}/e?et=REMOVE&amp;retURL=%2F{{$Param.id}}">
+                           <renderconditions logictype="and">
+                              <rendercondition type="userinfo" operator="=" fieldmodel="ApprovalInstances" sourcetype="fieldvalue" field="CreatedById" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+                           </renderconditions>
+                           <enableconditions/>
                         </action>
                      </actions>
                   </pagetitle>
