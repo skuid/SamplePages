@@ -1,5 +1,37 @@
 <skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
-   <models>
+  <models>
+      <model id="user" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="User">
+         <fields>
+            <field id="AboutMe"/>
+            <field id="Id"/>
+            <field id="UserRoleId"/>
+            <field id="UserRole.Name"/>
+            <field id="Title"/>
+            <field id="FullPhotoUrl"/>
+            <field id="Name"/>
+            <field id="CompanyName"/>
+            <field id="FirstName"/>
+            <field id="InformalName"/>
+            <field id="LastName"/>
+            <field id="MiddleName"/>
+            <field id="CommunityNickname"/>
+            <field id="MobilePhone"/>
+            <field id="Phone"/>
+            <field id="Email"/>
+            <field id="Alias"/>
+            <field id="City"/>
+            <field id="Country"/>
+            <field id="LanguageLocaleKey"/>
+            <field id="LastLoginDate"/>
+            <field id="LocaleSidKey"/>
+            <field id="ProfileId"/>
+            <field id="Profile.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+         <actions/>
+      </model>
       <model id="Messages" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="ChatterMessage">
          <fields>
             <field id="SenderId"/>
@@ -18,7 +50,7 @@
             <field id="Parent.Type"/>
          </fields>
          <conditions>
-            <condition type="userinfo" value="" field="SubscriberId" operator="=" mergefield="Id" novaluebehavior="deactivate" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="modelmerge" value="" field="SubscriberId" operator="=" model="pgs_CurrentUser" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
          </conditions>
          <actions/>
       </model>
@@ -29,7 +61,7 @@
             <field id="UserOrGroupId"/>
          </fields>
          <conditions>
-            <condition type="userinfo" value="" field="UserOrGroupId" operator="=" mergefield="Id" novaluebehavior="deactivate" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="modelmerge" value="" field="UserOrGroupId" operator="=" model="pgs_CurrentUser" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
          </conditions>
          <actions>
             <action>
@@ -61,7 +93,7 @@
          <conditions>
             <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="GroupMember" joinfield="GroupId">
                <conditions>
-                  <condition type="userinfo" value="" operator="=" field="UserOrGroupId" mergefield="Id" novaluebehavior="deactivate" enclosevalueinquotes="true" userinfotype="userid"/>
+                  <condition type="modelmerge" value="" operator="=" field="UserOrGroupId" model="pgs_CurrentUser" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
                </conditions>
             </condition>
          </conditions>
@@ -69,148 +101,304 @@
       </model>
    </models>
    <components>
-      <tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-2At9Rm-139" renderas="lefttabs" sidebarwidth="Messages">
-         <tabs>
-            <tab name="Feed">
-               <components>
-                  <social uniqueid="sk-2Asngi-116" feedtype="newsfeed" model="pgs_CurrentUser">
-                     <actions/>
-                  </social>
-               </components>
-               <oninitialshowactions/>
-               <onshowactions/>
-               <renderconditions logictype="and"/>
-            </tab>
-            <tab name="What I Follow" loadlazypanels="true">
-               <components>
-                  <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="subscriptions" buttonposition="" mode="read" uniqueid="sk-2Axn7h-151">
-                     <fields>
-                        <field id="ParentId" valuehalign="" type="">
-                           <label>Topic</label>
-                        </field>
-                        <field id="Parent.Type"/>
-                     </fields>
-                     <rowactions>
-                        <action type="delete"/>
-                     </rowactions>
-                     <massactions usefirstitemasdefault="true">
-                        <action type="massupdate"/>
-                        <action type="massdelete"/>
-                     </massactions>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-               </components>
-               <oninitialshowactions>
-                  <action type="requeryModel" model="subscriptions" behavior="standard"/>
-               </oninitialshowactions>
-               <onshowactions/>
-            </tab>
-            <tab name="Messages" loadlazypanels="true">
-               <components>
-                  <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Messages" buttonposition="" mode="readonly" uniqueid="sk-2AtHHK-161">
-                     <fields>
-                        <field id="SentDate" valuehalign="" type="">
-                           <label>Date</label>
-                        </field>
-                        <field id="SenderId" valuehalign="" type="">
-                           <label>Sender</label>
-                        </field>
-                        <field id="Body" valuehalign="" type="" maxdisplaycharacters="175"/>
-                     </fields>
-                     <rowactions>
-                        <action type="multi" label="Show Message" icon="sk-icon-comments">
-                           <actions>
-                              <action type="showPopup">
-                                 <popup title="Full Message" width="75%">
-                                    <components>
-                                       <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="Messages" buttonposition="" uniqueid="sk-2Au8Lu-254" mode="readonly" layout="above">
-                                          <columns>
-                                             <column width="100%">
-                                                <sections>
-                                                   <section title="Section A" collapsible="no" showheader="false">
-                                                      <fields>
-                                                         <field id="Body" valuehalign="" type="">
-                                                            <label/>
-                                                         </field>
-                                                      </fields>
-                                                   </section>
-                                                </sections>
-                                             </column>
-                                          </columns>
-                                       </basicfieldeditor>
-                                    </components>
-                                 </popup>
-                              </action>
-                           </actions>
-                        </action>
-                     </rowactions>
-                     <massactions usefirstitemasdefault="true"/>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-               </components>
-               <oninitialshowactions>
-                  <action type="requeryModel" model="Messages" behavior="standard"/>
-               </oninitialshowactions>
-               <onshowactions/>
-            </tab>
-            <tab name="My Groups" loadlazypanels="true">
-               <components>
-                  <pagetitle model="memberships" uniqueid="sk-2A__p2-327">
-                     <maintitle>My Memberships</maintitle>
-                     <actions/>
-                  </pagetitle>
-                  <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="memberships" buttonposition="" mode="read" uniqueid="sk-2Az7XP-372">
-                     <fields>
-                        <field id="GroupId" valuehalign="" type="REFPICK">
-                           <label>Group Memberships</label>
-                           <filters/>
-                        </field>
-                     </fields>
-                     <rowactions>
-                        <action type="delete"/>
-                     </rowactions>
-                     <massactions usefirstitemasdefault="true">
-                        <action type="massupdate"/>
-                        <action type="massdelete"/>
-                     </massactions>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-                  <pagetitle model="groups" uniqueid="sk-2A-232-333">
-                     <maintitle>My Groups</maintitle>
-                     <actions/>
-                  </pagetitle>
-                  <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="groups" buttonposition="" mode="readonly" uniqueid="sk-2A-4l9-339">
-                     <fields>
-                        <field id="Name"/>
-                        <field id="GroupMembers" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br&gt;">
-                           <label>Members</label>
-                           <template>{{UserOrGroupId}}</template>
-                        </field>
-                        <field id="OwnerId" valuehalign="" type="">
-                           <label>Owner</label>
-                        </field>
-                     </fields>
-                     <rowactions/>
-                     <massactions usefirstitemasdefault="true"/>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-               </components>
-               <oninitialshowactions>
-                  <action type="requeryModel" model="memberships" behavior="standard"/>
-               </oninitialshowactions>
-               <onshowactions/>
-            </tab>
-         </tabs>
-      </tabset>
-   </components>
+            <grid uniqueid="sk-2GzvpR-190" columngutter="3em">
+               <divisions>
+                  <division behavior="fit" verticalalign="top">
+                     <components>
+                        <image source="url" uniqueid="sk-2H1J_7-239" url="{{$Model.user.data.0.FullPhotoUrl}}">
+                           <styles>
+                              <styleitem type="itemsize"/>
+                              <styleitem type="border"/>
+                           </styles>
+                        </image>
+                        <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H1SZu-257" mode="read" layout="above">
+                           <columns>
+                              <column width="100%">
+                                 <sections>
+                                    <section title="Section A" collapsible="no" showheader="false">
+                                       <fields>
+                                          <field type="COMBO" valuehalign="" editmodebehavior="custompopup" allowhtml="true">
+                                             <template>&lt;bold&gt;&lt;font size=4.5&gt;{{{CommunityNickname}}} {{{LastName}}}&lt;/font&gt;&lt;/bold&gt;</template>
+                                             <editmodepopup title="Name" width="450">
+                                                <components>
+                                                   <basicfieldeditor showsavecancel="false" mode="edit" model="user" buttonposition="" uniqueid="sk-2H6IaQ-779">
+                                                      <columns>
+                                                         <column width="100%">
+                                                            <sections>
+                                                               <section title="" collapsible="no">
+                                                                  <fields>
+                                                                     <field id="CommunityNickname" valuehalign="" type=""/>
+                                                                     <field id="FirstName"/>
+                                                                     <field id="MiddleName"/>
+                                                                     <field id="LastName" valuehalign="" type=""/>
+                                                                     <field id="InformalName" valuehalign="" type=""/>
+                                                                  </fields>
+                                                               </section>
+                                                            </sections>
+                                                         </column>
+                                                      </columns>
+                                                   </basicfieldeditor>
+                                                </components>
+                                             </editmodepopup>
+                                          </field>
+                                          <field id="Title" valuehalign="" type="">
+                                             <label> Title</label>
+                                          </field>
+                                          <field id="CompanyName" valuehalign="" type=""/>
+                                          <field id="AboutMe" valuehalign="" type=""/>
+                                       </fields>
+                                       <renderconditions logictype="and"/>
+                                    </section>
+                                 </sections>
+                              </column>
+                           </columns>
+                        </basicfieldeditor>
+                        <wrapper uniqueid="sk-2H1lJL-300">
+                           <components>
+                              <pagetitle model="user" uniqueid="sk-2H1xJf-327" cssclass="left">
+                                 <actions>
+                                    <action type="savecancel">
+                                       <savehotkeys>
+                                          <hotkey modifiers="meta" key="s"/>
+                                       </savehotkeys>
+                                    </action>
+                                 </actions>
+                              </pagetitle>
+                              <pagetitle model="user" uniqueid="sk-2G-bX6-311" cssclass="left">
+                                 <actions>
+                                    <action type="redirect" label="Change Photo" window="blank" icon="fa-refresh" url="https://skuidify.my.salesforce.com/_ui/core/userprofile/UserProfilePage?u={{Id15}}&amp;tab=sfdc.ProfilePlatformFeed"/>
+                                 </actions>
+                              </pagetitle>
+                           </components>
+                           <styles>
+                              <styleitem type="background"/>
+                              <styleitem type="border" padding="bottom,top,">
+                                 <styles>
+                                    <styleitem property="padding-top" value="1em"/>
+                                    <styleitem property="padding-bottom" value="1em"/>
+                                    <styleitem property="box-sizing" value="border-box"/>
+                                 </styles>
+                              </styleitem>
+                              <styleitem type="size"/>
+                           </styles>
+                        </wrapper>
+                     </components>
+                  </division>
+                  <division behavior="flex" verticalalign="top" minwidth="100px" ratio="1">
+                     <components>
+                        <tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-2At9Rm-139" renderas="" sidebarwidth="Messages">
+                           <tabs>
+                              <tab name="My Feed" loadlazypanels="true" icon="sk-icon-activities">
+                                 <components>
+                                    <social uniqueid="sk-2Asngi-116" feedtype="newsfeed" model="pgs_CurrentUser">
+                                       <actions/>
+                                    </social>
+                                 </components>
+                              </tab>
+                              <tab name="What I Follow" loadlazypanels="true" icon="fa-rss">
+                                 <components>
+                                    <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="subscriptions" buttonposition="" mode="read" uniqueid="sk-2Axn7h-151">
+                                       <fields>
+                                          <field id="ParentId" valuehalign="" type="">
+                                             <label>Topic</label>
+                                          </field>
+                                          <field id="Parent.Type" valuehalign="" type="">
+                                             <label>Type</label>
+                                          </field>
+                                       </fields>
+                                       <rowactions>
+                                          <action type="delete"/>
+                                       </rowactions>
+                                       <massactions usefirstitemasdefault="true">
+                                          <action type="massupdate"/>
+                                          <action type="massdelete"/>
+                                       </massactions>
+                                       <views>
+                                          <view type="standard"/>
+                                       </views>
+                                    </skootable>
+                                 </components>
+                                 <oninitialshowactions>
+                                    <action type="requeryModel" model="subscriptions" behavior="standard"/>
+                                 </oninitialshowactions>
+                                 <onshowactions/>
+                              </tab>
+                              <tab name="Messages" loadlazypanels="true" icon="sk-icon-comments">
+                                 <components>
+                                    <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Messages" buttonposition="" mode="readonly" uniqueid="sk-2AtHHK-161">
+                                       <fields>
+                                          <field id="SentDate" valuehalign="" type="">
+                                             <label>Date</label>
+                                          </field>
+                                          <field id="SenderId" valuehalign="" type="">
+                                             <label>Sender</label>
+                                          </field>
+                                          <field id="Body" valuehalign="" type="" maxdisplaycharacters="175"/>
+                                       </fields>
+                                       <rowactions>
+                                          <action type="multi" label="Show Message" icon="sk-icon-comments">
+                                             <actions>
+                                                <action type="showPopup">
+                                                   <popup title="Full Message" width="75%">
+                                                      <components>
+                                                         <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="Messages" buttonposition="" uniqueid="sk-2Au8Lu-254" mode="readonly" layout="above">
+                                                            <columns>
+                                                               <column width="100%">
+                                                                  <sections>
+                                                                     <section title="Section A" collapsible="no" showheader="false">
+                                                                        <fields>
+                                                                           <field id="Body" valuehalign="" type="">
+                                                                              <label> </label>
+                                                                           </field>
+                                                                        </fields>
+                                                                     </section>
+                                                                  </sections>
+                                                               </column>
+                                                            </columns>
+                                                         </basicfieldeditor>
+                                                      </components>
+                                                   </popup>
+                                                </action>
+                                             </actions>
+                                          </action>
+                                       </rowactions>
+                                       <massactions usefirstitemasdefault="true"/>
+                                       <views>
+                                          <view type="standard"/>
+                                       </views>
+                                    </skootable>
+                                 </components>
+                                 <oninitialshowactions>
+                                    <action type="requeryModel" model="Messages" behavior="standard"/>
+                                 </oninitialshowactions>
+                                 <onshowactions/>
+                              </tab>
+                              <tab name="My Groups" loadlazypanels="true" icon="sk-icon-partners">
+                                 <components>
+                                    <pagetitle model="memberships" uniqueid="sk-2A__p2-327">
+                                       <maintitle>My Memberships</maintitle>
+                                       <actions/>
+                                    </pagetitle>
+                                    <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="memberships" buttonposition="" mode="read" uniqueid="sk-2Az7XP-372">
+                                       <fields>
+                                          <field id="GroupId" valuehalign="" type="REFPICK">
+                                             <label>Group Memberships</label>
+                                             <filters/>
+                                          </field>
+                                       </fields>
+                                       <rowactions>
+                                          <action type="delete"/>
+                                       </rowactions>
+                                       <massactions usefirstitemasdefault="true">
+                                          <action type="massupdate"/>
+                                          <action type="massdelete"/>
+                                       </massactions>
+                                       <views>
+                                          <view type="standard"/>
+                                       </views>
+                                    </skootable>
+                                    <pagetitle model="groups" uniqueid="sk-2A-232-333">
+                                       <maintitle>My Groups</maintitle>
+                                       <actions/>
+                                    </pagetitle>
+                                    <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="groups" buttonposition="" mode="readonly" uniqueid="sk-2A-4l9-339">
+                                       <fields>
+                                          <field id="Name"/>
+                                          <field id="GroupMembers" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br&gt;">
+                                             <label>Members</label>
+                                             <template>{{UserOrGroupId}}</template>
+                                          </field>
+                                          <field id="OwnerId" valuehalign="" type="">
+                                             <label>Owner</label>
+                                          </field>
+                                       </fields>
+                                       <rowactions/>
+                                       <massactions usefirstitemasdefault="true"/>
+                                       <views>
+                                          <view type="standard"/>
+                                       </views>
+                                    </skootable>
+                                 </components>
+                                 <oninitialshowactions>
+                                    <action type="requeryModel" model="memberships" behavior="standard"/>
+                                 </oninitialshowactions>
+                                 <onshowactions/>
+                              </tab>
+                              <tab name="My Profile" loadlazypanels="true" icon="sk-icon-contact">
+                                 <components>
+                                    <basicfieldeditor showheader="true" showsavecancel="true" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H5l4O-694" mode="read" layout="above">
+                                       <columns>
+                                          <column width="33.3%">
+                                             <sections>
+                                                <section title="Name" collapsible="no">
+                                                   <fields>
+                                                      <field id="Alias"/>
+                                                      <field id="CommunityNickname" valuehalign="" type=""/>
+                                                      <field id="FirstName"/>
+                                                      <field id="MiddleName" valuehalign="" type=""/>
+                                                      <field id="LastName"/>
+                                                      <field id="InformalName" valuehalign="" type=""/>
+                                                   </fields>
+                                                </section>
+                                                <section title="About Me" collapsible="no">
+                                                   <fields>
+                                                      <field id="AboutMe" valuehalign="" type="">
+                                                         <label> </label>
+                                                      </field>
+                                                   </fields>
+                                                </section>
+                                             </sections>
+                                          </column>
+                                          <column width="33.3%">
+                                             <sections>
+                                                <section title="Employment Info" collapsible="no">
+                                                   <fields>
+                                                      <field id="CompanyName"/>
+                                                      <field id="Title"/>
+                                                      <field id="City"/>
+                                                      <field id="Country"/>
+                                                   </fields>
+                                                </section>
+                                                <section title="Contact Info" collapsible="no">
+                                                   <fields>
+                                                      <field id="Email" valuehalign="" type=""/>
+                                                      <field id="MobilePhone"/>
+                                                      <field id="Phone"/>
+                                                   </fields>
+                                                </section>
+                                             </sections>
+                                          </column>
+                                          <column width="33.3%">
+                                             <sections>
+                                                <section title="Awesomeness" collapsible="no">
+                                                   <fields>
+                                                      <field id="LanguageLocaleKey"/>
+                                                      <field id="LastLoginDate"/>
+                                                      <field id="LocaleSidKey"/>
+                                                      <field id="ProfileId" valuehalign="" type="">
+                                                         <label>Profile</label>
+                                                      </field>
+                                                      <field id="UserRoleId" valuehalign="" type="">
+                                                         <label>Role</label>
+                                                      </field>
+                                                   </fields>
+                                                </section>
+                                             </sections>
+                                          </column>
+                                       </columns>
+                                    </basicfieldeditor>
+                                 </components>
+                              </tab>
+                           </tabs>
+                        </tabset>
+                     </components>
+                  </division>
+               </divisions>
+               <styles>
+                  <styleitem type="background" bgtype="none"/>
+               </styles>
+            </grid>
+         </components>
    <resources>
       <labels/>
       <javascript/>
