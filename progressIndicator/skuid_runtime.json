@@ -7,15 +7,18 @@
    ],
    "js": [
       {
-         "path": "progressIndicatorRuntime.js"
+         "path": "progressIndicatorRuntime.js",
+         "resource": "progressindicatorComponents"
       }
    ],
    "css": [
        {
-         "path": "runtime.css"
+         "path": "runtime.css",
+         "resource": "progressindicatorComponents"
       },
       {
-         "path": "progressIndicator.css"
+         "path": "progressIndicator.css",
+         "resource": "progressindicatorComponents"
       }
    ]
 }
