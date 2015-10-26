@@ -1,0 +1,24 @@
+{
+   "id": "progressindicator",
+   "components": [
+      {
+         "id": "progress_indicator"
+      }
+   ],
+   "js": [
+      {
+         "path": "progressIndicatorRuntime.js",
+         "resource": "progressindicatorComponents"
+      }
+   ],
+   "css": [
+       {
+         "path": "runtime.css",
+         "resource": "progressindicatorComponents"
+      },
+      {
+         "path": "progressIndicator.css",
+         "resource": "progressindicatorComponents"
+      }
+   ]
+}
