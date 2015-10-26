@@ -1,0 +1,12 @@
+.sample-fields {
+	color: black;
+	font-size: 14px;
+	border: 1px solid #ddd;
+	margin: 7px;
+	padding: 7px;
+}
+/* templates are wrapped in divs, need
+	 this to keep it on the same line */
+.sample-fields .nx-template{
+	display: inline-block;
+}
