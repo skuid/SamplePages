@@ -19,7 +19,7 @@
       }
    ],
    "css": [
-        {
+      {
          "path": "builders.css"
       },
       {
