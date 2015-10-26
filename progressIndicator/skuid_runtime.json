@@ -13,12 +13,10 @@
    ],
    "css": [
        {
-         "path": "runtime.css",
-         "resource": "progressindicatorComponents"
+         "path": "runtime.css"
       },
       {
-         "path": "progressIndicator.css",
-         "resource": "progressindicatorComponents"
+         "path": "progressIndicator.css"
       }
    ]
 }
