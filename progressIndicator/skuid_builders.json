@@ -20,9 +20,6 @@
    ],
    "css": [
       {
-         "path": "builders.css"
-      },
-      {
 
          "path": "progressIndicator.css"
       }
