@@ -1,79 +1,146 @@
-<skuidpage showheader="true" showsidebar="true">
-   <labels/>
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" tabtooverride="Contact">
    <models>
-      <model sobject="Contact" createrowifnonefound="true" query="false" limit="100" id="NewContact">
+      <model id="Contact" limit="1" query="false" createrowifnonefound="true" sobject="Contact" adapter="" type="" doclone="" processonclient="false">
          <fields>
-            <field id="Birthdate"/>
-            <field id="Phone"/>
-            <field id="Email"/>
             <field id="FirstName"/>
             <field id="LastName"/>
-            <field id="LeadSource"/>
+            <field id="Email"/>
+            <field id="Description"/>
+            <field id="Phone"/>
+            <field id="MobilePhone"/>
             <field id="MailingCity"/>
+            <field id="MailingStreet"/>
             <field id="MailingCountry"/>
             <field id="MailingState"/>
-            <field id="MailingStreet"/>
             <field id="MailingPostalCode"/>
+            <field id="Title"/>
          </fields>
          <conditions/>
+         <actions>
+            <action>
+               <actions>
+                  <action type="createRow" model="NewCases" appendorprepend="prepend" defaultmodefornewitems="edit"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+            </action>
+         </actions>
       </model>
-      <model sobject="Case" createrowifnonefound="false" query="false" limit="100" id="NewCases">
+      <model id="NewCases" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="Case">
          <fields>
+            <field id="Id"/>
             <field id="CaseNumber"/>
-            <field id="IsEscalated"/>
+            <field id="Origin"/>
+            <field id="Reason"/>
             <field id="Subject"/>
             <field id="Status"/>
          </fields>
          <conditions>
-            <condition field="ContactId" model="NewContact" value="Id" operator="=" enclosevalueinquotes="true" type="modelmerge"/>
+            <condition type="modelmerge" value="" field="ContactId" operator="=" model="Contact" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
          </conditions>
+         <actions/>
       </model>
-      <model sobject="Event" createrowifnonefound="false" query="false" limit="100" id="NewEvents">
+      <model id="NewEvents" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="Event">
          <fields>
-            <field id="Subject"/>
-            <field id="EndDateTime"/>
             <field id="StartDateTime"/>
+            <field id="Subject"/>
             <field id="Description"/>
+            <field id="Type"/>
          </fields>
          <conditions>
-            <condition field="WhoId" model="NewContact" value="Id" operator="=" enclosevalueinquotes="false" type="modelmerge" mergefield="Id"/>
+            <condition type="modelmerge" value="" field="WhoId" operator="=" mergefield="Id" novaluebehavior="deactivate" model="Contact" enclosevalueinquotes="true"/>
          </conditions>
+         <actions/>
+      </model>
+      <model id="contacts" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="Contact" doclone="">
+         <fields>
+            <field id="Id"/>
+            <field id="Salutation"/>
+            <field id="Title"/>
+            <field id="skuid__Best_Friend__c"/>
+            <field id="skuid__Best_Friend__r.Name"/>
+            <field id="CreatedDate"/>
+         </fields>
+         <conditions/>
+         <actions/>
+         <groupby method="simple"/>
       </model>
    </models>
    <components>
-      <pagetitle model="NewContact">
-         <maintitle>Create New Person</maintitle>
+      <pagetitle model="Contact" uniqueid="sk-16e6v5-64">
+         <maintitle>
+            <template>New {{Model.label}}</template>
+         </maintitle>
+         <subtitle>
+            <template>{{Model.labelPlural}}</template>
+         </subtitle>
          <actions/>
       </pagetitle>
-      <wizard>
+      <wizard deferstepcontentsrendering="false" uniqueid="sk-16ec29-165">
          <steps>
-            <step steplabel="Person Information" stepid="step1">
+            <step stepid="step1" steplabel="Enter New Contact Information">
                <components>
-                  <basicfieldeditor mode="edit" model="NewContact" showheader="true" showsavecancel="false">
+                  <basicfieldeditor showsavecancel="false" showheader="true" model="Contact" mode="edit" uniqueid="sk-16e6v5-65" buttonposition="">
                      <columns>
-                        <column width="50%">
+                        <column width="33.3%">
                            <sections>
-                              <section title="Profile Information">
+                              <section title="Basics" collapsible="no">
                                  <fields>
                                     <field id="FirstName"/>
                                     <field id="LastName"/>
-                                    <field id="LeadSource"/>
-                                    <field id="Birthdate"/>
-                                    <field id="Phone"/>
-                                    <field id="Email"/>
+                                    <field id="Title"/>
                                  </fields>
                               </section>
                            </sections>
                         </column>
-                        <column width="50%">
+                        <column width="33.3%">
                            <sections>
-                              <section title="Address">
+                              <section title="Additional Info" collapsible="no">
                                  <fields>
-                                    <field id="MailingStreet"/>
+                                    <field id="Email" valuehalign="" type=""/>
+                                    <field id="Description" valuehalign="" type=""/>
+                                 </fields>
+                              </section>
+                              <section title="Phone Numbers" collapsible="no">
+                                 <fields>
+                                    <columns layoutmode="fixed">
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="New Section" collapsible="no" showheader="false">
+                                                <fields>
+                                                   <field id="Phone" valuehalign="" type="">
+                                                      <label>Biz #</label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                       <column width="50%">
+                                          <sections>
+                                             <section title="New Section" collapsible="no" showheader="false">
+                                                <fields>
+                                                   <field id="MobilePhone" valuehalign="" type="">
+                                                      <label>Cell #</label>
+                                                   </field>
+                                                </fields>
+                                             </section>
+                                          </sections>
+                                       </column>
+                                    </columns>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                        <column width="33.3%">
+                           <sections>
+                              <section title="Business Address" collapsible="no">
+                                 <fields>
                                     <field id="MailingCity"/>
+                                    <field id="MailingStreet"/>
                                     <field id="MailingState"/>
                                     <field id="MailingPostalCode"/>
-                                    <field id="MailingCountry"/>
+                                    <field id="MailingCountry" valuehalign="" type=""/>
                                  </fields>
                               </section>
                            </sections>
@@ -82,51 +149,73 @@
                   </basicfieldeditor>
                </components>
                <actions>
-                  <action icon="ui-silk-control-repeat-blue" url="/apex/nexus__ui?page=NewPersonWizard" label="Start Over" type="navigate"/>
-                  <action stepid="step2" icon="ui-silk-resultset-next" label="Next Step" type="navigate"/>
+                  <action type="navigate" label="Start Over" stepid="" window="self" icon="sk-icon-refresh" url="/apex/skuid__ui?page=NewContactWizard.Tutorials"/>
+                  <action uniqueid="sk-16ec20-162" type="navigate" stepid="step2" label="Next Step" icon="sk-icon-arrow-right" window="self">
+                     <actions>
+                        <action type="requeryModel" model="contacts" behavior="standard"/>
+                        <action type="navigateToStep" stepid="step2"/>
+                     </actions>
+                  </action>
                </actions>
             </step>
-            <step steplabel="Create Cases" stepid="step2">
+            <step stepid="step2" steplabel="Create Cases">
                <components>
-                  <skootable model="NewCases" createrecords="true" pagesize="10" showexportbuttons="false" searchmethod="server" searchbox="false" showsavecancel="false" showconditions="false">
+                  <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="NewCases" buttonposition="" mode="read" uniqueid="sk-16kg4h-218" emptysearchbehavior="query">
                      <fields>
-                        <field id="CaseNumber"/>
-                        <field id="Subject"/>
+                        <field id="Subject" valuehalign="" type=""/>
+                        <field id="Origin"/>
+                        <field id="Reason"/>
                         <field id="Status"/>
-                        <field id="IsEscalated"/>
                      </fields>
                      <rowactions>
                         <action type="edit"/>
                         <action type="delete"/>
                      </rowactions>
-                     <massactions usefirstitemasdefault="true"/>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
                      <views>
                         <view type="standard"/>
                      </views>
+                     <searchfields/>
                   </skootable>
-                  <template allowhtml="true" multiple="false" model="NewContact">&lt;div class="nx-editor-header-title"&gt;Create Appointments&lt;/div&gt;&lt;div style="clear:both"&gt;&lt;/div&gt;</template>
-                  <skootable model="NewEvents" createrecords="true" pagesize="10" showexportbuttons="false" searchmethod="server" searchbox="false" showsavecancel="false" showconditions="false" mode="read">
+                  <template multiple="true" uniqueid="sk-16kgHk-230" model="NewEvents" allowhtml="true">
+                     <contents>&lt;div class="nx-editor-header-title"&gt;Create Appointments&lt;/div&gt;&lt;div style="clear:both"&gt;&lt;/div&gt;</contents>
+                  </template>
+                  <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="NewEvents" buttonposition="" mode="read" uniqueid="sk-16kgTI-234" emptysearchbehavior="query">
                      <fields>
-                        <field id="Subject"/>
-                        <field id="Description"/>
-                        <field id="StartDateTime"/>
-                        <field id="EndDateTime"/>
+                        <field id="Type" valuehalign="" type=""/>
+                        <field id="Subject" valuehalign="" type=""/>
+                        <field id="StartDateTime" valuehalign="" type=""/>
+                        <field id="Description" valuehalign="" type=""/>
                      </fields>
                      <rowactions>
                         <action type="edit"/>
                         <action type="delete"/>
                      </rowactions>
-                     <massactions usefirstitemasdefault="true"/>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
                      <views>
                         <view type="standard"/>
                      </views>
+                     <searchfields/>
                   </skootable>
                </components>
                <actions>
-                  <action icon="ui-silk-resultset-previous" stepid="step1" label="Previous Step" type="navigate"/>
-                  <action url="/{{Id}}" icon="ui-silk-user-add" label="Finish" type="save">
+                  <action uniqueid="sk-16ec22-163" type="navigate" stepid="step1" label="Previous Step" icon="sk-icon-arrow-left"/>
+                  <action type="cancel" label="Cancel" stepid="" window="self" icon="sk-icon-cancel" url="/{{Model.KeyPrefix}}">
                      <models>
-                        <model>NewContact</model>
+                        <model>Contact</model>
+                        <model>NewCases</model>
+                        <model>NewEvents</model>
+                     </models>
+                  </action>
+                  <action type="save" label="Finish" stepid="" window="self" icon="sk-icon-save" rollbackonanyerror="true" url="/{{Id}}">
+                     <models>
+                        <model>Contact</model>
                         <model>NewCases</model>
                         <model>NewEvents</model>
                      </models>
@@ -138,7 +227,10 @@
    </components>
    <resources>
       <labels/>
-      <javascript/>
       <css/>
+      <javascript/>
    </resources>
+   <styles>
+      <styleitem type="background" bgtype="none"/>
+   </styles>
 </skuidpage>
