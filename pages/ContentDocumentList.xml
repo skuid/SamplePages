@@ -1,0 +1,60 @@
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
+   <models>
+      <model id="ContentDocument" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="ContentDocument">
+         <fields>
+            <field id="CreatedDate"/>
+            <field id="Description"/>
+            <field id="FileType"/>
+            <field id="ContentVersions" type="childRelationship" limit="10">
+               <fields>
+                  <field id="Id"/>
+               </fields>
+            </field>
+            <field id="Title"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="ContentDocument" buttonposition="" mode="readonly" uniqueid="sk-2pjxyu-145">
+         <fields>
+            <field id="Title"/>
+            <field id="CreatedDate"/>
+            <field id="Description"/>
+            <field id="FileType" valuehalign="" type=""/>
+            <field id="ContentVersions" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br&gt;">
+               <label>Document Version</label>
+               <template>&lt;a href="/{{{Id}}}"&gt; Open Content Page&lt;/a&gt; </template>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="popup" label="View Image" icon="sk-icon-popup">
+               <popup width="80%" title="Viewing {{Model.label}}: {{Title}}">
+                  <components>
+                     <template multiple="false" uniqueid="sk-2pm61F-284" allowhtml="true">
+                        <contents>&lt;img src="/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&amp;amp;versionId={{#ContentVersions.records}}{{{Id}}}{{/ContentVersions.records}}&amp;amp;operationContext=CHATTER&amp;amp;contentId={{{Id}}}"/&gt;
+</contents>
+                        <conditions>
+                           <condition type="contextrow" field="Id" mergefield="Id" autocreated="true"/>
+                        </conditions>
+                     </template>
+                  </components>
+               </popup>
+            </action>
+         </rowactions>
+         <massactions usefirstitemasdefault="true"/>
+         <views>
+            <view type="standard"/>
+         </views>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+   <styles>
+      <styleitem type="background" bgtype="none"/>
+   </styles>
+</skuidpage>
