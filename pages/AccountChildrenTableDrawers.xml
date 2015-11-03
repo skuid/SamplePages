@@ -1,4 +1,4 @@
-<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true" tabtooverride="Account">
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true" tabtooverride="Account" personalizationmode="server">
    <models>
       <model id="Account" limit="100" query="true" createrowifnonefound="false" sobject="Account">
          <fields>
@@ -38,7 +38,7 @@
       </model>
    </models>
    <components>
-      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Account" mode="read">
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Account" mode="read" uniqueid="sk-3EgD_B-73">
          <fields>
             <field id="Name" valuehalign="" type=""/>
             <field id="RecordTypeId" valuehalign="" type=""/>
@@ -104,7 +104,7 @@
                                  </basicfieldeditor>
                               </components>
                            </tab>
-                           <tab name="Contacts" loadlazypanels="true" icon="ui-silk-group">
+                           <tab name="Contacts" loadlazypanels="true" icon="sk-icon-partners">
                               <components>
                                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="Contacts" buttonposition="" mode="read">
                                     <fields>
@@ -159,4 +159,7 @@
       <css/>
       <javascript/>
    </resources>
+<styles>
+<styleitem type="background" bgtype="none"/>
+</styles>
 </skuidpage>
