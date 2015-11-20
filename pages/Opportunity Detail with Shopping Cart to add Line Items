@@ -1,0 +1,1144 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Opportunity" theme="" unsavedchangeswarning="" personalizationmode="server">
+   <resources>
+      <labels/>
+      <javascript>
+         <jsitem location="inline" name="tasks.markCompleted">skuid.snippet.registerSnippet('tasks.markCompleted',function(params){
+    // Mark all selected items as closed,
+    // then save our Task model.
+    // Once the save is completed,
+    // update our TaskHistory model,
+    // so that the now-saved Task will show up there.
+    var $ = skuid.$,
+        model = params.model,
+        list = params.list,
+        selectedItems = params.item ? [params.item] : list.getSelectedItems();
+        
+    if (selectedItems.length === 1 &amp;&amp; skuid.model.isNewId(selectedItems[0].row.Id)) {
+        alert('Please finish creating this Task before marking it as completed.');
+        return;
+    }
+    $.each(selectedItems,function(i,item){
+        model.updateRow(item.row,'Status','Completed');
+    });
+    // Block the list from having updates
+    list.element.block({
+        css: list.blockUICSS, overlayCSS: list.blockOverlayCSS,
+        message:'Marking Tasks as Completed...'
+    });
+
+    var saveFinishes = model.save({callback:
+        function(){
+            var updateFinishes = skuid.model.updateData([model,skuid.model.getModel('TaskHistory')]);
+            $.when(updateFinishes).then(
+                function(){ list.element.unblock(); },
+                function(){ list.element.unblock(); }
+            );
+        }
+    });
+    
+});</jsitem>
+         <jsitem location="inlinesnippet" name="quantityRenderer" url="">var field = arguments[0],
+    value = arguments[1];
+
+if (field.mode == 'read') {
+    skuid.ui.fieldRenderers.DOUBLE.read(field,value);
+} else {
+
+    skuid.ui.fieldRenderers.DOUBLE.edit(field,value);
+
+    skuid.utils.delayInputCallback(
+        field.element.find('input'),
+        function(newValue) {
+            // Force updates of the UnitPrice (Sales Price) field
+            field.model.updateRow(field.row,'UnitPrice',field.model.getFieldValue(field.row,'UnitPrice'));
+        }
+    );
+
+}</jsitem>
+         
+         <jsitem location="inlinesnippet" name="pricebookEntryRenderer" url="">var $ = skuid.$,
+    field = arguments[0],
+    value = arguments[1],
+    renderer = skuid.ui.fieldRenderers[field.metadata.displaytype],
+    mode = field.mode;
+
+// Get the pricebook entries model we are using for the renderer
+var pricebookEntriesModel = skuid.model.getModel(field.options.optionmodel);
+
+if (mode == 'edit') {
+    // Specify that we want to display our field as a Picklist
+    field.options.type = 'REFPICK';
+}
+
+if(mode == 'readonly') mode = 'read';
+// Run standard renderer for the current mode
+// (applies to read/edit mode)
+renderer[mode](field,value);
+
+// Function that will update the value of our LineItem row's UnitPrice field
+// based on the selected PricebookEntry's ListPrice / UnitPrice
+var updateUnitPriceField = function(){
+
+    // Find the selected PricebookEntryId
+    var newEntryId = field.model.getFieldValue(field.row,'PricebookEntryId');
+    // Find the corresponding PricebookEntry record
+    var entry = pricebookEntriesModel.getRowById(newEntryId);
+    var newPrice = pricebookEntriesModel.getFieldValue(entry,'UnitPrice');
+
+    // Force updates of the UnitPrice (SalesPrice) field 
+    //with the newly-selected PricebookEntry's UnitPrice field
+    field.model.updateRow(field.row,'UnitPrice',newPrice);
+
+    // Rerender the UnitPrice field in the row,
+    // if that field has been rendered.
+    var item = field.editor.lists[0].renderedItems[field.row.Id];
+    if (item) {
+        $.each(item.fields,function(i,f){
+            if (f.id == 'UnitPrice') {
+                f.render();
+                return false;
+            }
+        });
+    }
+};
+
+if (mode == 'edit') {
+
+    // If we do not yet have a value for our UnitPrice field,
+    // update it.
+    if (!field.model.getFieldValue(field.row,'UnitPrice')) {
+        updateUnitPriceField();
+    }
+
+    // Attach an event handler to our field's &lt;select&gt; picklist element
+    var select = field.element.find('select');
+    select.on('change',function(){
+        updateUnitPriceField();
+    });
+
+}</jsitem>
+         <jsitem location="inlinesnippet" name="cloneRecord" url="">var params = arguments[0],
+    item = params.item,
+    row = item.row,
+    model = params.model,
+    $ = skuid.$;
+
+// Create a new row in our table
+var newRow = model.createRow();
+
+// Put in default values from the fields in our current row
+if (row) {
+    $.each(row,function(fieldId,val) {
+        // Only allow fields that are Objects,
+        // or that are Createable
+        if ((fieldId != 'attributes') &amp;&amp; (val != null) &amp;&amp; (fieldId != 'Id') &amp;&amp; (fieldId != 'TotalPrice')) {
+    		var modelField = model.getField(fieldId);
+            if ((typeof val === 'object') 
+            || (modelField &amp;&amp; modelField.createable)) {
+                model.updateRow(newRow,fieldId,val);
+            }
+    	}
+    });
+}
+
+// Force all registered lists to put our row into edit mode
+$.each(model.registeredLists,function(){
+    // See if this item has been rendered in this list yet
+    var newItem = this.renderedItems[newRow.Id];
+    if (newItem) {
+        newItem.mode = 'edit';
+        newItem.refreshFields();
+    }
+});
+
+</jsitem>
+         
+         
+      </javascript>
+      <!--
+      <css>
+      <cssitem location="external" name="" url="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/blitzer/jquery-ui.css" cachelocation="true"/>
+      <cssitem location="inline" name="matchBlitzer">/* template header text */
+.nx-editor-header-title {
+color: #004276;
+}
+/*Change table header text */
+table.nx-skootable-data th {
+color: #004276;
+}
+/* Change inactive tab text */
+.ui-tabs .ui-tabs .ui-state-default a:link {
+color: #004276;
+}
+/* Change active tab */
+.ui-tabs .ui-tabs .ui-tabs-nav li.ui-state-active {
+background-color: #cc0000;
+}
+.ui-tabs .ui-tabs .ui-state-active a:link {
+color: #FFFFFF;
+}
+/* Change tab border */
+.ui-tabs .ui-tabs .ui-tabs-nav {
+border-color: #DDDDDD;
+}
+/* Change table filter background */
+.nx-actionbutton {
+background-color: #cc0000;
+}
+/* Change field editor header text */
+.nx-basicfieldeditor-section-header {
+color: #004276;
+}
+/* Change calendar header text */
+.nx-cal-header-title {
+color: #004276;
+}
+/* change filter color */
+.nx-conditiontoken {
+background-color: #cc0000;
+}
+/*Change calendar weekday picker text */
+.nx-cal-dowpicker-item {
+color: #004276;
+}
+/* Change calendar view-switcher background */
+.nx-viewswitcher {
+background: #cc0000;
+}</cssitem>
+   </css>
+         -->
+   <css/>
+</resources>
+<models>
+   <model id="Opportunity" limit="1" query="true" createrowifnonefound="false" sobject="Opportunity">
+      <fields>
+         <field id="Name"/>
+         <field id="StageName"/>
+         <field id="CloseDate"/>
+         <field id="Amount"/>
+         <field id="AccountId"/>
+         <field id="Account.Name"/>
+         <field id="CreatedById"/>
+         <field id="CreatedDate"/>
+         <field id="CreatedBy.Name"/>
+         <field id="Description"/>
+         <field id="HasOpportunityLineItem"/>
+         <field id="LeadSource"/>
+         <field id="NextStep"/>
+         <field id="Type"/>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+         <field id="Pricebook2Id"/>
+         <field id="Pricebook2.Name"/>
+         <field id="Probability"/>
+         <field id="TotalOpportunityQuantity"/>
+         <field id="LastModifiedById"/>
+         <field id="LastModifiedDate"/>
+         <field id="LastModifiedBy.Name"/>
+         <field id="CampaignId"/>
+         <field id="Campaign.Name"/>
+         
+         
+         
+         
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="Id"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="PricebookEntries" limit="100" query="true" createrowifnonefound="false" orderby="" sobject="PricebookEntry" doclone="" type="">
+      <fields>
+         <field id="Id"/>
+         <field id="UnitPrice"/>
+         <field id="Product2Id"/>
+         <field id="Product2.Name"/>
+         <field id="ProductCode"/>
+      <field id="Product2.Family"/>
+</fields>
+      <conditions>
+         <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
+         <condition type="modelmerge" value="" field="Pricebook2Id" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Pricebook2Id"/>
+      <condition type="fieldvalue" field="Product2.Family" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Product2.Family" state="filterableoff" value=""/>
+</conditions>
+      <actions/>
+   </model>
+   <model id="OpportunityRoles" limit="100" query="true" createrowifnonefound="false" sobject="OpportunityContactRole" orderby="">
+      <fields>
+         <field id="ContactId"/>
+         <field id="Contact.Name"/>
+         <field id="IsPrimary"/>
+         <field id="Role"/>
+         <field id="Contact.Phone"/>
+         <field id="Contact.Email"/>
+         <field id="Contact.AccountId"/>
+         <field id="Contact.Account.Name"/>
+         <field id="Contact.Title"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="OpportunityId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="LineItems" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" orderby="SortOrder, PricebookEntry.Product2.Name">
+      <fields>
+         <field id="SortOrder"/>
+         <field id="UnitPrice"/>
+         <field id="Subtotal"/>
+         <field id="TotalPrice"/>
+         <field id="Quantity"/>
+         <field id="Description"/>
+         <field id="ListPrice"/>
+         <field id="ServiceDate"/>
+         <field id="PricebookEntry.Product2Id"/>
+         <field id="PricebookEntry.Product2.Name"/>
+         <field id="PricebookEntryId"/>
+         <field id="PricebookEntry.UnitPrice"/>
+         <field id="Discount"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="OpportunityId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="Attachments" limit="100" query="true" createrowifnonefound="false" sobject="Attachment" orderby="LastModifiedDate DESC">
+      <fields>
+         <field id="Name"/>
+         <field id="LastModifiedById"/>
+         <field id="LastModifiedBy.Name" targetobjects="User"/>
+         <field id="CreatedById"/>
+         <field id="CreatedBy.Name" targetobjects="User"/>
+         <field id="LastModifiedDate"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="ParentId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="Notes" limit="" query="true" createrowifnonefound="false" sobject="Note" orderby="LastModifiedDate DESC">
+      <fields>
+         <field id="Body"/>
+         <field id="Title"/>
+         <field id="LastModifiedDate"/>
+         <field id="LastModifiedById"/>
+         <field id="LastModifiedBy.Name"/>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="ParentId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="TaskHistory" limit="" query="true" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC">
+      <fields>
+         <field id="Subject"/>
+         <field id="ActivityDate"/>
+         <field id="WhoId"/>
+         <field id="Who.Name" targetobjects="Contact"/>
+         <field id="LastModifiedById"/>
+         <field id="LastModifiedBy.Name"/>
+         <field id="LastModifiedDate"/>
+         <field id="Type"/>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+         <field id="Description"/>
+         <field id="Priority"/>
+         <field id="Status"/>
+      </fields>
+      <conditions logic="">
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="WhatId"/>
+         <condition type="fieldvalue" enclosevalueinquotes="false" operator="=" field="IsClosed" value="true"/>
+         <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Subject" operator="contains" state="filterableoff" inactive="true" name="TaskHistorySubject"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="OpenTasks" limit="100" query="true" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC">
+      <fields>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+         <field id="WhoId"/>
+         <field id="Who.Name" targetobjects="Contact"/>
+         <field id="ActivityDate"/>
+         <field id="Priority"/>
+         <field id="Status"/>
+         <field id="Subject"/>
+         <field id="Type"/>
+         <field id="Description"/>
+         <field id="WhatId"/>
+         <field id="What.Name"/>
+         <field id="What.Type"/>
+      </fields>
+      <conditions logic="">
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="WhatId"/>
+         <condition type="fieldvalue" enclosevalueinquotes="true" operator="!=" field="Status" value="Completed"/>
+         <condition type="fieldvalue" enclosevalueinquotes="false" operator="!=" field="IsClosed" value="true"/>
+         <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Subject" operator="contains" state="filterableoff" inactive="true" name="OpenTasksSubject"/>
+         <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OwnerId" state="filterableoff" inactive="true" name="OwnerId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="RelevantEvents" limit="" query="true" createrowifnonefound="false" sobject="Event" orderby="ActivityDate DESC">
+      <fields>
+         <field id="EndDateTime"/>
+         <field id="StartDateTime"/>
+         <field id="Subject"/>
+         <field id="WhoId"/>
+         <field id="Who.Name" targetobjects="Contact"/>
+         <field id="Type"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="WhatId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="OppOwnerCalendarEvents" limit="" query="false" createrowifnonefound="false" sobject="Event">
+      <fields>
+         <field id="Subject"/>
+         <field id="EndDateTime"/>
+         <field id="StartDateTime"/>
+         <field id="Type"/>
+      </fields>
+      <conditions>
+         <condition type="userinfo" enclosevalueinquotes="true" operator="=" field="OwnerId" value="userid"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="RelevantPeople" limit="" query="true" createrowifnonefound="false" sobject="Contact">
+      <fields>
+         <field id="Name"/>
+      </fields>
+      <conditions>
+         <condition type="join" enclosevalueinquotes="true" operator="in" value="" field="Id" joinobject="OpportunityContactRole" joinfield="ContactId">
+            <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="OpportunityId"/>
+         </condition>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="StageHistory" limit="100" query="true" createrowifnonefound="false" sobject="OpportunityHistory" orderby="CreatedDate DESC">
+      <fields>
+         <field id="Amount"/>
+         <field id="StageName"/>
+         <field id="Probability"/>
+         <field id="ExpectedRevenue"/>
+         <field id="CloseDate"/>
+         <field id="CreatedDate"/>
+         <field id="CreatedById"/>
+         <field id="CreatedBy.Name"/>
+      </fields>
+      <conditions>
+         <condition type="param" enclosevalueinquotes="true" operator="=" field="OpportunityId" value="id"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="OtherOpportunities" limit="5" query="true" createrowifnonefound="false" sobject="Opportunity" orderby="CloseDate DESC">
+      <fields>
+         <field id="Amount"/>
+         <field id="CloseDate"/>
+         <field id="Probability"/>
+         <field id="StageName"/>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+         <field id="Name"/>
+         <field id="CreatedDate"/>
+         <field id="CreatedById"/>
+         <field id="CreatedBy.Name"/>
+         <field id="LeadSource"/>
+         <field id="TotalOpportunityQuantity"/>
+         <field id="FiscalYear"/>
+      </fields>
+      <conditions>
+         <condition type="modelmerge" enclosevalueinquotes="true" operator="=" value="AccountId" model="Opportunity" field="AccountId" mergefield="AccountId"/>
+         <condition type="modelmerge" enclosevalueinquotes="true" operator="!=" value="Id" model="Opportunity" field="Id" mergefield="Id"/>
+         <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" state="filterableoff" inactive="true" name="StageName"/>
+         <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="LeadSource" state="filterableoff" inactive="true" name="LeadSource"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="EmailToSF" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
+      <fields>
+         <field id="LocalPart"/>
+         <field id="EmailDomainName"/>
+      </fields>
+      <conditions>
+         <condition type="fieldvalue" value="EmailToSalesforce" enclosevalueinquotes="true" field="Function.FunctionName"/>
+         <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive" operator="="/>
+         <condition type="userinfo" value="" field="RunAsUserId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="Cases" limit="10" query="true" createrowifnonefound="false" orderby="" sobject="Case">
+      <fields>
+         <field id="Subject"/>
+         <field id="Status"/>
+         <field id="Priority"/>
+         <field id="CaseNumber"/>
+         <field id="IsEscalated"/>
+         
+         
+         <field id="AccountId"/>
+         <field id="Account.Name"/>
+         <field id="ContactId"/>
+         <field id="Contact.Name"/>
+      </fields>
+      <conditions>
+         <condition type="modelmerge" value="" field="AccountId" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="AccountId"/>
+      </conditions>
+      <actions/>
+   </model>
+   <model id="Events" limit="25" query="true" createrowifnonefound="false" sobject="Event">
+      <fields>
+         <field id="Subject"/>
+         <field id="StartDateTime"/>
+         <field id="EndDateTime"/>
+         <field id="OwnerId"/>
+         <field id="Owner.Name"/>
+      </fields>
+      <conditions>
+         <condition type="modelmerge" value="" field="WhatId" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Id"/>
+      </conditions>
+      <actions/>
+   </model>
+</models>
+<components>
+   <pagetitle model="Opportunity" uniqueid="sk-bsyQq-258">
+      <maintitle>
+         <template>{{Name}}</template>
+      </maintitle>
+      <subtitle>
+         <template>{{Model.Label}}</template>
+      </subtitle>
+      <actions>
+         <action type="redirect" label="Standard Page" window="blank" icon="sk-icon-return" url="/{{Id}}?nooverride=1"/>
+         <action type="delete"/>
+         <action type="share"/>
+         <action type="redirect" label="Clone" url="/{{Id}}/e?clone=1&amp;retURL=%2F{{Id}}" icon="sk-icon-magic" window="self"/>
+         <action type="redirect" label="Clone (with Products)" icon="sk-icon-clone" url="/{{Id}}/e?clone=1&amp;cloneli=1&amp;retURL=%2F{{Id}}" window="self"/>
+         <action type="savecancel" label="New Action" window="self">
+            <models>
+               <model>PricebookEntries</model>
+               <model>OpportunityRoles</model>
+               <model>LineItems</model>
+               <model>Attachments</model>
+               <model>Notes</model>
+               <model>TaskHistory</model>
+               <model>OpenTasks</model>
+               <model>RelevantEvents</model>
+               <model>RelevantPeople</model>
+               <model>OtherOpportunities</model>
+               <model>Cases</model>
+            </models>
+            <savehotkeys>
+               <hotkey modifiers="meta" key="s"/>
+            </savehotkeys>
+         </action>
+      </actions>
+   </pagetitle>
+   <tabset renderas="" rememberlastusertab="true" uniqueid="sk-bsyQq-259">
+      <tabs>
+         <tab name="Basics" icon="sk-icon-listview">
+            <components>
+               <basicfieldeditor showsavecancel="false" showheader="true" model="Opportunity" mode="read" layout="above" uniqueid="FE_Panel1" buttonposition="left">
+                  <columns>
+                     <column width="33.3%">
+                        <sections>
+                           <section title="Opportunity Info" collapsible="no">
+                              <fields>
+                                 <field id="Name"/>
+                                 <field id="AccountId">
+                                    <label>Account</label>
+                                 </field>
+                                 <field id="Pricebook2Id" required="true" type="REFPICK">
+                                    <label>Pricebook</label>
+                                 </field>
+                                 <field id="Amount"/>
+                                 <field id="Description">
+                                    <renderconditions>
+                                       <rendercondition type="blank" operator="!=" field="Description" value="null" enclosevalueinquotes="false"/>
+                                    </renderconditions>
+                                 </field>
+                              </fields>
+                           </section>
+                        </sections>
+                     </column>
+                     <column width="33.3%">
+                        <sections>
+                           <section title="More Info" collapsible="no">
+                              <fields>
+                                 <field id="StageName">
+                                    <label>Where in the process are we?</label>
+                                 </field>
+                                 <field id="Probability"/>
+                                 <field id="NextStep"/>
+                                 <field id="HasOpportunityLineItem"/>
+                              </fields>
+                           </section>
+                        </sections>
+                     </column>
+                     <column width="33.3%">
+                        <sections>
+                           <section title="Source Info" collapsible="no">
+                              <fields>
+                                 <field id="LeadSource"/>
+                                 <field id="CampaignId">
+                                    <label>Primary Campaign Source</label>
+                                 </field>
+                                 <field type="COMBO">
+                                    <label>Created By</label>
+                                    <template model="Opportunity" multiple="false">{{CreatedById}}, {{CreatedDate}}</template>
+                                 </field>
+                                 <field id="Type">
+                                    <label>Type</label>
+                                 </field>
+                                 <columns>
+                                    <column width="100%">
+                                       <sections>
+                                          <section title="New Section" collapsible="no" showheader="false">
+                                             <fields/>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                 </columns>
+                              </fields>
+                           </section>
+                           <section title="System Info" collapsible="collapsed">
+                              <fields>
+                                 <field type="COMBO">
+                                    <label>Last Modified By</label>
+                                    <template model="Opportunity" multiple="false">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                 </field>
+                                 <field id="OwnerId">
+                                    <label>Owner</label>
+                                 </field>
+                                 <field id="CloseDate"/>
+                              </fields>
+                           </section>
+                        </sections>
+                     </column>
+                  </columns>
+                  <renderconditions/>
+               </basicfieldeditor>
+               <template model="Opportunity" multiple="false" allowhtml="true" uniqueid="sk-bsyQq-260">
+                  <contents>&lt;div class="nx-editor-header-title"&gt;Other Opportunities (Past/Present) with {{Account.Name}}&lt;/div&gt;</contents>
+               </template>
+               <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="true" pagesize="5" createrecords="true" model="OtherOpportunities" mode="read" uniqueid="sk-bsyQq-261">
+                  <fields>
+                     <field id="Name" columnwidth="20%"/>
+                     <field id="Amount" allowordering="true">
+                        <summaries>
+                           <summary>sum</summary>
+                           <summary>avg</summary>
+                        </summaries>
+                     </field>
+                     <field id="StageName" allowordering="true"/>
+                     <field id="CloseDate" allowordering="true"/>
+                     <field id="OwnerId" allowordering="true">
+                        <label>Owner</label>
+                     </field>
+                     <field id="LeadSource"/>
+                     <field id="FiscalYear" type="">
+                        <label>FY</label>
+                     </field>
+                  </fields>
+                  <rowactions>
+                     <action type="edit"/>
+                     <action type="redirect" label="Clone this Opportunity" url="/{{Id}}/e?clone=1&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-magic" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <action type="redirect" label="Clone this Opportunity (with Products)" url="/{{Id}}/e?clone=1&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-clone" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                  </rowactions>
+                  <massactions usefirstitemasdefault="true">
+                     <action type="massupdate"/>
+                  </massactions>
+                  <views>
+                     <view type="standard"/>
+                  </views>
+                  <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                     <action type="redirect" label="New Opportunity" url="/{{Model.KeyPrefix}}/e" icon="sk-icon-add" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <action type="redirect" label="Clone Opportunity &quot;{{#$Model.Opportunity.data}}{{Name}}{{/$Model.Opportunity.data}}&quot;" url="/{{$Param.id}}/e?clone=1&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-clone" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <action type="redirect" label="Clone Opportunity &quot;{{#$Model.Opportunity.data}}{{Name}}{{/$Model.Opportunity.data}}&quot; (with Products)" url="/{{$Param.id}}/e?clone=1&amp;cloneli=1&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-clone" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                  </actions>
+                  <filters>
+                     <filter type="select" filteroffoptionlabel="Any Stage" createfilteroffoption="true" condition="StageName">
+                        <sources>
+                           <source type="metadata"/>
+                        </sources>
+                     </filter>
+                     <filter type="select" filteroffoptionlabel="Any Source" createfilteroffoption="true" condition="LeadSource">
+                        <sources>
+                           <source type="metadata"/>
+                        </sources>
+                     </filter>
+                  </filters>
+                  <exportproperties usetablecolumns="true"/>
+               </skootable>
+            </components>
+         </tab>
+         <tab name="Products ({{$Model.LineItems.data.length}})" icon="sk-icon-config">
+            <components>
+               <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="LineItems" mode="read" uniqueid="sk-bsyQq-262">
+                  <fields>
+                     <field id="PricebookEntryId" type="CUSTOM" optionsource="model" optionmodel="PricebookEntries" displaytemplate="{{Product2.Name}} (List: {{UnitPrice}})" snippet="pricebookEntryRenderer" required="true">
+                        <label>Product</label>
+                        <filters/>
+                     </field>
+                     <field id="ServiceDate" required="true"/>
+                     <field id="Quantity" type="CUSTOM" snippet="quantityRenderer"/>
+                     <field id="UnitPrice" required="true"/>
+                     <field id="Description"/>
+                     <field id="TotalPrice" readonly="true">
+                        <summaries>
+                           <summary>sum</summary>
+                        </summaries>
+                     </field>
+                  </fields>
+                  <rowactions>
+                     <action type="edit"/>
+                     <action type="delete"/>
+                     <action type="custom" snippet="cloneRecord" label="Clone Product" icon="sk-icon-clone">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                  </rowactions>
+                  <massactions usefirstitemasdefault="true">
+                     <action type="massupdate"/>
+                     <action type="massedit"/>
+                     <action type="massdelete"/>
+                  </massactions>
+                  <views>
+                     <view type="standard"/>
+                  </views>
+                  <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                     <action type="multi" label="Add Line Items" icon="sk-icon-add">
+                        <actions>
+                           <action type="showPopup">
+                              <popup title="Choose Products" width="90%">
+                                 <components>
+                                    <pagetitle model="LineItems">
+                                       <maintitle>Choose Products to Add</maintitle>
+                                       <actions>
+                                          <action type="multi" label="Save and Finish" icon="sk-icon-save">
+                                             <actions>
+                                                <action type="blockUI" message="Saving..."/>
+                                                <action type="save">
+                                                   <models>
+                                                      <model>LineItems</model>
+                                                   </models>
+                                                   <onerroractions>
+                                                      <action type="blockUI" message="There was a problem saving the new Line Items." timeout="1500"/>
+                                                   </onerroractions>
+                                                </action>
+                                                <action type="closeTopmostPopup"/>
+                                                <action type="unblockUI"/>
+                                             </actions>
+                                          </action>
+                                       </actions>
+                                    </pagetitle>
+                                    <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="PricebookEntries" buttonposition="" mode="readonly">
+                                       <fields>
+                                          <field id="Product2.Name"/>
+                                          <field id="UnitPrice" decimalplaces="" valuehalign="" type=""/>
+                                          <field id="ProductCode"/>
+                                       </fields>
+                                       <rowactions>
+                                          <action type="multi" label="Add Product" icon="sk-icon-add">
+                                             <actions>
+                                                <action type="createRow" model="LineItems" appendorprepend="prepend" defaultmodefornewitems="read">
+                                                   <defaults>
+                                                      <default type="fieldvalue" field="PricebookEntryId" enclosevalueinquotes="true" value="{{{Id}}}"/>
+                                                      <default type="fieldvalue" field="UnitPrice" enclosevalueinquotes="true" value="{{{UnitPrice}}}"/>
+                                                      <default type="fieldvalue" field="Quantity" enclosevalueinquotes="true" value="1"/>
+                                                      <default type="fieldvalue" field="ServiceDate" enclosevalueinquotes="true" value="TODAY"/>
+                                                   </defaults>
+                                                </action>
+                                             </actions>
+                                          </action>
+                                       </rowactions>
+                                       <massactions usefirstitemasdefault="true">
+                                          <action type="multi" label="Add selected Products" icon="sk-icon-add">
+                                             <actions>
+                                                <action type="createRow" model="LineItems" appendorprepend="prepend" defaultmodefornewitems="read">
+                                                   <defaults>
+                                                      <default type="fieldvalue" field="PricebookEntryId" enclosevalueinquotes="true" value="{{{Id}}}"/>
+                                                      <default type="fieldvalue" field="Quantity" enclosevalueinquotes="true" value="1"/>
+                                                      <default type="fieldvalue" field="UnitPrice" enclosevalueinquotes="true" value="{{{UnitPrice}}}"/>
+                                                      <default type="fieldvalue" field="ServiceDate" enclosevalueinquotes="true" value="TODAY"/>
+                                                   </defaults>
+                                                </action>
+                                             </actions>
+                                          </action>
+                                       </massactions>
+                                       <views>
+                                          <view type="standard"/>
+                                       </views>
+                                    <filters>
+<filter type="select" filteroffoptionlabel="Any Product Family" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="auto" labelmode="auto" conditionfield="Product2.Family"/>
+</filters>
+</skootable>
+                                 </components>
+                              </popup>
+                           </action>
+                        </actions>
+                     </action>
+                     <action type="redirect" label="Edit All" url="/oppitm/multilineitem.jsp?oppId={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-edit" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <!--<action type="redirect" label="Choose Pricebook" url="/oppitm/choosepricebook.jsp?id={{$Param.id}}&amp;retURL=%2F{{$Param.id}}&amp;sUrl=%2F{{$Param.id}}" icon="ui-silk-book-edit"/>-->
+                     <action type="redirect" label="Sort / Reorder" url="/oppitm/lineitemsort.jsp?id={{#$Model.OpportunityData.data}}{{Id15}}{{/$Model.OpportunityData.data}}&amp;retURL=%2F{{$Param.Id}}" icon="sk-icon-transfer" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <!--<action type="redirect" label="Add Product" url="/p/opp/SelectSearch?addTo={{$Param.id}}&amp;retURL=%2F{{$Param.id}}" icon="ui-silk-cart-put"/>-->
+                  </actions>
+               </skootable>
+            </components>
+         </tab>
+         <tab name="Key People" icon="sk-icon-contact">
+            <components>
+               <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="OpportunityRoles" mode="read" uniqueid="sk-bsyQq-263">
+                  <fields>
+                     <field id="ContactId" displaytemplate="{{Name}} ({{Account.Name}})">
+                        <label>Person</label>
+                     </field>
+                     <field type="COMBO" allowhtml="true">
+                        <label>Email</label>
+                        <template>{{#Contact.Email}}{{Contact.Email}} [&lt;a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to={{{Contact.Email}}}&amp;bcc=emailtosalesforce@{{#$Model.EmailToSF.data}}{{EmailDomainName}}{{/$Model.EmailToSF.data}}&amp;shva=1" target="ComposeGmail"&gt;&lt;img src="/img/google/gmail_M_icon.gif" alt=""/&gt; Gmail&lt;/a&gt;]{{/Contact.Email}}</template>
+                     </field>
+                     <field id="Contact.Phone"/>
+                     <field id="Contact.Title"/>
+                     <field id="Role" required="true"/>
+                     <field id="IsPrimary"/>
+                  </fields>
+                  <rowactions>
+                     <action type="edit"/>
+                     <action type="delete"/>
+                  </rowactions>
+                  <massactions usefirstitemasdefault="true">
+                     <action type="massupdate">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <action type="massdelete">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                  </massactions>
+                  <views>
+                     <view type="standard"/>
+                  </views>
+                  <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                     <action type="redirect" label="Define Key People" url="/p/opp/ContactRoleEditUi/e?oppid={{$Param.id}}&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-key-people" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                     <action type="redirect" label="Add New Person and Specify Role" url="/apex/skuid__ui?page=AddPersonAndOppRole&amp;oppid={{$Param.id}}" icon="sk-icon-add" window="self">
+                        <drawer title="Drawer Area" width="90%" closehandle="true">
+                           <components/>
+                        </drawer>
+                     </action>
+                  </actions>
+               </skootable>
+            </components>
+         </tab>
+         <tab name="Activities" icon="sk-icon-account-transfer">
+            <components>
+               <tabset rememberlastusertab="true" uniqueid="sk-bsyQq-264">
+                  <tabs>
+                     <tab name="Tasks" icon="sk-icon-attachment-view">
+                        <components>
+                           <tabset rememberlastusertab="true" defertabrendering="true" renderas="lefttabs" uniqueid="sk-bsyQq-265">
+                              <tabs>
+                                 <tab name="Open Tasks" icon="sk-icon-go-to-full-detail-page">
+                                    <components>
+                                       <template model="Opportunity" multiple="true" allowhtml="true" uniqueid="sk-bsyQq-266">
+                                          <contents>&lt;div class="nx-editor-header-title"&gt;Open Tasks&lt;/div&gt;</contents>
+                                       </template>
+                                       <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="5" createrecords="true" model="OpenTasks" mode="read" uniqueid="sk-bsyQq-267">
+                                          <fields>
+                                             <field id="Subject"/>
+                                             <field id="WhoId">
+                                                <label>Related To</label>
+                                             </field>
+                                             <field id="Priority" allowordering="true"/>
+                                             <field id="Status" allowordering="true"/>
+                                             <field id="ActivityDate" allowordering="true">
+                                                <label>Due Date</label>
+                                             </field>
+                                             <field id="OwnerId">
+                                                <label>Assigned To</label>
+                                             </field>
+                                             <field id="WhatId" displaytemplate="{{Name}} - {{Type}}"/>
+                                             <field id="Description"/>
+                                          </fields>
+                                          <rowactions>
+                                             <action type="edit"/>
+                                             <action type="delete"/>
+                                             <action type="custom" snippet="tasks.markCompleted" label="Mark Completed" icon="sk-icon-mark-completed">
+                                                <drawer title="Drawer Area" width="90%" closehandle="true">
+                                                   <components/>
+                                                </drawer>
+                                             </action>
+                                             
+                                          </rowactions>
+                                          <massactions usefirstitemasdefault="true">
+                                             <action type="massupdate"/>
+                                             <action type="massdelete"/>
+                                             <action type="custom" label="Mark Completed" icon="sk-icon-mark-completed" snippet="tasks.markCompleted"/>
+                                          </massactions>
+                                          <views>
+                                             <view type="standard"/>
+                                          </views>
+                                          <filters>
+                                             <filter type="select" filteroffoptionlabel="All Users" createfilteroffoption="true" affectcookies="true" condition="OwnerId">
+                                                <sources>
+                                                   <source type="metadata"/>
+                                                </sources>
+                                             </filter>
+                                          </filters>
+                                       </skootable>
+                                    </components>
+                                 </tab>
+                                 <tab name="Completed Tasks" icon="sk-icon-mark-completed">
+                                    <components>
+                                       <template model="Opportunity" multiple="true" allowhtml="true" uniqueid="sk-bsyQq-268">
+                                          <contents>&lt;div class="nx-editor-header-title"&gt;Completed Tasks&lt;/div&gt;</contents>
+                                       </template>
+                                       <skootable showconditions="true" showsavecancel="true" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="TaskHistory" mode="read" uniqueid="sk-bsyQq-269">
+                                          <fields>
+                                             <field id="Subject"/>
+                                             <field id="WhoId">
+                                                <label>Related To</label>
+                                             </field>
+                                             <field id="Priority"/>
+                                             <field id="Status"/>
+                                             <field id="ActivityDate" allowordering="true">
+                                                <label>Date</label>
+                                             </field>
+                                             <field id="OwnerId" allowordering="true">
+                                                <label>Assigned To</label>
+                                             </field>
+                                          </fields>
+                                          <rowactions>
+                                             <action type="edit"/>
+                                             <action type="delete"/>
+                                             
+                                          </rowactions>
+                                          <massactions usefirstitemasdefault="true">
+                                             <action type="massupdate"/>
+                                             <action type="massdelete"/>
+                                          </massactions>
+                                          <views>
+                                             <view type="standard"/>
+                                          </views>
+                                          <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                                             <action type="redirect" label="Log an Email" url="/00T/e?title=Email%3A%20&amp;what_id={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;tsk5=Email%3A%20&amp;tsk10=Email&amp;retURL=%2F{{$Param.id}} " icon="sk-icon-send-email" window="self">
+                                                <drawer title="Drawer Area" width="90%" closehandle="true">
+                                                   <components/>
+                                                </drawer>
+                                             </action>
+                                             <action type="redirect" label="Log a Call" url="/00T/e?title=Call%3A%20&amp;what_id={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;tsk5=Call%3A%20&amp;tsk10=Call&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-phone" window="self">
+                                                <drawer title="Drawer Area" width="90%" closehandle="true">
+                                                   <components/>
+                                                </drawer>
+                                             </action>
+                                             <action type="redirect" label="New Task" url="/00T/e?what_id={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;retURL=%2F{{$Param.id}} " icon="sk-icon-add" window="self">
+                                                <drawer title="Drawer Area" width="90%" closehandle="true">
+                                                   <components/>
+                                                </drawer>
+                                             </action>
+                                          </actions>
+                                          <filters/>
+                                       </skootable>
+                                    </components>
+                                 </tab>
+                              </tabs>
+                           </tabset>
+                        </components>
+                     </tab>
+                     <tab name="Events" icon="sk-icon-calendar">
+                        <components>
+                           <skoocal uniqueid="sk-bsyQq-270">
+                              <sources>
+                                 <eventsource name="events" createable="true" deleteable="true" updateable="true" eventclickhandler="autopopup" showdefaultbuttons="true" model="Events" namefield="Subject" startfield="StartDateTime" endfield="EndDateTime"/>
+                              </sources>
+                              <views>
+                                 <eventview type="month"/>
+                                 <eventview type="dayscheduling" groupingmodel="Events">
+                                    <groupingtemplate>{{Subject}}</groupingtemplate>
+                                 </eventview>
+                              </views>
+                           </skoocal>
+                        </components>
+                     </tab>
+                  </tabs>
+               </tabset>
+            </components>
+         </tab>
+         <tab name="Documents" icon="sk-icon-page-package">
+            <components>
+               <tabset uniqueid="sk-bsyQq-271">
+                  <tabs>
+                     <tab name="Attachments" icon="sk-icon-attachments">
+                        <components>
+                           <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="false" model="Attachments" mode="read" uniqueid="sk-bsyQq-272">
+                              <fields>
+                                 <field id="Name"/>
+                                 <field type="COMBO" readonly="true">
+                                    <label>Last Modified By</label>
+                                    <template model="Attachments" multiple="true">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                 </field>
+                                 <field id="CreatedById">
+                                    <label>Created By</label>
+                                 </field>
+                              </fields>
+                              <rowactions>
+                                 <action type="edit"/>
+                                 <action type="delete"/>
+                                 <action type="redirect" label="View File" url="/servlet/servlet.FileDownload?file={{Id}}" icon="sk-icon-attachment-view" window="self">
+                                    <drawer title="Drawer Area" width="90%" closehandle="true">
+                                       <components/>
+                                    </drawer>
+                                 </action>
+                              </rowactions>
+                              <massactions usefirstitemasdefault="true">
+                                 <action type="massupdate"/>
+                                 <action type="massdelete"/>
+                              </massactions>
+                              <views>
+                                 <view type="standard"/>
+                              </views>
+                              <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
+                                 <action type="redirect" label="Attach New Files" url="/p/attach/NoteAttach?pid={{$Param.id}}&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-attachments" window="self">
+                                    <drawer title="Drawer Area" width="90%" closehandle="true">
+                                       <components/>
+                                    </drawer>
+                                 </action>
+                              </actions>
+                           </skootable>
+                        </components>
+                     </tab>
+                     <tab name="Notes" icon="sk-icon-table-edit">
+                        <components>
+                           <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="Notes" uniqueid="sk-bsyQq-273">
+                              <fields>
+                                 <field id="Title"/>
+                                 <field id="Body"/>
+                                 <field type="COMBO" readonly="true">
+                                    <label>Last Modified By</label>
+                                    <template model="Notes" multiple="true">{{LastModifiedById}}, {{LastModifiedDate}}</template>
+                                 </field>
+                                 <field id="OwnerId">
+                                    <label>Owner</label>
+                                 </field>
+                              </fields>
+                              <rowactions>
+                                 <action type="edit"/>
+                                 <action type="delete"/>
+                              </rowactions>
+                              <massactions usefirstitemasdefault="true">
+                                 <action type="massupdate"/>
+                                 <action type="massdelete"/>
+                              </massactions>
+                              <views>
+                                 <view type="standard"/>
+                              </views>
+                           </skootable>
+                        </components>
+                     </tab>
+                  </tabs>
+               </tabset>
+            </components>
+         </tab>
+         <tab name="Feed/ History" icon="sk-icon-history">
+            <components>
+               <tabset rememberlastusertab="true" uniqueid="sk-bsyQq-274">
+                  <tabs>
+                     <tab name="Chatter Feed" icon="sk-icon-listview">
+                        <components>
+                           <social model="Opportunity" uniqueid="sk-bsyQq-275"/>
+                        </components>
+                     </tab>
+                     <tab name="Stage History" icon="sk-icon-versions">
+                        <components>
+                           <skootable showconditions="true" showsavecancel="false" searchbox="true" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="false" model="StageHistory" uniqueid="sk-bsyQq-276">
+                              <fields>
+                                 <field id="StageName" allowordering="true" readonly="true"/>
+                                 <field id="Amount" readonly="true"/>
+                                 <field id="Probability" readonly="true"/>
+                                 <field id="ExpectedRevenue" readonly="true"/>
+                                 <field id="CloseDate"/>
+                                 <field type="COMBO" readonly="true">
+                                    <label>Last Modified</label>
+                                    <template model="StageHistory" multiple="true">{{CreatedById}}, {{CreatedDate}}</template>
+                                 </field>
+                              </fields>
+                              <rowactions/>
+                              <massactions usefirstitemasdefault="true"/>
+                              <views>
+                                 <view type="standard"/>
+                              </views>
+                           </skootable>
+                        </components>
+                     </tab>
+                  </tabs>
+               </tabset>
+            </components>
+         </tab>
+         <tab name="Cases ({{$Model.Cases.data.length}})" icon="sk-icon-case">
+            <components>
+               <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Cases" mode="read" uniqueid="sk-bsyQq-277">
+                  <fields>
+                     <field id="CaseNumber"/>
+                     <field id="Subject"/>
+                     <field id="Status"/>
+                     
+                     
+                     <field id="AccountId"/>
+                     <field id="ContactId"/>
+                  </fields>
+                  <rowactions>
+                     <action type="edit"/>
+                     <action type="delete"/>
+                  </rowactions>
+                  <massactions usefirstitemasdefault="true">
+                     <action type="massupdate"/>
+                     <action type="massdelete"/>
+                  </massactions>
+                  <views>
+                     <view type="standard"/>
+                  </views>
+               </skootable>
+            </components>
+         </tab>
+      </tabs>
+   </tabset>
+</components>
+<styles>
+<styleitem type="background" bgtype="none"/>
+</styles>
+</skuidpage>
