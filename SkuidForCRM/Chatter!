@@ -1,5 +1,5 @@
-<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
-  <models>
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="true">
+   <models>
       <model id="user" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="User">
          <fields>
             <field id="AboutMe"/>
@@ -32,36 +32,40 @@
          </conditions>
          <actions/>
       </model>
-      <model id="Messages" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="ChatterMessage">
+      <model id="userslist" limit="100" query="true" createrowifnonefound="false" adapter="" type="" sobject="User">
          <fields>
-            <field id="SenderId"/>
-            <field id="Body"/>
-            <field id="SentDate"/>
+            <field id="Id"/>
+            <field id="Name"/>
+            <field id="Username"/>
          </fields>
          <conditions/>
          <actions/>
       </model>
-      <model id="subscriptions" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="EntitySubscription">
+      <model id="subscriptions" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="EntitySubscription" orderby="CreatedDate DESC">
          <fields>
             <field id="ParentId"/>
             <field id="Parent.Name"/>
             <field id="SubscriberId"/>
             <field id="Subscriber.Name"/>
             <field id="Parent.Type"/>
+            <field id="CreatedDate"/>
          </fields>
          <conditions>
             <condition type="modelmerge" value="" field="SubscriberId" operator="=" model="pgs_CurrentUser" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+            <condition type="multiple" field="Parent.Type" operator="in" inactive="true" enclosevalueinquotes="true" name="__autofilter__Parent.Type" state="filterableoff" value=""/>
          </conditions>
          <actions/>
       </model>
-      <model id="memberships" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="GroupMember">
+      <model id="memberships" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="GroupMember" orderby="Group.Name">
          <fields>
             <field id="GroupId"/>
             <field id="Group.Name"/>
             <field id="UserOrGroupId"/>
+            <field id="Group.Id"/>
          </fields>
          <conditions>
             <condition type="modelmerge" value="" field="UserOrGroupId" operator="=" model="pgs_CurrentUser" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="GroupId" state="filterableoff" inactive="true" name="GroupId"/>
          </conditions>
          <actions>
             <action>
@@ -74,12 +78,21 @@
             </action>
          </actions>
       </model>
-      <model id="feed" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="FeedItem">
-         <fields/>
+      <model id="Messages" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="ChatterMessage">
+         <fields>
+            <field id="SenderId"/>
+            <field id="Body"/>
+            <field id="SentDate"/>
+            <field id="Id"/>
+            <field id="UserName" uionly="true" displaytype="FORMULA" label="Sender" readonly="true" returntype="TEXT">
+               <formula>MODEL_LOOKUP("userslist",{{Username}},{{Id}},{{SenderId}})
+</formula>
+            </field>
+         </fields>
          <conditions/>
          <actions/>
       </model>
-      <model id="groups" limit="20" query="true" createrowifnonefound="false" adapter="" type="" sobject="Group">
+      <model id="groups" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="Group" orderby="Name">
          <fields>
             <field id="Name"/>
             <field id="OwnerId"/>
@@ -89,6 +102,12 @@
                   <field id="UserOrGroupId"/>
                </fields>
             </field>
+            <field id="CreatedDate"/>
+            <field id="Id"/>
+            <field id="Id15" uionly="true" displaytype="FORMULA" readonly="true" returntype="TEXT" label="Id15" precision="15" scale="0">
+               <formula>{{{Id}}}</formula>
+            </field>
+            <field id="Type"/>
          </fields>
          <conditions>
             <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="GroupMember" joinfield="GroupId">
@@ -99,39 +118,304 @@
          </conditions>
          <actions/>
       </model>
+      <model id="myfollowers" limit="" query="true" createrowifnonefound="false" adapter="" type="" sobject="EntitySubscription">
+         <fields>
+            <field id="ParentId"/>
+            <field id="Parent.Name"/>
+            <field id="SubscriberId"/>
+            <field id="Subscriber.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="ParentId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+         </conditions>
+         <actions/>
+         <groupby method="simple"/>
+      </model>
+      <model id="content" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="ContentVersion" orderby="CreatedDate DESC">
+         <fields>
+            <field id="Description"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="ContentDocumentId"/>
+            <field id="ContentDocument.Title"/>
+            <field id="CreatedDate"/>
+            <field id="VersionNumber"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+      <model id="collaborationgroups" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="CollaborationGroup" orderby="Name">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="CreatedDate"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="MemberCount"/>
+            <field id="GroupMembers" type="childRelationship" limit="100">
+               <fields>
+                  <field id="MemberId"/>
+                  <field id="Member.Name"/>
+               </fields>
+               <conditions/>
+            </field>
+            <field id="FullPhotoUrl"/>
+            <field id="Description"/>
+         </fields>
+         <conditions>
+            <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="CollaborationGroupMember" joinfield="CollaborationGroupId">
+               <conditions>
+                  <condition type="userinfo" value="" field="MemberId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+               </conditions>
+            </condition>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="cgmemberships" limit="" query="true" createrowifnonefound="false" adapter="" type="" sobject="CollaborationGroupMember">
+         <fields>
+            <field id="CollaborationGroupId"/>
+            <field id="CollaborationGroup.Name"/>
+            <field id="Id"/>
+            <field id="MemberId"/>
+            <field id="Member.Name"/>
+         </fields>
+         <conditions>
+            <condition type="userinfo" value="" field="MemberId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="CollaborationGroupId" state="filterableoff" inactive="true" name="CollaborationGroupId"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="allcollaborationgroups" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="CollaborationGroup" doclone="">
+         <fields>
+            <field id="Name"/>
+            <field id="Id"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="CreatedDate"/>
+            <field id="CreatedById"/>
+            <field id="CreatedBy.Name"/>
+            <field id="MemberCount"/>
+            <field id="GroupMembers" type="childRelationship" limit="10">
+               <fields>
+                  <field id="MemberId"/>
+                  <field id="Member.Name"/>
+               </fields>
+            </field>
+            <field id="FullPhotoUrl"/>
+            <field id="CollaborationType"/>
+         </fields>
+         <conditions>
+            <condition type="join" value="" field="Id" operator="not in" enclosevalueinquotes="true" joinobject="CollaborationGroupMember" joinfield="CollaborationGroupId">
+               <conditions>
+                  <condition type="userinfo" value="" field="MemberId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+               </conditions>
+            </condition>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="newcg" limit="20" query="false" createrowifnonefound="false" adapter="" type="" sobject="CollaborationGroup">
+         <fields>
+            <field id="Description"/>
+            <field id="Name"/>
+            <field id="FullPhotoUrl"/>
+            <field id="CollaborationType"/>
+         </fields>
+         <conditions/>
+         <actions/>
+      </model>
+      <model id="cgmemberships1" limit="" query="true" createrowifnonefound="false" adapter="" type="" sobject="CollaborationGroupMember">
+         <fields>
+            <field id="CollaborationGroupId"/>
+            <field id="CollaborationGroup.Name"/>
+            <field id="Id"/>
+            <field id="MemberId"/>
+            <field id="Member.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="CollaborationGroupId" state="filterableoff" inactive="true" name="CollaborationGroupId"/>
+         </conditions>
+         <actions/>
+      </model>
    </models>
    <components>
-            <grid uniqueid="sk-2GzvpR-190" columngutter="3em">
-               <divisions>
-                  <division behavior="fit" verticalalign="top">
+      <grid uniqueid="sk-2GzvpR-190" columngutter="3em">
+         <divisions>
+            <division behavior="flex" verticalalign="top" ratio="1" minwidth="100px">
+               <components>
+                  <image source="url" uniqueid="sk-2H1J_7-239" url="{{$Model.user.data.0.FullPhotoUrl}}">
+                     <styles>
+                        <styleitem type="itemsize"/>
+                        <styleitem type="border"/>
+                     </styles>
+                  </image>
+                  <wrapper uniqueid="sk-2H1lJL-300">
                      <components>
-                        <image source="url" uniqueid="sk-2H1J_7-239" url="{{$Model.user.data.0.FullPhotoUrl}}">
+                        <grid uniqueid="sk-3F6psI-1376">
+                           <divisions>
+                              <division behavior="flex" verticalalign="top" minwidth="100px" ratio="1">
+                                 <components>
+                                    <pagetitle model="user" uniqueid="sk-2G-bX6-311" cssclass="left">
+                                       <actions>
+                                          <action type="redirect" label="Change Photo" window="blank" icon="fa-refresh" url="https://skuidify.my.salesforce.com/_ui/core/userprofile/UserProfilePage?u={{Id15}}&amp;tab=sfdc.ProfilePlatformFeed"/>
+                                       </actions>
+                                    </pagetitle>
+                                 </components>
+                              </division>
+                              <division behavior="flex" verticalalign="top" minwidth="1px" ratio="1">
+                                 <components/>
+                              </division>
+                           </divisions>
                            <styles>
-                              <styleitem type="itemsize"/>
-                              <styleitem type="border"/>
+                              <styleitem type="background" bgtype="none"/>
                            </styles>
-                        </image>
-                        <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H1SZu-257" mode="read" layout="above">
-                           <columns>
-                              <column width="100%">
-                                 <sections>
-                                    <section title="Section A" collapsible="no" showheader="false">
-                                       <fields>
-                                          <field type="COMBO" valuehalign="" editmodebehavior="custompopup" allowhtml="true">
-                                             <template>&lt;bold&gt;&lt;font size=4.5&gt;{{{CommunityNickname}}} {{{LastName}}}&lt;/font&gt;&lt;/bold&gt;</template>
-                                             <editmodepopup title="Name" width="450">
+                        </grid>
+                        <pagetitle model="user" uniqueid="sk-2H1xJf-327" cssclass="left">
+                           <actions>
+                              <action type="savecancel">
+                                 <savehotkeys>
+                                    <hotkey modifiers="meta" key="s"/>
+                                 </savehotkeys>
+                              </action>
+                           </actions>
+                        </pagetitle>
+                     </components>
+                     <styles>
+                        <styleitem type="background"/>
+                        <styleitem type="border" padding="bottom,top,">
+                           <styles>
+                              <styleitem property="padding-top" value="1em"/>
+                              <styleitem property="padding-bottom" value="1em"/>
+                              <styleitem property="box-sizing" value="border-box"/>
+                           </styles>
+                        </styleitem>
+                        <styleitem type="size"/>
+                     </styles>
+                  </wrapper>
+                  <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H1SZu-257" mode="read" layout="above">
+                     <columns>
+                        <column width="100%">
+                           <sections>
+                              <section title="Section A" collapsible="no" showheader="false">
+                                 <fields>
+                                    <field type="COMBO" valuehalign="" editmodebehavior="custompopup" allowhtml="true">
+                                       <template>&lt;font size=4.5 color=#0088bb&gt;{{{CommunityNickname}}} {{{LastName}}}&lt;/font&gt;</template>
+                                       <editmodepopup title="Edit Name Options" width="450">
+                                          <components>
+                                             <basicfieldeditor showsavecancel="false" mode="edit" model="user" buttonposition="" uniqueid="sk-2H6IaQ-779">
+                                                <columns>
+                                                   <column width="100%">
+                                                      <sections>
+                                                         <section title="" collapsible="no">
+                                                            <fields>
+                                                               <field id="CommunityNickname" valuehalign="" type=""/>
+                                                               <field id="FirstName"/>
+                                                               <field id="MiddleName"/>
+                                                               <field id="LastName" valuehalign="" type=""/>
+                                                               <field id="InformalName" valuehalign="" type=""/>
+                                                            </fields>
+                                                         </section>
+                                                      </sections>
+                                                   </column>
+                                                </columns>
+                                             </basicfieldeditor>
+                                          </components>
+                                       </editmodepopup>
+                                    </field>
+                                    <field id="Title" valuehalign="" type="">
+                                       <label> Title</label>
+                                    </field>
+                                    <field id="CompanyName" valuehalign="" type=""/>
+                                    <field id="AboutMe" valuehalign="" type="">
+                                       <label>About Me (Public)</label>
+                                    </field>
+                                 </fields>
+                                 <renderconditions logictype="and"/>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+                  <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="myfollowers" buttonposition="" mode="readonly" uniqueid="sk-3F5Jzn-1167" emptysearchbehavior="query" cssclass="hidetablefooter">
+                     <fields>
+                        <field id="SubscriberId" valuehalign="" type="" columnwidth="">
+                           <label>My Subscribers</label>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <searchfields/>
+                     <renderconditions logictype="and"/>
+                  </skootable>
+               </components>
+            </division>
+            <division behavior="flex" verticalalign="top" minwidth="100px" ratio="10">
+               <components>
+                  <pagetitle model="Messages" uniqueid="sk-MqNSl-383">
+                     <actions>
+                        <action type="redirect" label="Salesforce Chatter" window="blank" url="/_ui/core/chatter/ui/ChatterPage" icon="fa-mail-forward"/>
+                     </actions>
+                  </pagetitle>
+                  <tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-2At9Rm-139" renderas="" sidebarwidth="Messages">
+                     <tabs>
+                        <tab name="My Feed" loadlazypanels="true" icon="sk-icon-activities">
+                           <components>
+                              <wrapper uniqueid="sk-3E_Cfd-332">
+                                 <components>
+                                    <file storeas="chatterfeed" displayas="filename" uniqueid="sk-3EzUxb-306" model="user" feedtext="{{Name}} shared a file."/>
+                                 </components>
+                                 <styles>
+                                    <styleitem type="background"/>
+                                    <styleitem type="border" padding="top,">
+                                       <styles>
+                                          <styleitem property="padding-top" value=".5em"/>
+                                          <styleitem property="box-sizing" value="border-box"/>
+                                       </styles>
+                                    </styleitem>
+                                    <styleitem type="size"/>
+                                 </styles>
+                              </wrapper>
+                              <social uniqueid="sk-2Asngi-116" feedtype="newsfeed" model="pgs_CurrentUser">
+                                 <actions/>
+                              </social>
+                           </components>
+                        </tab>
+                        <tab name="Groups" loadlazypanels="true" icon="sk-icon-partners">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="collaborationgroups" buttonposition="" mode="readonly" uniqueid="sk-1ehgS8-445">
+                                 <fields>
+                                    <field id="Name" valuehalign="" type=""/>
+                                    <field id="Description" valuehalign="" type="" maxdisplaycharacters="100"/>
+                                    <field id="OwnerId" valuehalign="" type="">
+                                       <label>Owner</label>
+                                    </field>
+                                    <field id="MemberCount" valuehalign="" type="">
+                                       <label>Members</label>
+                                    </field>
+                                    <field type="COMBO" valuehalign="">
+                                       <label>Created</label>
+                                       <template>{{CreatedDate}} by {{CreatedById}}</template>
+                                    </field>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="multi" label="View members" icon="sk-icon-partners">
+                                       <actions>
+                                          <action type="showPopup">
+                                             <popup title="{{Name}} Members" width="30%">
                                                 <components>
-                                                   <basicfieldeditor showsavecancel="false" mode="edit" model="user" buttonposition="" uniqueid="sk-2H6IaQ-779">
+                                                   <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="collaborationgroups" buttonposition="" uniqueid="sk-1fAmJR-974" mode="readonly" layout="above">
                                                       <columns>
                                                          <column width="100%">
                                                             <sections>
-                                                               <section title="" collapsible="no">
+                                                               <section title="Section A" collapsible="no" showheader="false">
                                                                   <fields>
-                                                                     <field id="CommunityNickname" valuehalign="" type=""/>
-                                                                     <field id="FirstName"/>
-                                                                     <field id="MiddleName"/>
-                                                                     <field id="LastName" valuehalign="" type=""/>
-                                                                     <field id="InformalName" valuehalign="" type=""/>
+                                                                     <field id="GroupMembers" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br/&gt;">
+                                                                        <template>{{Member.Name}}</template>
+                                                                     </field>
                                                                   </fields>
                                                                </section>
                                                             </sections>
@@ -139,266 +423,441 @@
                                                       </columns>
                                                    </basicfieldeditor>
                                                 </components>
-                                             </editmodepopup>
-                                          </field>
-                                          <field id="Title" valuehalign="" type="">
-                                             <label> Title</label>
-                                          </field>
-                                          <field id="CompanyName" valuehalign="" type=""/>
-                                          <field id="AboutMe" valuehalign="" type=""/>
-                                       </fields>
-                                       <renderconditions logictype="and"/>
-                                    </section>
-                                 </sections>
-                              </column>
-                           </columns>
-                        </basicfieldeditor>
-                        <wrapper uniqueid="sk-2H1lJL-300">
-                           <components>
-                              <pagetitle model="user" uniqueid="sk-2H1xJf-327" cssclass="left">
-                                 <actions>
-                                    <action type="savecancel">
-                                       <savehotkeys>
-                                          <hotkey modifiers="meta" key="s"/>
-                                       </savehotkeys>
+                                             </popup>
+                                          </action>
+                                       </actions>
+                                    </action>
+                                    <action type="multi" label="Leave Group" icon="sk-icon-delete">
+                                       <actions>
+                                          <action type="blockUI" message="Leaving Group..."/>
+                                          <action type="emptyModelData">
+                                             <models>
+                                                <model>cgmemberships</model>
+                                             </models>
+                                          </action>
+                                          <action type="setCondition" model="cgmemberships" condition="CollaborationGroupId" value="{{Id}}"/>
+                                          <action type="requeryModel" model="cgmemberships" behavior="standard">
+                                             <onerroractions>
+                                                <action type="blockUI" message="There was an error finding your group membership" timeout="3000"/>
+                                             </onerroractions>
+                                          </action>
+                                          <action type="markRowsForDeletion" model="cgmemberships"/>
+                                          <action type="save">
+                                             <models>
+                                                <model>cgmemberships</model>
+                                             </models>
+                                             <onerroractions/>
+                                          </action>
+                                          <action type="requeryModel" model="collaborationgroups" behavior="standard">
+                                             <onerroractions/>
+                                          </action>
+                                          <action type="unblockUI"/>
+                                       </actions>
+                                       <renderconditions logictype="and">
+                                          <rendercondition type="userinfo" operator="!=" fieldmodel="collaborationgroups" sourcetype="fieldvalue" field="OwnerId" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+                                       </renderconditions>
+                                    </action>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true"/>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <actions defaultlabel="Global Actions" defaulticon="sk-icon-magic" usefirstitemasdefault="true">
+                                    <action type="multi" label="Join More Groups" icon="fa-arrow-circle-o-right">
+                                       <actions>
+                                          <action type="requeryModel" model="allcollaborationgroups" behavior="standard"/>
+                                          <action type="deactivateCondition" model="cgmemberships"/>
+                                          <action type="emptyModelData" model="cgmemberships" appendorprepend="prepend" defaultmodefornewitems="edit">
+                                             <models>
+                                                <model>cgmemberships</model>
+                                             </models>
+                                          </action>
+                                          <action type="showPopup">
+                                             <popup title="Click to join one or multiple groups" width="50%">
+                                                <components>
+                                                   <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="allcollaborationgroups" buttonposition="" mode="readonly" uniqueid="sk-1f5y3l-1268">
+                                                      <fields>
+                                                         <field id="Name"/>
+                                                         <field id="OwnerId" valuehalign="" type="">
+                                                            <label>Owner</label>
+                                                         </field>
+                                                         <field id="MemberCount"/>
+                                                      </fields>
+                                                      <rowactions>
+                                                         <action type="multi" label="Join Group" icon="fa-arrow-circle-o-right">
+                                                            <actions>
+                                                               <action type="blockUI" message="Joining group..."/>
+                                                               <action type="createRow" model="cgmemberships" appendorprepend="prepend" defaultmodefornewitems="edit">
+                                                                  <defaults>
+                                                                     <default type="fieldvalue" field="CollaborationGroupId" enclosevalueinquotes="true" value="{{Id}}"/>
+                                                                  </defaults>
+                                                               </action>
+                                                               <action type="save">
+                                                                  <models>
+                                                                     <model>cgmemberships</model>
+                                                                  </models>
+                                                               </action>
+                                                               <action type="blockUI" message="Group Joined!"/>
+                                                               <action type="requeryModel" model="allcollaborationgroups" behavior="standard"/>
+                                                               <action type="unblockUI"/>
+                                                            </actions>
+                                                         </action>
+                                                      </rowactions>
+                                                      <massactions usefirstitemasdefault="true">
+                                                         <action type="multi" label="Join Groups" icon="fa-arrow-circle-right">
+                                                            <actions>
+                                                               <action type="blockUI" message="Joining Groups..."/>
+                                                               <action type="createRow" model="cgmemberships" appendorprepend="prepend" defaultmodefornewitems="edit">
+                                                                  <defaults>
+                                                                     <default type="fieldvalue" field="CollaborationGroupId" enclosevalueinquotes="true" value="{{Id}}"/>
+                                                                  </defaults>
+                                                               </action>
+                                                               <action type="save">
+                                                                  <models>
+                                                                     <model>cgmemberships</model>
+                                                                  </models>
+                                                               </action>
+                                                               <action type="requeryModel" model="allcollaborationgroups" behavior="standard"/>
+                                                               <action type="unblockUI"/>
+                                                            </actions>
+                                                         </action>
+                                                      </massactions>
+                                                      <views>
+                                                         <view type="standard"/>
+                                                      </views>
+                                                      <actions defaultlabel="Global Actions" defaulticon="sk-icon-magic" usefirstitemasdefault="true">
+                                                         <action type="multi" label="Finish" icon="sk-icon-save">
+                                                            <actions>
+                                                               <action type="blockUI" message="Updating group list..."/>
+                                                               <action type="requeryModel" model="collaborationgroups" behavior="standard"/>
+                                                               <action type="closeAllPopups"/>
+                                                               <action type="unblockUI"/>
+                                                            </actions>
+                                                         </action>
+                                                      </actions>
+                                                   </skootable>
+                                                </components>
+                                             </popup>
+                                          </action>
+                                       </actions>
+                                    </action>
+                                    <action type="multi" label="New Group" icon="sk-icon-add">
+                                       <actions>
+                                          <action type="emptyModelData">
+                                             <models>
+                                                <model>newcg</model>
+                                                <model>cgmemberships1</model>
+                                             </models>
+                                          </action>
+                                          <action type="createRow" model="newcg" appendorprepend="prepend" defaultmodefornewitems="edit"/>
+                                          <action type="showPopup">
+                                             <popup title="Create New Group" width="50%">
+                                                <components>
+                                                   <wizard deferstepcontentsrendering="false" uniqueid="sk-1fDbxk-1473">
+                                                      <steps>
+                                                         <step stepid="step1" steplabel="Enter Group Information">
+                                                            <components>
+                                                               <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="newcg" buttonposition="" uniqueid="sk-1fC60g-1175" mode="edit">
+                                                                  <columns>
+                                                                     <column width="100%">
+                                                                        <sections>
+                                                                           <section title="Section A" collapsible="no" showheader="false">
+                                                                              <fields>
+                                                                                 <field id="Name"/>
+                                                                                 <field id="Description" valuehalign="" type=""/>
+                                                                                 <field id="CollaborationType"/>
+                                                                              </fields>
+                                                                           </section>
+                                                                        </sections>
+                                                                     </column>
+                                                                  </columns>
+                                                               </basicfieldeditor>
+                                                            </components>
+                                                            <actions>
+                                                               <action uniqueid="sk-1fDbxi-1470" type="multi" stepid="step2" label="Add Members" icon="sk-icon-arrow-right" window="self">
+                                                                  <actions>
+                                                                     <action type="save">
+                                                                        <models>
+                                                                           <model>newcg</model>
+                                                                        </models>
+                                                                     </action>
+                                                                     <action type="setCondition" model="cgmemberships1" condition="CollaborationGroupId" value="{{Id}}"/>
+                                                                     <action type="navigateToStep" stepid="step2"/>
+                                                                  </actions>
+                                                               </action>
+                                                               <action type="multi" label="Finish" stepid="step1" window="self" icon="sk-icon-save">
+                                                                  <actions>
+                                                                     <action type="blockUI" message="Saving New Group..."/>
+                                                                     <action type="save">
+                                                                        <models>
+                                                                           <model>newcg</model>
+                                                                        </models>
+                                                                     </action>
+                                                                     <action type="closeTopmostPopup"/>
+                                                                     <action type="requeryModel" model="collaborationgroups" behavior="standard"/>
+                                                                     <action type="unblockUI"/>
+                                                                  </actions>
+                                                               </action>
+                                                            </actions>
+                                                         </step>
+                                                         <step stepid="step2" steplabel="Add Members">
+                                                            <components>
+                                                               <template multiple="false" uniqueid="sk-1fQmqn-1261">
+                                                                  <contents>As the group owner, you'll be added to the group automatically (cool, right?). You can add other members here.</contents>
+                                                               </template>
+                                                               <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="true" model="cgmemberships1" buttonposition="" mode="edit" uniqueid="sk-1fCFyh-1212" emptysearchbehavior="query">
+                                                                  <fields>
+                                                                     <field id="MemberId" valuehalign="" type="">
+                                                                        <label>Person</label>
+                                                                     </field>
+                                                                  </fields>
+                                                                  <rowactions>
+                                                                     <action type="edit"/>
+                                                                     <action type="delete"/>
+                                                                  </rowactions>
+                                                                  <massactions usefirstitemasdefault="true">
+                                                                     <action type="massupdate"/>
+                                                                     <action type="massdelete"/>
+                                                                  </massactions>
+                                                                  <views>
+                                                                     <view type="standard"/>
+                                                                  </views>
+                                                                  <searchfields/>
+                                                               </skootable>
+                                                            </components>
+                                                            <actions>
+                                                               <action uniqueid="sk-1fDbxj-1471" type="navigate" stepid="step1" label="Group Details" icon="sk-icon-arrow-left" window="self"/>
+                                                               <action uniqueid="sk-1fDbxj-1472" type="multi" label="Finish" icon="sk-icon-save" window="self">
+                                                                  <actions>
+                                                                     <action type="blockUI" message="Saving Group and Members..."/>
+                                                                     <action type="save">
+                                                                        <models>
+                                                                           <model>newcg</model>
+                                                                           <model>cgmemberships1</model>
+                                                                        </models>
+                                                                     </action>
+                                                                     <action type="requeryModel" model="collaborationgroups" behavior="standard"/>
+                                                                     <action type="closeTopmostPopup"/>
+                                                                     <action type="unblockUI"/>
+                                                                  </actions>
+                                                               </action>
+                                                            </actions>
+                                                         </step>
+                                                      </steps>
+                                                   </wizard>
+                                                </components>
+                                             </popup>
+                                          </action>
+                                       </actions>
                                     </action>
                                  </actions>
-                              </pagetitle>
-                              <pagetitle model="user" uniqueid="sk-2G-bX6-311" cssclass="left">
-                                 <actions>
-                                    <action type="redirect" label="Change Photo" window="blank" icon="fa-refresh" url="https://skuidify.my.salesforce.com/_ui/core/userprofile/UserProfilePage?u={{Id15}}&amp;tab=sfdc.ProfilePlatformFeed"/>
-                                 </actions>
-                              </pagetitle>
+                                 <searchfields/>
+                              </skootable>
                            </components>
-                           <styles>
-                              <styleitem type="background"/>
-                              <styleitem type="border" padding="bottom,top,">
-                                 <styles>
-                                    <styleitem property="padding-top" value="1em"/>
-                                    <styleitem property="padding-bottom" value="1em"/>
-                                    <styleitem property="box-sizing" value="border-box"/>
-                                 </styles>
-                              </styleitem>
-                              <styleitem type="size"/>
-                           </styles>
-                        </wrapper>
-                     </components>
-                  </division>
-                  <division behavior="flex" verticalalign="top" minwidth="100px" ratio="1">
-                     <components>
-                        <tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-2At9Rm-139" renderas="" sidebarwidth="Messages">
-                           <tabs>
-                              <tab name="My Feed" loadlazypanels="true" icon="sk-icon-activities">
-                                 <components>
-                                    <social uniqueid="sk-2Asngi-116" feedtype="newsfeed" model="pgs_CurrentUser">
-                                       <actions/>
-                                    </social>
-                                 </components>
-                              </tab>
-                              <tab name="What I Follow" loadlazypanels="true" icon="fa-rss">
-                                 <components>
-                                    <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="subscriptions" buttonposition="" mode="read" uniqueid="sk-2Axn7h-151">
-                                       <fields>
-                                          <field id="ParentId" valuehalign="" type="">
-                                             <label>Topic</label>
-                                          </field>
-                                          <field id="Parent.Type" valuehalign="" type="">
-                                             <label>Type</label>
-                                          </field>
-                                       </fields>
-                                       <rowactions>
-                                          <action type="delete"/>
-                                       </rowactions>
-                                       <massactions usefirstitemasdefault="true">
-                                          <action type="massupdate"/>
-                                          <action type="massdelete"/>
-                                       </massactions>
-                                       <views>
-                                          <view type="standard"/>
-                                       </views>
-                                    </skootable>
-                                 </components>
-                                 <oninitialshowactions>
-                                    <action type="requeryModel" model="subscriptions" behavior="standard"/>
-                                 </oninitialshowactions>
-                                 <onshowactions/>
-                              </tab>
-                              <tab name="Messages" loadlazypanels="true" icon="sk-icon-comments">
-                                 <components>
-                                    <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Messages" buttonposition="" mode="readonly" uniqueid="sk-2AtHHK-161">
-                                       <fields>
-                                          <field id="SentDate" valuehalign="" type="">
-                                             <label>Date</label>
-                                          </field>
-                                          <field id="SenderId" valuehalign="" type="">
-                                             <label>Sender</label>
-                                          </field>
-                                          <field id="Body" valuehalign="" type="" maxdisplaycharacters="175"/>
-                                       </fields>
-                                       <rowactions>
-                                          <action type="multi" label="Show Message" icon="sk-icon-comments">
-                                             <actions>
-                                                <action type="showPopup">
-                                                   <popup title="Full Message" width="75%">
-                                                      <components>
-                                                         <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="Messages" buttonposition="" uniqueid="sk-2Au8Lu-254" mode="readonly" layout="above">
-                                                            <columns>
-                                                               <column width="100%">
-                                                                  <sections>
-                                                                     <section title="Section A" collapsible="no" showheader="false">
-                                                                        <fields>
-                                                                           <field id="Body" valuehalign="" type="">
-                                                                              <label> </label>
-                                                                           </field>
-                                                                        </fields>
-                                                                     </section>
-                                                                  </sections>
-                                                               </column>
-                                                            </columns>
-                                                         </basicfieldeditor>
-                                                      </components>
-                                                   </popup>
+                           <oninitialshowactions>
+                              <action type="requeryModels" model="collaborationgroups" behavior="standard">
+                                 <models>
+                                    <model>collaborationgroups</model>
+                                 </models>
+                              </action>
+                           </oninitialshowactions>
+                           <onshowactions/>
+                        </tab>
+                        <tab name="Subscriptions" loadlazypanels="true" icon="fa-rss">
+                           <components>
+                              <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="subscriptions" buttonposition="" mode="read" uniqueid="sk-2Axn7h-151" emptysearchbehavior="query" searchplaceholdertext="Search Subscriptions...">
+                                 <fields>
+                                    <field id="ParentId" valuehalign="" type="" allowordering="false">
+                                       <label>Topic</label>
+                                    </field>
+                                    <field id="Parent.Type" valuehalign="" type="">
+                                       <label>Type</label>
+                                    </field>
+                                    <field id="CreatedDate"/>
+                                 </fields>
+                                 <rowactions>
+                                    <action type="delete"/>
+                                 </rowactions>
+                                 <massactions usefirstitemasdefault="true">
+                                    <action type="massupdate"/>
+                                    <action type="massdelete"/>
+                                 </massactions>
+                                 <views>
+                                    <view type="standard"/>
+                                 </views>
+                                 <filters>
+                                    <filter type="multiselect" filteroffoptionlabel="Any Type" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="auto" labelmode="auto" conditionfield="Parent.Type" conditionoperator="in"/>
+                                 </filters>
+                                 <searchfields/>
+                              </skootable>
+                           </components>
+                           <oninitialshowactions>
+                              <action type="blockUI" message="Loading Subscriptions..."/>
+                              <action type="requeryModel" model="subscriptions" behavior="standard"/>
+                              <action type="unblockUI"/>
+                           </oninitialshowactions>
+                           <onshowactions/>
+                        </tab>
+                        <tab name="My Profile" loadlazypanels="true" icon="sk-icon-contact">
+                           <components>
+                              <basicfieldeditor showheader="true" showsavecancel="true" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H5l4O-694" mode="read" layout="above">
+                                 <columns>
+                                    <column width="33.3%">
+                                       <sections>
+                                          <section title="Name" collapsible="no">
+                                             <fields>
+                                                <field id="Alias"/>
+                                                <field id="CommunityNickname" valuehalign="" type=""/>
+                                                <field id="FirstName"/>
+                                                <field id="MiddleName" valuehalign="" type=""/>
+                                                <field id="LastName"/>
+                                                <field id="InformalName" valuehalign="" type=""/>
+                                             </fields>
+                                          </section>
+                                          <section title="About Me (Public in Salesforce Communities)" collapsible="no">
+                                             <fields>
+                                                <field id="AboutMe" valuehalign="" type="">
+                                                   <label/>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                    <column width="33.3%">
+                                       <sections>
+                                          <section title="Employment Info" collapsible="no">
+                                             <fields>
+                                                <field id="CompanyName"/>
+                                                <field id="Title"/>
+                                                <field id="City"/>
+                                                <field id="Country"/>
+                                             </fields>
+                                          </section>
+                                          <section title="Contact Info" collapsible="no">
+                                             <fields>
+                                                <field id="Email" valuehalign="" type=""/>
+                                                <field id="MobilePhone"/>
+                                                <field id="Phone"/>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                    <column width="33.3%">
+                                       <sections>
+                                          <section title="Awesomeness" collapsible="no">
+                                             <fields>
+                                                <field id="LanguageLocaleKey"/>
+                                                <field id="LastLoginDate"/>
+                                                <field id="LocaleSidKey"/>
+                                                <field id="ProfileId" valuehalign="" type="">
+                                                   <label>Profile</label>
+                                                </field>
+                                                <field id="UserRoleId" valuehalign="" type="">
+                                                   <label>Role</label>
+                                                </field>
+                                             </fields>
+                                          </section>
+                                       </sections>
+                                    </column>
+                                 </columns>
+                              </basicfieldeditor>
+                           </components>
+                        </tab>
+                        <tab name="Content" loadlazypanels="true" icon="sk-icon-notes-and-attachments">
+                           <components>
+                              <tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-1aXQqg-2324" renderas="">
+                                 <tabs>
+                                    <tab name="Files" icon="sk-icon-note">
+                                       <components>
+                                          <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="content" buttonposition="" mode="readonly" uniqueid="sk-1aO7Pz-1402">
+                                             <fields>
+                                                <field id="ContentDocumentId" valuehalign="" type="">
+                                                   <label>Document</label>
+                                                </field>
+                                                <field id="VersionNumber" valuehalign="" type="">
+                                                   <label>#</label>
+                                                </field>
+                                                <field id="OwnerId" valuehalign="" type="">
+                                                   <label>Owner</label>
+                                                </field>
+                                                <field id="CreatedDate" valuehalign="" type="">
+                                                   <label>Date</label>
+                                                </field>
+                                             </fields>
+                                             <rowactions>
+                                                <action type="redirect" label="View in New Tab" icon="sk-icon-arrow-right" window="blank" url="/{{{ContentDocumentId}}}"/>
+                                             </rowactions>
+                                             <massactions usefirstitemasdefault="true"/>
+                                             <views>
+                                                <view type="standard"/>
+                                             </views>
+                                          </skootable>
+                                       </components>
+                                    </tab>
+                                    <tab name="Messages ({{$Model.Messages.data.length}})" loadlazypanels="true">
+                                       <components>
+                                          <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Messages" buttonposition="" mode="readonly" uniqueid="sk-2AtHHK-161">
+                                             <fields>
+                                                <field id="SentDate" valuehalign="" type="">
+                                                   <label>Date</label>
+                                                </field>
+                                                <field id="Body" valuehalign="" type="" maxdisplaycharacters="175"/>
+                                             </fields>
+                                             <rowactions>
+                                                <action type="multi" label="Show Message" icon="sk-icon-comments">
+                                                   <actions>
+                                                      <action type="showPopup">
+                                                         <popup title="Full Message" width="75%">
+                                                            <components>
+                                                               <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="Messages" buttonposition="" uniqueid="sk-2Au8Lu-254" mode="readonly" layout="above">
+                                                                  <columns>
+                                                                     <column width="100%">
+                                                                        <sections>
+                                                                           <section title="Section A" collapsible="no" showheader="false">
+                                                                              <fields>
+                                                                                 <field id="Body" valuehalign="" type="">
+                                                                                    <label/>
+                                                                                 </field>
+                                                                              </fields>
+                                                                           </section>
+                                                                        </sections>
+                                                                     </column>
+                                                                  </columns>
+                                                               </basicfieldeditor>
+                                                            </components>
+                                                         </popup>
+                                                      </action>
+                                                   </actions>
                                                 </action>
-                                             </actions>
-                                          </action>
-                                       </rowactions>
-                                       <massactions usefirstitemasdefault="true"/>
-                                       <views>
-                                          <view type="standard"/>
-                                       </views>
-                                    </skootable>
-                                 </components>
-                                 <oninitialshowactions>
-                                    <action type="requeryModel" model="Messages" behavior="standard"/>
-                                 </oninitialshowactions>
-                                 <onshowactions/>
-                              </tab>
-                              <tab name="My Groups" loadlazypanels="true" icon="sk-icon-partners">
-                                 <components>
-                                    <pagetitle model="memberships" uniqueid="sk-2A__p2-327">
-                                       <maintitle>My Memberships</maintitle>
-                                       <actions/>
-                                    </pagetitle>
-                                    <skootable showconditions="true" showsavecancel="true" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="memberships" buttonposition="" mode="read" uniqueid="sk-2Az7XP-372">
-                                       <fields>
-                                          <field id="GroupId" valuehalign="" type="REFPICK">
-                                             <label>Group Memberships</label>
-                                             <filters/>
-                                          </field>
-                                       </fields>
-                                       <rowactions>
-                                          <action type="delete"/>
-                                       </rowactions>
-                                       <massactions usefirstitemasdefault="true">
-                                          <action type="massupdate"/>
-                                          <action type="massdelete"/>
-                                       </massactions>
-                                       <views>
-                                          <view type="standard"/>
-                                       </views>
-                                    </skootable>
-                                    <pagetitle model="groups" uniqueid="sk-2A-232-333">
-                                       <maintitle>My Groups</maintitle>
-                                       <actions/>
-                                    </pagetitle>
-                                    <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="groups" buttonposition="" mode="readonly" uniqueid="sk-2A-4l9-339">
-                                       <fields>
-                                          <field id="Name"/>
-                                          <field id="GroupMembers" type="CHILDREL" limit="100" valuehalign="" delimiter="&lt;br&gt;">
-                                             <label>Members</label>
-                                             <template>{{UserOrGroupId}}</template>
-                                          </field>
-                                          <field id="OwnerId" valuehalign="" type="">
-                                             <label>Owner</label>
-                                          </field>
-                                       </fields>
-                                       <rowactions/>
-                                       <massactions usefirstitemasdefault="true"/>
-                                       <views>
-                                          <view type="standard"/>
-                                       </views>
-                                    </skootable>
-                                 </components>
-                                 <oninitialshowactions>
-                                    <action type="requeryModel" model="memberships" behavior="standard"/>
-                                 </oninitialshowactions>
-                                 <onshowactions/>
-                              </tab>
-                              <tab name="My Profile" loadlazypanels="true" icon="sk-icon-contact">
-                                 <components>
-                                    <basicfieldeditor showheader="true" showsavecancel="true" showerrorsinline="true" model="user" buttonposition="" uniqueid="sk-2H5l4O-694" mode="read" layout="above">
-                                       <columns>
-                                          <column width="33.3%">
-                                             <sections>
-                                                <section title="Name" collapsible="no">
-                                                   <fields>
-                                                      <field id="Alias"/>
-                                                      <field id="CommunityNickname" valuehalign="" type=""/>
-                                                      <field id="FirstName"/>
-                                                      <field id="MiddleName" valuehalign="" type=""/>
-                                                      <field id="LastName"/>
-                                                      <field id="InformalName" valuehalign="" type=""/>
-                                                   </fields>
-                                                </section>
-                                                <section title="About Me" collapsible="no">
-                                                   <fields>
-                                                      <field id="AboutMe" valuehalign="" type="">
-                                                         <label> </label>
-                                                      </field>
-                                                   </fields>
-                                                </section>
-                                             </sections>
-                                          </column>
-                                          <column width="33.3%">
-                                             <sections>
-                                                <section title="Employment Info" collapsible="no">
-                                                   <fields>
-                                                      <field id="CompanyName"/>
-                                                      <field id="Title"/>
-                                                      <field id="City"/>
-                                                      <field id="Country"/>
-                                                   </fields>
-                                                </section>
-                                                <section title="Contact Info" collapsible="no">
-                                                   <fields>
-                                                      <field id="Email" valuehalign="" type=""/>
-                                                      <field id="MobilePhone"/>
-                                                      <field id="Phone"/>
-                                                   </fields>
-                                                </section>
-                                             </sections>
-                                          </column>
-                                          <column width="33.3%">
-                                             <sections>
-                                                <section title="Awesomeness" collapsible="no">
-                                                   <fields>
-                                                      <field id="LanguageLocaleKey"/>
-                                                      <field id="LastLoginDate"/>
-                                                      <field id="LocaleSidKey"/>
-                                                      <field id="ProfileId" valuehalign="" type="">
-                                                         <label>Profile</label>
-                                                      </field>
-                                                      <field id="UserRoleId" valuehalign="" type="">
-                                                         <label>Role</label>
-                                                      </field>
-                                                   </fields>
-                                                </section>
-                                             </sections>
-                                          </column>
-                                       </columns>
-                                    </basicfieldeditor>
-                                 </components>
-                              </tab>
-                           </tabs>
-                        </tabset>
-                     </components>
-                  </division>
-               </divisions>
-               <styles>
-                  <styleitem type="background" bgtype="none"/>
-               </styles>
-            </grid>
-         </components>
+                                             </rowactions>
+                                             <massactions usefirstitemasdefault="true"/>
+                                             <views>
+                                                <view type="standard"/>
+                                             </views>
+                                             <actions defaultlabel="Global Actions" defaulticon="sk-icon-magic" usefirstitemasdefault="true"/>
+                                             <searchfields/>
+                                             <renderconditions logictype="and"/>
+                                          </skootable>
+                                       </components>
+                                    </tab>
+                                 </tabs>
+                              </tabset>
+                           </components>
+                           <oninitialshowactions/>
+                           <onshowactions>
+                              <action type="requeryModel" model="content" behavior="standard"/>
+                           </onshowactions>
+                        </tab>
+                     </tabs>
+                  </tabset>
+               </components>
+            </division>
+         </divisions>
+         <styles>
+            <styleitem type="background" bgtype="none"/>
+         </styles>
+      </grid>
+   </components>
    <resources>
       <labels/>
       <javascript/>
