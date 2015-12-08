@@ -2,10 +2,10 @@
 	var $xml = skuid.utils.makeXMLDoc;
 
 	skuid.builder.core.registerBuilder(new skuid.builder.core.Builder({
-		id: "progressindicator__progress_indicator",
+		id: "skuidopen__progress_indicator",
 		name: "Progress Indicator",
 		icon: "sk-icon-arrow-right",
-		description: "Connect to a Tab Set or Wizard Component to track users' progress through processes",
+		description: "Indicates the progress of a Wizard, a Tabset, or a Picklist.",
 
 		// How it's rendered in the composer view in desktop
 		componentRenderer: function(component) {
@@ -13,6 +13,7 @@
 			// Create some shortcut variables
 			var $ = skuid.jQuery;
 			var bc = skuid.builder.core;
+			var state = component.state;
 
 			var content = $j('<div class="progress-indicator">');
 			var cTable = $('<table>');
@@ -31,6 +32,8 @@
 						
 						var text = $('<div class="progress-text">');
 						var icon = stepComponent.state.attr('icon');
+						var editable = stepComponent.state.attr('editable') === undefined || stepComponent.state.attr('editable') == "true"
+
 						if(icon){
 							text.append($('<div>').addClass('nx-step-icon ' + icon + ' sk-icon inline'));
 						}
@@ -62,65 +65,76 @@
 
 						stepComponent.previewElement = disp;
 
-						stepComponent.addActionItem('Remove Step','sk-bi-tab-delete',function() {
-							// Remove the display portion
-							stepComponent.element.remove();
-							disp.remove();
-							
-							// Remove it from the xml 
-							var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
-							component.state.find(findString).remove();
-							component.save();
-						});
+						if(editable){
+							stepComponent.addActionItem('Remove Step','sk-bi-tab-delete',function() {
+								// Remove the display portion
+								stepComponent.element.remove();
+								disp.remove();
+								
+								// Remove it from the xml 
+								var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
+								component.state.find(findString).remove();
+								component.save();
+							});
+						}
 				},
 				propertiesRenderer : function (propertiesObj,stepComponent) {
-					// The header that appears across all property pages at the top left
-					propertiesObj.setHeaderText('Step Properties');
-									
-					// We only have one page of properties, basic in this case
-					var propertyPages = [{
-						name: 'Basic',
-						props : [
-							{
-								id : 'label',
-								type : 'string',
-								label : 'Step Label',
-								onChange : function(val) {
-									// Update the text in the preview
-									stepComponent.previewElement.find('.progress-text .text-content').text(stepComponent.state.attr('label'));
+					var editable = stepComponent.state.attr('editable') === undefined || stepComponent.state.attr('editable') == "true"
 
-									// Update the actual data
-									var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
-									component.state.find(findString).attr('label', stepComponent.state.attr('label'));
+					if(editable){
 
-									component.save();
-								}
-							},
-							{
-								id : 'icon',
-								type : 'icon',
-								label : 'Icon',
-								onChange : function(val) {								
-									var text = stepComponent.previewElement.find('.progress-text');
-									var iconelem = text.children('.nx-step-icon');
-									if (iconelem.length) {
-										iconelem.remove();
+						// The header that appears across all property pages at the top left
+						propertiesObj.setHeaderText('Step Properties');
+										
+						// We only have one page of properties, basic in this case
+						var propertyPages = [{
+							name: 'Basic',
+							props : [
+								{
+									id : 'label',
+									type : 'string',
+									label : 'Step Label',
+									onChange : function(val) {
+										// Update the text in the preview
+										stepComponent.previewElement.find('.progress-text .text-content').text(stepComponent.state.attr('label'));
+
+										// Update the actual data
+										var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
+										component.state.find(findString).attr('label', stepComponent.state.attr('label'));
+
+										component.save();
 									}
-									
-									if (val) {
-										iconelem = $('<div>').addClass('nx-step-icon ' + val + ' sk-icon inline');
-										text.prepend(iconelem);
-									}
+								},
+								{
+									id : 'icon',
+									type : 'icon',
+									label : 'Icon',
+									onChange : function(val) {								
+										var text = stepComponent.previewElement.find('.progress-text');
+										var iconelem = text.children('.nx-step-icon');
+										if (iconelem.length) {
+											iconelem.remove();
+										}
+										
+										if (val) {
+											iconelem = $('<div>').addClass('nx-step-icon ' + val + ' sk-icon inline');
+											text.prepend(iconelem);
+										}
 
-									// Update the actual data
-									var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
-									component.state.find(findString).attr('icon', stepComponent.state.attr('icon'));
+										// Update the actual data
+										var findString = '[data-id="' + stepComponent.state.attr('data-id') + '"]';
+										component.state.find(findString).attr('icon', stepComponent.state.attr('icon'));
+									}
 								}
-							}
-						]	
-					}];
+							]	
+						}];
+
+						propertiesObj.applyPropsWithCategories(propertyPages,stepComponent.state);	
 					
-					propertiesObj.applyPropsWithCategories(propertyPages,stepComponent.state);	
+					}					
+					else{
+						propertiesObj.applyPropsWithCategories([],stepComponent.state);		
+					}
 					
 				},
 				defaultStateGenerator : function () {
@@ -151,26 +165,38 @@
 				
 				addStep(0);
 
-				// Lets the component now that the state has been changed
+				// Lets save the component now that the state has been changed
 				component.save();
 			});
 
 			// The actual rendering
 			component.idIndex = component.state.attr('id-index');
 
-			// A nice 'for each' 'loop' (not exactly either of those
-			// but it may help some to look at it that way)
-			component.state.children('steps').children().each(function(index, element){
-				// Seems like theres a better way to do this...
-				addStep(0, $(this));
-			});
-
 			// Make steps sortable
-			component.stepsWrapper.sortableComponent({
-				axis: 'x',
-				component: component,
-				parentStateSelector: 'steps'
-			});
+			if(state.attr('mode') === undefined || state.attr('mode') == 'tabwiz'){
+
+				// A nice 'for each' 'loop' (not exactly either of those
+				// but it may help some to look at it that way)
+				state.children('steps').children().each(function(index, element){
+					// Seems like theres a better way to do this...
+					addStep(0, $(this));
+				});
+
+				component.stepsWrapper.sortableComponent({
+					axis: 'x',
+					component: component,
+					parentStateSelector: 'steps'
+				});
+			}
+			else{
+				// Add the picklist entries as steps
+				var tempModel = new skuid.model.Model(skuid.builder.core.getPageXML().find('model#' + state.attr('model')));
+				skuid.model.load([tempModel]).done(function(){
+					$.each(tempModel.getField(state.attr('field')).picklistEntries, function(i, entry){
+						addStep(0, $('<step label="' + entry.label + '" data-id="0" editable="false">'));
+					});
+				});
+			}
 			
 			component.setTitle(component.builder.name);
 
@@ -182,11 +208,11 @@
 
 		// The inputtable properties
 		propertiesRenderer: function (propertiesObj,component) {
-			propertiesObj.setTitle("Progress Indicator Component Properties");
+			propertiesObj.setTitle("Say Hello Component Properties");
 			var state = component.state;
 			var propCategories = [];
 
-			var propsList = [
+			var wizTabProps = [
 				{
 					id: "friendId",
 					type: "string",
@@ -222,20 +248,68 @@
 				}
 			];
 
+			var picklistProps = [
+				{
+					id: "model",
+					type: "model",
+					label: "Model",
+					onChange: function(){
+						component.refresh();
+					}
+				},
+				{
+					id: "field",
+					type: "field",
+					label: "Picklist Field",
+					modelprop : "model",
+					displayTypeFilter: ['PICKLIST'],
+					onChange: function(){
+						component.refresh();
+					}
+				},
+			];
+
+			var properties = [{
+				id: "mode",
+				type: "picklist",
+				label: "Mode",
+				picklistEntries: [{
+						value: "tabwiz",
+						label: "Tabset/Wizard"
+					},
+					{
+						value: "picklist",
+						label: "Picklist"
+					}],
+
+				defaultValue: 'tabwiz',
+				onChange: function(){
+					component.refresh().rebuildProps();
+				}
+			}];
+
+			if(component.state.attr('mode') === undefined || component.state.attr('mode') === 'tabwiz'){
+				properties = properties.concat(wizTabProps);
+			}
+			else{
+				properties = properties.concat(picklistProps);
+			}
+
 			// Page 1 Properties
 			propCategories.push({
 				name: "Basic",
-				props: propsList,
+				props: properties,
 			});
 
 			propertiesObj.applyPropsWithCategories(propCategories,state);
 		},
 		defaultStateGenerator : function() {
-			var progressIndicator = $xml('<progressindicator__progress_indicator/>')
+			var progressIndicator = $xml('<skuidopen__progress_indicator/>')
 				.attr('id-index', '0')
 				.attr('future-color', '#eeeeee')
 				.attr('current-color', '#555')
-				.attr('done-color', '#888888');
+				.attr('done-color', '#888888')
+				.attr('mode', 'tabwiz');
 
 			// Always wrap lists in plural nodes
 			steps = $xml('<steps/>').appendTo(progressIndicator);
