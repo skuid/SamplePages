@@ -2,7 +2,7 @@
 	var $xml = skuid.utils.makeXMLDoc;
 
 	skuid.builder.core.registerBuilder(new skuid.builder.core.Builder({
-		id: "skuidopen__progress_indicator",
+		id: "progressindicator__progress_indicator",
 		name: "Progress Indicator",
 		icon: "sk-icon-arrow-right",
 		description: "Indicates the progress of a Wizard, a Tabset, or a Picklist.",
