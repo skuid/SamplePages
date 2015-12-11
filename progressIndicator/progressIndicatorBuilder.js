@@ -304,7 +304,7 @@
 			propertiesObj.applyPropsWithCategories(propCategories,state);
 		},
 		defaultStateGenerator : function() {
-			var progressIndicator = $xml('<skuidopen__progress_indicator/>')
+			var progressIndicator = $xml('<progressindicator__progress_indicator/>')
 				.attr('id-index', '0')
 				.attr('future-color', '#eeeeee')
 				.attr('current-color', '#555')
