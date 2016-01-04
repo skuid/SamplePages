@@ -12,18 +12,16 @@
             <field id="Fiscal" name="fiscal"/>
          </groupby>
       </model>
-      <model id="Opportunities" limit="300" query="true" createrowifnonefound="false" orderby="Amount DESC NULLS LAST" sobject="Opportunity" doclone="" type="" adapter="">
+      <model id="Opportunities" limit="30" query="true" createrowifnonefound="false" orderby="Amount DESC NULLS LAST" sobject="Opportunity" doclone="" type="" adapter="">
          <fields>
             <field id="AccountId"/>
             <field id="Amount"/>
             <field id="CloseDate"/>
             <field id="Account.Name"/>
-            <field id="NextStep"/>
             <field id="Name"/>
             <field id="StageName"/>
             <field id="OwnerId"/>
             <field id="Owner.Name"/>
-            <field id="LeadSource"/>
             <field id="LastModifiedDate"/>
             <field id="CreatedDate"/>
             <field id="Probability"/>
