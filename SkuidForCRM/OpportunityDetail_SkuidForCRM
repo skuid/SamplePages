@@ -31,13 +31,26 @@
             <field id="IsWon"/>
             <field id="Account.ParentId"/>
             <field id="Account.Parent.Name"/>
-            <field id="PartnerAccountId"/>
-            <field id="PartnerAccount.Name"/>
+            <field id="DefaultProbabilityFormula" uionly="true" displaytype="FORMULA" label="Default Probability" readonly="true" returntype="PERCENT" precision="9" scale="2">
+               <formula>MODEL_LOOKUP("OpportunityStages","DefaultProbability","MasterLabel",{{StageName}})</formula>
+            </field>
          </fields>
          <conditions>
             <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="Id"/>
          </conditions>
-         <actions/>
+         <actions>
+            <action>
+               <actions>
+                  <action type="updateRow" fieldmodel="Opportunity" field="Probability" enclosevalueinquotes="false" value="{{{DefaultProbabilityFormula}}}"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>StageName</field>
+               </fields>
+            </action>
+         </actions>
       </model>
       <model id="PricebookEntries" limit="100" query="true" createrowifnonefound="false" orderby="Product2.Family, Product2.Name" sobject="PricebookEntry" adapter="" type="" doclone="" unloadwarningifunsavedchanges="false">
          <fields>
@@ -424,6 +437,14 @@
             <condition type="modelmerge" value="" field="WhatId" operator="=" model="Opportunity" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
             <condition type="fieldvalue" value="Completed" enclosevalueinquotes="true" field="Status" operator="!="/>
          </conditions>
+         <actions/>
+      </model>
+      <model id="OpportunityStages" limit="" query="true" createrowifnonefound="false" adapter="" type="" sobject="OpportunityStage">
+         <fields>
+            <field id="MasterLabel"/>
+            <field id="DefaultProbability"/>
+         </fields>
+         <conditions/>
          <actions/>
       </model>
    </models>
