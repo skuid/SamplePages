@@ -2,7 +2,7 @@
 
 <skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" tabtooverride="Opportunities">
    <models>
-      <model id="Opportunity" limit="1" query="true" createrowifnonefound="false" sobject="Opportunity" adapter="" type="" doclone="" unloadwarningifunsavedchanges="false">
+      <model id="Opportunity" limit="1" query="true" createrowifnonefound="false" sobject="Opportunity" adapter="" type="" doclone="" unloadwarningifunsavedchanges="true">
          <fields>
             <field id="Name"/>
             <field id="StageName"/>
@@ -52,19 +52,7 @@
             </action>
          </actions>
       </model>
-      <model id="PricebookEntries" limit="100" query="true" createrowifnonefound="false" orderby="Product2.Family, Product2.Name" sobject="PricebookEntry" adapter="" type="" doclone="" unloadwarningifunsavedchanges="false">
-         <fields>
-            <field id="Id"/>
-            <field id="UnitPrice"/>
-            <field id="Product2Id"/>
-            <field id="Product2.Name"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsActive"/>
-         </conditions>
-         <actions/>
-      </model>
-      <model id="OpportunityRoles" limit="100" query="true" createrowifnonefound="false" sobject="OpportunityContactRole" orderby="" adapter="" type="" doclone="" unloadwarningifunsavedchanges="false">
+      <model id="OpportunityRoles" limit="20" query="true" createrowifnonefound="false" sobject="OpportunityContactRole" orderby="" adapter="" type="" doclone="" unloadwarningifunsavedchanges="true">
          <fields>
             <field id="ContactId"/>
             <field id="Contact.Name"/>
@@ -81,7 +69,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="LineItems" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" orderby="SortOrder, PricebookEntry.Product2.Name" adapter="" type="">
+      <model id="LineItems" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" orderby="SortOrder, PricebookEntry.Product2.Name" adapter="" type="" doclone="" unloadwarningifunsavedchanges="true">
          <fields>
             <field id="SortOrder"/>
             <field id="UnitPrice"/>
@@ -94,17 +82,23 @@
             <field id="PricebookEntryId"/>
             <field id="PricebookEntry.UnitPrice"/>
             <field id="Discount"/>
-            <field id="TotalPriceFormula" uionly="true" displaytype="FORMULA" label="Total Price" readonly="true" returntype="CURRENCY">
+            <field id="TotalPriceFormula" uionly="true" displaytype="FORMULA" label="Total Price" readonly="true" returntype="CURRENCY" precision="9" scale="2">
                <formula>{{Quantity}}*{{UnitPrice}}*((100-{{Discount}})/100)</formula>
             </field>
-            <field id="UnitPrice2" uionly="true" displaytype="FORMULA" label="Unit Price 2 (for hacky work only!)" readonly="true" returntype="CURRENCY">
+            <field id="UnitPrice2" uionly="true" displaytype="FORMULA" label="Unit Price 2 (workaround)" readonly="true" returntype="CURRENCY" precision="9" scale="2">
                <formula>{{UnitPrice}}*2</formula>
             </field>
-            <field id="UnitPriceTemp" uionly="true" displaytype="CURRENCY" label="Unit Price for hacks" precision="9" scale="2"/>
+            <field id="UnitPriceTemp" uionly="true" displaytype="CURRENCY" label="Unit Price (workaround)" precision="9" scale="2"/>
             <field id="TotalPrice"/>
             <field id="SalesPriceFormula" uionly="true" displaytype="FORMULA" label="Sales Price" precision="9" scale="2" readonly="true" returntype="CURRENCY">
-               <formula>{{PricebookEntry.UnitPrice}}</formula>
+               <formula>{{UnitPrice}}</formula>
             </field>
+            <field id="ProductCode"/>
+            <field id="Product2.IsActive"/>
+            <field id="Product2.ProductCode"/>
+            <field id="Product2.Description"/>
+            <field id="Product2.Family"/>
+            <field id="Product2.Name"/>
          </fields>
          <conditions>
             <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="OpportunityId"/>
@@ -147,9 +141,29 @@
                   <event>models.saved</event>
                </events>
             </action>
+            <action>
+               <actions>
+                  <action type="updateRow" fieldmodel="LineItems" field="UnitPrice" enclosevalueinquotes="false" value="{{{PricebookEntry.UnitPrice}}}"/>
+               </actions>
+               <events>
+                  <event>row.updated</event>
+               </events>
+               <fields>
+                  <field>PricebookEntryId</field>
+               </fields>
+            </action>
+            <action>
+               <actions>
+                  <action type="updateRow" fieldmodel="LineItems" field="Quantity" enclosevalueinquotes="false" value="1"/>
+                  <action type="updateRow" fieldmodel="LineItems" field="ServiceDate" enclosevalueinquotes="false" value="TODAY"/>
+               </actions>
+               <events>
+                  <event>row.created</event>
+               </events>
+            </action>
          </actions>
       </model>
-      <model id="Attachments" limit="100" query="false" createrowifnonefound="false" sobject="Attachment" orderby="LastModifiedDate DESC" adapter="" type="">
+      <model id="Attachments" limit="20" query="false" createrowifnonefound="false" sobject="Attachment" orderby="LastModifiedDate DESC" adapter="" type="" doclone="">
          <fields>
             <field id="Name"/>
             <field id="LastModifiedById"/>
@@ -164,7 +178,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="Notes" limit="" query="false" createrowifnonefound="false" sobject="Note" orderby="LastModifiedDate DESC" adapter="" type="">
+      <model id="Notes" limit="20" query="false" createrowifnonefound="false" sobject="Note" orderby="LastModifiedDate DESC" adapter="" type="" doclone="">
          <fields>
             <field id="Body"/>
             <field id="Title"/>
@@ -179,7 +193,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="TaskHistory" limit="" query="false" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC" queryallrows="true" adapter="" type="">
+      <model id="TaskHistory" limit="20" query="false" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC" queryallrows="true" adapter="" type="" doclone="">
          <fields>
             <field id="Subject"/>
             <field id="ActivityDate"/>
@@ -205,7 +219,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="OpenTasks" limit="100" query="false" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC" adapter="" type="">
+      <model id="OpenTasks" limit="20" query="false" createrowifnonefound="false" sobject="Task" orderby="ActivityDate DESC" adapter="" type="" doclone="">
          <fields>
             <field id="OwnerId"/>
             <field id="Owner.Name"/>
@@ -253,7 +267,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="StageHistory" limit="100" query="false" createrowifnonefound="false" sobject="OpportunityHistory" orderby="CreatedDate DESC" adapter="" type="">
+      <model id="StageHistory" limit="50" query="false" createrowifnonefound="false" sobject="OpportunityHistory" orderby="CreatedDate DESC" adapter="" type="">
          <fields>
             <field id="Amount"/>
             <field id="StageName"/>
@@ -366,7 +380,7 @@
          </conditions>
          <actions/>
       </model>
-      <model id="EmailToSF" limit="100" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
+      <model id="EmailToSF" limit="1" query="true" createrowifnonefound="false" orderby="LastModifiedDate DESC" sobject="EmailServicesAddress">
          <fields>
             <field id="LocalPart"/>
             <field id="EmailDomainName"/>
@@ -800,15 +814,49 @@
             </tab>
             <tab name="Products" icon="sk-icon-product">
                <components>
+                  <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="Opportunity" buttonposition="" uniqueid="sk-1RDBPJ-1525" mode="read" layout="above">
+                     <columns layoutmode="responsive" columngutter="0px" rowgutter="0px">
+                        <column behavior="specified" verticalalign="top" width="500px">
+                           <sections>
+                              <section title="Opportunity Pricebook" collapsible="no">
+                                 <fields>
+                                    <field id="Pricebook2Id" valuehalign="" type="REFPICK" required="true" optionsource="" displaytemplate="{{Name}}" searchtemplate="{{Name}}">
+                                       <searchfields/>
+                                       <filters>
+                                          <filter type="fieldvalue" operator="=" enclosevalueinquotes="false" field="IsActive" value="true"/>
+                                       </filters>
+                                       <renderconditions logictype="and" onhidedatabehavior="keep"/>
+                                       <enableconditions/>
+                                       <label/>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                           <renderconditions logictype="and"/>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
                   <skootable showconditions="true" showsavecancel="false" searchbox="false" searchmethod="server" showexportbuttons="false" pagesize="10" createrecords="true" model="LineItems" mode="read" buttonposition="" uniqueid="sk-fu8jP-523">
                      <fields>
-                        <field id="PricebookEntryId" type="REFPICK" optionsource="model" optionmodel="PricebookEntries" displaytemplate="{{Product2.Name}} (List: {{UnitPrice}})" snippet="" required="true" valuehalign="">
+                        <field id="PricebookEntryId" type="" optionsource="" snippet="" required="true" valuehalign="" displaytemplate="{{Product2.Name}}" searchtemplate="{{Product2.Name}} (List: {{UnitPrice}})">
                            <label>Product</label>
-                           <searchfields/>
+                           <searchfields>
+                              <searchfield query="true" return="true" show="true" field="Product2.Name" operator="contains"/>
+                              <searchfield query="true" return="true" show="true" field="UnitPrice"/>
+                              <searchfield query="false" return="true" show="true" field="ProductCode" operator="contains"/>
+                              <searchfield query="false" return="true" show="true" field="Product2.Family" operator="contains"/>
+                              <searchfield query="false" return="true" show="true" field="Product2.Description" operator="contains"/>
+                           </searchfields>
+                           <filters>
+                              <filter type="fieldvalue" operator="=" enclosevalueinquotes="false" field="IsActive" value="true"/>
+                              <filter type="modelmerge" operator="=" field="Pricebook2Id" value="" model="Opportunity" enclosevalueinquotes="true" mergefield="Pricebook2Id" novaluebehavior="deactivate"/>
+                           </filters>
                         </field>
                         <field id="ServiceDate" required="true" valuehalign="" type=""/>
                         <field id="Quantity" type="" snippet="" decimalplaces="" valuehalign=""/>
-                        <field id="SalesPriceFormula" decimalplaces="" valuehalign="" type=""/>
+                        <field id="UnitPrice" decimalplaces="" valuehalign="" type="">
+                           <summaries/>
+                        </field>
                         <field id="Description" valuehalign="" type=""/>
                         <field id="Discount" type="" decimalplaces="" valuehalign=""/>
                         <field id="TotalPriceFormula" decimalplaces="" valuehalign="" type="">
@@ -844,8 +892,7 @@
                         <view type="standard"/>
                      </views>
                      <actions defaultlabel="Global Actions" defaulticon="ui-silk-wand" usefirstitemasdefault="true">
-                        <action type="redirect" label="Edit All" url="/oppitm/multilineitem.jsp?oppId={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-edit" window="self"/>
-                        <action type="redirect" label="Sort / Reorder" url="/oppitm/lineitemsort.jsp?id={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;retURL=%2F{{$Param.id}}" icon="fa-reorder" window="self"/>
+                        <action type="redirect" label="Sort / Reorder" url="/oppitm/lineitemsort.jsp?id={{#$Model.Opportunity.data}}{{Id15}}{{/$Model.Opportunity.data}}&amp;retURL=%2F{{$Param.id}}" icon="sk-icon-listview" window="self"/>
                      </actions>
                      <searchfields/>
                   </skootable>
@@ -1334,3 +1381,4 @@ margin: 4px 0;
       <styleitem type="background" bgtype="none"/>
    </styles>
 </skuidpage>
+
