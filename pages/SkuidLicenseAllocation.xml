@@ -1,0 +1,125 @@
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" tabtooverride="User">
+    <models>
+        <model id="User" limit="100" query="true" createrowifnonefound="false" sobject="User" type="" orderby="LastLoginDate ASC">
+            <fields>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="CreatedDate"/>
+                <field id="LastLoginDate"/>
+                <field id="IsActive"/>
+                <field id="Username"/>
+            </fields>
+            <conditions>
+                <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
+                    <conditions>
+                        <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+                    </conditions>
+                </condition>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="SelectedUserPackageLicense" limit="" query="false" createrowifnonefound="false" type="" sobject="UserPackageLicense">
+            <fields>
+                <field id="Id"/>
+            </fields>
+            <conditions>
+                <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="UserId" state="filterableoff" inactive="true" name="UserId"/>
+                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" adapter="salesforce" type="" sobject="PackageLicense">
+            <fields>
+                <field id="ExpirationDate"/>
+                <field id="UsedLicenses"/>
+                <field id="Status"/>
+                <field id="AllowedLicenses"/>
+            </fields>
+            <conditions>
+                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
+            </conditions>
+            <actions/>
+        </model>
+    </models>
+    <components>
+        <grid uniqueid="sk-xuyaW-380">
+            <divisions>
+                <division behavior="flex" minwidth="100px" ratio="4" verticalalign="top">
+                    <components>
+                        <pagetitle model="User" uniqueid="sk-xt7jv-81">
+                            <maintitle>Users with a Skuid package License</maintitle>
+                            <subtitle>
+                                <template>Home</template>
+                            </subtitle>
+                            <actions/>
+                        </pagetitle>
+                    </components>
+                </division>
+                <division behavior="flex" verticalalign="top" minwidth="100px" ratio="6">
+                    <components>
+                        <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="SkuidLicenses" buttonposition="" uniqueid="sk-xv0df-389" mode="readonly" layout="">
+                            <columns>
+                                <column width="100%">
+                                    <sections>
+                                        <section title="Section A" collapsible="no" showheader="false">
+                                            <fields>
+                                                <field type="COMBO" valuehalign="" editmodebehavior="autopopup">
+                                                    <label>License Usage</label>
+                                                    <template>{{UsedLicenses}} / {{AllowedLicenses}}</template>
+                                                </field>
+                                            </fields>
+                                        </section>
+                                    </sections>
+                                </column>
+                            </columns>
+                        </basicfieldeditor>
+                    </components>
+                </division>
+            </divisions>
+            <styles>
+                <styleitem type="background" bgtype="none"/>
+            </styles>
+        </grid>
+        <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="User" mode="readonly" uniqueid="sk-xt7jv-82">
+            <fields>
+                <field id="FirstName" allowordering="true"/>
+                <field id="LastName" allowordering="true"/>
+                <field id="Username" valuehalign="" type=""/>
+                <field id="IsActive" type="" valuehalign=""/>
+                <field id="LastLoginDate" valuehalign="" type="" allowordering="true"/>
+            </fields>
+            <rowactions>
+                <action type="multi" label="Revoke License" icon="sk-icon-remove-reference">
+                    <actions>
+                        <action type="custom" snippet="Confirm">
+                            <onerroractions/>
+                        </action>
+                        <action type="blockUI" message="Revoking License for User..."/>
+                        <action type="setCondition" model="SelectedUserPackageLicense" condition="UserId" value="{{{Id}}}"/>
+                        <action type="requeryModel" model="SelectedUserPackageLicense" behavior="standard"/>
+                        <action type="markRowsForDeletion" model="SelectedUserPackageLicense"/>
+                        <action type="save">
+                            <models>
+                                <model>SelectedUserPackageLicense</model>
+                            </models>
+                        </action>
+                        <action type="requeryModel" model="User" behavior="standard"/>
+                        <action type="blockUI" message="License revoked." timeout="1000"/>
+                    </actions>
+                </action>
+            </rowactions>
+            <massactions usefirstitemasdefault="true"/>
+            <views>
+                <view type="standard"/>
+            </views>
+        </skootable>
+    </components>
+    <resources>
+        <labels/>
+        <css/>
+        <javascript/>
+    </resources>
+    <styles>
+        <styleitem type="background" bgtype="none"/>
+    </styles>
+</skuidpage>
