@@ -18,7 +18,7 @@
             </conditions>
             <actions/>
         </model>
-        <model id="SelectedUserPackageLicense" limit="" query="false" createrowifnonefound="false" type="" sobject="UserPackageLicense">
+        <model id="SelectedUserPackageLicense" limit="1" query="false" createrowifnonefound="false" type="" sobject="UserPackageLicense">
             <fields>
                 <field id="Id"/>
             </fields>
@@ -28,7 +28,7 @@
             </conditions>
             <actions/>
         </model>
-        <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" adapter="salesforce" type="" sobject="PackageLicense">
+        <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" type="" sobject="PackageLicense">
             <fields>
                 <field id="ExpirationDate"/>
                 <field id="UsedLicenses"/>
