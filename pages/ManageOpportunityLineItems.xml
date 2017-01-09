@@ -200,7 +200,6 @@ if (!listener) {
             <field id="CampaignId"/>
             <field id="Campaign.Name"/>
             <field id="IsClosed"/>
-            <field id="Contract_Start_Date__c"/>
          </fields>
          <conditions>
             <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="Id" novaluebehavior="noquery"/>

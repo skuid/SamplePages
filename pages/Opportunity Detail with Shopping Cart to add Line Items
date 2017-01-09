@@ -237,10 +237,6 @@ background: #cc0000;
          <field id="LastModifiedBy.Name"/>
          <field id="CampaignId"/>
          <field id="Campaign.Name"/>
-         
-         
-         
-         
       </fields>
       <conditions>
          <condition type="param" enclosevalueinquotes="true" operator="=" value="id" field="Id"/>
@@ -474,8 +470,6 @@ background: #cc0000;
          <field id="Priority"/>
          <field id="CaseNumber"/>
          <field id="IsEscalated"/>
-         
-         
          <field id="AccountId"/>
          <field id="Account.Name"/>
          <field id="ContactId"/>

@@ -5,8 +5,6 @@
             <field id="Name"/>
             <field id="CreatedDate"/>
             <field id="Type"/>
-            <field id="RecordTypeId"/>
-            <field id="RecordType.Name"/>
             <field id="NumberOfEmployees"/>
             <field id="Phone"/>
             <field id="OwnerId"/>
@@ -14,7 +12,6 @@
             <field id="ParentId"/>
             <field id="Parent.Name"/>
             <field id="Website"/>
-            <field id="Geographic_Location__c"/>
             <field id="Description"/>
          </fields>
          <conditions/>
@@ -27,7 +24,6 @@
             <field id="Email"/>
             <field id="Phone"/>
             <field id="Title"/>
-            <field id="Hat_Size__c"/>
             <field id="AccountId"/>
             <field id="Account.Name"/>
          </fields>
@@ -41,7 +37,6 @@
       <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="Account" mode="read" uniqueid="sk-3EgD_B-73">
          <fields>
             <field id="Name" valuehalign="" type=""/>
-            <field id="RecordTypeId" valuehalign="" type=""/>
             <field id="Type"/>
             <field id="NumberOfEmployees"/>
             <field id="CreatedDate" allowordering="true" valuehalign="" type=""/>
@@ -63,7 +58,6 @@
                                              <section title="Contact" collapsible="no">
                                                 <fields>
                                                    <field id="Phone"/>
-                                                   <field id="Geographic_Location__c" valuehalign="" type=""/>
                                                 </fields>
                                              </section>
                                           </sections>
@@ -113,7 +107,6 @@
                                        <field id="Email"/>
                                        <field id="Phone"/>
                                        <field id="Title"/>
-                                       <field id="Hat_Size__c"/>
                                     </fields>
                                     <rowactions>
                                        <action type="edit"/>

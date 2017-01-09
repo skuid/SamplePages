@@ -58,8 +58,6 @@
             <field id="Id"/>
             <field id="Salutation"/>
             <field id="Title"/>
-            <field id="skuid__Best_Friend__c"/>
-            <field id="skuid__Best_Friend__r.Name"/>
             <field id="CreatedDate"/>
          </fields>
          <conditions/>
