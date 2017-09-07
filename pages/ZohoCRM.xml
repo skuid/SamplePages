@@ -80,7 +80,7 @@
 				<field>id</field>
 			</idfields>
 		</model>
-		<model id="Contacts" query="true" createrowifnonefound="false" datasource="ZachZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Contact" labelplural="Contacts" async="true">
+		<model id="Contacts" query="true" createrowifnonefound="false" datasource="ZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Contact" labelplural="Contacts" async="true">
 			<fields>
 				<field id="First_Name" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
 				<field id="Last_Name" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
@@ -121,7 +121,7 @@
 				<field>id</field>
 			</idfields>
 		</model>
-		<model id="Accounts" query="true" createrowifnonefound="false" datasource="ZachZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Account" labelplural="Accounts" async="true">
+		<model id="Accounts" query="true" createrowifnonefound="false" datasource="ZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Account" labelplural="Accounts" async="true">
 			<fields>
 				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="19" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
 				<field id="State" label="State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" length="2"/>
