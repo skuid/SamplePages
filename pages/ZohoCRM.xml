@@ -1,0 +1,336 @@
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
+	<models>
+		<model id="CurrentUser" query="true" createrowifnonefound="false" datasource="ZohoCRM" processonclient="true" type="" verb="GET" endpoint="/users?type=CurrentUser" label="User" labelplural="Users" pathtocontent="users" fieldtargetobjects="users">
+			<fields>
+				<field id="first_name" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="full_name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="last_name" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="locale" label="Locale" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="time_zone" label="Time Zone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Users" query="true" createrowifnonefound="false" datasource="ZohoCRM" processonclient="true" type="" verb="GET" endpoint="/users?type=ActiveUsers" pathtocontent="users" fieldtargetobjects="users" label="User" labelplural="Users">
+			<fields>
+				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="full_name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="name" displaytype="FORMULA" label="Name" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" uionly="true">
+					<formula>{{full_name}}</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Leads" query="true" createrowifnonefound="false" datasource="ZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Lead" labelplural="Leads" async="false">
+			<fields>
+				<field id="Company" label="Company" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
+				<field id="First_Name" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
+				<field id="Last_Name" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
+				<field id="Lead_Status" label="Lead Status" ispolymorphic="false" isnamepointing="false" displaytype="PICKLIST" accessible="true" filterable="true" ogdisplaytype="STRING" picklistsource="manual" required="true">
+					<picklistentries>
+						<entry value="Attempted to Contact" label="Attempted to Contact"/>
+						<entry value="Contact in Future" label="Contact in Future"/>
+						<entry value="Contacted" label="Contacted"/>
+						<entry value="Not Qualified" label="Not Qualified"/>
+						<entry value="Pre-Qualified" label="Pre-Qualified"/>
+						<entry value="Qualified" label="Qualified"/>
+					</picklistentries>
+				</field>
+				<field id="Lead_Source" label="Lead Source" ispolymorphic="false" isnamepointing="false" displaytype="COMBOBOX" accessible="true" filterable="true" ogdisplaytype="STRING" picklistsource="manual" required="true">
+					<picklistentries>
+						<entry value="Advertisement" label="Advertisement"/>
+						<entry value="Employee Referral" label="Employee Referral"/>
+						<entry value="External Referral" label="External Referral"/>
+						<entry value="Seminar Partner" label="Seminar Partner"/>
+						<entry value="Trade Show" label="Trade Show"/>
+						<entry value="Web Download" label="Web Download"/>
+					</picklistentries>
+				</field>
+				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="19" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
+				<field id="State" label="State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" length="2"/>
+				<field id="Street" label="Street" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Website" label="Website" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" accessible="true" filterable="true" ogdisplaytype="URL"/>
+				<field id="Twitter" label="Twitter" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Zip_Code" label="Zip Code" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="5" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
+				<field id="Full_Name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Owner.name" label="Owner Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" readonly="true"/>
+				<field id="Owner.id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="Created_Time" label="Created Time" ispolymorphic="false" isnamepointing="false" displaytype="DATETIME" accessible="true" filterable="true"/>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="requeryModel" model="Leads" behavior="standard"/>
+					</actions>
+					<events>
+						<event>models.saved</event>
+					</events>
+				</action>
+			</actions>
+			<methods>
+				<method type="query" verb="GET" endpoint="/Leads?sort_order=desc" pathtocontent="data"/>
+				<method type="insert" verb="POST" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Leads" batch="true" payloadsnippet="ZohoBatchInsertConverter"/>
+				<method type="update" verb="PUT" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Leads" batch="true" payloadsnippet="ZohoBatchUpdateConverter"/>
+				<method type="delete" verb="DELETE" endpoint="/Leads/{{{id}}}" successif="requestsucceeds"/>
+			</methods>
+			<idfields>
+				<field>id</field>
+			</idfields>
+		</model>
+		<model id="Contacts" query="true" createrowifnonefound="false" datasource="ZachZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Contact" labelplural="Contacts" async="true">
+			<fields>
+				<field id="First_Name" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
+				<field id="Last_Name" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" required="true"/>
+				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="19" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
+				<field id="Full_Name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Owner.name" label="Owner Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" readonly="true"/>
+				<field id="Owner.id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="Created_Time" label="Created Time" ispolymorphic="false" isnamepointing="false" displaytype="DATETIME" accessible="true" filterable="true"/>
+				<field id="Email" label="Email" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Phone" label="Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Date_of_Birth" label="Date Of Birth" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Account_Name.id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="Account_Name.name" label="Account Name" ispolymorphic="false" isnamepointing="false" displaytype="COMBOBOX" accessible="true" filterable="true" ogdisplaytype="STRING" picklistsource="rowsinmodel" picklistmodel="Accounts" entryvalue="{{Account_Name}}" entrylabel="{{Account_Name}}"/>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="requeryModels" behavior="standard">
+							<models>
+								<model>Contacts</model>
+								<model>Accounts</model>
+							</models>
+						</action>
+					</actions>
+					<events>
+						<event>models.saved</event>
+					</events>
+				</action>
+			</actions>
+			<methods>
+				<method type="query" verb="GET" endpoint="/Contacts?sort_order=desc" pathtocontent="data"/>
+				<method type="insert" verb="POST" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Contacts" batch="true" payloadsnippet="ZohoBatchInsertConverter"/>
+				<method type="update" verb="PUT" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Contacts" batch="true" payloadsnippet="ZohoBatchUpdateConverter"/>
+				<method type="delete" verb="DELETE" endpoint="/Contacts/{{{id}}}" successif="requestsucceeds"/>
+			</methods>
+			<idfields>
+				<field>id</field>
+			</idfields>
+		</model>
+		<model id="Accounts" query="true" createrowifnonefound="false" datasource="ZachZohoCRM" processonclient="true" type="readwrite" fieldtargetobjects="data" namefield="Full_Name" label="Account" labelplural="Accounts" async="true">
+			<fields>
+				<field id="id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="19" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
+				<field id="State" label="State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" length="2"/>
+				<field id="Street" label="Street" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Website" label="Website" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" accessible="true" filterable="true" ogdisplaytype="URL"/>
+				<field id="Twitter" label="Twitter" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Zip_Code" label="Zip Code" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" precision="5" scale="0" accessible="true" filterable="true" ogdisplaytype="DOUBLE"/>
+				<field id="Owner.name" label="Owner Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true" readonly="true"/>
+				<field id="Owner.id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="19" scale="0" accessible="true" filterable="true"/>
+				<field id="Created_Time" label="Created Time" ispolymorphic="false" isnamepointing="false" displaytype="DATETIME" accessible="true" filterable="true"/>
+				<field id="Account_Type" label="Account Type" ispolymorphic="false" isnamepointing="false" displaytype="COMBOBOX" accessible="true" filterable="true" ogdisplaytype="STRING" picklistsource="manual">
+					<picklistentries>
+						<entry value="Partner" label="Partner"/>
+						<entry value="Supplier" label="Supplier"/>
+						<entry value="Vendor" label="Vendor"/>
+						<entry value="Reseller" label="Reseller"/>
+						<entry value="Other" label="Other"/>
+					</picklistentries>
+				</field>
+				<field id="Billing_Country" label="Billing Country" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Billing_State" label="Billing State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Employees" label="Employees" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="3" scale="0" accessible="true" filterable="true"/>
+				<field id="Industry" label="Industry" ispolymorphic="false" isnamepointing="false" displaytype="COMBOBOX" accessible="true" filterable="true" ogdisplaytype="STRING" picklistsource="manual">
+					<picklistentries>
+						<entry value="Consulting" label="Consulting"/>
+						<entry value="Manufacturing" label="Manufacturing"/>
+						<entry value="Real Estate" label="Real Estate"/>
+						<entry value="Technology" label="Technology"/>
+					</picklistentries>
+				</field>
+				<field id="Account_Name" label="Account Name" ispolymorphic="false" isnamepointing="false" displaytype="TEXT" accessible="true" filterable="true" ogdisplaytype="STRING" required="true"/>
+				<field id="Account_Number" label="Account Number" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="1" scale="0" accessible="true" filterable="true"/>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="requeryModels" behavior="standard">
+							<models>
+								<model>Contacts</model>
+								<model>Accounts</model>
+							</models>
+						</action>
+					</actions>
+					<events>
+						<event>models.saved</event>
+					</events>
+				</action>
+			</actions>
+			<methods>
+				<method type="query" verb="GET" endpoint="/Accounts?sort_order=desc" pathtocontent="data"/>
+				<method type="insert" verb="POST" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Accounts" batch="true" payloadsnippet="ZohoBatchInsertConverter"/>
+				<method type="update" verb="PUT" successif="requestsucceeds" sendchanges="custompayloadinbody" endpoint="/Accounts" batch="true" payloadsnippet="ZohoBatchUpdateConverter"/>
+				<method type="delete" verb="DELETE" endpoint="/Accounts/{{{id}}}" successif="requestsucceeds"/>
+			</methods>
+			<idfields>
+				<field>id</field>
+			</idfields>
+		</model>
+	</models>
+	<components>
+		<pagetitle model="Leads" uniqueid="sk-1SsWuN-513">
+			<maintitle>Zoho CRM</maintitle>
+			<actions>
+				<action type="savecancel" label="New Button" uniqueid="sk-1Ss_Y9-617">
+					<savehotkeys>
+						<hotkey modifiers="ctrl" key="s"/>
+						<hotkey modifiers="meta" key="s"/>
+					</savehotkeys>
+					<models>
+						<model>Contacts</model>
+						<model>Accounts</model>
+					</models>
+				</action>
+			</actions>
+		</pagetitle>
+		<tabset rememberlastusertab="true" defertabrendering="true" uniqueid="sk-1SsZHn-517" renderas="">
+			<tabs>
+				<tab name="Leads" icon="sk-icon-phone">
+					<components>
+						<skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="client" searchbox="true" showexportbuttons="true" pagesize="10" alwaysresetpagination="false" createrecords="true" model="Leads" buttonposition="" mode="read" allowcolumnreordering="true" responsive="true" uniqueid="sk-1JJlyC-128" emptysearchbehavior="query">
+							<fields>
+								<field id="First_Name" hideable="true" uniqueid="fi-1JJooE-143" valuehalign="" type=""/>
+								<field id="Last_Name" hideable="true" uniqueid="fi-1JJooE-144"/>
+								<field id="Company" hideable="true" uniqueid="fi-1JJooF-147" valuehalign="" type=""/>
+								<field id="Lead_Source" hideable="true" uniqueid="fi-1JJooE-145" valuehalign="" type=""/>
+								<field id="Lead_Status" hideable="true" uniqueid="fi-1JJooF-146" valuehalign="" type=""/>
+								<field id="Street" hideable="true" uniqueid="fi-1JJooF-149" valuehalign="" type=""/>
+								<field id="State" hideable="true" uniqueid="fi-1JJooF-148"/>
+								<field id="Zip_Code" hideable="true" uniqueid="fi-1JJooG-152" decimalplaces="" valuehalign="" type=""/>
+								<field id="Created_Time" hideable="true" uniqueid="fi-1T1qlH-1722"/>
+								<field id="Owner.name" hideable="true" uniqueid="fi-1S_HNg-1462" valuehalign="" type=""/>
+							</fields>
+							<rowactions>
+								<action type="edit"/>
+								<action type="delete"/>
+							</rowactions>
+							<massactions usefirstitemasdefault="true">
+								<action type="massupdate"/>
+								<action type="massdelete"/>
+							</massactions>
+							<views>
+								<view type="standard"/>
+							</views>
+							<exportproperties usetablecolumns="true"/>
+							<searchfields/>
+							<filters>
+								<filter type="select" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="auto" labelmode="auto"/>
+							</filters>
+						</skootable>
+					</components>
+					<oninitialshowactions/>
+					<onshowactions/>
+				</tab>
+				<tab name="Contacts" loadlazypanels="true" icon="sk-icon-key-people">
+					<components>
+						<skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="client" searchbox="true" showexportbuttons="true" pagesize="10" alwaysresetpagination="false" createrecords="true" model="Contacts" buttonposition="" mode="read" allowcolumnreordering="true" responsive="true" uniqueid="sk-1T2Qx--1888" emptysearchbehavior="query">
+							<fields>
+								<field id="First_Name" hideable="true" uniqueid="fi-1T2UZW-1902" valuehalign="" type=""/>
+								<field id="Last_Name" hideable="true" uniqueid="fi-1T2UZX-1903" valuehalign="" type=""/>
+								<field id="Account_Name.name" hideable="true" uniqueid="fi-1T8TWp-292" valuehalign="" type=""/>
+								<field id="Email" hideable="true" uniqueid="fi-1T2UZY-1904"/>
+								<field id="Phone" hideable="true" uniqueid="fi-1T2UZY-1905"/>
+								<field id="Date_of_Birth" hideable="true" uniqueid="fi-1T2UZc-1907"/>
+								<field id="Created_Time" hideable="true" uniqueid="fi-1T2UZd-1908"/>
+							</fields>
+							<rowactions>
+								<action type="edit"/>
+								<action type="delete"/>
+							</rowactions>
+							<massactions usefirstitemasdefault="true">
+								<action type="massupdate"/>
+								<action type="massdelete"/>
+							</massactions>
+							<views>
+								<view type="standard"/>
+							</views>
+							<exportproperties usetablecolumns="true"/>
+							<searchfields/>
+						</skootable>
+					</components>
+					<oninitialshowactions/>
+					<onshowactions/>
+				</tab>
+				<tab name="Accounts" loadlazypanels="true" icon="sk-icon-employment-info">
+					<components>
+						<skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="client" searchbox="true" showexportbuttons="true" pagesize="10" alwaysresetpagination="false" createrecords="true" model="Accounts" buttonposition="" mode="read" allowcolumnreordering="true" responsive="true" uniqueid="sk-1T35Ao-2032" emptysearchbehavior="query">
+							<fields>
+								<field id="Account_Name" hideable="true" uniqueid="fi-1T380x-2046" valuehalign="" type=""/>
+								<field id="Account_Type" hideable="true" uniqueid="fi-1T380y-2048"/>
+								<field id="Industry" hideable="true" uniqueid="fi-1T380y-2049"/>
+								<field id="Billing_State" hideable="true" uniqueid="fi-1T380z-2050"/>
+								<field id="Billing_Country" hideable="true" uniqueid="fi-1T380z-2051"/>
+								<field id="Employees" hideable="true" uniqueid="fi-1T380_-2052"/>
+							</fields>
+							<rowactions>
+								<action type="edit"/>
+								<action type="delete"/>
+							</rowactions>
+							<massactions usefirstitemasdefault="true">
+								<action type="massupdate"/>
+								<action type="massdelete"/>
+							</massactions>
+							<views>
+								<view type="standard"/>
+							</views>
+							<exportproperties usetablecolumns="true"/>
+							<searchfields/>
+						</skootable>
+					</components>
+					<oninitialshowactions/>
+					<onshowactions/>
+				</tab>
+			</tabs>
+		</tabset>
+	</components>
+	<resources>
+		<labels/>
+		<javascript>
+			<jsitem location="inlinesnippet" name="ZohoBatchInsertConverter" cachelocation="false">var CurrentUserModel = skuid.$M("CurrentUser");
+var CurrentUser = CurrentUserModel.getFirstRow();
+return {
+    data: skuid.$.map(arguments[0].changes, function(change) {
+        return skuid.$.extend(
+            { 
+                Owner: {
+                    id: CurrentUser.id,
+                },
+            },
+            change
+        );
+    }),
+};</jsitem>
+			<jsitem location="inlinesnippet" name="ZohoBatchUpdateConverter" cachelocation="false">var model = arguments[0].model;
+return {
+    data: skuid.$.map(arguments[0].changes, function(change, rowId) {
+        return skuid.$.extend(
+            { 
+                id: model.getFieldValue(model.getRowById(rowId), "id", true),
+            },
+            change
+        );
+    }),
+};</jsitem>
+		</javascript>
+		<css/>
+		<actionsequences uniqueid="sk-1JJh98-102"/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+</skuidpage>
