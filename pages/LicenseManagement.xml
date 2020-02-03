@@ -1,40 +1,42 @@
-<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" tabtooverride="User">
-
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" useviewportmeta="true" showsidebar="true" showheader="true" tabtooverride="UserPackageLicense">
     <models>
-        <model id="User" limit="100" query="true" createrowifnonefound="false" sobject="User" type="" orderby="LastLoginDate ASC" datasource="salesforce">
+        <model id="UserPackageLicense" query="false" createrowifnonefound="false" datasource="salesforce" sobject="UserPackageLicense" processonclient="true" type="" limit="">
             <fields>
-                <field id="FirstName"/>
-                <field id="LastName"/>
-                <field id="CreatedDate"/>
-                <field id="LastLoginDate"/>
-                <field id="IsActive"/>
-                <field id="Username"/>
+                <field id="UserId"/>
+                <field id="PackageLicenseId"/>
+                <field id="PackageLicense.NamespacePrefix"/>
             </fields>
             <conditions>
-                <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
-                    <conditions>
-                        <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
-                    </conditions>
-                </condition>
-            </conditions>
-            <actions/>
-        </model>
-        <model id="SelectedUserPackageLicense" limit="1" query="false" createrowifnonefound="false" type="" sobject="UserPackageLicense" datasource="salesforce">
-            <fields>
-                <field id="Id"/>
-            </fields>
-            <conditions>
-                <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="UserId" state="filterableoff" inactive="true" name="UserId"/>
                 <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
             </conditions>
             <actions/>
         </model>
-        <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" type="" sobject="PackageLicense">
+        <model id="Users" limit="2000" query="false" createrowifnonefound="false" datasource="salesforce" sobject="User" processonclient="true" orderby="Lastname ASC NULLS LAST" type="">
             <fields>
-                <field id="ExpirationDate"/>
-                <field id="UsedLicenses"/>
-                <field id="Status"/>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="ProfileId"/>
+                <field id="Profile.Name"/>
+                <field id="IsActive"/>
+                <field id="UserRoleId"/>
+                <field id="UserRole.Name"/>
+                <field id="Username"/>
+                <field id="Email"/>
+                <field id="CreatedDate"/>
+            </fields>
+            <conditions>
+                <condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id"/>
+                <condition type="modelmerge" value="" field="Id" operator="not in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id1"/>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="PackageLicense" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" type="" sobject="PackageLicense">
+            <fields>
                 <field id="AllowedLicenses"/>
+                <field id="UsedLicenses"/>
+                <field id="AvailableLicenses" uionly="true" displaytype="FORMULA" label="Available Licenses" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+                    <formula>{{{AllowedLicenses}}} - {{{UsedLicenses}}}</formula>
+                </field>
             </fields>
             <conditions>
                 <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
@@ -43,82 +45,99 @@
         </model>
     </models>
     <components>
-        <grid uniqueid="sk-xuyaW-380">
-            <divisions>
-                <division behavior="flex" minwidth="100px" ratio="4" verticalalign="top">
-                    <components>
-                        <pagetitle model="User" uniqueid="sk-xt7jv-81">
-                            <maintitle>Users with a Skuid package License</maintitle>
-                            <subtitle>
-                                <template>Home</template>
-                            </subtitle>
-                            <actions/>
-                        </pagetitle>
-                    </components>
-                </division>
-                <division behavior="flex" verticalalign="top" minwidth="100px" ratio="6">
-                    <components>
-                        <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="SkuidLicenses" buttonposition="" uniqueid="sk-xv0df-389" mode="readonly" layout="">
-                            <columns>
-                                <column width="100%">
-                                    <sections>
-                                        <section title="Section A" collapsible="no" showheader="false">
-                                            <fields>
-                                                <field type="COMBO" valuehalign="" editmodebehavior="autopopup" uniqueid="sk-296JVz-309">
-                                                    <label>License Usage</label>
-                                                    <template> / </template>
-                                                </field>
-                                            </fields>
-                                        </section>
-                                    </sections>
-                                </column>
-                            </columns>
-                        </basicfieldeditor>
-                    </components>
-                </division>
-            </divisions>
-            <styles>
-                <styleitem type="background" bgtype="none"/>
-            </styles>
-        </grid>
-        <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="User" mode="readonly" uniqueid="sk-xt7jv-82">
+        <template multiple="false" uniqueid="sk-NRizp-268" model="PackageLicense">
+            <contents>You have {{AvailableLicenses}} available Skuid licenses.
+
+
+Allowed Licenses: {{{AllowedLicenses}}}
+Used Licenses: {{{UsedLicenses}}}</contents>
+        </template>
+        <skootable showconditions="true" showsavecancel="false" showerrorsinline="true" searchmethod="server" searchbox="true" showexportbuttons="true" hideheader="false" hidefooter="false" pagesize="10" alwaysresetpagination="false" createrecords="false" model="Users" buttonposition="" mode="readonly" allowcolumnreordering="true" responsive="true" uniqueid="sk-3_VY-695" heading="User List">
             <fields>
-                <field id="FirstName" allowordering="true" uniqueid="sk-296JWJ-312"/>
-                <field id="LastName" allowordering="true" uniqueid="sk-296JWO-314"/>
-                <field id="Username" valuehalign="" type="" uniqueid="sk-296JWT-316"/>
-                <field id="IsActive" type="" valuehalign="" uniqueid="sk-296JWU-318"/>
-                <field id="LastLoginDate" valuehalign="" type="" allowordering="true" uniqueid="sk-296JWW-320"/>
+                <field id="FirstName" uniqueid="sk-3_VY-700" valuehalign="" type="" allowordering="true"/>
+                <field id="LastName" uniqueid="sk-3_VY-703" valuehalign="" type="" allowordering="true"/>
+                <field id="ProfileId" hideable="true" uniqueid="fi-3_VY-1194" valuehalign="" type=""/>
+                <field id="UserRoleId" hideable="true" uniqueid="fi-3_VY-1221" valuehalign="" type="" allowordering="true"/>
+                <field id="IsActive" hideable="true" uniqueid="fi-3_VY-1206" type="" valuehalign="" allowordering="true"/>
+                <field id="Username" hideable="true" uniqueid="fi-3_VY-1249" valuehalign="" type="" allowordering="true"/>
+                <field id="Email" hideable="true" uniqueid="fi-3_VY-1265" valuehalign="" type="" allowordering="true"/>
+                <field id="CreatedDate" hideable="true" uniqueid="fi-3-8zAk-284" valuehalign="" type="" allowordering="true"/>
             </fields>
-            <rowactions>
-                <action type="multi" label="Revoke License" icon="sk-icon-remove-reference">
-                    <actions>
-                        <action type="custom" snippet="Confirm">
-                            <onerroractions/>
-                        </action>
-                        <action type="blockUI" message="Revoking License for User..."/>
-                        <action type="setCondition" model="SelectedUserPackageLicense" condition="UserId" value="}"/>
-                        <action type="requeryModel" model="SelectedUserPackageLicense" behavior="standard"/>
-                        <action type="markRowsForDeletion" model="SelectedUserPackageLicense"/>
-                        <action type="save">
-                            <models>
-                                <model>SelectedUserPackageLicense</model>
-                            </models>
-                        </action>
-                        <action type="requeryModel" model="User" behavior="standard"/>
-                        <action type="blockUI" message="License revoked." timeout="1000"/>
-                    </actions>
-                </action>
-            </rowactions>
+            <rowactions/>
             <massactions usefirstitemasdefault="true"/>
             <views>
                 <view type="standard"/>
             </views>
+            <filters>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users with Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users without Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id1"/>
+                        <effect action="deactivate" value="" condition="Id"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="All Users">
+                    <effects>
+                        <effect action="deactivate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+            </filters>
+            <exportproperties usetablecolumns="true"/>
         </skootable>
     </components>
     <resources>
         <labels/>
         <css/>
         <javascript/>
+        <actionsequences uniqueid="sk-3_VY-232">
+            <actionsequence id="7c837e08-1017-4f03-a292-6f7bb1bb8b13" label="Load User License Info" type="event-triggered" event-scope="component" event-name="page.rendered" uniqueid="sk-3-8vo9-277">
+                <description/>
+                <actions>
+                    <action type="blockUI" message="Loading User License info"/>
+                    <action type="requeryModel" model="UserPackageLicense" behavior="standard">
+                        <onerroractions>
+                            <action type="blockUI" message="There was an error" timeout="3000"/>
+                        </onerroractions>
+                    </action>
+                    <action type="requeryModel" model="Users" behavior="standard"/>
+                    <action type="unblockUI"/>
+                </actions>
+            </actionsequence>
+            <actionsequence id="ff381c0e-a182-4561-b338-9e0ff2c001a2" label="SkuidLicenseAlert" type="event-triggered" event-scope="component" event-name="page.rendered">
+                <description/>
+                <actions>
+                    <action type="branch" model="PackageLicense" whenfinished="stop">
+                        <formula>({{AvailableLicenses}} &lt; 100)</formula>
+                        <iftrueactions>
+                            <action type="showPopup">
+                                <popup title="WARNING" width="40%">
+                                    <components>
+                                        <template multiple="false" uniqueid="sk-NTB31-1434" model="PackageLicense">
+                                            <contents>&lt;p style="color:red;font-weight:bold; font-size:150%;"&gt;Warning: You have only {{AvailableLicenses}} available Skuid licenses.&lt;/p&gt;</contents>
+                                        </template>
+                                        <buttonset uniqueid="sk-MGD-440">
+                                            <buttons>
+                                                <button type="multi" label="Close" uniqueid="sk-MGD-446">
+                                                    <actions>
+                                                        <action type="closeTopmostPopup"/>
+                                                    </actions>
+                                                </button>
+                                            </buttons>
+                                        </buttonset>
+                                    </components>
+                                </popup>
+                            </action>
+                        </iftrueactions>
+                    </action>
+                </actions>
+            </actionsequence>
+        </actionsequences>
     </resources>
     <styles>
         <styleitem type="background" bgtype="none"/>
