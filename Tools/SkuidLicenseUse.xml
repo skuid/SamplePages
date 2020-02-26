@@ -1,4 +1,4 @@
-<skuidpage unsavedchangeswarning="" showsidebar="true" showheader="true" tabtooverride="UserLogin">
+<skuidpage unsavedchangeswarning="" showsidebar="false" showheader="false" tabtooverride="UserLogin">
    <models>
       <model id="ProfileSelector_FromUser" limit="1" query="false" createrowifnonefound="true" sobject="User" doclone="" type="">
          <fields>
