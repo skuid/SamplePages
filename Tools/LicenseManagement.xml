@@ -1,15 +1,3 @@
-<!--Title: Skuid License Management - Where are all my Skuid licenses on Salesforce? -->
-<!-- Instructions:  Create a new page in your Salesforce org.  Copy the XML below into it. 
- You will be able to see all users that have been granted Skuid Licenses, 
- Even Guest Site Users,  Chatter Free users and others that don't normally show in standard User lists-->
-<!-- Related Links:  
-Docs: https://docs.skuid.com/latest/en/skuid/deploy/salesforce/user-access/#skuid-sample-page-license-management
-Community Post: https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available
--->
-<!-- DataSource: Salesforce  (no new datasource needed)-->
-<!-- Design System: None -->
-<!-- Origin: SFDC Demo Org -->
-
 <skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" tabtooverride="User">
     <models>
         <model id="User" limit="100" query="true" createrowifnonefound="false" sobject="User" orderby="LastLoginDate ASC" datasource="salesforce">
