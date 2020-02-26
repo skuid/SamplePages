@@ -21,13 +21,13 @@ Otherwise, modify to your heart's content and click **Save** to retain your chan
 
 Pages: 
 
- - <a download="" href="LicenseManagement.xml">License Management </a>  
+ - <a href="LicenseManagement.xml" download>License Management </a>  
     - Report that shows all users that have been assigned a Skuid license - even guest user and Chatter free users - that don't normally show in the Salesforce assigned license page. 
 
- - <a download="" href="SkuidLicenseUse.xml">License Use </a>  
+ - <a href="SkuidLicenseUse.xml" download>License Use </a>  
     -   Summary report that shows logins by month for users that have license to the Skuid Package.  Report shows 6 months of login activity. 
 
- - <a download="" href="SkuidLicenes_1Month.xml">License Use </a>  
+ - <a href="SkuidLicenes_1Month.xml" download>License Use </a>  
     -   Summary report that shows a summary of logins for a single month for users that have license to the Skuid Package
 
 
