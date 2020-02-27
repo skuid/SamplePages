@@ -197,9 +197,6 @@ $.each(NewTasksModel.registeredLists,function(i,list){
       } 
    });
 });
-
-
-   
 </jsitem>
       </javascript>
    </resources>
