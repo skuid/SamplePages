@@ -29,10 +29,12 @@ Pages:
    -  DataSource: Salesforce  (no new datasource needed)
    -  Design System: None 
 
-
+***
 
  - <a href="SkuidLicenseUse.xml" download="SkuidLicenseUse.xml">License Use - Six Months</a>  
     -   Summary report that shows logins by month for users that have license to the Skuid Package.  Report shows 6 months of login activity. 
+
+***
 
  - <a href="SkuidLicenes_1Month.xml" download="SkuidLicenes_1Month.xml">License Use - One Month</a>  
     -   Summary report that shows a summary of logins for a single month for users that have license to the Skuid Package
