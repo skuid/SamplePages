@@ -2,7 +2,7 @@
 
 While Skuid Filters on tables and in filter sets provide very flexible functionality - there are times when you want more.  This Skuid technique uses fields on one model,  with actions to pass values into conditions on a second model. 
 
-<img src "ArbitraryFilters.png" width "300">
+![Arbitrary Filters](ArbitraryFilters.png){:width="300px"}.
 
 ## Instructions:  
 - V2 Page API Used
