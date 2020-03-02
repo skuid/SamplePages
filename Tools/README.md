@@ -19,22 +19,38 @@ To see your page in action, click **Preview**.
 
 Pages: 
 
- - <a href="LicenseManagement.xml" download="LicenseManagement.xml">License Management </a>  
+ <a href="LicenseManagement.xml" download="LicenseManagement.xml">License Management </a>  
     - Where are all my Skuid licenses on Salesforce? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users - that don't normally show in the Salesforce assigned license page. 
 
-   - Related Links:  
-      - Docs: https://docs.skuid.com/latest/en/skuid/deploy/salesforce/user-access/#skuid-sample-page-license-management
-      - Community Post: https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available
-
-   -  DataSource: Salesforce  (no new datasource needed)
+   -  V1 Page API Used
+   -  Data source: Uses default Salesforce data source
    -  Design System: None 
 
+   - Related Links:  
+      - [Skuid Documentation](https://docs.skuid.com/latest/en/skuid/deploy/salesforce/user-access/#skuid-sample-page-license-management)
+      - [Community Post](https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available)
+
+
 ***
 
- - <a href="SkuidLicenseUse.xml" download="SkuidLicenseUse.xml">License Use - Six Months</a>  
+ <a href="SkuidLicenseUse.xml" download="SkuidLicenseUse.xml">License Use - Six Months</a>  
     -   Summary report that shows logins by month for users that have license to the Skuid Package.  Report shows 6 months of login activity. 
 
+   -  V1 Page API Used
+   -  Data source: Uses default Salesforce data source
+   -  Design System: None 
+
+
 ***
 
- - <a href="SkuidLicenes_1Month.xml" download="SkuidLicenes_1Month.xml">License Use - One Month</a>  
-    -   Summary report that shows a summary of logins for a single month for users that have license to the Skuid Package
+ <a href="SkuidLicenes_1Month.xml" download="SkuidLicenes_1Month.xml">License Use - One Month</a>  
+    -   Summary report that shows a summary of logins for a single month for users that have license to the
+    Skuid Package.  (Useful when the 6 month report attempts to load too much data and you get an Apex Heap Size error)
+
+
+   -  V1 Page API Used
+   -  Data source: Uses default Salesforce data source
+   -  Design System: None 
+
+
+
