@@ -1,0 +1,464 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false">
+	<models>
+		<model id="CaseData" query="true" createrowifnonefound="false" sobject="Case" datasource="salesforce" limit="20">
+			<fields>
+				<field id="CaseNumber"/>
+				<field id="CreatedDate"/>
+				<field id="ContactId"/>
+				<field id="Contact.Name"/>
+				<field id="Subject"/>
+				<field id="Status"/>
+				<field id="Priority"/>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="Origin"/>
+				<field id="Reason"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="Description"/>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="param" enclosevalueinquotes="true" operator="=" field="Id" value="id"/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="requeryModels" model="CaseData" behavior="standard">
+							<models>
+								<model>CaseData</model>
+								<model>FieldHistory</model>
+							</models>
+						</action>
+					</actions>
+					<events>
+						<event>models.saved</event>
+					</events>
+				</action>
+			</actions>
+		</model>
+		<model id="ApprovalInstances" limit="100" query="true" createrowifnonefound="false" sobject="ProcessInstance" orderby="CreatedDate DESC" datasource="salesforce">
+			<fields>
+				<field id="Id"/>
+				<field id="Status"/>
+				<field id="CompletedDate"/>
+				<field id="CreatedDate"/>
+				<field id="TargetObjectId"/>
+				<field id="TargetObject.Name"/>
+				<field id="TargetObject.Type"/>
+				<field id="ProcessDefinition.Description"/>
+				<field id="ProcessDefinition.Name"/>
+				<field id="Steps" type="childRelationship" limit="10" orderby="CreatedDate ASC">
+					<fields>
+						<field id="Comments"/>
+						<field id="ActorId"/>
+						<field id="StepStatus"/>
+						<field id="Actor.Name"/>
+						<field id="CreatedDate"/>
+					</fields>
+				</field>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="TargetObjectId" operator="=" model="CaseData" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="CurrentWorkItem" limit="20" query="true" createrowifnonefound="false" sobject="ProcessInstanceWorkitem" datasource="salesforce">
+			<fields>
+				<field id="ActorId"/>
+				<field id="Actor.Name"/>
+				<field id="CreatedDate"/>
+				<field id="ProcessInstanceId"/>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="ProcessInstanceId" operator="in" model="ApprovalInstances" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="ErrorDisplay" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="ErrorText" displaytype="TEXT" length="255"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__grid uniqueid="sk-2SzY-10888" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+			<divisions>
+				<division minWidth="100px" ratio="1">
+					<components>
+						<skuid__form showErrorsInline="true" model="CaseData" uniqueid="sk-2Szt-13982" mode="edit" showSaveCancel="true">
+							<sections>
+								<section title="Case Details">
+									<rows>
+										<row>
+											<fields>
+												<skuid__field id="CaseNumber" redirectType="none"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="Subject"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="Status"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="OwnerId" redirectType="none"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="AccountId" redirectType="none"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="ContactId" redirectType="none"/>
+											</fields>
+										</row>
+									</rows>
+								</section>
+								<section title="Origin / Priority">
+									<rows>
+										<row>
+											<fields>
+												<skuid__field id="Origin"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="Reason"/>
+											</fields>
+										</row>
+										<row>
+											<fields>
+												<skuid__field id="Priority"/>
+											</fields>
+										</row>
+									</rows>
+								</section>
+							</sections>
+							<styles>
+								<spacing/>
+							</styles>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__form>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="4">
+					<components>
+						<skuid__wrapper uniqueid="sk-2S_K-25759">
+							<components>
+								<skuid__messageArea uniqueid="sk-2TCw-21926" model="ErrorDisplay">
+									<group>
+										<skuid__messageBlock title="There was an Error" styleSettingsVariant="errorStrong" showClose="true" description="{{ErrorText}}">
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="ErrorDisplay" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+											</renderConditions>
+										</skuid__messageBlock>
+									</group>
+									<renderconditions logictype="and"/>
+									<enableconditions/>
+									<styles>
+										<spacing top="4" bottom="4" left="4" right="4"/>
+									</styles>
+								</skuid__messageArea>
+								<skuid__grid uniqueid="sk-2S_K-25760" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+									<divisions>
+										<division minWidth="100px" ratio="1" alignSelf="flex-start">
+											<components>
+												<skuid__form showErrorsInline="true" model="CurrentWorkItem" uniqueid="sk-2S-0-39343" mode="readonly">
+													<sections>
+														<section title="Pending Approvals">
+															<rows>
+																<row>
+																	<fields>
+																		<skuid__field id="ActorId" label="Assigned To"/>
+																		<skuid__field id="CreatedDate" label="Requested Date"/>
+																	</fields>
+																</row>
+															</rows>
+														</section>
+													</sections>
+												</skuid__form>
+											</components>
+										</division>
+										<division alignSelf="flex-start" minWidth="100px" ratio="1">
+											<components>
+												<skuid__buttonSet uniqueid="sk-2S-N-43837">
+													<groups>
+														<skuid__buttonGroup>
+															<buttons>
+																<skuid__button label="Request Approval" uniqueId="sk-2S-N-43836">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Submitting Case # {{$Model.CaseData.data.0.CaseNumber}} for Approval"/>
+																		<action type="datasource-action" datasource="salesforce" actionname="submit">
+																			<inputs>
+																				<input name="objectId" displaytype="reference" value="{{$Model.CaseData.data.0.Id}}"/>
+																				<input name="comment" displaytype="string" value="Please Review Case {{$Model.CaseData.data.0.CaseNumber}}"/>
+																				<input name="submitterId" displaytype="string" value="{{$User.userId}}"/>
+																			</inputs>
+																			<onerroractions>
+																				<action type="unblockUI"/>
+																				<action type="emptyModelData">
+																					<models>
+																						<model>ErrorDisplay</model>
+																					</models>
+																				</action>
+																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults>
+																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</defaults>
+																				</action>
+																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																			</onerroractions>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>ApprovalInstances</model>
+																				<model>CurrentWorkItem</model>
+																			</models>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<renderCondition fieldmodel="CurrentWorkItem" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<styleVariantConditions/>
+																</skuid__button>
+																<skuid__button label="Approve" uniqueId="sk-2S-N-43836">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Approving case # {{$Model.CaseData.data.0.CaseNumber}}"/>
+																		<action type="datasource-action" datasource="salesforce" actionname="approvals-approve" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Looks Good">
+																			<onerroractions>
+																				<action type="unblockUI"/>
+																				<action type="emptyModelData">
+																					<models>
+																						<model>ErrorDisplay</model>
+																					</models>
+																				</action>
+																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults>
+																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</defaults>
+																				</action>
+																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																			</onerroractions>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>CaseData</model>
+																			</models>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>ApprovalInstances</model>
+																				<model>CurrentWorkItem</model>
+																			</models>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" sourceproperty="hasRows"/>
+																		<renderCondition type="userinfo" operator="=" fieldmodel="CurrentWorkItem" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="ActorId" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<styleVariantConditions/>
+																</skuid__button>
+																<skuid__button label="Reject" uniqueId="sk-2S-N-43836">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Rejecting Case # {{$Model.CaseData.data.0.CaseNumber}}"/>
+																		<action type="datasource-action" datasource="salesforce" actionname="approvals-reject" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Nope">
+																			<onerroractions>
+																				<action type="unblockUI"/>
+																				<action type="emptyModelData">
+																					<models>
+																						<model>ErrorDisplay</model>
+																					</models>
+																				</action>
+																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults>
+																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</defaults>
+																				</action>
+																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																			</onerroractions>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>CaseData</model>
+																				<model>ApprovalInstances</model>
+																				<model>CurrentWorkItem</model>
+																			</models>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" sourceproperty="hasRows"/>
+																		<renderCondition type="userinfo" operator="=" fieldmodel="CurrentWorkItem" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="ActorId" fieldtargetobjects="Group,User" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<styleVariantConditions/>
+																</skuid__button>
+																<skuid__button label="Recall" uniqueId="sk-2S-N-43836">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Recalling Case # {{$Model.CaseData.data.0.CaseNumber}}"/>
+																		<action type="datasource-action" datasource="salesforce" actionname="approvals-recall" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Ooops - Do This Over">
+																			<onerroractions>
+																				<action type="unblockUI"/>
+																				<action type="emptyModelData">
+																					<models>
+																						<model>ErrorDisplay</model>
+																					</models>
+																				</action>
+																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults>
+																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</defaults>
+																				</action>
+																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																			</onerroractions>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>CaseData</model>
+																				<model>ApprovalInstances</model>
+																				<model>CurrentWorkItem</model>
+																			</models>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<renderCondition type="userinfo" operator="=" fieldmodel="ApprovalInstances" sourcetype="fieldvalue" field="CreatedById" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" sourceproperty="hasRows"/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<styleVariantConditions/>
+																</skuid__button>
+																<skuid__button label="Unlock" uniqueId="sk-2S-N-43836">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Unlocking Case # {{$Model.CaseData.data.0.CaseNumber}}"/>
+																		<action type="datasource-action" datasource="salesforce" actionname="approvals-unlock" recordid="{{$Model.CaseData.data.0.Id}}">
+																			<onerroractions>
+																				<action type="unblockUI"/>
+																				<action type="emptyModelData">
+																					<models>
+																						<model>ErrorDisplay</model>
+																					</models>
+																				</action>
+																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults>
+																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</defaults>
+																				</action>
+																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																			</onerroractions>
+																		</action>
+																		<action type="requeryModels" behavior="standard">
+																			<models>
+																				<model>CaseData</model>
+																				<model>ApprovalInstances</model>
+																				<model>CurrentWorkItem</model>
+																			</models>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="CurrentWorkItem" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<styleVariantConditions/>
+																</skuid__button>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+												</skuid__buttonSet>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing bottom="4" left="4" right="4"/>
+									</styles>
+								</skuid__grid>
+								<skuid__table allowColumnFreezing="dragDrop" model="ApprovalInstances" uniqueid="sk-2T2W-8357" mode="read" showSaveCancel="false" title="Approval History" pageSize="10" enableDrawers="true">
+									<fields>
+										<field id="ProcessDefinition.Name" uniqueid="fi-2T36-11874"/>
+										<field id="CreatedById" label="Requested By" uniqueid="fi-2UI8-26570"/>
+										<field id="CompletedDate" uniqueid="fi-2T36-11876"/>
+										<field id="Status" uniqueid="fi-2T36-11875"/>
+									</fields>
+									<filtering enableSearch="false"/>
+									<rowActions/>
+									<massActions/>
+									<styles>
+										<spacing top="4" bottom="4" left="4" right="4"/>
+									</styles>
+									<drawer>
+										<components>
+											<skuid__text contents="{{#Steps.records}}{{StepStatus}} by  {{Actor.Name}} on {{CreatedDate}} ({{Comments}})&lt;p&gt;{{/Steps.records}}" uniqueid="sk-2UGJ-18977">
+												<conditions>
+													<condition type="contextrow" field="Id" mergefield="Id"/>
+												</conditions>
+												<styles>
+													<spacing top="2" bottom="2" left="4" right="4"/>
+												</styles>
+											</skuid__text>
+										</components>
+										<beforeLoad/>
+									</drawer>
+								</skuid__table>
+							</components>
+							<styles>
+								<spacing top="4" bottom="4" left="4" right="4"/>
+							</styles>
+							<background type="color" color="white"/>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;Appoval Process Actions&lt;/span&gt;" uniqueid="sk-2Sy_-4292" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4" styleSettingsVariant="large"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#a5a5a5"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background type="color" color="#f2f2f2"/>
+</skuid__page>

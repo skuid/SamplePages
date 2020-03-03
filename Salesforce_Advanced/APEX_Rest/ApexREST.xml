@@ -28,9 +28,6 @@
                 <field id="Website" uniqueid="fi-2Le3WU-109"/>
                 <field id="BillingState" hideable="true" uniqueid="fi-2LjXbi-125" valuehalign="" type=""/>
             </fields>
-            <rowactions>
-
-
             </rowactions>
             <massactions usefirstitemasdefault="true">
                 <action type="massupdate"/>
