@@ -1,0 +1,1278 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="Complex Form">
+	<models>
+		<model id="Property" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CTR2H-207">
+			<fields>
+				<field id="street_number" displaytype="DOUBLE" label="Street Number" ogdisplaytype="TEXT" precision="9" scale="0"/>
+				<field id="street_name" displaytype="TEXT" label="Street Name" defaultvaluetype="fieldvalue" defaultValue="936 Linda Street"/>
+				<field id="apt_suite" displaytype="TEXT" label="Apt./Suite" placeholder="eg. Suite K101"/>
+				<field id="city" displaytype="TEXT" label="City" defaultvaluetype="fieldvalue" defaultValue="Philadelphia"/>
+				<field id="state" displaytype="TEXT" label="State" defaultvaluetype="fieldvalue" defaultValue="PA"/>
+				<field id="county" displaytype="TEXT" label="County"/>
+				<field id="zip" displaytype="DOUBLE" label="Zip Code" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" defaultValue="19103"/>
+				<field id="type" displaytype="PICKLIST" label="Property Type" ogdisplaytype="TEXT" picklistsource="manual" required="true" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Single Family Residence">
+					<picklistentries>
+						<entry value="Single Family Residence" label="Single Family Residence"/>
+						<entry value="Condominium" label="Condominium"/>
+						<entry value="Townhouse" label="Townhouse"/>
+						<entry value="Multi-Family" label="Multi-Family"/>
+						<entry value="Manufactured Home" label="Manufactured Home"/>
+						<entry value="Lot" label="Lot"/>
+						<entry value="Commercial" label="Commercial"/>
+					</picklistentries>
+				</field>
+				<field id="use" displaytype="PICKLIST" label="Property Use" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue">
+					<picklistentries>
+						<entry value="Primary Residence" label="Primary Residence"/>
+						<entry value="Second Home" label="Second Home"/>
+						<entry value="Investment Property" label="Investment Property"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop" model="Property" label="If Type is Multi-family">
+							<formula>{{type}} === "Multi-Family" &amp;&amp; {{$Model.MultiFam_Unit.data.length}} === 0</formula>
+							<iftrueactions>
+								<action type="branch" whenfinished="stop" label="if no unit">
+									<formula>{{$Model.MultiFam_Unit.data.length}} === 0</formula>
+									<iftrueactions>
+										<action type="createRow" model="MultiFam_Unit" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+											<defaults>
+												<default type="fieldvalue" field="unit_number" enclosevalueinquotes="false" value="1"/>
+											</defaults>
+										</action>
+									</iftrueactions>
+								</action>
+								<action type="createRow" model="MultiFam_Unit" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+									<defaults/>
+								</action>
+								<action type="updateRow" fieldmodel="MultiFam_Unit" valuesource="fieldvalue" affectedrows="context" field="unit_number" enclosevalueinquotes="false" value="{{index}}"/>
+							</iftrueactions>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>type</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="Mortgage" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CUhpi-1518">
+			<fields>
+				<field id="term" displaytype="PICKLIST" label="Mortgage Term" ogdisplaytype="TEXT" picklistsource="manual" required="true" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="15 years">
+					<picklistentries>
+						<entry value="15 years" label="15 years"/>
+						<entry value="20 years" label="20 years"/>
+						<entry value="30 years" label="30 years"/>
+						<entry value="Other" label="Other"/>
+					</picklistentries>
+				</field>
+				<field id="insurance_included" displaytype="BOOLEAN" label="Include Insurance in Escrow?" ogdisplaytype="TEXT" required="true" defaultvaluetype="fieldvalue" defaultValue="false"/>
+				<field id="property_tax_included" displaytype="BOOLEAN" label="Include Property Tax in Escrow?" ogdisplaytype="TEXT" required="true" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false">
+					<picklistentries>
+						<entry value="New Entry" label="New Entry"/>
+						<entry value="New Entry" label="New Entry"/>
+						<entry value="New Entry" label="New Entry"/>
+					</picklistentries>
+				</field>
+				<field id="type" displaytype="PICKLIST" label="Mortgage Type" ogdisplaytype="TEXT" picklistsource="manual" required="true" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Fixed">
+					<picklistentries>
+						<entry value="Fixed" label="Fixed"/>
+						<entry value="ARM" label="ARM"/>
+						<entry value="GPM" label="GPM"/>
+						<entry value="Other" label="Other"/>
+					</picklistentries>
+				</field>
+				<field id="loan_amount" displaytype="FORMULA" label="Loan Amount" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" readonly="true" returntype="CURRENCY">
+					<formula>{{purchase_amount}} - {{down_pmt}}</formula>
+				</field>
+				<field id="down_pmt" displaytype="FORMULA" label="Down Payment" ogdisplaytype="TEXT" precision="9" scale="0" readonly="true" returntype="CURRENCY" defaultvaluetype="fieldvalue">
+					<formula>{{purchase_amount}} * {{down_pmt_percent}}/100</formula>
+				</field>
+				<field id="down_pmt_percent" displaytype="DOUBLE" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" label="Percent Down Payment" defaultValue="20"/>
+				<field id="purchase_amount" displaytype="CURRENCY" ogdisplaytype="TEXT" precision="9" scale="0" label="Purchase Amount" defaultvaluetype="fieldvalue" defaultValue="10000"/>
+				<field id="ltv" displaytype="FORMULA" label="LTV" ogdisplaytype="TEXT" readonly="true" returntype="PERCENT" precision="9" scale="0">
+					<formula>({{loan_amount}} / {{purchase_amount}})*100</formula>
+				</field>
+				<field id="est_insurance" displaytype="CURRENCY" label="Est. Insurance Amount" ogdisplaytype="TEXT" precision="9" scale="2"/>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="action-sequence" action-sequence-id="66974502-8bf6-4dd7-b9c1-727263625120"/>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>down_pmt_percent</field>
+						<field>purchase_amount</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="Personal" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CVMjA-2357">
+			<fields>
+				<field id="first_name" displaytype="TEXT" label="First Name" defaultvaluetype="fieldvalue" defaultValue="John"/>
+				<field id="last_name" displaytype="TEXT" label="Last Name" defaultvaluetype="fieldvalue" defaultValue="Smith"/>
+				<field id="email" displaytype="EMAIL" label="Primary Email" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="johnsmith@example.com"/>
+				<field id="phone" displaytype="TEXT" label="Primary Phone" defaultvaluetype="fieldvalue" defaultValue="555-555-5555"/>
+				<field id="birthdate" displaytype="DATE" label="Date of Birth" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="2018-10-05"/>
+				<field id="residency_status" displaytype="PICKLIST" label="Residency Status" ogdisplaytype="TEXT" picklistsource="manual" required="true" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="US Citizen">
+					<picklistentries>
+						<entry value="US Citizen" label="US Citizen"/>
+						<entry value="Permanent Resident" label="Permanent Residence"/>
+						<entry value="Non-Permanent Resident" label="Non-Permanent Residence"/>
+					</picklistentries>
+				</field>
+				<field id="education" displaytype="PICKLIST" label="Education" ogdisplaytype="TEXT" picklistsource="manual" required="true" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="High School Diploma">
+					<picklistentries>
+						<entry value="High School Diploma" label="High School Diploma"/>
+						<entry value="Some College, No Degree" label="Some College, No Degree"/>
+						<entry value="Associate's Degree" label="Associate's Degree"/>
+						<entry value="Bachelor's Degree" label="Bachelor's Degree"/>
+						<entry value="Master's Degree" label="Master's Degree"/>
+						<entry value="Doctorate" label="Doctorate"/>
+					</picklistentries>
+				</field>
+				<field id="ssn" displaytype="DOUBLE" label="Social Security Number" defaultvaluetype="fieldvalue" ogdisplaytype="TEXT" precision="9" scale="0" helptext="Enter without dash (eg 1112223333)" defaultValue="5555555555"/>
+				<field id="index" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="1" scale="0" defaultvaluetype="fieldvalue">
+					<formula>{{index}}</formula>
+				</field>
+				<field id="borrower_number" displaytype="DOUBLE" ogdisplaytype="TEXT" precision="1" scale="0" defaultvaluetype="fieldvalue" defaultValue="1"/>
+				<field id="ssn_display" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" label="Social Security">
+					<formula>JOIN_TEXT("","***-***-",RIGHT({{ssn}},4))</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Financial" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CWrTD-3734">
+			<fields>
+				<field id="employment" displaytype="PICKLIST" label="Employment" ogdisplaytype="TEXT" picklistsource="manual" required="true">
+					<picklistentries>
+						<entry value="Employed Full-time" label="Employed Full-time"/>
+						<entry value="Employed Part-time" label="Employed Part-time"/>
+						<entry value="Self-Employed" label="Self-Employed"/>
+						<entry value="Retired" label="Retired"/>
+						<entry value="No Employment" label="No Employment"/>
+					</picklistentries>
+				</field>
+				<field id="number_past_positions" displaytype="DOUBLE" label="Number of positions held in the past 2 years?" ogdisplaytype="TEXT" precision="2" scale="0"/>
+				<field id="base_income" displaytype="CURRENCY" label="Base Income" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="bonus" displaytype="CURRENCY" label="Bonus" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="commissions" displaytype="CURRENCY" label="Commissions" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="royalties" displaytype="CURRENCY" label="Royalties" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="ssa_benefits" displaytype="CURRENCY" label="SSA Benefits" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="other_income" displaytype="CURRENCY" label="Other Income" ogdisplaytype="TEXT" precision="9" scale="2"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Assets" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CWrTD-3735">
+			<fields>
+				<field id="checking" displaytype="CURRENCY" label="Checking" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="savings" displaytype="CURRENCY" label="Savings" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="stocks" displaytype="CURRENCY" label="Stocks" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="bonds" displaytype="CURRENCY" label="Bonds" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="other" displaytype="CURRENCY" label="Other Assets" ogdisplaytype="TEXT" precision="9" scale="2"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Liabilities" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CWrTD-3736">
+			<fields>
+				<field id="first_mortgage" displaytype="CURRENCY" label="First Mortgage" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="second_mortgage" displaytype="CURRENCY" label="Second Mortgage" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="student_loan" displaytype="CURRENCY" label="Student Loan" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="credit_card_balance" displaytype="CURRENCY" label="Credit Card Balance" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="notes" displaytype="CURRENCY" label="Notes" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="other" displaytype="CURRENCY" label="Other" ogdisplaytype="TEXT" precision="9" scale="2"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Declaration" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true" uniqueid="sk-1CWrTD-3737">
+			<fields>
+				<field id="NewField" displaytype="BOOLEAN" label="Are there any outstanding judgements against you?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField1" displaytype="BOOLEAN" label="Have you ever declared bankruptcy?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField2" displaytype="BOOLEAN" label="Are you a party to any current lawsuit?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField3" displaytype="BOOLEAN" label="Are you presently delinquent or in default on any loan, or title transfer?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField4" displaytype="BOOLEAN" label="Have you ever been obligated to any loan which resulted in foreclosure?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField5" displaytype="BOOLEAN" label="Have any of your properties been foreclosed upon?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField6" displaytype="BOOLEAN" label="Are you obligated to pay alimony, child support or separate maintenance obligations?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField7" displaytype="BOOLEAN" label="Are you the maker or co-maker on endorser on a note?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField8" displaytype="BOOLEAN" label="Do you plan on occupying the property as your primary residence?" ogdisplaytype="TEXT" required="true"/>
+				<field id="NewField9" displaytype="BOOLEAN" label="Will any part of the down payment be borrowed?" ogdisplaytype="TEXT" required="true"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="MultiFam_Unit" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field displaytype="DOUBLE" id="unit_number" label="Unit Number" ogdisplaytype="TEXT" precision="2" scale="0" defaultvaluetype="fieldvalue" defaultValue="1" readonly="false" returntype="TEXT"/>
+				<field id="unit_bed" displaytype="DOUBLE" ogdisplaytype="TEXT" precision="1" scale="0" defaultvaluetype="fieldvalue" defaultValue="1" label="Bedrooms"/>
+				<field id="unit_bath" displaytype="DOUBLE" ogdisplaytype="TEXT" precision="1" scale="0" defaultvaluetype="fieldvalue" defaultValue="1" label="Bathrooms"/>
+				<field id="index" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>{{$Model.MultiFam_Unit.data.length}}</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Chart" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field id="value" displaytype="CURRENCY" ogdisplaytype="TEXT" precision="9" scale="2" defaultvaluetype="fieldvalue" defaultValue="0"/>
+				<field id="type" displaytype="PICKLIST" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Loan Amount">
+					<picklistentries>
+						<entry value="Loan Amount" label="Loan Amount"/>
+						<entry value="Down Payment" label="Down Payment"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="ui_control" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field id="first_time_click" displaytype="BOOLEAN" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="true"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__grid uniqueid="sk-10pi-5032" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+			<divisions>
+				<division minWidth="8px" ratio="1" alignSelf="auto">
+					<components/>
+				</division>
+				<division alignSelf="auto" minWidth="1024px" ratio="1" maxWidth="1024px">
+					<components>
+						<skuid__grid uniqueid="sk-y1S-1135" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0" fullWidth="true">
+							<divisions>
+								<division alignSelf="auto" minWidth="400px" ratio="2" maxWidth="800px">
+									<components>
+										<skuid__wizard uniqueid="sk-x-q-472">
+											<steps>
+												<step stepId="step1" stepLabel="Property">
+													<components>
+														<skuid__header title="Property" uniqueid="sk-y1r-1494" styleSettingsVariant="large">
+															<styles>
+																<spacing top="3" bottom="3"/>
+															</styles>
+														</skuid__header>
+														<skuid__wrapper uniqueid="sk-yGH-603" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+															<components>
+																<skuid__form showErrorsInline="true" model="Property" uniqueid="sk-y0l-754" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																	<sections>
+																		<section title="Address" showHeading="false">
+																			<rows>
+																				<row uniqueid="sk-y0x-803">
+																					<fields>
+																						<skuid__field uniqueid="sk-y0x-787" id="street_name" label="Street Name"/>
+																						<skuid__field uniqueid="sk-y0x-795" id="apt_suite" label="Apt/Suite"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-y0x-845">
+																					<fields>
+																						<skuid__field uniqueid="sk-y0x-794" id="city" label="City"/>
+																						<skuid__field uniqueid="sk-y0x-790" id="state" label="State"/>
+																						<skuid__field uniqueid="sk-y0x-789" id="zip" label="Zip Code"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<background color="#f3f5f7"/>
+															<styles>
+																<spacing bottom="2"/>
+															</styles>
+														</skuid__wrapper>
+														<skuid__wrapper uniqueid="sk-yH8-758" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+															<components>
+																<skuid__form showErrorsInline="true" model="Property" uniqueid="sk-yH8-759" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																	<sections>
+																		<section title="Property Use" showHeading="false">
+																			<rows>
+																				<row uniqueid="sk-yH8-760">
+																					<fields>
+																						<skuid__field uniqueid="sk-yH8-761" id="type" styleSettingsVariant="049db373-54e0-4a54-a2a1-11511a0037c4" label="Property Type"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__form>
+																<skuid__wrapper uniqueid="sk-yIl-1516">
+																	<components>
+																		<skuid__deck model="MultiFam_Unit" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-yJ_-2263" pageSize="Infinity" setMaxWidth="auto" styleSettingsVariant="7a8dca4c-9f87-4154-aea0-bc9ccc21ce1f" hideFooter="true" hideHeader="true" showPageSizeSelect="false" showLoadMore="false" showListHeader="false" showListFooter="false">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-10K0-706">
+																					<components>
+																						<skuid__text contents="Unit {{unit_number}}" uniqueid="sk-10M0-1433" model="MultiFam_Unit" styleSettingsVariant="medium">
+																							<styles>
+																								<spacing/>
+																							</styles>
+																							<renderConditions logictype="and"/>
+																						</skuid__text>
+																						<skuid__form showErrorsInline="true" model="MultiFam_Unit" uniqueid="sk-yIh-1479" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																							<sections>
+																								<section showHeading="false">
+																									<rows>
+																										<row uniqueid="sk-yIx-1617">
+																											<fields>
+																												<skuid__field uniqueid="sk-yIx-1601" id="unit_bath" displayAs="VALUE_STEPPER" label="Bathroom(s)"/>
+																												<skuid__field uniqueid="sk-yIx-1602" id="unit_bed" displayAs="VALUE_STEPPER" label="Bedroom(s)"/>
+																											</fields>
+																										</row>
+																									</rows>
+																								</section>
+																							</sections>
+																						</skuid__form>
+																					</components>
+																					<background/>
+																					<styles>
+																						<spacing bottom="2"/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																			<filtering enableSearch="false" instantSearch="false"/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__deck>
+																		<skuid__buttonSet model="MultiFam_Unit" uniqueid="sk-yIk-1497" position="left">
+																			<groups>
+																				<skuid__buttonGroup>
+																					<buttons>
+																						<skuid__button label="Add Unit" uniqueid="sk-yIk-1505" icon="sk-webicon-ink:add">
+																							<actions>
+																								<action type="action-sequence" action-sequence-id="bd063fac-000a-4efe-8310-29e1d9365316"/>
+																							</actions>
+																						</skuid__button>
+																					</buttons>
+																				</skuid__buttonGroup>
+																			</groups>
+																		</skuid__buttonSet>
+																	</components>
+																	<background/>
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Property" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="type" value="Multi-Family"/>
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="MultiFam_Unit" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+																	</renderConditions>
+																	<styles>
+																		<spacing top="3"/>
+																	</styles>
+																</skuid__wrapper>
+															</components>
+															<background/>
+															<styles>
+																<spacing bottom="2"/>
+															</styles>
+														</skuid__wrapper>
+														<skuid__wrapper uniqueid="sk-yGL-633" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+															<components>
+																<skuid__form showErrorsInline="true" model="Property" uniqueid="sk-yC6-3750" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																	<sections>
+																		<section title="Property Use" showHeading="false">
+																			<rows>
+																				<row uniqueid="sk-yCb-3880">
+																					<fields>
+																						<skuid__field uniqueid="sk-yCb-3868" id="use" displayAs="BUTTON_GROUP" styleSettingsVariant="049db373-54e0-4a54-a2a1-11511a0037c4" label="Property Use"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__form>
+															</components>
+															<background/>
+															<styles>
+																<spacing bottom="2"/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+													<buttons>
+														<button label="Next" styleSettingsVariant="primary" uniqueid="sk-x-q-479">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step2"/>
+																<action type="branch" whenfinished="stop" label="if first time going through wizard">
+																	<formula>{{$Model.ui_control.data.0.first_time_click}} === true</formula>
+																	<iftrueactions>
+																		<action type="updateRow" fieldmodel="Mortgage" affectedrows="all">
+																			<updates>
+																				<update valuesource="fieldvalue" field="down_pmt_percent" enclosevalueinquotes="false" value="15"/>
+																			</updates>
+																		</action>
+																		<action type="updateRow" fieldmodel="ui_control" affectedrows="all">
+																			<updates>
+																				<update valuesource="fieldvalue" field="first_time_click" enclosevalueinquotes="false" value="false"/>
+																			</updates>
+																		</action>
+																	</iftrueactions>
+																</action>
+															</actions>
+															<renderConditions logictype="and"/>
+															<enableConditions logictype="and">
+																<condition type="blank" operator="!=" fieldmodel="Property" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="use" value="null" enclosevalueinquotes="false"/>
+															</enableConditions>
+														</button>
+													</buttons>
+												</step>
+												<step stepId="step2" stepLabel="Mortgage">
+													<components>
+														<skuid__header title="Mortgage" uniqueid="sk-yC0-3716" styleSettingsVariant="large">
+															<styles>
+																<spacing top="3" bottom="3"/>
+															</styles>
+														</skuid__header>
+														<skuid__wrapper uniqueid="sk-3Gtu-3118">
+															<components>
+																<skuid__grid uniqueid="sk-10yq-8177" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1" rowGutter="0" fullWidth="true">
+																	<divisions>
+																		<division minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-10yy-8251" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Down Payment&lt;/div&gt;&#10;" uniqueid="sk-10yy-8252" styleSettingsVariant="2a9e74ab-2c62-4bc6-90e7-7df3d7061ae4">
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__text>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{down_pmt}}&lt;/div&gt;&#10;" uniqueid="sk-10yy-8253" model="Mortgage" styleSettingsVariant="34671159-af3b-4b1f-a819-753bc747e892">
+																							<styles>
+																								<spacing top="0.5"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																					<background color="#004A94" type="color"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-10yz-8312" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Loan Amount&lt;/div&gt;&#10;" uniqueid="sk-10yz-8315" styleSettingsVariant="2a9e74ab-2c62-4bc6-90e7-7df3d7061ae4">
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__text>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{loan_amount}}&lt;/div&gt;&#10;" uniqueid="sk-10yz-8316" model="Mortgage" styleSettingsVariant="34671159-af3b-4b1f-a819-753bc747e892">
+																							<styles>
+																								<spacing top="0.5"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																					<background color="#004A94" type="color"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-10Xv-2904" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Loan To Value&lt;/div&gt;&#10;" uniqueid="sk-10Yy-3446" styleSettingsVariant="2a9e74ab-2c62-4bc6-90e7-7df3d7061ae4">
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__text>
+																						<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{ltv}}&lt;/div&gt;&#10;" uniqueid="sk-10Yz-3455" model="Mortgage" styleSettingsVariant="34671159-af3b-4b1f-a819-753bc747e892">
+																							<styles>
+																								<spacing top="0.5"/>
+																							</styles>
+																							<renderConditions logictype="and"/>
+																						</skuid__text>
+																					</components>
+																					<background color="#004A94" type="color"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__wrapper uniqueid="sk-10Pv-1732" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																	<components>
+																		<skuid__grid uniqueid="sk-115j-10694" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2" rowGutter="0" fullWidth="true">
+																			<divisions>
+																				<division minWidth="100px" ratio="2" alignSelf="auto">
+																					<components>
+																						<skuid__form showErrorsInline="true" model="Mortgage" uniqueid="sk-10Pv-1733" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																							<sections>
+																								<section title="Property Use" showHeading="false">
+																									<rows>
+																										<row uniqueid="sk-10Yk-3205">
+																											<fields>
+																												<skuid__field uniqueid="sk-10Yk-3190" id="purchase_amount" label="Purchase Amount"/>
+																											</fields>
+																										</row>
+																										<row uniqueid="sk-116Q-10865">
+																											<fields>
+																												<skuid__field uniqueid="sk-116Q-10852" id="down_pmt_percent" displayAs="SLIDER" min="0" max="100" step="5" label="Purchase Down Payment"/>
+																											</fields>
+																										</row>
+																									</rows>
+																								</section>
+																							</sections>
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__form>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__wrapper uniqueid="sk-3GpP-1569">
+																							<components>
+																								<skuid__chart model="Chart" type="donut" uniqueid="sk-3Gqt-2003" height="200px" styleSettingsVariant="24a90ff3-2561-468e-be2b-bc253bbe9f63" export="off">
+																									<dataaxes>
+																										<axis id="axis1"/>
+																									</dataaxes>
+																									<categoryaxes>
+																										<axis id="categories" categorytype="field"/>
+																									</categoryaxes>
+																									<serieslist>
+																										<series valuefield="value" splittype="field" splitfield="type"/>
+																									</serieslist>
+																									<colors/>
+																									<legend halign="center" valign="bottom" layout="off" showlabels="false"/>
+																									<renderconditions logictype="and"/>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__chart>
+																							</components>
+																							<background/>
+																							<renderConditions logictype="and"/>
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__wrapper>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-10Zr-4082" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Mortgage" uniqueid="sk-10Zr-4096" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																			<sections>
+																				<section title="Property Use" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-10Zr-4097">
+																							<fields>
+																								<skuid__field uniqueid="sk-10Zr-4098" id="term" label="Mortgage Term"/>
+																								<skuid__field uniqueid="sk-10Zr-4100" id="type" label="Mortgage Type"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10Zr-4101">
+																							<fields>
+																								<skuid__field uniqueid="sk-10Zr-4103" id="insurance_included" displayAs="SWITCH" label="Include Insurance in Escrow?">
+																									<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																									<enableConditions/>
+																								</skuid__field>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-1Zpf-1315">
+																							<fields>
+																								<skuid__field uniqueid="sk-1Zpf-1296" id="est_insurance" label="Est. Insurance Amount">
+																									<renderConditions logictype="and" onhidedatabehavior="keep">
+																										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="Mortgage" sourcetype="fieldvalue" field="insurance_included" value="true"/>
+																									</renderConditions>
+																									<enableConditions/>
+																								</skuid__field>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10tE-6831">
+																							<fields>
+																								<skuid__field uniqueid="sk-10tE-6814" id="property_tax_included" selectedList="3" displayAs="SWITCH" label="Include Property Tax in Escrows?">
+																									<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																									<enableConditions/>
+																								</skuid__field>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__form>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__wrapper>
+															</components>
+															<background/>
+															<renderConditions logictype="and">
+																<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="Mortgage" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+															</renderConditions>
+														</skuid__wrapper>
+													</components>
+													<buttons>
+														<button label="Back" uniqueid="sk-x-q-485">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step1"/>
+															</actions>
+														</button>
+														<button label="Next" styleSettingsVariant="primary" uniqueid="sk-x-q-488">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step3"/>
+															</actions>
+														</button>
+													</buttons>
+													<tooltip position="top"/>
+												</step>
+												<step stepId="step3" stepLabel="Personal">
+													<components>
+														<skuid__header title="Personal" uniqueid="sk-yHY-967" styleSettingsVariant="large">
+															<styles>
+																<spacing top="3" bottom="3"/>
+															</styles>
+														</skuid__header>
+														<skuid__deck model="Personal" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-112u-9145" hideHeader="true" hideFooter="true" pageSize="Infinity" showPageSizeSelect="false" styleSettingsVariant="7a8dca4c-9f87-4154-aea0-bc9ccc21ce1f" setMaxWidth="auto" showLoadMore="false" showListHeader="false" showListFooter="false">
+															<components>
+																<skuid__grid uniqueid="sk-11My-4432" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+																	<divisions>
+																		<division minWidth="50px" ratio="1" alignSelf="auto">
+																			<components>
+																				<skuid__text contents="Borrower {{borrower_number}}" uniqueid="sk-11Jg-3059" model="Personal" styleSettingsVariant="medium">
+																					<renderConditions logictype="and"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="50px" ratio="0">
+																			<components>
+																				<skuid__buttonSet model="Personal" uniqueid="sk-11N2-4504">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button label="Remove" uniqueid="sk-11N2-4512" icon="sk-webicon-ink:remove-circle" styleSettingsVariant="borderless">
+																									<actions>
+																										<action type="abandonRows" model="Personal" affectedrows="context"/>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<renderConditions logictype="and">
+																						<renderCondition type="fieldvalue" operator="!=" enclosevalueinquotes="false" fieldmodel="Personal" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="index" value="1"/>
+																					</renderConditions>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing bottom="1"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__wrapper uniqueid="sk-10tZ-6874" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Personal" uniqueid="sk-10tc-6893" mode="edit" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-10ti-6938">
+																							<fields>
+																								<skuid__field uniqueid="sk-10ti-6923" id="first_name" label="First Name"/>
+																								<skuid__field uniqueid="sk-10ti-6924" id="last_name" label="Last Name"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10ti-6950">
+																							<fields>
+																								<skuid__field uniqueid="sk-10ti-6925" id="birthdate" label="Date of Birth"/>
+																								<skuid__field uniqueid="sk-10xB-7705" id="ssn" displayAs="PASSWORD" label="Social Security"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10ti-6962">
+																							<fields>
+																								<skuid__field uniqueid="sk-10ti-6927" id="email" label="Primary Email"/>
+																								<skuid__field uniqueid="sk-10ti-6928" id="phone" label="Primary Phone"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10ti-6974">
+																							<fields>
+																								<skuid__field uniqueid="sk-10ti-6929" id="residency_status" displayAs="BUTTON_GROUP" label="Residency Status"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-10xd-7884">
+																							<fields>
+																								<skuid__field uniqueid="sk-10xd-7859" id="education" displayAs="RADIO" label="Education"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__form>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing bottom="3"/>
+																	</styles>
+																</skuid__wrapper>
+															</components>
+															<filtering enableSearch="false" instantSearch="false"/>
+															<interactions/>
+															<styles>
+																<spacing bottom="1.5"/>
+															</styles>
+														</skuid__deck>
+														<skuid__buttonSet model="Personal" uniqueid="sk-112F-9021" expandToFill="true">
+															<groups>
+																<skuid__buttonGroup>
+																	<buttons>
+																		<skuid__button label="Add Co-borrower" uniqueid="sk-112F-9029">
+																			<actions>
+																				<action type="branch" whenfinished="stop">
+																					<formula>{{$Model.Personal.data.length}} === 3</formula>
+																					<iftrueactions>
+																						<action type="blockUI" message="Maximum 3 borrowers allowed" subtext="Contact your Lender for assistance" timeout="2500" styleSettingsVariant="dark"/>
+																					</iftrueactions>
+																				</action>
+																				<action type="createRow" model="Personal" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+																					<defaults/>
+																				</action>
+																				<action type="updateRow" fieldmodel="Personal" valuesource="fieldvalue" affectedrows="context" field="borrower_number" enclosevalueinquotes="false" value="{{index}}"/>
+																			</actions>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+														</skuid__buttonSet>
+													</components>
+													<buttons>
+														<button label="Back" uniqueid="sk-y09-513">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step2"/>
+															</actions>
+														</button>
+														<button label="Next" styleSettingsVariant="primary" uniqueid="sk-y09-516">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step4"/>
+															</actions>
+														</button>
+													</buttons>
+												</step>
+												<step stepId="step4" stepLabel="Summary">
+													<components>
+														<skuid__header title="Summary" uniqueid="sk-yHh-1055" styleSettingsVariant="large">
+															<styles>
+																<spacing top="3" bottom="3"/>
+															</styles>
+														</skuid__header>
+														<skuid__wrapper uniqueid="sk-11Sh-1323">
+															<components>
+																<skuid__grid uniqueid="sk-11Pt-5204" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+																	<divisions>
+																		<division minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__text contents="Property" uniqueid="sk-11SV-1265" styleSettingsVariant="increased">
+																					<renderConditions logictype="and"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="0">
+																			<components>
+																				<skuid__buttonSet model="Mortgage" uniqueid="sk-11Pu-5244">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button label="Edit" uniqueid="sk-11Pu-5252" icon="sk-webicon-ink:edit" styleSettingsVariant="borderless">
+																									<actions>
+																										<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step1"/>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__wrapper uniqueid="sk-11Pg-5072" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Property" uniqueid="sk-11Qx-1074" mode="readonly" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-11Q_-1113">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Q_-1104" label="Address" type="COMBO" template="{{street_name}}{{#apt_suite}}, Apt/Suite{{apt_suite}}{{/apt_suite}}, {{city}} {{state}}, {{zip}}" readOnly="true"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11S9-1234">
+																							<fields>
+																								<skuid__field uniqueid="sk-11S9-1221" id="type" label="Property Type"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11S9-1240">
+																							<fields>
+																								<skuid__field uniqueid="sk-11S9-1222" id="use" label="Property Use"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__form>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__wrapper>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+														<skuid__wrapper uniqueid="sk-11Sj-1352">
+															<components>
+																<skuid__grid uniqueid="sk-11Sj-1353" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+																	<divisions>
+																		<division minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__text contents="Mortgage" uniqueid="sk-11Sj-1354" styleSettingsVariant="increased">
+																					<renderConditions logictype="and"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="0">
+																			<components>
+																				<skuid__buttonSet model="Mortgage" uniqueid="sk-11Sj-1355">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button label="Edit" uniqueid="sk-11Sj-1356" icon="sk-webicon-ink:edit" styleSettingsVariant="borderless">
+																									<actions>
+																										<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step2"/>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing top="4" bottom="1.5"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__wrapper uniqueid="sk-11Sj-1357" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Mortgage" uniqueid="sk-11Sj-1358" mode="readonly" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-11Sx-1624">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1607" id="purchase_amount" label="Purchase Amount"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1630">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1608" id="down_pmt_percent" label="Percent Down Payment"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1636">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1609" id="type" label="Mortgage Type"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1642">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1610" id="term" label="Mortgage Term"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1648">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1611" id="loan_amount" label="Loan Amount"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1654">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1612" id="ltv" label="LTV"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1660">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1613" id="property_tax_included" label="Include Property Tax in Escrow?"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1666">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1614" id="insurance_included" label="Include Insurance in Escrow?"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-11Sx-1672">
+																							<fields>
+																								<skuid__field uniqueid="sk-11Sx-1615" id="down_pmt" label="Down Payment"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__form>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__wrapper>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+														<skuid__wrapper uniqueid="sk-11So-1498">
+															<components>
+																<skuid__grid uniqueid="sk-11So-1499" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+																	<divisions>
+																		<division minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__text contents="Personal" uniqueid="sk-11So-1500" styleSettingsVariant="increased">
+																					<renderConditions logictype="and"/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="0">
+																			<components>
+																				<skuid__buttonSet model="Mortgage" uniqueid="sk-11So-1501">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button label="Edit" uniqueid="sk-11So-1502" icon="sk-webicon-ink:edit" styleSettingsVariant="borderless">
+																									<actions>
+																										<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step3"/>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing top="4" bottom="1.5"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__deck model="Personal" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-153U-2321" hideHeader="true" hideFooter="true" pageSize="Infinity" showPageSizeSelect="false" styleSettingsVariant="7a8dca4c-9f87-4154-aea0-bc9ccc21ce1f" setMaxWidth="auto" showLoadMore="false" showListHeader="false" showListFooter="false">
+																	<components>
+																		<skuid__grid uniqueid="sk-153U-2322" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+																			<divisions>
+																				<division minWidth="50px" ratio="1" alignSelf="auto">
+																					<components>
+																						<skuid__text contents="Borrower {{borrower_number}}" uniqueid="sk-153U-2323" model="Personal" styleSettingsVariant="medium">
+																							<renderConditions logictype="and"/>
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																			</divisions>
+																			<styles>
+																				<spacing bottom="1"/>
+																			</styles>
+																		</skuid__grid>
+																		<skuid__wrapper uniqueid="sk-153U-2326" styleSettingsVariant="254b1da6-8bdc-4ab8-900a-623df0bf9333">
+																			<components>
+																				<skuid__form showErrorsInline="true" model="Personal" uniqueid="sk-153U-2327" mode="readonly" styleSettingsVariant="c56c7a9f-1edc-45f0-9722-60ef74d64a4f">
+																					<sections>
+																						<section title="New Section" showHeading="false">
+																							<rows>
+																								<row uniqueid="sk-153U-2328">
+																									<fields>
+																										<skuid__field uniqueid="sk-153U-2329" id="first_name" label="First Name"/>
+																										<skuid__field uniqueid="sk-153U-2330" id="last_name" label="Last Name"/>
+																									</fields>
+																								</row>
+																								<row uniqueid="sk-153U-2331">
+																									<fields>
+																										<skuid__field uniqueid="sk-153U-2332" id="birthdate" label="Date of Birth"/>
+																										<skuid__field uniqueid="sk-154S-2909" id="ssn_display" label="Social Security" displayAs="PASSWORD"/>
+																									</fields>
+																								</row>
+																								<row uniqueid="sk-153U-2334">
+																									<fields>
+																										<skuid__field uniqueid="sk-153U-2335" id="email" label="Primary Email"/>
+																										<skuid__field uniqueid="sk-153U-2336" id="phone" label="Primary Phone"/>
+																									</fields>
+																								</row>
+																								<row uniqueid="sk-153U-2337">
+																									<fields>
+																										<skuid__field uniqueid="sk-153U-2338" id="residency_status" displayAs="BUTTON_GROUP" label="Residency Status"/>
+																									</fields>
+																								</row>
+																								<row uniqueid="sk-153U-2339">
+																									<fields>
+																										<skuid__field uniqueid="sk-153U-2340" id="education" displayAs="RADIO" label="Education"/>
+																									</fields>
+																								</row>
+																							</rows>
+																						</section>
+																					</sections>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__form>
+																			</components>
+																			<background/>
+																			<styles>
+																				<spacing bottom="3"/>
+																			</styles>
+																		</skuid__wrapper>
+																	</components>
+																	<filtering enableSearch="false" instantSearch="false"/>
+																	<interactions/>
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__deck>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+													<buttons>
+														<button label="Back" uniqueid="sk-y0A-558">
+															<actions>
+																<action type="runComponentAction" componentid="sk-x-q-472" action="navigateToStep" stepId="step3"/>
+															</actions>
+														</button>
+													</buttons>
+												</step>
+											</steps>
+											<renderConditions logictype="and"/>
+											<styles>
+												<spacing top="4" bottom="4"/>
+											</styles>
+										</skuid__wizard>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="0" ratio="0" maxWidth="400px">
+									<components>
+										<skuid__wrapper uniqueid="sk-10O8-1091">
+											<components>
+												<skuid__accordion uniqueid="sk-10Oj-1210" styleSettingsVariant="small">
+													<sections>
+														<section title="In this demo">
+															<components>
+																<skuid__wrapper uniqueid="sk-10PH-1603">
+																	<components>
+																		<skuid__text contents="Skuid features:" uniqueid="sk-10Nk-874">
+																			<styles>
+																				<spacing bottom="1"/>
+																			</styles>
+																		<renderConditions logictype="and"/>
+<styleVariantConditions/>
+</skuid__text>
+																		<skuid__text contents="&lt;ul&gt;&#10;&#9;&lt;li&gt;Render fields only when necessary&#10;&#9;&lt;ul&gt;&#10;&#9;&#9;&lt;li&gt;In Step 1, select Multi Family under Property Type to add units&lt;/li&gt;&#10;&#9;&lt;/ul&gt;&#10;&#9;&lt;/li&gt;&#10;&#9;&lt;li&gt;Conditional rendering/enabling fields&#10;&#9;&lt;ul&gt;&#10;&#9;&#9;&lt;li&gt;Step 2: Insurance amount is hidden until &lt;em&gt;Insurance included in escrow?&lt;/em&gt; is checked&lt;/li&gt;&#10;&#9;&lt;/ul&gt;&#10;&#9;&lt;/li&gt;&#10;&#9;&lt;li&gt;Calculate fields like Down Payment, Loan Amount, etc.&lt;/li&gt;&#10;&#9;&lt;li&gt;Placeholder text&#10;&#9;&lt;ul&gt;&#10;&#9;&#9;&lt;li&gt;Step 1: Apt/Suite&lt;/li&gt;&#10;&#9;&lt;/ul&gt;&#10;&#9;&lt;/li&gt;&#10;&#9;&lt;li&gt;Inline Help Text&#10;&#9;&lt;ul&gt;&#10;&#9;&#9;&lt;li&gt;Step 3: Hover over Social Security label for help text&lt;/li&gt;&#10;&#9;&lt;/ul&gt;&#10;&#9;&lt;/li&gt;&#10;&#9;&lt;li&gt;Validation&amp;nbsp;&#10;&#9;&lt;ul&gt;&#10;&#9;&#9;&lt;li&gt;Step 1: Next button not enabled until Property Use field is complete&lt;/li&gt;&#10;&#9;&#9;&lt;li&gt;Step 3: Try adding more than 3 borrowers&lt;/li&gt;&#10;&#9;&lt;/ul&gt;&#10;&#9;&lt;/li&gt;&#10;&lt;/ul&gt;&#10;" uniqueid="sk-10Ns-899">
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__text>
+																	</components>
+																	<background/>
+																	<styles>
+																		<spacing left="2"/>
+																	</styles>
+																<renderConditions logictype="and"/>
+<styleVariantConditions/>
+</skuid__wrapper>
+															</components>
+														</section>
+													</sections>
+													<styles>
+														<spacing/>
+													</styles>
+												<renderConditions logictype="and"/>
+<styleVariantConditions/>
+</skuid__accordion>
+											</components>
+											<background/>
+											<styles>
+												<spacing top="4" bottom="4"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true"/>
+											</renderConditions>
+										</skuid__wrapper>
+									</components>
+								<renderConditions logictype="and">
+<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true"/>
+</renderConditions>
+</division>
+							</divisions>
+							<styles>
+								<spacing top="1"/>
+							</styles>
+						</skuid__grid>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="8px" ratio="1">
+					<components/>
+				</division>
+			</divisions>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences uniqueid="sk-yH3-708">
+			<actionsequence id="bd063fac-000a-4efe-8310-29e1d9365316" label="create new unit" type="reusable" uniqueid="sk-10KQ-812">
+				<actions>
+					<action type="branch" whenfinished="stop" label="if no unit">
+						<formula>{{$Model.MultiFam_Unit.data.length}} === 0</formula>
+						<iftrueactions>
+							<action type="createRow" model="MultiFam_Unit" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+								<defaults>
+									<default type="fieldvalue" field="unit_number" enclosevalueinquotes="false" value="1" valuesource="fieldvalue"/>
+								</defaults>
+							</action>
+						</iftrueactions>
+					</action>
+					<action type="createRow" model="MultiFam_Unit" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults/>
+					</action>
+					<action type="updateRow" fieldmodel="MultiFam_Unit" affectedrows="context" enclosevalueinquotes="false">
+						<updates>
+							<update valuesource="fieldvalue" field="unit_number" value="{{index}}"/>
+						</updates>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+			<actionsequence id="66974502-8bf6-4dd7-b9c1-727263625120" label="Render chart" type="reusable" event-scope="component" event-name="page.rendered" uniqueid="sk-11AG-1616">
+				<description/>
+				<actions>
+					<action type="emptyModelData" whenfinished="stop">
+						<formula>{{$Model.Chart.data.length}} &gt; 0</formula>
+						<iftrueactions>
+							<action type="emptyModelData">
+								<models>
+									<model>Chart</model>
+								</models>
+							</action>
+						</iftrueactions>
+						<models>
+							<model>Chart</model>
+						</models>
+					</action>
+					<action type="createRow" model="Chart" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="all">
+						<defaults>
+							<default field="value" value="{{$Model.Mortgage.data.0.loan_amount}}" valuesource="fieldvalue"/>
+							<default field="type" value="Loan Amount" valuesource="fieldvalue"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Chart" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="all">
+						<defaults>
+							<default field="value" value="{{$Model.Mortgage.data.0.down_pmt}}" valuesource="fieldvalue"/>
+							<default field="type" value="Down Payment" valuesource="fieldvalue"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__grid uniqueid="sk-10po-5468" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+							<divisions>
+								<division minWidth="8px" ratio="1" alignSelf="auto">
+									<components/>
+								</division>
+								<division alignSelf="auto" minWidth="1024px" ratio="1" maxWidth="1024px">
+									<components>
+										<skuid__text contents="Mortgage Loan Application" uniqueid="sk-10NP-669" styleSettingsVariant="5dd99c73-4291-4a9f-9f16-102b8137fd0d">
+											<styles>
+												<spacing top="2" bottom="2"/>
+											</styles>
+										</skuid__text>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="8px" ratio="1">
+									<components/>
+								</division>
+							</divisions>
+						</skuid__grid>
+					</components>
+					<background type="color" color="#0059bc"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background type="color" color="white"/>
+</skuid__page>

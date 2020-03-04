@@ -1,0 +1,426 @@
+<skuid__page personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="Product Selection">
+	<models>
+		<model id="quoteLineItems_UiOnly" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field id="line-item-name" displaytype="TEXT" label="Line Item Name"/>
+				<field id="price" displaytype="CURRENCY" label="Price" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="quantity" displaytype="DOUBLE" ogdisplaytype="TEXT" datasource="SkuidLocal" precision="9" scale="0" label="Quantity" defaultvaluetype="fieldvalue" defaultValue="1"/>
+				<field id="total" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="CURRENCY" label="Total" precision="9" scale="2">
+					<formula>{{price}}*{{quantity}}</formula>
+				</field>
+				<field id="img_url" displaytype="TEXT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="uiOnly" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field id="showCategoryFilter" displaytype="BOOLEAN" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false"/>
+				<field id="showSubCategoryFilter" displaytype="BOOLEAN" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Products" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="PricebookEntry">
+			<fields>
+				<field id="Product2Id"/>
+				<field id="Product2.Name"/>
+				<field id="Product2.ProductCode"/>
+				<field id="Product2.Description"/>
+				<field id="Product2.Family"/>
+				<field id="Product2.Id"/>
+				<field id="Product2.StockKeepingUnit"/>
+				<field id="UnitPrice"/>
+				<field id="image" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" precision="2" scale="0" uionly="true">
+					<formula>JOIN_TEXT("","https://source.unsplash.com/collection/1989985/280x170/?sig=",{{index}})</formula>
+				</field>
+				<field id="Product2.ProductCategory__c"/>
+				<field id="Product2.skuidcrm__Product_Image__c"/>
+				<field id="Product2.skuidcrm__Product_Image__r.Name"/>
+				<field id="Product2.skuidcrm__Product_Image__r.skuid__AttachmentId__c"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" sourcetype="fieldvalue" field="product_category" operator="=" clientorserver="client" state="filterableoff" inactive="true" name="product_category"/>
+				<condition type="fieldvalue" field="UnitPrice" operator="gte" inactive="true" enclosevalueinquotes="false" name="__autofilter__nstart__UnitPrice" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="UnitPrice" operator="lte" inactive="true" enclosevalueinquotes="false" name="__autofilter__nend__UnitPrice" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="Product2.ProductCategory__c" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Product2.ProductCategory__c" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="Product2.Family" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Product2.Family" state="filterableoff" value=""/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Total_Ui" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field id="total" displaytype="CURRENCY" label="Total" ogdisplaytype="TEXT" precision="9" scale="2" defaultvaluetype="fieldvalue" defaultValue="0"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-1OVT-524">
+			<components>
+				<skuid__grid uniqueid="sk-1TLs-1090" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5" rowGutter="0" fullWidth="true">
+					<divisions>
+						<division minWidth="200px" ratio="0" alignSelf="auto" maxWidth="288px">
+							<components>
+								<skuid__wrapper uniqueid="sk-41L-656">
+									<components>
+										<skuid__wrapper uniqueid="sk-4CS-890" styleSettingsVariant="dfb84c47-9cbb-4513-956b-33aaa502b2cd">
+											<components>
+												<skuid__text contents="Filters" uniqueid="sk-4CS-891" styleSettingsVariant="caa4f086-6fd2-4390-951a-2936d510fa3a">
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__text>
+											</components>
+											<background/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__wrapper>
+										<skuid__filterSet model="Products" uniqueid="sk-3-z-2349" layout="vertical" styleSettingsVariant="ca859aad-2bda-4679-adac-cff921b31ee4">
+											<filters>
+												<skuid__filter uniqueId="sk-32iL-6691" type="numericrange" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="UnitPrice" startConditionName="__autofilter__nstart__UnitPrice" endConditionName="__autofilter__nend__UnitPrice" label="Price"/>
+												<skuid__filter uniqueId="sk-32iR-6925" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="Product2.ProductCategory__c" conditionName="__autofilter__Product2.ProductCategory__c" filterOffOptionLabel="All Categories" label="Category" displayAs="radioOrCheckboxes"/>
+												<skuid__filter uniqueId="sk-32iV-7175" type="multiselect" conditionSource="auto" filterMethod="server" labelMode="manual" filterOffOptionLabel="All Products" label="Family" conditionField="Product2.Family" conditionName="__autofilter__Product2.Family" conditionOperator="in"/>
+											</filters>
+											<filtering enableSearch="true" instantSearch="false" instantFilters="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search"/>
+											<renderConditions logictype="and"/>
+											<styles>
+												<spacing left="1" bottom="1.5"/>
+											</styles>
+										</skuid__filterSet>
+									</components>
+									<background type="color" color="white"/>
+									<renderConditions logictype="and"/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="4">
+							<components>
+								<skuid__deck columnGutter="16px" model="Products" showSaveCancel="false" verticalAlign="top" minWidth="264px" uniqueid="sk-1TMe-1388" pageSize="Infinity" setMaxWidth="manual" maxWidth="320px" styleSettingsVariant="7a8dca4c-9f87-4154-aea0-bc9ccc21ce1f" showPageSizeSelect="false" showLoadMore="false" showListHeader="false" showListFooter="false" rowGutter="16px">
+									<components>
+										<skuid__image source="url" uniqueid="sk-1gdH-6430" datasource="salesforce" model="Products" field="Product2.Image__c" fieldtargetobjects="skuid__Image__c" url="{{image}}">
+											<conditions>
+												<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+											</conditions>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+											<interactions/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__image>
+										<skuid__wrapper uniqueid="sk-46v-700" styleSettingsVariant="4635c499-d62c-4819-996b-fc66da610988">
+											<components>
+												<skuid__wrapper uniqueid="sk-4Ge-2046" heightStrategy="fixed" height="custom" heightCustom="130px">
+													<components>
+														<skuid__text contents="{{Product2.Name}}" uniqueid="sk-1TMu-1448" styleSettingsVariant="a6670e03-3f61-487f-b445-d0ba106f39df" model="Products">
+															<conditions>
+																<condition type="contextrow" field="Id" mergefield="Id"/>
+															</conditions>
+														</skuid__text>
+														<skuid__text contents="&lt;div&gt;{{UnitPrice}}&lt;/div&gt;&#10;" uniqueid="sk-3vJ-668" model="Products" styleSettingsVariant="b664043a-0ac6-4f00-83e4-0e39332799bc">
+															<conditions>
+																<condition type="contextrow" field="Id" mergefield="Id"/>
+															</conditions>
+														</skuid__text>
+														<skuid__text contents="{{Product2.Description}}" uniqueid="sk-332O-21986" model="Products" styleSettingsVariant="94017855-3fcf-47d3-91b8-e0a1955991d2">
+															<conditions>
+																<condition type="contextrow" field="Id" mergefield="Id"/>
+															</conditions>
+															<styles>
+																<spacing top="0.5"/>
+															</styles>
+														</skuid__text>
+														<skuid__text contents="Category:&amp;nbsp; {{Product2.ProductCategory__c}}" uniqueid="sk-332m-23365" model="Products" styleSettingsVariant="94017855-3fcf-47d3-91b8-e0a1955991d2">
+															<conditions>
+																<condition type="contextrow" field="Id" mergefield="Id"/>
+															</conditions>
+															<styles>
+																<spacing top="0.5"/>
+															</styles>
+														</skuid__text>
+														<skuid__text contents="Family: {{Product2.Family}}" uniqueid="sk-332n-23584" model="Products" styleSettingsVariant="94017855-3fcf-47d3-91b8-e0a1955991d2">
+															<conditions>
+																<condition type="contextrow" field="Id" mergefield="Id"/>
+															</conditions>
+															<styles>
+																<spacing top="0.5"/>
+															</styles>
+														</skuid__text>
+													</components>
+													<background/>
+													<styles>
+														<spacing bottom="3" left="3" right="3" top="2"/>
+													</styles>
+													<renderConditions logictype="and"/>
+													<styleVariantConditions/>
+												</skuid__wrapper>
+												<skuid__buttonSet uniqueid="sk-1TNf-1620" expandToFill="true" model="Products">
+													<groups>
+														<skuid__buttonGroup>
+															<buttons>
+																<skuid__button label="Add to Order" uniqueid="sk-1TNf-1628" styleSettingsVariant="d420d4cb-fb6d-44db-9763-eca5b7b5908b">
+																	<actions>
+																		<action type="action-sequence" action-sequence-id="3f8548b5-61cd-48bf-a34c-164f728ed9d4"/>
+																	</actions>
+																	<renderConditions logictype="and"/>
+																	<enableConditions logictype="and"/>
+																</skuid__button>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+													<conditions>
+														<condition type="contextrow" field="Id" mergefield="Id"/>
+													</conditions>
+													<styles>
+														<spacing/>
+													</styles>
+													<renderConditions logictype="and"/>
+												</skuid__buttonSet>
+											</components>
+											<background type="color" color="#fff"/>
+										</skuid__wrapper>
+									</components>
+									<filtering enableSearch="false" instantSearch="false"/>
+									<interactions/>
+								</skuid__deck>
+							</components>
+						</division>
+						<division alignSelf="auto" ratio="0">
+							<components>
+								<skuid__grid uniqueid="sk-3Fw8-1768" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+									<divisions>
+										<division minWidth="240px" ratio="1" alignSelf="auto">
+											<components>
+												<skuid__wrapper uniqueid="sk-1TRY-2743">
+													<components>
+														<skuid__wrapper uniqueid="sk-3Fum-1298" styleSettingsVariant="dfb84c47-9cbb-4513-956b-33aaa502b2cd">
+															<components>
+																<skuid__text contents="Order Summary" uniqueid="sk-3L90-1707" styleSettingsVariant="caa4f086-6fd2-4390-951a-2936d510fa3a">
+																	<renderConditions logictype="and"/>
+																</skuid__text>
+															</components>
+															<background/>
+														</skuid__wrapper>
+														<skuid__wrapper uniqueid="sk-3Fug-1247">
+															<components>
+																<skuid__text contents="No item added yet" uniqueid="sk-3L95-1764" styleSettingsVariant="aceea022-8b08-4ffe-84b2-9e6181ab67dd">
+																	<renderConditions logictype="and">
+																		<renderCondition fieldmodel="quoteLineItems_UiOnly" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
+																	</renderConditions>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+																<skuid__list model="quoteLineItems_UiOnly" uniqueid="sk-1TLy-1152" pageSize="Infinity" showPageSizeSelect="false" rowActionsOnLeft="false" showLoadMore="false" showListHeader="false" showListFooter="false" styleSettingsVariant="6e24b78a-cd62-4678-aa72-8f5f85abb2ef">
+																	<columns>
+																		<column uniqueid="sk-3FwX-2003" fillRatio="0">
+																			<items>
+																				<item displayType="avatar" uniqueid="sk-3FwX-2001" size="small" styleSettingsVariant="circular" fallbackType="icon" fallback="sk-webicon-font-awesome:shopping-cart" url="{{img_url}}"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-1TM0-1168" fillRatio="2">
+																			<items>
+																				<item displayType="field" template="Template" uniqueid="sk-1TM0-1166" fieldId="line-item-name" displayStyle="primary"/>
+																				<item fieldId="price" uniqueid="sk-1TM6-1181" displayType="template" template="Quantity: {{quantity}}" displayStyle="tertiary"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-1TMA-1229" fillRatio="1">
+																			<items>
+																				<item displayType="field" template="Template" uniqueid="sk-1TMA-1227" fieldId="total"/>
+																			</items>
+																		</column>
+																	</columns>
+																	<rowActions/>
+																	<massActions/>
+																	<filtering enableSearch="false" instantSearch="false"/>
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="quoteLineItems_UiOnly" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+																	</renderConditions>
+																	<interactions>
+																		<interaction type="tap">
+																			<action type="showModal">
+																				<skuid__modal title="Edit Selection" width="400px" buttonsJustification="right">
+																					<components>
+																						<skuid__form showErrorsInline="true" model="quoteLineItems_UiOnly" uniqueid="sk-1TQd-2375" mode="edit">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<rows>
+																										<row uniqueid="sk-1TQg-2400">
+																											<fields>
+																												<skuid__field id="line-item-name" uniqueid="sk-1TQg-2398"/>
+																											</fields>
+																										</row>
+																										<row uniqueid="sk-1TQg-2407">
+																											<fields>
+																												<skuid__field id="price" uniqueid="sk-1TQg-2405" showHelp="true"/>
+																											</fields>
+																										</row>
+																										<row uniqueid="sk-1TQg-2414">
+																											<fields>
+																												<skuid__field id="quantity" uniqueid="sk-1TQg-2412" showHelp="true"/>
+																											</fields>
+																										</row>
+																									</rows>
+																								</section>
+																							</sections>
+																							<conditions/>
+																							<renderConditions logictype="and"/>
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__form>
+																					</components>
+																					<buttons>
+																						<skuid__button label="Done" uniqueid="sk-1TQl-2525" styleSettingsVariant="primary">
+																							<actions>
+																								<action type="updateRow" fieldmodel="Total_Ui" affectedrows="all">
+																									<updates>
+																										<update valuesource="formula" field="total" enclosevalueinquotes="false">
+																											<formula>{{$Model.Total_Ui.data.0.total}} + ({{price}}*{{quantity}})</formula>
+																										</update>
+																									</updates>
+																								</action>
+																								<action type="closeAllPopups"/>
+																							</actions>
+																						</skuid__button>
+																					</buttons>
+																					<afterCloseActions/>
+																				</skuid__modal>
+																			</action>
+																		</interaction>
+																	</interactions>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__list>
+																<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Total: {{total}}&lt;/div&gt;&#10;" uniqueid="sk-2WNY-6086" model="Total_Ui" styleSettingsVariant="a6670e03-3f61-487f-b445-d0ba106f39df">
+																	<styles>
+																		<spacing top="2" bottom="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<background/>
+															<styles>
+																<spacing top="2" bottom="2" left="3" right="3"/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+													<background type="color" color="#fff"/>
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="quoteLineItems_UiOnly" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+													</renderConditions>
+													<interactions/>
+												</skuid__wrapper>
+											</components>
+										</division>
+									</divisions>
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="quoteLineItems_UiOnly" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+									</renderConditions>
+								</skuid__grid>
+							</components>
+						</division>
+					</divisions>
+					<interactions/>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+			</components>
+			<background/>
+			<styles>
+				<spacing top="3" left="4" right="4"/>
+			</styles>
+			<interactions/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences uniqueid="sk-1TK_-398">
+			<actionsequence id="3f8548b5-61cd-48bf-a34c-164f728ed9d4" label="add item to cart" type="reusable">
+				<actions>
+					<action type="blockUI" message="Adding {{name}} to cart" showPlaceholder="true" styleSettingsVariant="dark"/>
+					<action type="createRow" model="quoteLineItems_UiOnly" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default field="line-item-name" value="{{Product2.Name}}" valuesource="fieldvalue"/>
+							<default field="price" value="{{UnitPrice}}" valuesource="fieldvalue"/>
+							<default field="img_url" value="{{image}}" valuesource="fieldvalue"/>
+						</defaults>
+					</action>
+					<action type="updateRow" fieldmodel="Total_Ui" affectedrows="context">
+						<updates>
+							<update valuesource="formula" field="total" enclosevalueinquotes="false">
+								<formula>{{$Model.Total_Ui.data.0.total}} + {{$Model.quoteLineItems_UiOnly.data.0.price}}*{{$Model.quoteLineItems_UiOnly.data.0.quantity}}</formula>
+							</update>
+						</updates>
+					</action>
+					<action type="branch" whenfinished="continue" model="products" label="catching context bug">
+						<iftrueactions>
+							<action type="abandonRows" model="quoteLineItems_UiOnly" affectedrows="context"/>
+						</iftrueactions>
+						<formula>{{$Model.quoteLineItems_UiOnly.data.0.line-item-name}} === undefined</formula>
+					</action>
+					<action type="unblockUI"/>
+				</actions>
+				<description/>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="color">
+			<styles>
+				<styleitem property="background-color" value="#fafafa"/>
+			</styles>
+		</styleitem>
+	</styles>
+	<interactions/>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__wrapper uniqueid="sk-4JZ-905" styleSettingsVariant="dfb84c47-9cbb-4513-956b-33aaa502b2cd">
+							<components>
+								<skuid__grid uniqueid="sk-4HZ-646" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5" rowGutter="0" fullWidth="true">
+									<divisions>
+										<division minWidth="90px" ratio="1" alignSelf="auto" maxWidth="90px">
+											<components>
+												<skuid__image source="staticresource" uniqueid="sk-335P-6058" datasource="salesforce" resource="Minimal_UIG_Logo" resourceContentType="image/svg+xml"/>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components>
+												<skuid__text contents="Product Selection" uniqueid="sk-4AB-730" styleSettingsVariant="a6670e03-3f61-487f-b445-d0ba106f39df">
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__text>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing left="2" right="2" top="0.5" bottom="0.5"/>
+									</styles>
+								</skuid__grid>
+							</components>
+							<background/>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+					<background type="color" color="#fff"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background type="color" color="#f6f8f9"/>
+</skuid__page>

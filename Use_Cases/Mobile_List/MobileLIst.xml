@@ -1,0 +1,292 @@
+<skuid__page personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="Mobile Contact List">
+	<models>
+		<model id="Contacts" limit="25" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Contact">
+			<fields>
+				<field id="AssistantName" label="Assistant Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="AssistantPhone" label="Assistant Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingCity" label="City" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingCountry" label="Country" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Department" label="Department" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Email" label="Email" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="FirstName" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Title" label="Job Title" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="LastName" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Phone" label="Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingState" label="State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingStreet" label="Street" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingPostalCode" label="Postal Code" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="5" scale="0" accessible="true" filterable="true"/>
+				<field id="profile_img" displaytype="FORMULA" uionly="true" label="Photo" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>JOIN_TEXT("","https://randomuser.me/api/portraits/thumb/",IF({{gender}}=="M","men/","women/"), {{index}}, ".jpg")</formula>
+				</field>
+				<field id="index" displaytype="FORMULA" uionly="true" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+					<formula>{{index}}</formula>
+				</field>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__masthead uniqueid="sk-2QD7-4377" position="fixed" styleSettingsVariant="260defdc-e055-43d3-b174-9d010d633bd0">
+			<divisions>
+				<division type="navigation">
+					<components>
+						<skuid__buttonSet uniqueid="sk-2RJH-1510" position="left">
+							<groups>
+								<skuid__buttonGroup>
+									<buttons>
+										<skuid__button uniqueid="sk-2RJH-1514" icon="sk-webicon-material-icons:menu" styleSettingsVariant="050703d5-0c90-4fc8-9a80-df63cee6f9b4">
+											<actions>
+												<action type="openSlidingPanel" openbehavior="open">
+													<skuid__slidingPanel uniqueid="sk-2RJd-1735" size="40%" origin="left" closeOnPageClick="true">
+														<components>
+															<skuid__buttonSet uniqueid="sk-2RJy-2033">
+																<groups>
+																	<skuid__buttonGroup>
+																		<buttons>
+																			<skuid__button uniqueid="sk-2RJy-2037" icon="sk-webicon-material-icons:close" styleSettingsVariant="circular">
+																				<actions>
+																					<action type="closeSlidingPanel" closebehavior="close"/>
+																				</actions>
+																			</skuid__button>
+																		</buttons>
+																	</skuid__buttonGroup>
+																</groups>
+															</skuid__buttonSet>
+															<skuid__verticalNavigation uniqueid="sk-2RJk-1753" styleSettingsVariant="borderless">
+																<items>
+																	<item label="Home" uniqueid="sk-2RJk-1752" type="action">
+																		<actions/>
+																	</item>
+																	<item label="Accounts" uniqueid="sk-2RJk-1761" type="action">
+																		<actions/>
+																	</item>
+																	<item label="Contacts" uniqueid="sk-2RKY-2461" type="action">
+																		<actions/>
+																	</item>
+																</items>
+																<styles>
+																	<spacing/>
+																</styles>
+															</skuid__verticalNavigation>
+														</components>
+														<interactions/>
+													</skuid__slidingPanel>
+												</action>
+											</actions>
+										</skuid__button>
+									</buttons>
+								</skuid__buttonGroup>
+							</groups>
+						</skuid__buttonSet>
+					</components>
+				</division>
+				<division type="logo" flex="1">
+					<components>
+						<skuid__text contents="My Contacts" uniqueid="sk-2L_q-2555" styleSettingsVariant="5dd99c73-4291-4a9f-9f16-102b8137fd0d">
+							<styles>
+								<spacing left="2"/>
+							</styles>
+						</skuid__text>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing/>
+			</styles>
+		</skuid__masthead>
+		<skuid__text contents="{{$Model.Contacts.data.length}} contacts" uniqueid="sk-2RLI-2796">
+			<styles>
+				<spacing top="2" bottom="1.5" left="3"/>
+			</styles>
+			<renderConditions logictype="and">
+				<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="Contacts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+			</renderConditions>
+		</skuid__text>
+		<skuid__list model="Contacts" uniqueid="sk-QtE-1771" pageSize="25" styleSettingsVariant="70c27afa-2b34-40c5-8848-a228c80b735b" showPageSizeSelect="false" showLoadMore="true" showListHeader="false" showListFooter="true" rowActionsOnLeft="false">
+			<columns>
+				<column uniqueid="sk-QtE-1772" fillRatio="0" widthBehavior="fixed" width="6">
+					<items>
+						<item displayType="avatar" uniqueid="sk-QtE-1773" size="large" styleSettingsVariant="circular" fallbackType="icon" fallback="sk-webicon-ink:user" url="https://randomuser.me/api/portraits/{{#IsFemale}}women{{/IsFemale}}{{^IsFemale}}men{{/IsFemale}}/{{index}}.jpg"/>
+					</items>
+				</column>
+				<column uniqueid="sk-QtE-1774" fillRatio="1">
+					<items>
+						<item fieldId="FirstName" uniqueid="sk-QtE-1775" displayType="template" template="{{Name}}"/>
+						<item fieldId="Account.Name" uniqueid="sk-QtE-1776" displayType="field" displayStyle="secondary"/>
+						<item fieldId="Title" uniqueid="sk-QtE-1777" displayType="field" displayStyle="tertiary"/>
+					</items>
+				</column>
+			</columns>
+			<rowActions>
+				<action type="multi" uniqueid="sk-QtE-1778" icon="sk-webicon-material-icons:call">
+					<actions>
+						<action type="showToast" duration="4" styleSettingsVariant="default" message="Dialing {{first_name}}..."/>
+					</actions>
+					<tooltip position="top"/>
+				</action>
+				<action type="multi" uniqueid="sk-QtE-1779" icon="sk-webicon-material-icons:email">
+					<actions>
+						<action type="showToast" duration="4" styleSettingsVariant="default" message="Messaging {{first_name}}..."/>
+					</actions>
+				</action>
+			</rowActions>
+			<massActions/>
+			<filtering enableSearch="false" instantSearch="false"/>
+			<styles>
+				<spacing bottom="2" top="1.5"/>
+			</styles>
+			<interactions>
+				<interaction type="tap">
+					<action type="showModal">
+						<skuid__modal title="Edit Contact Details" width="80vw" buttonsJustification="center" fullScreen="true">
+							<components>
+								<skuid__wrapper uniqueid="sk-2QV6-4088" styleSettingsVariant="cabf031e-7d3a-4b6d-b89b-77af2c4cf050">
+									<components>
+										<skuid__grid uniqueid="sk-2QRQ-1518" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+											<divisions>
+												<division minWidth="4px" ratio="1" alignSelf="auto">
+													<components/>
+												</division>
+												<division alignSelf="auto" minWidth="120px" ratio="1" maxWidth="120px">
+													<components>
+														<skuid__wrapper uniqueid="sk-2QR3-3094" styleSettingsVariant="cea1760e-188e-4ae4-a98a-4a4e5d11fed4">
+															<components>
+																<skuid__image source="url" uniqueid="sk-2QK3-2769" datasource="Ui-Only" model="Contacts" url="{{profile_img}}"/>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="4px" ratio="1">
+													<components/>
+												</division>
+											</divisions>
+											<styles>
+												<spacing top="5" bottom="4"/>
+											</styles>
+										</skuid__grid>
+										<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{Name}}&lt;/div&gt;&#10;" uniqueid="sk-2QW2-4899" model="Contacts" styleSettingsVariant="35cc6ec7-f959-47d5-86c2-70d488694c3b">
+											<styles>
+												<spacing bottom="5"/>
+											</styles>
+										</skuid__text>
+									</components>
+									<background type="image" datasource="Ui-Only" source="url" size="cover" model="Contacts" url="https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1950&amp;q=80" position="center center"/>
+									<styles>
+										<spacing bottom="4"/>
+									</styles>
+								</skuid__wrapper>
+								<skuid__form showErrorsInline="true" model="Contacts" uniqueid="sk-2QGH-1897" mode="edit">
+									<sections>
+										<section title="New Section" showHeading="false">
+											<rows>
+												<row uniqueid="sk-2QGP-1926">
+													<fields>
+														<skuid__field id="FirstName" uniqueid="sk-2QGP-1925"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2QGP-1930">
+													<fields>
+														<skuid__field id="LastName" uniqueid="sk-2QGP-1929"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2QGP-1934">
+													<fields>
+														<skuid__field id="Department" uniqueid="sk-2QGP-1933"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2QGP-1938">
+													<fields>
+														<skuid__field id="Email" uniqueid="sk-2QGP-1937"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2QGP-1942">
+													<fields>
+														<skuid__field id="Phone" uniqueid="sk-2QGP-1941"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2QGP-1946">
+													<fields>
+														<skuid__field id="AccountId" showHelp="true" label="Account"/>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+							<buttons>
+								<skuid__button label="Cancel" uniqueid="sk-2QGV-2061">
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+									</renderConditions>
+									<enableConditions logictype="and"/>
+									<actions>
+										<action type="closeAllPopups"/>
+										<action type="cancel">
+											<models>
+												<model>Contacts</model>
+											</models>
+										</action>
+									</actions>
+									<styleVariantConditions/>
+								</skuid__button>
+								<skuid__button label="Save" uniqueid="sk-2QGV-2054" styleSettingsVariant="primary">
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+									</renderConditions>
+									<enableConditions logictype="and"/>
+									<actions>
+										<action type="closeAllPopups"/>
+										<action type="save">
+											<models>
+												<model>Contacts</model>
+											</models>
+										</action>
+										<action type="showToast" duration="2" styleSettingsVariant="default" message="Changes Saved"/>
+									</actions>
+									<styleVariantConditions/>
+								</skuid__button>
+								<skuid__button label="Done" uniqueid="sk-2QGp-2252" styleSettingsVariant="primary">
+									<actions>
+										<action type="closeAllPopups"/>
+										<action type="cancel">
+											<models>
+												<model>Contacts</model>
+											</models>
+										</action>
+									</actions>
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="false" operator="="/>
+									</renderConditions>
+									<enableConditions logictype="and"/>
+									<styleVariantConditions/>
+								</skuid__button>
+							</buttons>
+						</skuid__modal>
+					</action>
+				</interaction>
+			</interactions>
+			<renderConditions logictype="and"/>
+		</skuid__list>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background type="color" color="white"/>
+	<interactions/>
+</skuid__page>
