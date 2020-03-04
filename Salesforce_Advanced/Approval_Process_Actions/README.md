@@ -1,8 +1,8 @@
 # Salesforce Approval Processes
 
-Salesforce approval processes allow for very complicated workflows and multi-party transactions to be managed and tracked effectively. Its a powerful platform.  Often Skuid builders want to expose approval history for a particular record,  as well as enable the relevant approval actions to facilitate these workflows. 
+Salesforce approval processes allow for very complicated workflows and multi-party transactions to be managed and tracked effectively. Its a powerful platform.  Often Skuid builders want to expose approval history for a particular record and enable the relevant approval actions to facilitate these workflows.  
 
-This sample page uses a chain of models to show approval history, and uses Salesforce datasource actions to enable the various forms of approval actions. 
+This sample page shows both of these in action. A chain of models is used to show approval history and details, and Salesforce data source actions enable the various approval actions. 
 
 <img src="ApprovalActions.png" width="300"></img>
 
@@ -15,8 +15,13 @@ This sample page uses a chain of models to show approval history, and uses Sales
 ## Notes:
 - Before this page can run - an approval process must be created on the Case object. 
 
-- In order to use the "Unlock" action the following Salesforce setting you must to go to `Salesforce  Setup->Create-> Workflows and Approvals -> Process Automation Settings` and set checkbox Enable record locking and unlocking in Apex as true
+- In order to use the "Unlock" action the following Salesforce setting you must to go to `Salesforce  Setup->Create-> Workflows and Approvals -> Process Automation Settings` and set checkbox Enable record locking and unlocking in Apex as true.
 
+- Explore the Render Conditions on the approval actions to see how the appropriate action is shown for the record context.  For example: 
+    - If a record has not been submitted, only show the "submit for approval" action.  
+    - If an  approval is pending, only show the approve / reject buttons to the eligible approver.  
+
+- Explore the message area - a component that is initially hidden,  but is triggered to be exposed if there are errors in the salesforce approval actions. 
 
 
 ## Related Links: 
@@ -25,11 +30,12 @@ This sample page uses a chain of models to show approval history, and uses Sales
 
 
 
+<!--
+Rnh Notes. 
 
-Notes. 
+Approval and Reject actions:  If you immediately requery the approval process models,  the APEX required to perform the actions may not have completed.  Bug with components not listening to requery changes. 
 
-To use the "unlock" o
+I don't yet understand Lock and Unlock of parent record,  and how I can see this?  Do we have a way of controlling the interface if a record is locked?  Can we conditionally enable?
 
-
-Approval and Reject actions:  If you immediately requery the approval process models,  the APEX required to perform the actions may not have completed.  Need a timer.. 
-
+Message block - Dont use conditional rendering via field values,  use component actions to show message block.   There is still a problem with message block not merging {{$CurrentAction.error}} 
+-->

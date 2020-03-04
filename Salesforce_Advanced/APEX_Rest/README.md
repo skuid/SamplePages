@@ -1,6 +1,6 @@
-#Access Apex as a REST data source. 
+#Use APEX output in Skuid using a REST data source. 
 
-This page is an example supporting this articule in [Skuid Docs](https://docs.skuid.com/latest/en/skuid/salesforce/apex/apex-as-rest.html)
+This page is an example supporting this article in [Skuid Docs](https://docs.skuid.com/latest/en/skuid/salesforce/apex/apex-as-rest.html)
 
 ## Instructions:  
 - V1 Page API Used

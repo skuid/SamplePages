@@ -78,9 +78,9 @@
 			</conditions>
 			<actions/>
 		</model>
-		<model id="ErrorDisplay" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+		<model id="ErrorMessages" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
 			<fields>
-				<field id="ErrorText" displaytype="TEXT" length="255"/>
+				<field id="ErrorText" displaytype="TEXT" length="500"/>
 			</fields>
 			<conditions/>
 			<actions/>
@@ -159,18 +159,10 @@
 					<components>
 						<skuid__wrapper uniqueid="sk-2S_K-25759">
 							<components>
-								<skuid__messageArea uniqueid="sk-2TCw-21926" model="ErrorDisplay">
-									<group>
-										<skuid__messageBlock title="There was an Error" styleSettingsVariant="errorStrong" showClose="true" description="{{ErrorText}}">
-											<renderConditions logictype="and">
-												<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="ErrorDisplay" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
-											</renderConditions>
-										</skuid__messageBlock>
-									</group>
-									<renderconditions logictype="and"/>
-									<enableconditions/>
+								<skuid__messageArea uniqueid="sk-2bx1-19036">
+									<group/>
 									<styles>
-										<spacing top="4" bottom="4" left="4" right="4"/>
+										<spacing left="4" right="4" top="4" bottom="4"/>
 									</styles>
 								</skuid__messageArea>
 								<skuid__grid uniqueid="sk-2S_K-25760" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
@@ -210,17 +202,12 @@
 																			</inputs>
 																			<onerroractions>
 																				<action type="unblockUI"/>
-																				<action type="emptyModelData">
-																					<models>
-																						<model>ErrorDisplay</model>
-																					</models>
+																				<action type="updateRow" fieldmodel="ErrorMessages" affectedrows="all">
+																					<updates>
+																						<update valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</updates>
 																				</action>
-																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-																					<defaults>
-																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
-																					</defaults>
-																				</action>
-																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																				<action type="runComponentAction" componentid="sk-2bx1-19036" action="show" styleSettingsVariant="errorStrong" showClose="true" title="There is an error" description="{{$Model.ErrorMessages.data.0.ErrorText}}"/>
 																			</onerroractions>
 																		</action>
 																		<action type="requeryModels" behavior="standard">
@@ -243,17 +230,12 @@
 																		<action type="datasource-action" datasource="salesforce" actionname="approvals-approve" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Looks Good">
 																			<onerroractions>
 																				<action type="unblockUI"/>
-																				<action type="emptyModelData">
-																					<models>
-																						<model>ErrorDisplay</model>
-																					</models>
+																				<action type="updateRow" fieldmodel="ErrorMessages" affectedrows="all">
+																					<updates>
+																						<update valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</updates>
 																				</action>
-																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-																					<defaults>
-																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
-																					</defaults>
-																				</action>
-																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																				<action type="runComponentAction" componentid="sk-2bx1-19036" action="show" styleSettingsVariant="errorStrong" showClose="true" title="There is an error" description="{{$Model.ErrorMessages.data.0.ErrorText}}"/>
 																			</onerroractions>
 																		</action>
 																		<action type="requeryModels" behavior="standard">
@@ -282,17 +264,12 @@
 																		<action type="datasource-action" datasource="salesforce" actionname="approvals-reject" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Nope">
 																			<onerroractions>
 																				<action type="unblockUI"/>
-																				<action type="emptyModelData">
-																					<models>
-																						<model>ErrorDisplay</model>
-																					</models>
+																				<action type="updateRow" fieldmodel="ErrorMessages" affectedrows="all">
+																					<updates>
+																						<update valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</updates>
 																				</action>
-																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-																					<defaults>
-																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
-																					</defaults>
-																				</action>
-																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																				<action type="runComponentAction" componentid="sk-2bx1-19036" action="show" styleSettingsVariant="errorStrong" showClose="true" title="There is an error" description="{{$Model.ErrorMessages.data.0.ErrorText}}"/>
 																			</onerroractions>
 																		</action>
 																		<action type="requeryModels" behavior="standard">
@@ -317,17 +294,12 @@
 																		<action type="datasource-action" datasource="salesforce" actionname="approvals-recall" workitemid="{{$Model.CurrentWorkItem.data.0.Id}}" comments="Ooops - Do This Over">
 																			<onerroractions>
 																				<action type="unblockUI"/>
-																				<action type="emptyModelData">
-																					<models>
-																						<model>ErrorDisplay</model>
-																					</models>
+																				<action type="updateRow" fieldmodel="ErrorMessages" affectedrows="all">
+																					<updates>
+																						<update valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</updates>
 																				</action>
-																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-																					<defaults>
-																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
-																					</defaults>
-																				</action>
-																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																				<action type="runComponentAction" componentid="sk-2bx1-19036" action="show" styleSettingsVariant="errorStrong" showClose="true" title="There is an error" description="{{$Model.ErrorMessages.data.0.ErrorText}}"/>
 																			</onerroractions>
 																		</action>
 																		<action type="requeryModels" behavior="standard">
@@ -352,17 +324,12 @@
 																		<action type="datasource-action" datasource="salesforce" actionname="approvals-unlock" recordid="{{$Model.CaseData.data.0.Id}}">
 																			<onerroractions>
 																				<action type="unblockUI"/>
-																				<action type="emptyModelData">
-																					<models>
-																						<model>ErrorDisplay</model>
-																					</models>
+																				<action type="updateRow" fieldmodel="ErrorMessages" affectedrows="all">
+																					<updates>
+																						<update valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
+																					</updates>
 																				</action>
-																				<action type="createRow" model="ErrorDisplay" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-																					<defaults>
-																						<default valuesource="fieldvalue" field="ErrorText" enclosevalueinquotes="true" value="{{$CurrentAction.error}}"/>
-																					</defaults>
-																				</action>
-																				<action type="toggleRenderComponent" behavior="show" componentid="sk-2TCw-21926"/>
+																				<action type="runComponentAction" componentid="sk-2bx1-19036" action="show" styleSettingsVariant="errorStrong" showClose="true" title="There is an error" description="{{$Model.ErrorMessages.data.0.ErrorText}}"/>
 																			</onerroractions>
 																		</action>
 																		<action type="requeryModels" behavior="standard">
@@ -388,7 +355,7 @@
 										</division>
 									</divisions>
 									<styles>
-										<spacing bottom="4" left="4" right="4"/>
+										<spacing bottom="4" left="4" right="4" top="4"/>
 									</styles>
 								</skuid__grid>
 								<skuid__table allowColumnFreezing="dragDrop" model="ApprovalInstances" uniqueid="sk-2T2W-8357" mode="read" showSaveCancel="false" title="Approval History" pageSize="10" enableDrawers="true">
@@ -419,9 +386,6 @@
 									</drawer>
 								</skuid__table>
 							</components>
-							<styles>
-								<spacing top="4" bottom="4" left="4" right="4"/>
-							</styles>
 							<background type="color" color="white"/>
 						</skuid__wrapper>
 					</components>
