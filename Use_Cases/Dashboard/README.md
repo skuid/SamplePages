@@ -1,4 +1,4 @@
-#Simple Sales Dashboard using Skuid. 
+# Simple Sales Dashboard using Skuid. 
 
 A quick overview of key statistics and immediate calls to action.  Personalize the data on this screen by role. 
 

@@ -1,4 +1,4 @@
-#List view optimized for small form factor
+# List view optimized for small form factor
 
 When you need a list of records on a phone - or other small form factor.
 

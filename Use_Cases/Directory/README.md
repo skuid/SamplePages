@@ -1,4 +1,4 @@
-#Photo Directory of Contacts in Skuid 
+# Photo Directory of Contacts in Skuid 
 
 A highly scannable view of records in individual cards. Usually contacts, but it really could be anything.
 
