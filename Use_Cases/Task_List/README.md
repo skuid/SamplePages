@@ -1,4 +1,4 @@
-# Photo Directory of Contacts in Skuid 
+# A better To-Do list
 
 We all need a better to-do list. A Skuid list provide the tools to make just what you need.
 

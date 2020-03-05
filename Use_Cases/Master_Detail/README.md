@@ -1,4 +1,4 @@
-# Photo Directory of Contacts in Skuid 
+# Master Detail View
 
 Quickly work though multiple records, reviewing data and making updates.
 
@@ -8,7 +8,7 @@ Quickly work though multiple records, reviewing data and making updates.
 - V2 Page API Used
 - Data source: Uses default Salesforce data source.   
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Directory.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Master_Detail.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links: 

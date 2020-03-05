@@ -1,4 +1,4 @@
-#Add a Skuid page to the Salesforce Home Page 
+# Add a Skuid page to the Salesforce Home Page 
 
 This page is an example supporting this article in [Skuid Docs](https://docs.skuid.com/latest/en/tutorials/salesforce/homepage-dashboard.html)
 
