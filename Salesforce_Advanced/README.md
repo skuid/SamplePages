@@ -1,20 +1,15 @@
-# Sample Pages
-
-Example Skuid pages to help get you started or learn how to do cool and complicated things with Skuid. 
-
-## Four basic categories of material here. 
-
-### [Use Cases](/Use_Cases)
-Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 
-
-### [Advanced Salesforce techniques](/Salesforce_Advanced) 
+# Advanced Salesforce techniques 
 There are complicated features provided by Salesforce that provide TONS of value.  Can they be used in Skuid? Approval process?  Duplicate Management rules?  YES! These pages provide examples for you to explore and include in your Skuid Applications.
 
-### [Skuid Techniques](/Skuid_Techniques)
-We know its true - some of the coolest capabilities provided by Skuid are complicated to set up. These pages provide examples of things like complicated filters, action sequences, etc. 
+## Contents
 
-### [Tools](/Tools)
-Pages used for license management. Understand who has access to Skuid and how much it is being used. 
+-  [Exposing the results of an APEX Class](/APEX_Rest)
+-  [Approval Processes](/Approval_Process_Actions) 
+-  [Using Salesforce Content in Skuid](/Content_Document) 
+-  [Making a custom Skuid Home page](/Custom_Home_Page) 
+-  [Exposing Duplicate Record Warnings](/Duplicate_Management) 
+-  [Using Chatter "Follow" in Skuid](/Follow_or_Unfollow_Records) 
+-  [Using Chatter Topics in Skuid](/Topic_Management) 
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:

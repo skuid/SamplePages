@@ -1,20 +1,21 @@
-# Sample Pages
+# Use Cases
 
-Example Skuid pages to help get you started or learn how to do cool and complicated things with Skuid. 
-
-## Four basic categories of material here. 
-
-### [Use Cases](/Use_Cases)
 Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 
 
-### [Advanced Salesforce techniques](/Salesforce_Advanced) 
-There are complicated features provided by Salesforce that provide TONS of value.  Can they be used in Skuid? Approval process?  Duplicate Management rules?  YES! These pages provide examples for you to explore and include in your Skuid Applications.
+## Contents
 
-### [Skuid Techniques](/Skuid_Techniques)
-We know its true - some of the coolest capabilities provided by Skuid are complicated to set up. These pages provide examples of things like complicated filters, action sequences, etc. 
-
-### [Tools](/Tools)
-Pages used for license management. Understand who has access to Skuid and how much it is being used. 
+-  [Account Hierarchy](/Account_Hierarchy) 
+-  [Case_Management](/Case_Management) 
+-  [Complex Form](/Complex_Form) 
+-  [Simple Sales Dashboard](/Dashboard) 
+-  [Photo Directory](/Directory) 
+-  [Lead Analysis](/Lead_Analysis) 
+-  [Master Detail View](/Master_Detail) 
+-  [Mobile List](/Mobile_List)
+-  [Opportunity Management](/Opportunity_Management) 
+-  [Product Catalog](/Product_Selection) 
+-  [Simple List](/Simple_List) 
+-  [Task List](/Task_List) 
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:
