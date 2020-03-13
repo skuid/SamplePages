@@ -4,7 +4,7 @@ Samples of pages we see used commonly within business applications. Gain inspira
 
 ## Contents
 
--  [Account Hierarchy](Use_Cases/Account_Hierarchy) 
+-  [Account Hierarchy](Account_Hierarchy) 
 -  [Case_Management](/Case_Management) 
 -  [Complex Form](/Complex_Form) 
 -  [Simple Sales Dashboard](/Dashboard) 
