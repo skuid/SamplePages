@@ -4,18 +4,18 @@ Samples of pages we see used commonly within business applications. Gain inspira
 
 ## Contents
 
--  [Account Hierarchy](/Account_Hierarchy) 
--  [Case_Management](/Case_Management) 
--  [Complex Form](/Complex_Form) 
--  [Simple Sales Dashboard](/Dashboard) 
--  [Photo Directory](/Directory) 
--  [Lead Analysis](/Lead_Analysis) 
--  [Master Detail View](/Master_Detail) 
--  [Mobile List](/Mobile_List)
--  [Opportunity Management](/Opportunity_Management) 
--  [Product Catalog](/Product_Selection) 
--  [Simple List](/Simple_List) 
--  [Task List](/Task_List) 
+-  [Account Hierarchy](Account_Hierarchy) 
+-  [Case_Management](Case_Management) 
+-  [Complex Form](Complex_Form) 
+-  [Simple Sales Dashboard](Dashboard) 
+-  [Photo Directory](Directory) 
+-  [Lead Analysis](Lead_Analysis) 
+-  [Master Detail View](Master_Detail) 
+-  [Mobile List](Mobile_List)
+-  [Opportunity Management](Opportunity_Management) 
+-  [Product Catalog](Product_Selection) 
+-  [Simple List](Simple_List) 
+-  [Task List](Task_List) 
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:
