@@ -9,11 +9,12 @@ Samples of pages we see used commonly within business applications. Gain inspira
 -  [Complex Form](Complex_Form) 
 -  [Simple Sales Dashboard](Dashboard) 
 -  [Photo Directory](Directory) 
--  [Lead Analysis](Lead_Analysis) 
+<!--  [Lead Analysis](Lead_Analysis)  -->
 -  [Master Detail View](Master_Detail) 
 -  [Mobile List](Mobile_List)
--  [Opportunity Management](Opportunity_Management) 
+<!--  [Opportunity Management](Opportunity_Management) -->
 -  [Product Catalog](Product_Selection) 
+-  [Service Request](Service_Request) 
 -  [Simple List](Simple_List) 
 -  [Task List](Task_List) 
 
