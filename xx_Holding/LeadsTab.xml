@@ -1,3 +1,5 @@
+<!-- This was an example page to help understnad actions.  It mostly just does lead detail popup and new lead popup and lots of redirects. -->
+
 <skuidpage showsidebar="false" showheader="true" tabtooverride="" unsavedchangeswarning="yes">
    <models>
       <model id="RunningUser" limit="1" query="true" createrowifnonefound="false" sobject="User">
