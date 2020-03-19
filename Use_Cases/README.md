@@ -9,10 +9,8 @@ Samples of pages we see used commonly within business applications. Gain inspira
 -  [Complex Form](Complex_Form) 
 -  [Simple Sales Dashboard](Dashboard) 
 -  [Photo Directory](Directory) 
-<!--  [Lead Analysis](Lead_Analysis)  -->
 -  [Master Detail View](Master_Detail) 
 -  [Mobile List](Mobile_List)
-<!--  [Opportunity Management](Opportunity_Management) -->
 -  [Product Catalog](Product_Selection) 
 -  [Service Request](Service_Request) 
 -  [Simple List](Simple_List) 
@@ -35,3 +33,10 @@ Note: Some of these pages require a separate data source,  or require installati
 You will be directed to the App Composer, displaying your newly created sample page.
 - To see your page in action, click **Preview**.
 - Otherwise, modify to your heart's content and click **Save** to retain your changes.
+
+<!--  Rnh Notes:  More folders to be added after V2 conversion. 
+  [Lead Analysis](Lead_Analysis)  
+  [Opportunity Management](Opportunity_Management) 
+  
+  -->
+
