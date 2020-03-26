@@ -1,4 +1,4 @@
-# Example Design System and - Style Guide Page
+# Example Design System and Style Guide Page
 
 Use a component-filled Skuid page to preview components and re-usable patterns to build a style guide for your Skuid project.
 

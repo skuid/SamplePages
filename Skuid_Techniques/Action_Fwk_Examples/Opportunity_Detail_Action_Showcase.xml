@@ -384,6 +384,11 @@
 											<action type="datasource-action" datasource="salesforce" actionname="clone"/>
 										</actions>
 									</skuid__button>
+									<skuid__button label="Share" uniqueId="sk-3q0O-19661">
+										<actions>
+											<action type="datasource-action" datasource="salesforce" actionname="share"/>
+										</actions>
+									</skuid__button>
 								</buttons>
 							</skuid__buttonGroup>
 						</groups>
