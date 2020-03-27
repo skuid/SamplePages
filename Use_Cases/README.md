@@ -5,7 +5,6 @@ Samples of pages we see used commonly within business applications. Gain inspira
 ## Contents
 
 -  [Account Hierarchy](Account_Hierarchy) 
--  [Case_Management](Case_Management) 
 -  [Complex Form](Complex_Form) 
 -  [Simple Sales Dashboard](Dashboard) 
 -  [Photo Directory](Directory) 
@@ -37,6 +36,6 @@ You will be directed to the App Composer, displaying your newly created sample p
 <!--  Rnh Notes:  More folders to be added after V2 conversion. 
   [Lead Analysis](Lead_Analysis)  
   [Opportunity Management](Opportunity_Management) 
-  
+  [Case_Management](Case_Management) 
   -->
 

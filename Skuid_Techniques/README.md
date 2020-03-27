@@ -2,10 +2,10 @@
 We know its true - some of the coolest capabilities provided by Skuid are complicated to set up. These pages provide examples of things like complicated filters, action sequences, etc. 
 
 ## Contents
-- [A set of action framework examples](Action_Fwk_Examples)
+- [Action framework examples](Action_Fwk_Examples)
 - [Adding related records to drawers](Drawers_Related_Records)
 - [Advanced Filtering Techniques](Filters_Using_Forms)
-- [Show Key Indicators](KeyIndicators)
+- [Key Indicators Dashboard](KeyIndicators)
 
 
 ## Instructions

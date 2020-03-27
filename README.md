@@ -2,7 +2,7 @@
 
 Example Skuid pages to help get you started or learn how to do cool and complicated things with Skuid. 
 
-## Four basic categories of material here. 
+## Five basic categories of material here. 
 
 ### [Use Cases](/Use_Cases)
 Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 

@@ -1,338 +1,553 @@
-<skuidpage showsidebar="false" showheader="true" tabtooverride="Skuid Dashboard" theme="" unsavedchangeswarning="">
-   <models>
-      <model id="Accounts" limit="" query="true" createrowifnonefound="false" sobject="Account" type="aggregate">
-         <fields>
-            <field id="Id" name="countId" function="COUNT"/>
-         </fields>
-         <conditions/>
-         <groupby method="simple"/>
-         <actions/>
-      </model>
-      <model id="ProductCustomers" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" type="aggregate">
-         <fields>
-            <field id="TotalPrice" name="sumTotalPrice" function="SUM"/>
-            <field id="Opportunity.Name" name="countdistinctOpportunityN" function="COUNT_DISTINCT"/>
-         </fields>
-         <conditions>
-            <condition type="multiple" value="" field="Opportunity.StageName" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
-               <values>
-                  <value>Closed Won</value>
-                  <value>Invoiced</value>
-               </values>
-            </condition>
-            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="Opportunity.CloseDate"/>
-         </conditions>
-         <groupby method="simple"/>
-         <actions/>
-      </model>
-      <model id="ProfSvcsCustomers" limit="" query="true" createrowifnonefound="false" sobject="OpportunityLineItem" type="aggregate">
-         <fields>
-            <field id="TotalPrice" name="sumTotalPrice" function="SUM"/>
-            <field id="Opportunity.Name" name="countdistinctOpportunityN" function="COUNT_DISTINCT"/>
-         </fields>
-         <conditions>
-            <condition type="multiple" value="" field="PricebookEntry.Name" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
-               <values>
-                  <value>Professional Services Block 80</value>
-                  <value>Professional Services Hourly</value>
-               </values>
-            </condition>
-            <condition type="multiple" value="" field="Opportunity.StageName" operator="in" enclosevalueinquotes="true" state="off" inactive="true">
-               <values>
-                  <value>Closed Won</value>
-                  <value>Invoice</value>
-               </values>
-            </condition>
-            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="Opportunity.CloseDate"/>
-         </conditions>
-         <groupby method="simple"/>
-         <actions/>
-      </model>
-      <model id="License MRR" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate">
-         <fields>
-            <field id="Amount" name="sumAmount" function="SUM"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="Renewal" enclosevalueinquotes="true" field="Name" operator="contains"/>
-            <condition type="multiple" value="" field="StageName" operator="not in" enclosevalueinquotes="true">
-               <values>
-                  <value>Closed Won</value>
-                  <value>Closed Lost</value>
-               </values>
-            </condition>
-         </conditions>
-         <groupby method="simple"/>
-         <actions/>
-      </model>
-      <model id="HotLeads" limit="" query="true" createrowifnonefound="false" sobject="Lead" type="aggregate" orderby="">
-         <fields>
-            <field id="Id" name="countId" function="COUNT"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
-         </conditions>
-         <groupby method="simple"/>
-         <actions/>
-      </model>
-      <model id="Opportunities" limit="100" query="true" createrowifnonefound="false" sobject="Opportunity" orderby="StageName">
-         <fields>
-            <field id="AccountId"/>
-            <field id="Account.Name"/>
-            <field id="Amount"/>
-            <field id="CreatedDate"/>
-            <field id="StageName"/>
-            <field id="Name"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="New Business" enclosevalueinquotes="true" field="Type"/>
-            <condition type="fieldvalue" value="LAST_N_MONTHS:6" enclosevalueinquotes="false" field="CreatedDate"/>
-         </conditions>
-         <actions/>
-      </model>
-      <model id="Opportunies by Month" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" orderby="CALENDAR_MONTH(CreatedDate)">
-         <fields>
-            <field id="Id" name="countId" function="COUNT"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CloseDate"/>
-            <condition type="fieldvalue" value="New Business" enclosevalueinquotes="true" field="Type"/>
-         </conditions>
-         <groupby method="simple">
-            <field id="CreatedDate" name="cmCreatedDate" function="CALENDAR_MONTH"/>
-         </groupby>
-         <actions/>
-      </model>
-      <model id="Leads" limit="100" query="true" createrowifnonefound="false" sobject="Lead">
-         <fields>
-            <field id="Name"/>
-            <field id="Company"/>
-            <field id="Email"/>
-            <field id="CreatedDate"/>
-         </fields>
-         <conditions>
-            <condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
-         </conditions>
-         <actions/>
-      </model>
-      <model id="OppsByYear" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate">
-         <fields>
-            <field id="Amount" name="sumAmount" function="SUM"/>
-         </fields>
-         <conditions/>
-         <groupby method="simple">
-            <field id="CloseDate" name="cyCloseDate" function="CALENDAR_YEAR"/>
-         </groupby>
-         <actions/>
-      </model>
-   </models>
-   <components>
-      <pagetitle model="Accounts">
-         <maintitle>Management Dashboard</maintitle>
-         <actions>
-            <action type="delete"/>
-            <action type="share"/>
-            <action type="clone"/>
-         </actions>
-      </pagetitle>
-      <panelset type="custom" scroll="">
-         <panels>
-            <panel width="20%">
-               <components>
-                  <pagetitle model="ProfSvcsCustomers">
-                     <actions/>
-                     <maintitle>Key Statistics</maintitle>
-                  </pagetitle>
-                  <template model="Accounts" multiple="false" allowhtml="true">
-                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=CustomerAccountDetail"&gt;
-&lt;div class = "box"&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; Number of Accounts: &lt;/div&gt;
-&lt;div class = "nx-pagetitle-maintitle"&gt;
-{{countId}}
-&lt;/div&gt;
-&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
-&lt;/div&gt;&lt;/a&gt;</contents>
-                  </template>
-                  <template model="HotLeads" multiple="false" allowhtml="true">
-                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
-&lt;div class = "box"&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; Hot Leads: &lt;/div&gt;
-&lt;div class = "nx-pagetitle-maintitle"&gt;
-{{countId}}
-&lt;/div&gt;
-&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
-&lt;/div&gt;&lt;/a&gt;</contents>
-                  </template>
-                  <template model="Accounts" multiple="false" allowhtml="true">
-                     <contents>&lt;a href="/apex/skuid__ui?page=AccountTab&amp;Oportunites_Won__c=-on-"&gt;
-&lt;div class = "box"&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; Customer Accounts 
-&lt;/div&gt;
-&lt;div class = "nx-pagetitle-maintitle"&gt;
-{{countId}}
-&lt;/div&gt;
-&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
-
-
-&lt;/div&gt;&lt;/a&gt;</contents>
-                  </template>
-                  <template model="ProductCustomers" multiple="false" allowhtml="true">
-                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
-&lt;div class = "box"&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; License Opportunities Won: Current Year &lt;/div&gt;
-&lt;div class = "nx-pagetitle-maintitle"&gt;
-{{countdistinctOpportunityN}}
-&lt;/div&gt;
-&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
-&lt;/div&gt;&lt;/a&gt;</contents>
-                  </template>
-                  <template model="ProductCustomers" multiple="false" allowhtml="true">
-                     <contents>&lt;a href="https://skuid.na2.visual.force.com/apex/skuid__ui?page=LicenseOpportunitiesWonThisYear"&gt;
-&lt;div class = "box"&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; License Revenue Won: Current Year &lt;/div&gt;
-&lt;div class = "nx-pagetitle-maintitle"&gt;
-{{sumTotalPrice}}
-&lt;/div&gt;
-&lt;div class = "bottomtext"&gt; Details &lt;/div&gt;
-&lt;/div&gt;&lt;/a&gt;</contents>
-                  </template>
-                  <custom name="block"/>
-                  <pagetitle model="OppsByYear">
-                     <maintitle>Opps by Year</maintitle>
-                     <actions/>
-                  </pagetitle>
-                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="OppsByYear" mode="readonly" buttonposition="left" cssclass="hidetablefooter">
-                     <fields>
-                        <field id="CloseDate" name="cyCloseDate" valuehalign="" type="">
-                           <label>Year</label>
-                        </field>
-                        <field id="Amount" name="sumAmount" decimalplaces="" valuehalign="" type="">
-                           <label>Amount</label>
-                        </field>
-                     </fields>
-                     <rowactions/>
-                     <massactions usefirstitemasdefault="true"/>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-               </components>
-            </panel>
-            <panel width="80%">
-               <components>
-                  <template model="Accounts" multiple="true" allowhtml="true">
-                     <contents>&lt;div class = "nx-pagetitle-maintitle"&gt;
-Leads
-&lt;/div&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; Hot Leads from past 7 days &lt;/div&gt;
-
-&lt;/div&gt;</contents>
-                  </template>
-                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="false" model="Leads" mode="read" buttonposition="" cssclass="hidetablefooter">
-                     <fields>
-                        <field id="Name"/>
-                        <field id="Email"/>
-                        <field id="Company"/>
-                        <field id="CreatedDate"/>
-                     </fields>
-                     <rowactions/>
-                     <massactions usefirstitemasdefault="true"/>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-                  <template model="Accounts" multiple="true" allowhtml="true">
-                     <contents>&lt;div class = "nx-pagetitle-maintitle"&gt;
-Opportunities
-&lt;/div&gt;
-&lt;div class = "nx-pagetitle-subtitle"&gt; New Business - Created in last 30 days&lt;/div&gt;
-
-&lt;/div&gt;</contents>
-                  </template>
-                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="all" createrecords="false" model="Opportunities" mode="read" buttonposition="" cssclass="hidetablefooter">
-                     <fields>
-                        <field id="Name"/>
-                        <field id="AccountId"/>
-                        <field id="CreatedDate" type="CUSTOM" snippet="ShortDate"/>
-                        <field id="StageName"/>
-                        <field id="Amount">
-                           <summaries>
-                              <summary>sum</summary>
-                           </summaries>
-                        </field>
-                     </fields>
-                     <rowactions/>
-                     <massactions usefirstitemasdefault="true"/>
-                     <views>
-                        <view type="standard"/>
-                     </views>
-                  </skootable>
-               </components>
-            </panel>
-         </panels>
-      </panelset>
-   </components>
-   <resources>
-      <labels/>
-      <css>
-         <cssitem location="inline" name="box">.box{
-        padding:8px;
-        background-color: LightBlue; 
-        border-width: 2px;
-        border-color: Navy;
-        height: 75px;
-        margin: 4px;
-        position: relative;
-}
-
-.bottomtext {
-    text-decoration:underline;
-    position: absolute;
-    bottom: 8px;
-    width: 100%;
-    text-align: left;
-}</cssitem>
-         <cssitem location="inline" name="hidefooter" cachelocation="false">.hidetablefooter .nx-list-footer {	
-    display:none;</cssitem>
-      </css>
-      <javascript>
-         <jsitem location="inlinesnippet" name="ShortDate" url="">var $ = skuid.$;
-var field = arguments[0];
-var value = arguments[1];
-var jsdate = new Date();
-
-//use skuid util to change SF date to JS date
-jsdate = skuid.time.parseSFDate(value);
-
-//uses jQuery UI Datepicker.formatDate tools
-skuid.ui.fieldRenderers.TEXT[field.mode](field, $.datepicker.formatDate( "mm/dd", jsdate));
-</jsitem>
-         <jsitem location="inline" name="MRRCalcBoxDisplay">skuid.componentType.register('block',function(element){
-var $ = skuid.$;
-var m = skuid.model.getModel('ProductCustomers');
-var row = m.getFirstRow();
-annual = row.sumTotalPrice
-var monthly = (annual / 120).toFixed(2)
-monthly = addCommas(monthly);
-var text = 
-    "&lt;a href='https://skuid.na2.visual.force.com/apex/skuid__ui?page=MRR_Detail'&gt;&lt;div class= 'box ui-widget'&gt;&lt;div class='nx-pagetitle-subtitle'&gt; License MRR &lt;/div&gt;&lt;div class = 'nx-pagetitle-maintitle'&gt;$"
-    + monthly 
-    +"&lt;/div&gt;&lt;div class='bottomtext'&gt;Details&lt;/div&gt;&lt;/div&gt;&lt;/a&gt;";
-element.append(
-    m.mergeRow(row,text)
-);
-});
-
- var addCommas = function(str) {
-        str += '';
-        x = str.split('.');
-        x1 = x[0];
-        x2 = x.length &gt; 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    };</jsitem>
-      </javascript>
-   </resources>
-</skuidpage>
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false">
+	<models>
+		<model id="Customers" limit="" query="true" createrowifnonefound="false" sobject="Account" type="aggregate" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="0.0" enclosevalueinquotes="false" field="Opportunites_Won__c" operator="gt"/>
+			</conditions>
+			<groupby method="simple"/>
+			<actions/>
+		</model>
+		<model id="Leads_YTD" limit="" query="true" createrowifnonefound="false" sobject="Lead" type="aggregate" orderby="" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
+			</conditions>
+			<groupby method="simple">
+				<field id="CreatedDate" name="calendaryearCreatedDate" function="CALENDAR_YEAR"/>
+			</groupby>
+			<actions/>
+		</model>
+		<model id="ClosedOppsYTD" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="DisplayAmount" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(
+{{sumAmount}}&gt;1000000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10000)/100),"M"),
+IF({{sumAmount}}&gt;1000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10)/100),"K"),
+JOIN_TEXT("","$",(ROUND({{sumAmount}}/100)/100))
+))
+</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CloseDate"/>
+				<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed"/>
+			</conditions>
+			<groupby method="simple"/>
+			<actions/>
+		</model>
+		<model id="ClosedOppsLastMonth" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="DisplayAmount" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(
+{{sumAmount}}&gt;1000000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10000)/100),"M"),
+IF({{sumAmount}}&gt;1000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10)/100),"K"),
+JOIN_TEXT("","$",(ROUND({{sumAmount}}/100)/100))
+))
+</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="LAST_MONTH" enclosevalueinquotes="false" field="CloseDate"/>
+				<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed"/>
+			</conditions>
+			<groupby method="simple"/>
+			<actions/>
+		</model>
+		<model id="OpenOppsYTD" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="DisplayAmount" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(
+{{sumAmount}}&gt;1000000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10000)/100),"M"),
+IF({{sumAmount}}&gt;1000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10)/100),"K"),
+JOIN_TEXT("","$",(ROUND({{sumAmount}}/100)/100))
+))</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CloseDate"/>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsClosed"/>
+			</conditions>
+			<groupby method="simple"/>
+			<actions/>
+		</model>
+		<model id="OpenOppsByMonth" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" orderby="CALENDAR_MONTH(CloseDate)" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="DisplayAmount" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(
+{{sumAmount}}&gt;1000000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10000)/100),"M"),
+IF({{sumAmount}}&gt;1000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10)/100),"K"),
+JOIN_TEXT("","$",(ROUND({{sumAmount}}/100)/100))
+))
+</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CloseDate"/>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsClosed"/>
+			</conditions>
+			<groupby method="simple">
+				<field id="CloseDate" name="cmCloseDate" function="CALENDAR_MONTH"/>
+			</groupby>
+			<actions/>
+		</model>
+		<model id="Opportunities_List" limit="100" query="true" createrowifnonefound="false" sobject="Opportunity" orderby="StageName" datasource="salesforce">
+			<fields>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="Amount"/>
+				<field id="CreatedDate"/>
+				<field id="StageName"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="LAST_N_MONTHS:6" enclosevalueinquotes="false" field="CreatedDate"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Leads_List" limit="100" query="true" createrowifnonefound="false" sobject="Lead" datasource="salesforce">
+			<fields>
+				<field id="Name"/>
+				<field id="Company"/>
+				<field id="Email"/>
+				<field id="CreatedDate"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="CreatedDate" operator="="/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="OppsByYear" limit="" query="true" createrowifnonefound="false" sobject="Opportunity" type="aggregate" datasource="salesforce">
+			<fields>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+			</fields>
+			<conditions/>
+			<groupby method="simple">
+				<field id="CloseDate" name="cyCloseDate" function="CALENDAR_YEAR"/>
+			</groupby>
+			<actions/>
+		</model>
+		<model id="ClosedOppTopProductYTD" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" sobject="OpportunityLineItem" type="aggregate" orderby="SUM(TotalPrice) DESC">
+			<fields>
+				<field id="OpportunityId" name="countdistinctOpportunityI" function="COUNT_DISTINCT"/>
+				<field id="TotalPrice" name="sumAmount" function="SUM"/>
+				<field id="DisplayAmount" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(
+{{sumAmount}}&gt;1000000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10000)/100),"M"),
+IF({{sumAmount}}&gt;1000,JOIN_TEXT("","$",(ROUND({{sumAmount}}/10)/100),"K"),
+JOIN_TEXT("","$",(ROUND({{sumAmount}}/100)/100))
+))</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="THIS_YEAR" enclosevalueinquotes="false" field="Opportunity.CloseDate"/>
+				<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="Opportunity.IsClosed" fieldtargetobjects="Opportunity"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple">
+				<field id="Product2.Name" name="product2Name"/>
+			</groupby>
+		</model>
+		<model id="Targets" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="LeadsTarget" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" defaultValue="500"/>
+				<field displaytype="CURRENCY" length="255" id="OpportunityRevenueTarget" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" defaultValue="45000000"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Calculations" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field id="Lead_PercentToTarget" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="PERCENT" precision="3" scale="2">
+					<formula>{{$Model.Leads_YTD.data.0.countId}}/{{$Model.Targets.data.0.LeadsTarget}}</formula>
+				</field>
+				<field id="Opportunity_PercentToTarget" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="PERCENT" precision="3" scale="2">
+					<formula>{{$Model.ClosedOppsYTD.data.0.sumAmount}}/{{$Model.Targets.data.0.OpportunityRevenueTarget}}</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-SMV-38053">
+			<components>
+				<skuid__grid uniqueid="sk-SON-53816" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+					<divisions>
+						<division minWidth="325px" ratio="0" alignSelf="auto" maxWidth="325px">
+							<components>
+								<skuid__grid uniqueid="sk-SsZ-8188" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2" rowGutter="2">
+									<divisions>
+										<division minWidth="300px" ratio="1" alignSelf="auto">
+											<components>
+												<skuid__wrapper uniqueid="sk-SyM-57896">
+													<components>
+														<skuid__wrapper uniqueid="sk-SyM-57897">
+															<components>
+																<skuid__text contents="Number of Customer Accounts" uniqueid="sk-SyM-57898" styleSettingsVariant="medium"/>
+																<skuid__text contents="{{{countId}}}" uniqueid="sk-SyM-57899" model="Customers" styleSettingsVariant="huge">
+																	<styles>
+																		<spacing top="3"/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="300px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-SsZ-8193">
+													<components>
+														<skuid__wrapper uniqueid="sk-SsZ-8194">
+															<components>
+																<skuid__text contents="Leads created in&amp;nbsp; {{{calendaryearCreatedDate}}}" uniqueid="sk-SsZ-8195" styleSettingsVariant="medium" model="Leads_YTD"/>
+																<skuid__grid uniqueid="sk-T7k-89461" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1">
+																	<divisions>
+																		<division minWidth="0" ratio="0" alignSelf="flex-end">
+																			<components>
+																				<skuid__text contents="{{{countId}}}" uniqueid="sk-SsZ-8196" model="Leads_YTD" styleSettingsVariant="huge">
+																					<styles>
+																						<spacing top="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="flex-end" minWidth="0" ratio="0">
+																			<components>
+																				<skuid__text contents="{{Lead_PercentToTarget}}&lt;br /&gt;&#10;of Target" uniqueid="sk-SsZ-8201" model="Calculations">
+																					<styles>
+																						<spacing bottom="1.5"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																	</divisions>
+																</skuid__grid>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="300px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-SsZ-8197">
+													<components>
+														<skuid__wrapper uniqueid="sk-SsZ-8198">
+															<components>
+																<skuid__text contents="Closed Opportunities&amp;nbsp;in&amp;nbsp; {{{calendaryearCreatedDate}}}" uniqueid="sk-SsZ-8199" styleSettingsVariant="medium" model="Leads_YTD"/>
+																<skuid__grid uniqueid="sk-T8k-98968" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1">
+																	<divisions>
+																		<division minWidth="0" ratio="0" alignSelf="flex-end">
+																			<components>
+																				<skuid__text contents="{{{DisplayAmount}}}" uniqueid="sk-SsZ-8200" model="ClosedOppsYTD" styleSettingsVariant="huge">
+																					<styles>
+																						<spacing top="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="flex-end" minWidth="0" ratio="0">
+																			<components>
+																				<skuid__text contents="{{Opportunity_PercentToTarget}}&lt;br /&gt;&#10;of Target" uniqueid="sk-T8k-98970" model="Calculations">
+																					<styles>
+																						<spacing bottom="1.5"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																	</divisions>
+																</skuid__grid>
+																<skuid__text contents="{{{countId}}} Opportunities" uniqueid="sk-T7n-90429" model="ClosedOppsYTD" styleSettingsVariant="medium"/>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="300px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-TJL-105386">
+													<components>
+														<skuid__wrapper uniqueid="sk-TJL-105387">
+															<components>
+																<skuid__text contents="Opportunities Closed Last Month" uniqueid="sk-TJL-105388" styleSettingsVariant="medium"/>
+																<skuid__text contents="{{{DisplayAmount}}}" uniqueid="sk-TJL-105389" model="ClosedOppsLastMonth" styleSettingsVariant="huge">
+																	<styles>
+																		<spacing top="3"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="{{{countId}}} Opportunities" uniqueid="sk-TJm-112695" model="ClosedOppsLastMonth" styleSettingsVariant="medium"/>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-SsZ-8202">
+													<components>
+														<skuid__wrapper uniqueid="sk-SsZ-8203">
+															<components>
+																<skuid__text contents="Top Product Sold in&amp;nbsp;{{{calendaryearCreatedDate}}}&amp;nbsp;" uniqueid="sk-SsZ-8204" styleSettingsVariant="medium" model="Leads_YTD"/>
+																<skuid__text contents="{{{product2Name}}}" uniqueid="sk-SvK-53209" model="ClosedOppTopProductYTD" styleSettingsVariant="medium">
+																	<styles>
+																		<spacing top="3"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="{{{DisplayAmount}}}" uniqueid="sk-SsZ-8205" model="ClosedOppTopProductYTD" styleSettingsVariant="huge"/>
+																<skuid__text contents="{{{countdistinctOpportunityI}}}&amp;nbsp;Opportunities" uniqueid="sk-SsZ-8206" model="ClosedOppTopProductYTD" styleSettingsVariant="medium"/>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__grid>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="325px" ratio="0" maxWidth="325px">
+							<components>
+								<skuid__grid uniqueid="sk-SMa-38914" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2" rowGutter="2">
+									<divisions>
+										<division alignSelf="auto" minWidth="300px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-STu-97371">
+													<components>
+														<skuid__wrapper uniqueid="sk-STu-97372">
+															<components>
+																<skuid__text contents="Open Opportunities&amp;nbsp;in&amp;nbsp; {{{calendaryearCreatedDate}}}" uniqueid="sk-STu-97373" styleSettingsVariant="medium" model="Leads_YTD"/>
+																<skuid__text contents="{{{DisplayAmount}}}" uniqueid="sk-STu-97374" model="OpenOppsYTD" styleSettingsVariant="huge">
+																	<styles>
+																		<spacing top="3"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="{{{countId}}} Opportunities" uniqueid="sk-STu-97375" model="OpenOppsYTD" styleSettingsVariant="medium"/>
+															</components>
+															<styles>
+																<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="white"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="300px" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sk-SOd-59177">
+													<components>
+														<skuid__wrapper uniqueid="sk-SOd-59178">
+															<components>
+																<skuid__text contents="Open Opps by Month" uniqueid="sk-SOd-59179" styleSettingsVariant="medium">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+																<skuid__list model="OpenOppsByMonth" uniqueid="sk-SUb-103198" pageSize="Infinity" showListFooter="false" showListHeader="false" showLoadMore="false">
+																	<columns>
+																		<column fillRatio="1">
+																			<items>
+																				<item displayType="template" template="Mo {{{cmCloseDate}}}" displayStyle="tertiary"/>
+																			</items>
+																			</column>
+					<column fillRatio="1">
+						<items>
+							<item name="DisplayAmount" fieldId="DisplayAmount" displayType="field" displayStyle="primary"/>
+						</items>
+					</column>
+				
+					
+				
+					<column fillRatio="1">
+						<items>
+							<item name="countId" fieldId="Id" displayType="field" displayStyle="tertiary"/>
+						</items>
+					</column>
+				</columns>
+																			<rowActions/>
+																			<massActions/>
+																			<filtering enableSearch="false"/>
+																			<styles>
+																				<spacing top="3"/>
+																			</styles>
+																		</skuid__list>
+																	</components>
+																	<styles>
+																		<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+																	</styles>
+																	<background/>
+																</skuid__wrapper>
+															</components>
+															<styles>
+																<spacing/>
+															</styles>
+															<background type="color" color="white"/>
+														</skuid__wrapper>
+													</components>
+												</division>
+											</divisions>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__grid>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SsZ-8189">
+											<components>
+												<skuid__tabSet uniqueid="sk-SyR-59112">
+													<tabs>
+														<skuid__tabPanel name="Opportunities">
+															<components>
+																<skuid__table allowColumnFreezing="dragDrop" model="Opportunities_List" uniqueid="sk-S-i-64098" mode="readonly" showSaveCancel="false" allowSortingByColumn="false" pageSize="25" adaptiveColumns="true">
+																	<fields>
+																		<field id="Name" uniqueid="fi-T0O-71691" redirectType="none"/>
+																		<field id="StageName" uniqueid="fi-T0O-71692"/>
+																		<field id="Amount" horizontalAlignment="right" uniqueid="fi-T0O-71693"/>
+																		<field id="AccountId" uniqueid="fi-T0O-71694" redirectType="none"/>
+																		<field id="CreatedDate" uniqueid="fi-T0O-71695"/>
+																	</fields>
+																	<filtering enableSearch="false"/>
+																	<rowActions/>
+																	<massActions/>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__table>
+															</components>
+														</skuid__tabPanel>
+														<skuid__tabPanel name="Leads">
+															<components>
+																<skuid__table allowColumnFreezing="dragDrop" model="Leads_List" uniqueid="sk-Syn-60200" mode="readonly" showSaveCancel="false" allowSortingByColumn="false" pageSize="25" adaptiveColumns="true">
+																	<fields>
+																		<field id="Name" uniqueid="fi-S-b-63137" redirectType="none"/>
+																		<field id="Company" uniqueid="fi-S-b-63138" redirectType="none"/>
+																		<field id="Email" uniqueid="fi-S-b-63139"/>
+																		<field id="CreatedDate" uniqueid="fi-S-b-63140"/>
+																	</fields>
+																	<filtering enableSearch="false"/>
+																	<rowActions/>
+																	<massActions/>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__table>
+															</components>
+														</skuid__tabPanel>
+													</tabs>
+													<styles>
+														<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+													</styles>
+												</skuid__tabSet>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="white"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+						</skuid__grid>
+					</components>
+					<styles>
+						<spacing top="4" bottom="4" left="4" right="4"/>
+					</styles>
+					<background/>
+				</skuid__wrapper>
+			</components>
+			<resources>
+				<labels/>
+				<javascript/>
+				<css/>
+				<actionsequences/>
+			</resources>
+			<styles>
+				<styleitem type="background" bgtype="none"/>
+			</styles>
+			<pageregioncontents>
+				<pageregioncontent uniqueid="__header">
+					<components>
+						<skuid__layoutRegion sticky="true">
+							<components>
+								<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;Key Indicators&lt;/span&gt;" uniqueid="sk-SME-36227" styleSettingsVariant="large">
+									<styles>
+										<spacing top="2" bottom="2" left="4"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#a5a5a5"/>
+						</skuid__layoutRegion>
+					</components>
+				</pageregioncontent>
+			</pageregioncontents>
+			<background type="color" color="#f2f2f2"/>
+		</skuid__page>
