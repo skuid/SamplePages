@@ -2,6 +2,8 @@
 
 Skuid combination of dynamic data access and dynamic UI components makes it a great solution for dashboards of all types.  This page shows a set of key indicators for Leads and Opportunities.  
 
+<img src="KeyIndicators.png" width="300"></img>
+
 ## Instructions:  
 - V2 Page API Used
 - Data source: Uses default Salesforce data source
