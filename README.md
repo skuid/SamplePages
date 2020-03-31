@@ -2,16 +2,16 @@
 
 Example Skuid pages to help get you started or learn how to do cool and complicated things with Skuid. 
 
-## Five basic categories of material here. 
+## Five basic categories of material here
 
 ### [Use Cases](/Use_Cases)
 Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 
 
 ### [Design Systems](/Design_Systems)
-Download and install reference design systems for your V2 page. Make your pages beautiful. Every design system has a "style guide" page that shows how to construct pages with this system in effective and elegant ways. 
+Download and install reference design systems for your V2 pages. Make your pages beautiful. Every design system has a "style guide" page that shows how to construct pages with this system in effective and elegant ways. 
 
 ### [Advanced Salesforce techniques](/Salesforce_Advanced) 
-There are complicated features provided by Salesforce that provide TONS of value.  Can they be used in Skuid? Approval process?  Duplicate Management rules?  YES! These pages provide examples for you to explore and include in your Skuid Applications.
+There are complicated features provided by Salesforce that provide TONS of value. Can they be used in Skuid? Approval process? Duplicate Management rules? YES! These pages provide examples for you to explore and include in your Skuid Applications.
 
 ### [Skuid Techniques](/Skuid_Techniques)
 We know its true - some of the coolest capabilities provided by Skuid are complicated to set up. These pages provide examples of things like complicated filters, action sequences, etc. 

@@ -17,16 +17,16 @@ You will be directed to the App Composer, displaying your newly created sample p
 To see your page in action, click **Preview**.
 
 
-## Pages: 
+## Pages
 
 ### <a href="LicenseManagement.xml" download="LicenseManagement.xml">License Management </a>  
 
-Where are all my Skuid licenses on Salesforce? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users - that don't normally show in the Salesforce assigned license page. 
+Where are all the Skuid licenses in my Salesforce org? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users that don't normally show in the Salesforce assigned license page.
 
 Instructions: 
-   -  V1 Page API Used
-   -  Data source: Uses default Salesforce data source
-   -  Design System: None 
+   - Page API:  V1
+   - Data source: Uses default Salesforce data source
+   - Design System: None 
    - Page XML:  [Copy the XML from this page](LicenseManagement.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 Related Links:  
@@ -40,7 +40,7 @@ Related Links:
 Summary report that shows logins by month for users that have license to the Skuid Package.  Report shows 6 months of login activity. 
 
 Instructions: 
-   -  V1 Page API Used
+   - Page API:  V1   
    -  Data source: Uses default Salesforce data source
    -  Design System: None 
    - Page XML:  [Copy the XML from this page](SkuidLicenseUse.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
@@ -54,9 +54,9 @@ Related Links:
 Summary report that shows a summary of logins for a single month for users that have license to the Skuid Package.  (Useful when the 6 month report attempts to load too much data and you get an Apex Heap Size error)
 
 Instructions: 
-   -  V1 Page API Used
-   -  Data source: Uses default Salesforce data source
-   -  Design System: None 
+   - Page API:  V1  
+   - Data source: Uses default Salesforce data source
+   - Design System: None 
    - Page XML:  [Copy the XML from this page](SkuidLicenes_1Month.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 Related Links:  

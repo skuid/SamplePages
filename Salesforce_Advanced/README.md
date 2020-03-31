@@ -1,5 +1,5 @@
 # Advanced Salesforce techniques 
-There are complicated features provided by Salesforce that provide TONS of value.  Can they be used in Skuid? Approval process?  Duplicate Management rules?  YES! These pages provide examples for you to explore and include in your Skuid Applications.
+There are complicated features provided by Salesforce that provide TONS of value. Can they be used in Skuid? Approval process?  Duplicate Management rules? YES! But they may be a bit more complicated to set up. The pages below provide examples to explore and include in your Skuid Applications.
 
 ## Contents
 

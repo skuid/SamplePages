@@ -8,26 +8,26 @@ Skuid does support use of the duplicate report.   The example below is a Lead de
 
 <img src="Duplicate_Management.png" width="300"></img>
 
-## Instructions:  
+## Instructions
 
 This example leverages the standard duplicate rule "Standard Rule for Leads with Duplicate Contacts". This rule must be active in your org,  and the "Alert" operation on Create must be turned off.  See the screen-shot below of the rule 
 
 <img src="Duplicate_Setup.png" width="300"></img>
 
-- V2 Page API Used
+- Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
 - Page XML:  [Copy the XML from this page](DuplicateLeadWarning.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 To see this page in action,  find a lead that matches a contact's name and email address.  Then Preview the page using that lead.
 
-## Notes:
-- This page uses 2 models on the DuplicateRecordItem sObject, which is what is used in the duplicate management report. 
+## Notes
+- This page uses 2 models on the DuplicateRecordItem sObject, which provide data for the duplicate management report. 
 
-- If there are records in these models conditional rendering is used to expose a message block and table that shows the duplicate warning  and encourage the user to delete the current lead record and redirect to the suggested contact.  
+- If there are records in these models conditional rendering is used to expose a message block and table that shows the duplicate warning and encourage the user to delete the current lead record and redirect to the suggested contact.  
 
 
-## Related Links: 
+## Related Links
 - [Skuid Community](https://community.skuid.com/skuid/topics/duplicate-management-in-winter-15?topic-reply-list%5Bsettings%5D%5Bfilter_by%5D=all)
 - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__PageBuilder?id=a090P00001ncweeQAA) (for Skuid Employees only)
 

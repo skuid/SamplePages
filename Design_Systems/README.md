@@ -1,7 +1,7 @@
 # Design Systems
 One of the major new innovations in the Spark Release was the Design System Studio.   Skuid now allows you to create robust style guides to control how your pages look.  These remove the need to add custom CSS to your page to get buttons to look "just so" in particular scenarios. 
 
-We have not yet included reference design systems in the product.  For now you can find reference files here. The download and install process is very simple.  Use these example design systems to explore capabilities.  Maybe one of them will work for your company's graphic identity in Skuid. 
+We have not yet included reference design systems in the product, but you can find reference files here. The process to download and install is very simple.  Use these example design systems to explore capabilities.  Maybe one of them will work for your company's graphic identity in Skuid.  Once you have downloaded one,  tweak as you see fit. 
 
 ## Contents
 - [Sales App Design System](Sales_App_Design_System)

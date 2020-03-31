@@ -6,13 +6,13 @@ This page shows a number of examples of the way Actions are used in typical Skui
 
 <img src="OppDetailActions.png" width="300"></img>
 
-## Instructions:  
-- V2 Page API Used
+## Instructions
+- Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
 - Page XML:  [Copy the XML from this page](Opportunity_Detail_Action_Showcase.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
-## Notes:
+## Notes
 
 This page does not show absolutely every action,  but it shows a number of common scenarios. Here is an overview of what is included.
 
@@ -40,7 +40,7 @@ Activities:
 - A row actions and a mass actions mark tasks complete by updating the status value in the row, and saving the model. 
 - Ease the documentation of tasks by having separate buttons for new task,  logged phone call,  voice mail etc.  Each of these different global actions call the same action sequence,  but pass different input values so the right pre-population of task data can occur.  New Tasks don't populate due date and set status to open.  Logging phone call sets due date to today and status to complete. 
 
-## Related Links: 
+## Related Links
 - [Skuid Documentation](https://docs.skuid.com/latest/v2/en/skuid/action-framework/)
 - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__PageBuilder?id=a090P00001nd4UlQAI) (for Skuid Employees only)
 
