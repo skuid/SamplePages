@@ -5,20 +5,20 @@ The HR Mobile Portal design system is hip and trendy, familiar and similar to pe
 *Demo Page coming soon*
 
 ## Example Screenshots
-**Quick Actions**
-![Screenshot: Quick Actions](Screenshots/quick_actions.png "Quick Actions")
+#### Quick Actions
+<img src="Screenshots/quick_actions.png" alt="Screenshot: Quick Actions" width="400"/>
 
-**News**
-![Screenshot: News](Screenshots/news.png "News")
+#### News
+<img src="Screenshots/news.png" alt="Screenshot: News" width="400"/>
 
-**Full Page Form**
-![Screenshot: Full Page Form](Screenshots/request_pto.png "Full Page Form")
+#### Full Page Form
+<img src="Screenshots/request_pto.png" alt="Screenshot: Full Page Form" width="400"/>
 
-**Chart**
-![Screenshot: Chart](Screenshots/chart.png "Chart")
+#### Chart
+<img src="Screenshots/chart.png" alt="Screenshot: Chart" width="400"/>
 
-**Success Modal**
-![Screenshot: Success Modal](Screenshots/success_modal.png "Success Modal")
+#### Success Modal
+<img src="Screenshots/success_modal.png" alt="Screenshot: Success Modal" width="400"/>
 
 ## Features
 - Customized components: form, list, accordion, buttons, message area, text, modal, image, deck, tab set, tab container.
