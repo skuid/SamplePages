@@ -1,0 +1,1053 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="HR_Portal">
+	<models>
+		<model id="Request_PTO" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="StartDate" displaytype="DATE" length="255" ogdisplaytype="TEXT" required="true" defaultvaluetype="fieldvalue" defaultValue="TOMORROW" label="Start Date"/>
+				<field id="EndDate" displaytype="DATE" length="255" required="true" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="NEXT_WEEK" label="End Date"/>
+				<field id="HalfDay" displaytype="MULTIPICKLIST" length="255" ogdisplaytype="TEXT" label="Taking a half day?" picklistsource="manual" returntype="BOOLEAN" defaultvaluetype="fieldvalue" defaultValue="false">
+					<picklistentries>
+						<entry value="true" label="Taking a half day"/>
+					</picklistentries>
+				</field>
+				<field id="Reason" displaytype="TEXTAREA" length="255" ogdisplaytype="TEXT" required="true" placeholder="Brief reason why you're taking this PTO" label="Reason for PTO"/>
+				<field id="duration_calc" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>RIGHT(DATE_DIFF({{StartDate}}, {{EndDate}}),LEN(DATE_DIFF({{StartDate}}, {{EndDate}}))-3)</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Holidays" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="Name" displaytype="TEXT" length="255" label="Name"/>
+				<field id="Date" displaytype="DATE" length="255" label="Date" ogdisplaytype="TEXT"/>
+			</fields>
+			<actions/>
+			<conditions/>
+		</model>
+		<model id="Documents" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="Name" displaytype="TEXT" length="255" label="Name"/>
+				<field id="CreatedDate" displaytype="DATETIME" length="255" ogdisplaytype="TEXT"/>
+				<field id="CreatedBy" displaytype="TEXT" length="255"/>
+				<field id="IsSigned" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false"/>
+			</fields>
+			<actions/>
+			<conditions/>
+		</model>
+		<model id="Benefits" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="InsuranceType" displaytype="TEXT" length="255" label="Insurance Type"/>
+				<field id="CoverageType" displaytype="TEXT" length="255" label="Coverage Type"/>
+				<field id="HasDocument" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="VolunteerHours" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="NumberOfHours" displaytype="DOUBLE" length="255" label="Number of Hours" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="Date" displaytype="DATETIME" length="255" ogdisplaytype="TEXT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="PersonalInfo" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="Gender" displaytype="PICKLIST" length="255" label="Gender" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Male" label="Male"/>
+						<entry value="Female" label="Female"/>
+						<entry value="Other" label="Other"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-3KoJ-1289" styleSettingsVariant="239ca45a-eebd-4204-a104-4fe0bed1966f">
+			<components>
+				<skuid__header title="HR Portal" uniqueid="sk-3Kpx-11749" styleSettingsVariant="f23fa59f-ee0e-4051-abdb-1c651edb2a43">
+					<styles>
+						<spacing top="5" bottom="6" styleSettingsVariant="f23fa59f-ee0e-4051-abdb-1c651edb2a43"/>
+					</styles>
+				</skuid__header>
+			</components>
+			<background color="#1cd8d2"/>
+			<styles>
+				<spacing/>
+			</styles>
+		</skuid__wrapper>
+		<skuid__grid uniqueid="sk-3Kor-4013" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+			<divisions>
+				<division minWidth="100px" ratio="1">
+					<components>
+						<skuid__wrapper uniqueid="sk-3L4O-7798" styleSettingsVariant="e46aeb57-ed0c-4ffb-a311-cbef39f91811">
+							<components>
+								<skuid__grid uniqueid="sk-3L4O-7799" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0">
+									<divisions>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+										<division minWidth="0px" ratio="0" alignSelf="auto">
+											<components>
+												<skuid__image source="staticresource" uniqueid="sk-3L4O-7800" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_pto.svg" alt="PTO" imageHeight="80px"/>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__grid>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Request PTO&lt;/div&gt;&#10;" uniqueid="sk-3L4O-7801" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46">
+									<styles>
+										<spacing top="2" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<background/>
+							<interactions>
+								<interaction type="tap">
+									<action type="emptyModelData">
+										<models>
+											<model>Request_PTO</model>
+										</models>
+									</action>
+									<action type="createRow" model="Request_PTO" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+									<action type="showModal">
+										<skuid__modal title="Request PTO" width="90%" buttonsJustification="center" fullScreen="false">
+											<components>
+												<skuid__grid uniqueid="sk-3Vss-9131" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="3">
+													<divisions>
+														<division alignSelf="auto" minWidth="0px" ratio="1">
+															<components/>
+														</division>
+														<division alignSelf="auto" minWidth="0px" ratio="0">
+															<components>
+																<skuid__wrapper uniqueid="sk-3Vsx-10535">
+																	<components>
+																		<skuid__image source="staticresource" uniqueid="sk-3Vsz-10901" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_pto.svg" alt="PTO" imageWidth="160px"/>
+																		<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{duration_calc}}&lt;/div&gt;&#10;" uniqueid="sk-3Vt4-11344" styleSettingsVariant="increased" model="Request_PTO">
+																			<styles>
+																				<spacing top="3"/>
+																			</styles>
+																		</skuid__text>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background/>
+																</skuid__wrapper>
+															</components>
+														</division>
+														<division alignSelf="auto" minWidth="0px" ratio="1">
+															<components/>
+														</division>
+													</divisions>
+												</skuid__grid>
+												<skuid__form showErrorsInline="true" model="Request_PTO" uniqueid="sk-3Vsq-7559" mode="edit" minLabelWidth="120px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2" maxLabelWidth="160px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<rows>
+																<row>
+																	<fields>
+																		<skuid__field id="StartDate"/>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="EndDate"/>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="HalfDay" selectedList="3" label=" " displayAs="CHECKBOX_LIST"/>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="Reason"/>
+																	</fields>
+																</row>
+															</rows>
+														</section>
+													</sections>
+													<styles>
+														<spacing top="3"/>
+													</styles>
+												</skuid__form>
+											</components>
+											<buttons>
+												<skuid__button label="Submit Request" uniqueId="sk-3LcL-16596" styleSettingsVariant="primary">
+													<actions>
+														<action type="closeAllPopups"/>
+														<action type="showModal">
+															<skuid__modal width="440px" buttonsJustification="center" styleSettingsVariant="00c667b8-d6d7-41ad-8f88-9980287bf646" title="Success!">
+																<components>
+																	<skuid__text contents="Your PTO request has been sent to your manager. You&amp;#39;ll hear back soon!" uniqueid="sk-TY--13642"/>
+																</components>
+																<buttons>
+																	<skuid__button label="Close" uniqueId="sk-3ldW-45758">
+																		<actions>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																		<tooltip position="top"/>
+																	</skuid__button>
+																</buttons>
+															</skuid__modal>
+														</action>
+													</actions>
+												</skuid__button>
+												<skuid__button label="Cancel" uniqueId="sk-3LcM-16896">
+													<actions>
+														<action type="closeAllPopups"/>
+													</actions>
+												</skuid__button>
+											</buttons>
+										</skuid__modal>
+									</action>
+								</interaction>
+							</interactions>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="1">
+					<components>
+						<skuid__wrapper uniqueid="sk-3KvI-5646" styleSettingsVariant="e46aeb57-ed0c-4ffb-a311-cbef39f91811">
+							<components>
+								<skuid__grid uniqueid="sk-3KvI-5647" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0">
+									<divisions>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+										<division minWidth="0px" ratio="0" alignSelf="auto">
+											<components>
+												<skuid__image source="staticresource" uniqueid="sk-3KvI-5648" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_personal_info.svg" alt="Personal Info" imageHeight="80px"/>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+									</divisions>
+								</skuid__grid>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Personal Info&lt;/div&gt;&#10;" uniqueid="sk-3KvI-5649" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46">
+									<styles>
+										<spacing top="2" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<background/>
+							<styles>
+								<spacing/>
+							</styles>
+							<interactions>
+								<interaction type="tap">
+									<action type="showModal">
+										<skuid__modal title="Personal Info" width="90%" buttonsJustification="center">
+											<components>
+												<skuid__form showErrorsInline="true" model="PersonalInfo" uniqueid="sk-nlb-18746" mode="edit">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<rows>
+																<row>
+																	<fields>
+																		<skuid__field id="Gender" displayAs="BUTTON_GROUP"/>
+																	</fields>
+																</row>
+															</rows>
+														</section>
+													</sections>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__form>
+											</components>
+											<buttons>
+												<skuid__button label="Done" uniqueId="sk-nlk-22490" styleSettingsVariant="primary">
+													<actions>
+														<action type="save">
+															<models>
+																<model>PersonalInfo</model>
+															</models>
+														</action>
+														<action type="closeAllPopups"/>
+													</actions>
+												</skuid__button>
+											</buttons>
+										</skuid__modal>
+									</action>
+								</interaction>
+							</interactions>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing bottom="3" top="-7" left="4" right="4"/>
+			</styles>
+		</skuid__grid>
+		<skuid__grid uniqueid="sk-3L4r-9949" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+			<divisions>
+				<division minWidth="100px" ratio="1" alignSelf="auto">
+					<components>
+						<skuid__wrapper uniqueid="sk-3L4r-9950" styleSettingsVariant="e46aeb57-ed0c-4ffb-a311-cbef39f91811">
+							<components>
+								<skuid__grid uniqueid="sk-3L4r-9951" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0">
+									<divisions>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+										<division minWidth="0px" ratio="0" alignSelf="auto">
+											<components>
+												<skuid__image source="staticresource" uniqueid="sk-3L4r-9952" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_benefits.svg" alt="Benefits" imageHeight="80px"/>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__grid>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;View Benefits&lt;/div&gt;&#10;" uniqueid="sk-3L4r-9953" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46">
+									<styles>
+										<spacing top="2" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<background/>
+							<styles>
+								<spacing/>
+							</styles>
+							<interactions>
+								<interaction type="tap">
+									<action type="showModal">
+										<skuid__modal title="Benefits" width="90%" fullScreen="false" buttonsJustification="center">
+											<components>
+												<skuid__table allowColumnFreezing="dragDrop" model="Benefits" uniqueid="sk-TcU-12172" mode="readonly" showSaveCancel="false" allowSortingByColumn="false">
+													<fields>
+														<field id="InsuranceType" uniqueid="fi-Tcb-14275" label="Insurance"/>
+														<field id="CoverageType" uniqueid="fi-Tcb-14276" label="Coverage"/>
+													</fields>
+													<filtering enableSearch="false" searchMethod="client"/>
+													<rowActions>
+														<action type="multi" label="View">
+															<actions/>
+															<renderConditions logictype="and">
+																<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="Benefits" sourcetype="fieldvalue" field="HasDocument" value="true"/>
+															</renderConditions>
+														</action>
+													</rowActions>
+													<massActions/>
+												</skuid__table>
+											</components>
+											<buttons>
+												<skuid__button label="Done" uniqueId="sk-TcT-11712" styleSettingsVariant="primary">
+													<actions>
+														<action type="closeAllPopups"/>
+													</actions>
+												</skuid__button>
+											</buttons>
+										</skuid__modal>
+									</action>
+								</interaction>
+							</interactions>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="1">
+					<components>
+						<skuid__wrapper uniqueid="sk-3L4r-9954" styleSettingsVariant="e46aeb57-ed0c-4ffb-a311-cbef39f91811">
+							<components>
+								<skuid__grid uniqueid="sk-3L4r-9955" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0">
+									<divisions>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+										<division minWidth="0px" ratio="0" alignSelf="auto">
+											<components>
+												<skuid__image source="staticresource" uniqueid="sk-3L4r-9956" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_volunteers.svg" alt="Volunteers" imageHeight="80px"/>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="0px" ratio="1">
+											<components/>
+										</division>
+									</divisions>
+								</skuid__grid>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Volunteer Hours&lt;/div&gt;&#10;" uniqueid="sk-3L4r-9957" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46">
+									<styles>
+										<spacing top="2" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46"/>
+									</styles>
+								</skuid__text>
+								<skuid__chart model="VolunteerHours" maintitle="{{Model.labelPlural}}" type="line" uniqueid="sk-i10-18639">
+									<dataaxes>
+										<axis id="axis1"/>
+									</dataaxes>
+									<categoryaxes>
+										<axis id="categories" categorytype="field" field="Date" fillvals="true" dategranularity="calmonth"/>
+									</categoryaxes>
+									<serieslist>
+										<series valuefield="NumberOfHours" splittype="none" aggfunction="count">
+											<actions/>
+										</series>
+									</serieslist>
+									<colors/>
+									<legend layout="horizontal" halign="center" valign="bottom"/>
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true"/>
+									</renderConditions>
+									<styleVariantConditions/>
+								</skuid__chart>
+							</components>
+							<background/>
+							<styles>
+								<spacing/>
+							</styles>
+							<interactions>
+								<interaction type="tap">
+									<action type="createRow" model="VolunteerHours" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+										<defaults>
+											<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="NOW"/>
+										</defaults>
+									</action>
+									<action type="showModal">
+										<skuid__modal title="Volunteer Hours" width="90%" buttonsJustification="center">
+											<components>
+												<skuid__tabContainer uniqueid="sk-i1_-29400">
+													<tabs>
+														<skuid__tabPanel name="Log Hours">
+															<components>
+																<skuid__form showErrorsInline="true" model="VolunteerHours" uniqueid="sk-i39-13062" mode="edit">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="NumberOfHours" displayAs="VALUE_STEPPER" step="1"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Date"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<onInitialShowActions/>
+															<onShowActions>
+																<action type="cancel">
+																	<models>
+																		<model>VolunteerHours</model>
+																	</models>
+																</action>
+																<action type="createRow" model="VolunteerHours" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+															</onShowActions>
+														</skuid__tabPanel>
+														<skuid__tabPanel name="Report">
+															<components>
+																<skuid__chart model="VolunteerHours" type="column" uniqueid="sk-i0M-11720" export="off" height="240px">
+																	<dataaxes>
+																		<axis id="axis1" title="Number of Hours"/>
+																	</dataaxes>
+																	<categoryaxes>
+																		<axis id="categories" categorytype="field" field="Date" fillvals="true" dategranularity="calmonth"/>
+																	</categoryaxes>
+																	<serieslist>
+																		<series valuefield="NumberOfHours" splittype="none" aggfunction="sum"/>
+																	</serieslist>
+																	<colors/>
+																	<legend layout="off" halign="center" valign="bottom" showlabels="true"/>
+																</skuid__chart>
+															</components>
+															<onInitialShowActions/>
+															<onShowActions>
+																<action type="emptyModelData">
+																	<models>
+																		<model>VolunteerHours</model>
+																	</models>
+																</action>
+																<action type="action-sequence" action-sequence-id="63ac2efc-e38a-4573-ac11-c728084b97ff"/>
+															</onShowActions>
+														</skuid__tabPanel>
+													</tabs>
+												</skuid__tabContainer>
+											</components>
+											<buttons>
+												<skuid__button label="Done" uniqueId="sk-htj-14757">
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="VolunteerHours" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="false" operator="="/>
+													</renderConditions>
+													<enableConditions/>
+													<styleVariantConditions/>
+												</skuid__button>
+												<skuid__button label="Save" uniqueId="sk-i3--25915" styleSettingsVariant="primary">
+													<actions/>
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="VolunteerHours" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+													</renderConditions>
+													<enableConditions/>
+													<styleVariantConditions/>
+												</skuid__button>
+												<skuid__button label="Cancel" uniqueId="sk-i3--26229">
+													<actions/>
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="VolunteerHours" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+													</renderConditions>
+													<enableConditions/>
+													<styleVariantConditions/>
+												</skuid__button>
+											</buttons>
+										</skuid__modal>
+									</action>
+								</interaction>
+							</interactions>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing left="4" right="4"/>
+			</styles>
+		</skuid__grid>
+		<skuid__wrapper uniqueid="sk-3Kq2-13211">
+			<components>
+				<skuid__header title="Notifications" uniqueid="sk-3Kq2-13212" titleTag="h2" styleSettingsVariant="1bdbaebc-dc21-4abd-8769-b2be0981dce9">
+					<styles>
+						<spacing bottom="3" styleSettingsVariant="1bdbaebc-dc21-4abd-8769-b2be0981dce9"/>
+					</styles>
+					<skuid__buttonSet model="Request_PTO">
+						<groups>
+							<skuid__buttonGroup>
+								<buttons>
+									<skuid__button label="View all" uniqueId="sk-3ldk-47782" styleSettingsVariant="1a2313b9-efd7-4175-981b-cbee2a803115"/>
+								</buttons>
+							</skuid__buttonGroup>
+						</groups>
+					</skuid__buttonSet>
+				</skuid__header>
+				<skuid__messageArea uniqueid="sk-3W5t-33054">
+					<group>
+						<skuid__messageBlock title="Happy Anniversary" description="It's your 4th year anniversary! " styleSettingsVariant="primaryStrong" icon="sk-webicon-ink:heart-outline" showClose="true"/>
+						<skuid__messageBlock title="E-sign Doc waiting for you" description="There's a document waiting for your signature" showClose="true" icon="sk-webicon-ink:edit-form"/>
+						<skuid__messageBlock title="Upcoming Holiday" description="Memorial Day - Monday, May 25th" icon="sk-webicon-ink:monthly-view" showClose="true"/>
+						<skuid__messageBlock title="Your PTO request is approved!" description="Your PTO request from May 22 - May 30 is approved. Enjoy the time off!" icon="sk-webicon-ink:checkmark" styleSettingsVariant="successStrong" showClose="true"/>
+					</group>
+				</skuid__messageArea>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+		<skuid__header title="Updates" uniqueid="sk-3V_C-18069" titleTag="h2" styleSettingsVariant="1bdbaebc-dc21-4abd-8769-b2be0981dce9">
+			<styles>
+				<spacing bottom="3" styleSettingsVariant="1bdbaebc-dc21-4abd-8769-b2be0981dce9" top="4" left="4" right="4"/>
+			</styles>
+		</skuid__header>
+		<skuid__wrapper uniqueid="sk-3V_C-18070" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__wrapper uniqueid="sk-3V_C-18071" heightStrategy="fixed" height="custom" styleSettingsVariant="f86792f5-0f1d-41b2-9d71-f04d8952209e" heightCustom="220px">
+					<components/>
+					<background type="image" datasource="SkuidLocal" source="url" url="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2389&amp;q=80" position="center center" size="cover"/>
+					<styles>
+						<spacing/>
+					</styles>
+				</skuid__wrapper>
+				<skuid__wrapper uniqueid="sk-3V_C-18072" styleSettingsVariant="c3e680d9-176b-4739-abb9-8e984ece7d81">
+					<components>
+						<skuid__header title="Employee Appreciation Week" uniqueid="sk-3V_C-18073" subtitle="Mar 6 - Mar 13" titleTag="h3">
+							<styles>
+								<spacing bottom="1"/>
+							</styles>
+						</skuid__header>
+						<skuid__text contents="It is almost &lt;strong&gt;Employee Appreciation Week&lt;/strong&gt; which is my favorite week of the year here. I have big plans and can&amp;#39;t wait for you all to be involved." uniqueid="sk-3V_C-18074"/>
+						<skuid__grid uniqueid="sk-3V_C-18075" flexDirection="row" justifyContent="flex-start" alignItems="center">
+							<divisions>
+								<division minWidth="100px" ratio="1">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3V_C-18076" position="left">
+											<groups>
+												<skuid__buttonGroup displayType="attached">
+													<buttons>
+														<skuid__button uniqueId="sk-3V_C-18078" styleSettingsVariant="borderless" iconPosition="right" label="Feel appreciated">
+															<actions/>
+															<renderConditions logictype="and"/>
+															<enableConditions/>
+															<styleVariantConditions/>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3V_C-18077">
+											<groups>
+												<skuid__buttonGroup displayType="detached">
+													<buttons>
+														<skuid__button uniqueId="sk-3V_C-18079" icon="sk-webicon-ink:dots-vertical" styleSettingsVariant="6d857a40-ffe0-43ad-b34e-65e24a197545">
+															<actions>
+																<action type="toggleMenu">
+																	<optionGroups>
+																		<optionGroup>
+																			<options>
+																				<option label="Share"/>
+																				<option label="Bookmark"/>
+																			</options>
+																		</optionGroup>
+																	</optionGroups>
+																</action>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="1"/>
+							</styles>
+						</skuid__grid>
+					</components>
+					<background/>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+					<styles>
+						<spacing/>
+					</styles>
+				</skuid__wrapper>
+			</components>
+			<background/>
+			<styles>
+				<spacing bottom="3" left="4" right="4"/>
+			</styles>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+			<interactions/>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-3V_S-20546" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__wrapper uniqueid="sk-3V_S-20547" heightStrategy="fixed" height="custom" styleSettingsVariant="f86792f5-0f1d-41b2-9d71-f04d8952209e" heightCustom="220px">
+					<components/>
+					<background type="image" datasource="SkuidLocal" source="url" url="https://images.unsplash.com/photo-1562886877-f12251816e01?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2389&amp;q=80" position="center center" size="cover" model="Request_PTO"/>
+					<styles>
+						<spacing/>
+					</styles>
+				</skuid__wrapper>
+				<skuid__wrapper uniqueid="sk-3V_S-20548" styleSettingsVariant="c3e680d9-176b-4739-abb9-8e984ece7d81">
+					<components>
+						<skuid__header title="Spring Cleaning" uniqueid="sk-3V_S-20549" subtitle="Mar 6 - Mar 13" titleTag="h3">
+							<styles>
+								<spacing bottom="1"/>
+							</styles>
+						</skuid__header>
+						<skuid__text contents="Tips to a 15 minute clean, declutter, and sanitize your workspace" uniqueid="sk-3V_S-20550"/>
+						<skuid__grid uniqueid="sk-3V_S-20551" flexDirection="row" justifyContent="flex-start" alignItems="center">
+							<divisions>
+								<division minWidth="100px" ratio="1">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3V_S-20552" position="left">
+											<groups>
+												<skuid__buttonGroup displayType="attached">
+													<buttons>
+														<skuid__button label="Work healthy" uniqueId="sk-3V_S-20554" styleSettingsVariant="borderless" iconPosition="right">
+															<actions/>
+															<renderConditions logictype="and"/>
+															<enableConditions/>
+															<styleVariantConditions/>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3V_S-20553">
+											<groups>
+												<skuid__buttonGroup displayType="detached">
+													<buttons>
+														<skuid__button uniqueId="sk-3V_S-20555" icon="sk-webicon-ink:dots-vertical" styleSettingsVariant="6d857a40-ffe0-43ad-b34e-65e24a197545">
+															<actions>
+																<action type="toggleMenu">
+																	<optionGroups>
+																		<optionGroup>
+																			<options>
+																				<option label="Share"/>
+																				<option label="Bookmark"/>
+																			</options>
+																		</optionGroup>
+																	</optionGroups>
+																</action>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="1"/>
+							</styles>
+						</skuid__grid>
+					</components>
+					<background/>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+					<styles>
+						<spacing/>
+					</styles>
+				</skuid__wrapper>
+			</components>
+			<background/>
+			<styles>
+				<spacing bottom="3" left="4" right="4"/>
+			</styles>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-3WBo-15147" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__accordion uniqueid="sk-3WAT-9173" onePanelAtATime="false" iconOnRight="true">
+					<sections>
+						<section title="Documents">
+							<components>
+								<skuid__list model="Documents" uniqueid="sk-3aON-47757">
+									<columns>
+										<column fillRatio="0">
+											<items>
+												<item displayType="icon" size="medium" fallback="sk-webicon-ink:work-order-type" styleSettingsVariant="circular"/>
+											</items>
+										</column>
+										<column fillRatio="1">
+											<items>
+												<item fieldId="Name" displayType="field"/>
+												<item displayType="template" template="Added by {{CreatedBy}} on {{CreatedDate}}" displayStyle="tertiary"/>
+											</items>
+										</column>
+									</columns>
+									<rowActions>
+										<action type="multi" label="View"/>
+										<action type="multi" label="Sign">
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="Documents" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="IsSigned" value="false"/>
+											</renderConditions>
+										</action>
+									</rowActions>
+									<massActions/>
+									<filtering enableSearch="false"/>
+									<styles>
+										<spacing bottom="3"/>
+									</styles>
+								</skuid__list>
+							</components>
+						</section>
+					</sections>
+				</skuid__accordion>
+			</components>
+			<background/>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+			<interactions/>
+			<styles>
+				<spacing top="4" bottom="3" left="4" right="4"/>
+			</styles>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-3aKS-30460" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__accordion uniqueid="sk-3aKS-30461" onePanelAtATime="false" iconOnRight="true">
+					<sections>
+						<section title="History">
+							<components>
+								<skuid__text contents="&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sollicitudin lacus ut porta euismod. Cras commodo ligula id dapibus euismod. Phasellus interdum vel lacus vel consectetur. Maecenas orci elit, gravida ut ipsum et, pulvinar porta tortor. Morbi vestibulum, felis at viverra egestas, ante enim gravida risus, eu scelerisque leo lorem nec mi. Mauris pellentesque ligula quis lectus sagittis, tristique ultricies dolor tincidunt. Phasellus ut accumsan nibh.&lt;/p&gt;&#10;&#10;&lt;p&gt;Nunc suscipit eu nisi a rhoncus. Ut scelerisque vel elit vel convallis. Duis sed laoreet arcu. Nunc ac consequat nulla, a lacinia augue. In pretium auctor libero ac auctor. Cras vel elementum diam, vel vulputate urna. Integer pulvinar sollicitudin nisl sed scelerisque. Praesent augue nulla, iaculis sed nisi sit amet, pretium rhoncus lectus. In hac habitasse platea dictumst. Sed accumsan eleifend lectus nec suscipit. Donec sagittis nisi quis nunc eleifend scelerisque. Duis vulputate vel elit sit amet pharetra. Integer laoreet neque vitae tellus finibus aliquet. Curabitur venenatis in neque ac molestie. Suspendisse potenti.&lt;/p&gt;&#10;" uniqueid="sk-3aKS-30464"/>
+							</components>
+						</section>
+					</sections>
+				</skuid__accordion>
+			</components>
+			<styles>
+				<spacing top="4" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad" bottom="3" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-3aKR-29174" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__accordion uniqueid="sk-3aKR-29175" onePanelAtATime="false" iconOnRight="true">
+					<sections>
+						<section title="Policies">
+							<components>
+								<skuid__text contents="&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sollicitudin lacus ut porta euismod. Cras commodo ligula id dapibus euismod. Phasellus interdum vel lacus vel consectetur. Maecenas orci elit, gravida ut ipsum et, pulvinar porta tortor. Morbi vestibulum, felis at viverra egestas, ante enim gravida risus, eu scelerisque leo lorem nec mi. Mauris pellentesque ligula quis lectus sagittis, tristique ultricies dolor tincidunt. Phasellus ut accumsan nibh.&lt;/p&gt;&#10;&#10;&lt;p&gt;Nunc suscipit eu nisi a rhoncus. Ut scelerisque vel elit vel convallis. Duis sed laoreet arcu. Nunc ac consequat nulla, a lacinia augue. In pretium auctor libero ac auctor. Cras vel elementum diam, vel vulputate urna. Integer pulvinar sollicitudin nisl sed scelerisque. Praesent augue nulla, iaculis sed nisi sit amet, pretium rhoncus lectus. In hac habitasse platea dictumst. Sed accumsan eleifend lectus nec suscipit. Donec sagittis nisi quis nunc eleifend scelerisque. Duis vulputate vel elit sit amet pharetra. Integer laoreet neque vitae tellus finibus aliquet. Curabitur venenatis in neque ac molestie. Suspendisse potenti.&lt;/p&gt;&#10;" uniqueid="sk-3aKR-29177"/>
+							</components>
+						</section>
+					</sections>
+				</skuid__accordion>
+			</components>
+			<styles>
+				<spacing top="4" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad" bottom="3" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-3aKT-31880" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__accordion uniqueid="sk-3aKT-31881" onePanelAtATime="false" iconOnRight="true">
+					<sections>
+						<section title="Office Holidays">
+							<components>
+								<skuid__list model="Holidays" uniqueid="sk-3aKT-31885" pageSize="5">
+									<columns>
+										<column fillRatio="2">
+											<items>
+												<item fieldId="Name" displayType="field" displayStyle="primary"/>
+											</items>
+										</column>
+										<column fillRatio="1">
+											<items>
+												<item fieldId="Date" displayType="field" displayStyle="secondary"/>
+											</items>
+										</column>
+									</columns>
+									<rowActions/>
+									<massActions/>
+									<filtering enableSearch="false"/>
+									<interactions/>
+									<styles>
+										<spacing bottom="3"/>
+									</styles>
+								</skuid__list>
+							</components>
+						</section>
+					</sections>
+				</skuid__accordion>
+			</components>
+			<styles>
+				<spacing top="4" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad" bottom="5" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-ij9-23015" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad">
+			<components>
+				<skuid__tabSet uniqueid="sk-ijA-24041">
+					<tabs>
+						<skuid__tabPanel name="New Tab">
+							<components>
+								<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sollicitudin lacus ut porta euismod. Cras commodo ligula id dapibus euismod. Phasellus interdum vel lacus vel consectetur. Maecenas orci elit, gravida ut ipsum et, pulvinar porta tortor. Morbi vestibulum, felis at viverra egestas, ante enim gravida risus, eu scelerisque leo lorem nec mi. Mauris pellentesque ligula quis lectus sagittis, tristique ultricies dolor tincidunt. Phasellus ut accumsan nibh. Nunc suscipit eu nisi a rhoncus. Ut scelerisque vel elit vel convallis. Duis sed laoreet arcu. Nunc ac consequat nulla, a lacinia augue. In pretium auctor libero ac auctor. Cras vel elementum diam, vel vulputate urna. Integer pulvinar sollicitudin nisl sed scelerisque. Praesent augue nulla, iaculis sed nisi sit amet, pretium rhoncus lectus. In hac habitasse platea dictumst. Sed accumsan eleifend lectus nec suscipit. Donec sagittis nisi quis nunc eleifend scelerisque. Duis vulputate vel elit sit amet pharetra. Integer laoreet neque vitae tellus finibus aliquet. Curabitur venenatis in neque ac molestie. Suspendisse potenti." uniqueid="sk-ijH-26664">
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__text>
+							</components>
+						</skuid__tabPanel>
+						<skuid__tabPanel name="New Tab">
+							<components>
+								<skuid__text contents="&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sollicitudin lacus ut porta euismod. Cras commodo ligula id dapibus euismod. Phasellus interdum vel lacus vel consectetur. Maecenas orci elit, gravida ut ipsum et, pulvinar porta tortor. Morbi vestibulum, felis at viverra egestas, ante enim gravida risus, eu scelerisque leo lorem nec mi. Mauris pellentesque ligula quis lectus sagittis, tristique ultricies dolor tincidunt. Phasellus ut accumsan nibh.&lt;/p&gt;&#10;&#10;&lt;p&gt;Nunc suscipit eu nisi a rhoncus. Ut scelerisque vel elit vel convallis. Duis sed laoreet arcu. Nunc ac consequat nulla, a lacinia augue. In pretium auctor libero ac auctor. Cras vel elementum diam, vel vulputate urna. Integer pulvinar sollicitudin nisl sed scelerisque. Praesent augue nulla, iaculis sed nisi sit amet, pretium rhoncus lectus. In hac habitasse platea dictumst. Sed accumsan eleifend lectus nec suscipit. Donec sagittis nisi quis nunc eleifend scelerisque. Duis vulputate vel elit sit amet pharetra. Integer laoreet neque vitae tellus finibus aliquet. Curabitur venenatis in neque ac molestie. Suspendisse potenti.&lt;/p&gt;&#10;" uniqueid="sk-ijF-25399">
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__text>
+							</components>
+						</skuid__tabPanel>
+						<skuid__tabPanel name="New Tab">
+							<components/>
+						</skuid__tabPanel>
+					</tabs>
+				</skuid__tabSet>
+			</components>
+			<styles>
+				<spacing top="4" styleSettingsVariant="d54d9f13-3d0b-47bc-88f4-e726a36bd2ad" bottom="5" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences>
+			<actionsequence id="59eea243-75b1-402e-8758-dc5af3b174a1" label="Populate dummy data" type="event-triggered" event-scope="component" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="action-sequence" action-sequence-id="bc0226b3-1a12-47e6-9b83-ba4c5c5d327e"/>
+					<action type="action-sequence" action-sequence-id="2d2e583e-a570-49e9-9d05-109fd0251ce2"/>
+					<action type="action-sequence" action-sequence-id="cb2892f6-5252-4253-9a4c-e52a184c5965"/>
+					<action type="action-sequence" action-sequence-id="63ac2efc-e38a-4573-ac11-c728084b97ff"/>
+				</actions>
+			</actionsequence>
+			<actionsequence id="bc0226b3-1a12-47e6-9b83-ba4c5c5d327e" label="Populate Office Holidays Data" type="reusable">
+				<description/>
+				<actions>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Memorial Day"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-05-25"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Independence Day"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-07-04"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Labor Day"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-09-07"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Thanksgiving Day"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-11-26"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Christmas Eve"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-12-24"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Holidays" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Christmas Day"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-12-25"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+			<actionsequence id="2d2e583e-a570-49e9-9d05-109fd0251ce2" label="Populate Documents Data" type="reusable">
+				<description/>
+				<actions>
+					<action type="createRow" model="Documents" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="90 Days Performance Review"/>
+							<default valuesource="fieldvalue" field="CreatedDate" enclosevalueinquotes="false" value="2019-09-03T04:00:00.000Z"/>
+							<default valuesource="fieldvalue" field="CreatedBy" enclosevalueinquotes="true" value="Jane Smith"/>
+							<default valuesource="fieldvalue" field="IsSigned" enclosevalueinquotes="false" value="false"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Documents" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Change of Address"/>
+							<default valuesource="fieldvalue" field="CreatedDate" enclosevalueinquotes="false" value="2018-09-03T04:00:00.000Z"/>
+							<default valuesource="fieldvalue" field="CreatedBy" enclosevalueinquotes="true" value="Jane Smith"/>
+							<default valuesource="fieldvalue" field="IsSigned" enclosevalueinquotes="false" value="false"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Documents" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="1 Year Performance Review"/>
+							<default valuesource="fieldvalue" field="CreatedDate" enclosevalueinquotes="false" value="2020-01-03T04:00:00.000Z"/>
+							<default valuesource="fieldvalue" field="CreatedBy" enclosevalueinquotes="true" value="Jane Smith"/>
+							<default valuesource="fieldvalue" field="IsSigned" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Documents" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Change of Job Title"/>
+							<default valuesource="fieldvalue" field="CreatedDate" enclosevalueinquotes="false" value="2016-02-03T04:00:00.000Z"/>
+							<default valuesource="fieldvalue" field="CreatedBy" enclosevalueinquotes="true" value="Jane Smith"/>
+							<default valuesource="fieldvalue" field="IsSigned" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+			<actionsequence id="cb2892f6-5252-4253-9a4c-e52a184c5965" label="Populate Benefits Data" type="reusable">
+				<description/>
+				<actions>
+					<action type="createRow" model="Benefits" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="InsuranceType" enclosevalueinquotes="true" value="Dental"/>
+							<default valuesource="fieldvalue" field="CoverageType" enclosevalueinquotes="true" value="Employee + Spouse"/>
+							<default valuesource="fieldvalue" field="HasDocument" enclosevalueinquotes="false" value="false"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Benefits" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="InsuranceType" enclosevalueinquotes="true" value="Medical"/>
+							<default valuesource="fieldvalue" field="CoverageType" enclosevalueinquotes="true" value="Employee + Spouse"/>
+							<default valuesource="fieldvalue" field="HasDocument" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Benefits" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="InsuranceType" enclosevalueinquotes="true" value="HSA"/>
+							<default valuesource="fieldvalue" field="CoverageType" enclosevalueinquotes="true" value="Employee Only"/>
+							<default valuesource="fieldvalue" field="HasDocument" enclosevalueinquotes="false" value="false"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="Benefits" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="InsuranceType" enclosevalueinquotes="true" value="Vision"/>
+							<default valuesource="fieldvalue" field="CoverageType" enclosevalueinquotes="true" value="Employee Only"/>
+							<default valuesource="fieldvalue" field="HasDocument" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+			<actionsequence id="63ac2efc-e38a-4573-ac11-c728084b97ff" label="Populate Volunteer Hours" type="reusable" event-scope="component" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="createRow" model="VolunteerHours" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="NumberOfHours" enclosevalueinquotes="false" value="3"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-01-02T22:00:00.000Z"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="VolunteerHours" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="NumberOfHours" enclosevalueinquotes="false" value="4"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-02-15T02:00:00.000Z"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="VolunteerHours" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="NumberOfHours" enclosevalueinquotes="false" value="1"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-02-28T01:00:00.000Z"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="VolunteerHours" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="NumberOfHours" enclosevalueinquotes="false" value="1"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-01-20T03:00:00.000Z"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="VolunteerHours" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="NumberOfHours" enclosevalueinquotes="false" value="3"/>
+							<default valuesource="fieldvalue" field="Date" enclosevalueinquotes="false" value="2020-03-20T03:00:00.000Z"/>
+						</defaults>
+					</action>
+					<action type="save">
+						<models>
+							<model>VolunteerHours</model>
+						</models>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background/>
+</skuid__page>
