@@ -2,23 +2,25 @@
 
 ## Description
 The Compact Data Workspace design system is compact, practical, with plenty of views for data entry, data visualization, and data analysis. Easy to read, filter and scan lots of data.
+
 *Previewing Demo Page coming soon*
 
 ## Example Screenshots
-**Full Page**
-[Full Page](Screenshots/full_page.png)
 
-**Account Dashboard**
-![Screenshot: Account Dashboard](Screenshots/account_dashboard.png "Account Dashboard")
+#### Full Page
+[View screenshot of the full demo page](Screenshots/full_page.png)
 
-**Support Tickets**
-![Screenshot: Support Tickets](Screenshots/support_ticket.png "Support Tickets")
+#### Account Dashboard
+<img src="Screenshots/account_dashboard.png" alt="Screenshot: Account Dashboard" width="600"/>
 
-**Overview/KPIs/Summary**
-![Screenshot: Overview](Screenshots/vertical_nav_and_chart.png "Overview")
+#### Support Tickets
+<img src="Screenshots/support_tickets.png" alt="Screenshot: Support Tickets" width="600"/>
 
-**Edit Record Modal**
-![Screenshot: Edit Record Modal](Screenshots/edit_form.png "Edit Record Modal")
+#### Overview/KPIs/Summary
+<img src="Screenshots/vertical_nav_and_chart.png" alt="Screenshot: Overview" width="600"/>
+
+#### Edit Record Modal
+<img src="Screenshots/edit_form.png" alt="Screenshot: Edit Record Modal" width="600"/>
 
 ## Features
 - Customized components: table, charts, tab set, filters, buttons, form, accordion, vertical nav, text, header, wrapper, list, deck.
