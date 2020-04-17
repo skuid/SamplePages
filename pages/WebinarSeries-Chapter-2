@@ -237,7 +237,7 @@
 								<division minWidth="100px" ratio="1">
 									<components>
 										<skuid__text contents="{{{Name}}}" uniqueid="sk-1bgj-25405" model="AccountViewer"/>
-										<skuid__text contents="asdfsadf{{BillingCity}}, {{BillingState}}" uniqueid="sk-1bgq-26262" model="AccountViewer"/>
+										<skuid__text contents="{{BillingCity}}, {{BillingState}}" uniqueid="sk-1bgq-26262" model="AccountViewer"/>
 									</components>
 								</division>
 								<division alignSelf="auto" minWidth="100px" ratio="1">
