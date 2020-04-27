@@ -93,7 +93,7 @@
 										</division>
 										<division minWidth="0px" ratio="0" alignSelf="auto">
 											<components>
-												<skuid__image source="staticresource" uniqueid="sk-3L4O-7800" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_pto.svg" alt="PTO" imageHeight="80px"/>
+												<skuid__image source="url" uniqueid="sk-3L4O-7800" datasource="Ui-Only" alt="PTO" imageHeight="80px" model="Request_PTO"/>
 											</components>
 										</division>
 										<division alignSelf="auto" minWidth="0px" ratio="1">
@@ -131,7 +131,7 @@
 															<components>
 																<skuid__wrapper uniqueid="sk-3Vsx-10535">
 																	<components>
-																		<skuid__image source="staticresource" uniqueid="sk-3Vsz-10901" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_pto.svg" alt="PTO" imageWidth="160px"/>
+																		<skuid__image source="url" uniqueid="sk-3L4O-7800" datasource="Ui-Only" alt="PTO" imageWidth="160px" model="Request_PTO"/>
 																		<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{duration_calc}}&lt;/div&gt;&#10;" uniqueid="sk-3Vt4-11344" styleSettingsVariant="increased" model="Request_PTO">
 																			<styles>
 																				<spacing top="3"/>
@@ -230,7 +230,7 @@
 										</division>
 										<division minWidth="0px" ratio="0" alignSelf="auto">
 											<components>
-												<skuid__image source="staticresource" uniqueid="sk-3KvI-5648" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_personal_info.svg" alt="Personal Info" imageHeight="80px"/>
+												<skuid__image source="url" uniqueid="sk-3KvI-5648" datasource="Ui-Only" alt="Personal Info" imageHeight="80px" model="Request_PTO"/>
 											</components>
 										</division>
 										<division alignSelf="auto" minWidth="0px" ratio="1">
@@ -307,7 +307,7 @@
 										</division>
 										<division minWidth="0px" ratio="0" alignSelf="auto">
 											<components>
-												<skuid__image source="staticresource" uniqueid="sk-3L4r-9952" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_benefits.svg" alt="Benefits" imageHeight="80px"/>
+												<skuid__image source="url" uniqueid="sk-3L4r-9952" datasource="Ui-Only" alt="Benefits" imageHeight="80px" model="Request_PTO"/>
 											</components>
 										</division>
 										<division alignSelf="auto" minWidth="0px" ratio="1">
@@ -377,7 +377,7 @@
 										</division>
 										<division minWidth="0px" ratio="0" alignSelf="auto">
 											<components>
-												<skuid__image source="staticresource" uniqueid="sk-3L4r-9956" datasource="salesforce" resource="mobile_hr_portal_images" resourceContentType="application/zip" path="undraw_volunteers.svg" alt="Volunteers" imageHeight="80px"/>
+												<skuid__image source="url" uniqueid="sk-3L4r-9956" datasource="Ui-Only" alt="Volunteers" imageHeight="80px" model="Request_PTO"/>
 											</components>
 										</division>
 										<division alignSelf="auto" minWidth="0px" ratio="1">

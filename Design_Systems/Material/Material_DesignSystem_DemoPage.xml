@@ -1,0 +1,1388 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="Material">
+	<models>
+		<model id="PlanetaryFacts" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="false">
+			<fields>
+				<field id="Mass" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Mass"/>
+				<field id="Diameter" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Diameter"/>
+				<field id="Density" displaytype="DOUBLE" length="255" label="Density" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="Gravity" displaytype="DOUBLE" length="255" label="Gravity" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="Num_Moons" displaytype="DOUBLE" length="255" label="Number of Moons" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="RingSystem" displaytype="BOOLEAN" length="255" label="Ring System?" ogdisplaytype="TEXT"/>
+				<field id="Mean_Temp" displaytype="DOUBLE" length="255" label="Mean Temperature" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="Name" displaytype="TEXT" length="255" label="Name"/>
+				<field id="Image_URL" displaytype="URL" length="255" ogdisplaytype="TEXT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="SelectionControls" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field id="MultiPicklist" displaytype="MULTIPICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" label="List of Comets" helptext="Showing multi-picklist options" defaultvaluetype="multiple" defaultValue="" enclosevalueinquotes="true">
+					<picklistentries>
+						<entry value="Halley" label="Halley"/>
+						<entry value="Encke" label="Encke"/>
+						<entry value="Churyumov-Gerasimenko" label="Churyumov-Gerasimenko"/>
+						<entry value="d'Arrest" label="d'Arrest"/>
+						<entry value="West-Kohoutek-Ikemura" label="West-Kohoutek-Ikemura"/>
+					</picklistentries>
+					<values>
+						<value>Churyumov-Gerasimenko</value>
+						<value>Encke</value>
+					</values>
+				</field>
+				<field id="Picklist" displaytype="PICKLIST" length="255" label="List of Comets" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" helptext="Showing picklist options" defaultvaluetype="fieldvalue" defaultValue="d'Arrest">
+					<picklistentries>
+						<entry value="Halley" label="Halley"/>
+						<entry value="Encke" label="Encke"/>
+						<entry value="Churyumov-Gerasimenko" label="Churyumov-Gerasimenko"/>
+						<entry value="d'Arrest" label="d'Arrest"/>
+						<entry value="West-Kohoutek-Ikemura" label="West-Kohoutek-Ikemura"/>
+					</picklistentries>
+				</field>
+				<field id="Boolean" displaytype="BOOLEAN" length="255" label="Has ring system?" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-bYj-26329">
+			<components>
+				<skuid__wrapper uniqueid="sk-baO-7665" styleSettingsVariant="6ca5d6b1-fad2-4657-b368-880ae4a130d4">
+					<components>
+						<skuid__wrapper uniqueid="sk-29NJ-13296">
+							<components>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Polli Theme&lt;/div&gt;&#10;" uniqueid="sk-bZk-6922" styleSettingsVariant="302b695d-ff00-4168-a865-132ac999c925">
+									<styles>
+										<spacing top="6" bottom="1"/>
+									</styles>
+								</skuid__text>
+								<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;A Skuid&amp;#39;s design system following Material Design guidelines&lt;/div&gt;&#10;" uniqueid="sk-2TAB-18815" styleSettingsVariant="d667e0c7-d4a8-4ae9-a7bf-55ba07f5c482">
+									<styles>
+										<spacing bottom="6"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="3" bottom="3"/>
+							</styles>
+							<background/>
+						</skuid__wrapper>
+					</components>
+					<background/>
+					<styles>
+						<spacing/>
+					</styles>
+				</skuid__wrapper>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background type="image" datasource="Ui-Only" source="url" model="PlanetaryFacts" url="https://images.unsplash.com/photo-1564053051381-5cb91813736b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1126&amp;q=80" position="center center" size="cover"/>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-ZtW-2206" styleSettingsVariant="2c157577-b1fd-4339-9850-4e33fefe1d9f">
+			<components>
+				<skuid__grid uniqueid="sk-aB1-5341" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-bUG-5330" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Headings&lt;/div&gt;&#10;" uniqueid="sk-bUH-5602" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" ratio="3">
+							<components>
+								<skuid__header uniqueid="sk-Znz-4320" title="Page Title" model="" subtitle="Subtitle" separator="false" styleSettingsVariant="29804294-53c1-4d4d-8040-c71bb104baa5">
+									<skuid__buttonSet>
+										<groups/>
+									</skuid__buttonSet>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__header>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="3"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-bUN-6055" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-bUN-6056" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Text&lt;/div&gt;&#10;" uniqueid="sk-bUN-6057" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975">
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__text>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" ratio="3" minWidth="400px" maxWidth="1208px">
+							<components>
+								<skuid__header title="Section Heading" uniqueid="sk-29Qc-14607" titleTag="h2"/>
+								<skuid__text contents="&lt;p&gt;For those who have seen the Earth from space, and for the hundreds and perhaps thousands more who will, the experience most certainly changes your perspective. The things that we share in our world are far more valuable than those which divide us.&lt;/p&gt;&#10;&#10;&lt;p&gt;It suddenly struck me that that tiny pea, pretty and blue, was the Earth. I put up my thumb and shut one eye, and my thumb blotted out the planet Earth. I didn&amp;rsquo;t feel like a giant. I felt very, very small.&lt;/p&gt;&#10;&#10;&lt;p&gt;Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next 10.&lt;/p&gt;&#10;" uniqueid="sk-bUN-6061">
+									<styles>
+										<spacing/>
+									</styles>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+								</skuid__text>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-bUQ-8709" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-bUQ-8710" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Accordion&lt;/div&gt;&#10;" uniqueid="sk-bUQ-8711" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" ratio="3" minWidth="400px" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-bUQ-8714" styleSettingsVariant="70e8d34e-e1c6-4ec5-bbd4-c326ac629fe0">
+									<components>
+										<skuid__accordion uniqueid="sk-bUQ-8715" iconOnRight="true" sectionsInitiallyOpen="none" onePanelAtATime="true">
+											<sections>
+												<section title="Table">
+													<components>
+														<skuid__table allowColumnFreezing="dragDrop" model="PlanetaryFacts" uniqueid="sk-29SI-36880" mode="read" pageSize="10" numFrozenColumns="1" showSaveCancel="false">
+															<fields>
+																<field id="Name" uniqueid="fi-29SI-37407"/>
+																<field id="Mass" horizontalAlignment="right" uniqueid="fi-29SI-37400"/>
+																<field id="Diameter" horizontalAlignment="right" uniqueid="fi-29SI-37401"/>
+																<field id="Density" uniqueid="fi-29SI-37402"/>
+																<field id="Gravity" horizontalAlignment="right" uniqueid="fi-29SI-37403"/>
+																<field id="Num_Moons" horizontalAlignment="right" uniqueid="fi-29SI-37404"/>
+																<field id="RingSystem" uniqueid="fi-29SI-37405"/>
+																<field id="Mean_Temp" horizontalAlignment="right" uniqueid="fi-29SI-37406"/>
+															</fields>
+															<filtering enableSearch="false"/>
+															<rowActions/>
+															<massActions>
+																<action type="multi" label="Mass Update">
+																	<actions>
+																		<action type="massUpdate"/>
+																	</actions>
+																</action>
+															</massActions>
+														</skuid__table>
+													</components>
+												</section>
+												<section title="Text in accordion 1">
+													<components>
+														<skuid__text contents="&lt;p&gt;We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.&lt;/p&gt;&#10;&#10;&lt;p&gt;There can be no thought of finishing for &amp;lsquo;aiming for the stars.&amp;rsquo; Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.&lt;/p&gt;&#10;" uniqueid="sk-bUQ-8719"/>
+													</components>
+												</section>
+												<section title="Text in accordion 2">
+													<components>
+														<skuid__text contents="&lt;p&gt;As I stand out here in the wonders of the unknown at Hadley, I sort of realize there&amp;rsquo;s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest.&lt;/p&gt;&#10;&#10;&lt;p&gt;Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center &amp;mdash; an equal earth which all men occupy as equals. The airman&amp;rsquo;s earth, if free men make it, will be truly round: a globe in practice, not in theory.&lt;/p&gt;&#10;" uniqueid="sk-bUQ-8713"/>
+													</components>
+												</section>
+											</sections>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__accordion>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-bUT-11585" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-bUT-11586" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Buttons&lt;/div&gt;&#10;" uniqueid="sk-bUT-11587" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__text contents="Buttons with Text" uniqueid="sk-bUp-16075"/>
+								<skuid__buttonSet uniqueid="sk-bUT-11596" position="left">
+									<groups>
+										<skuid__buttonGroup>
+											<buttons>
+												<skuid__button label="Primary" uniqueId="sk-bUT-11597" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
+													<actions/>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup>
+											<buttons>
+												<skuid__button label="Default" uniqueId="sk-bUT-11598" icon="sk-webicon-material-icons:archive">
+													<actions/>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup displayType="detached">
+											<buttons>
+												<skuid__button label="Text Button" uniqueId="sk-bUT-11599" styleSettingsVariant="borderless">
+													<actions/>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup>
+											<buttons>
+												<skuid__button label="Destroy" uniqueId="sk-bbB-13036" styleSettingsVariant="destructive"/>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+									<styles>
+										<spacing top="1.5" bottom="3"/>
+									</styles>
+								</skuid__buttonSet>
+								<skuid__text contents="Icon Only Variants" uniqueid="sk-bUs-16345"/>
+								<skuid__grid uniqueid="sk-2ZD1-25942" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+									<divisions>
+										<division minWidth="100px" ratio="0" alignSelf="auto">
+											<components>
+												<skuid__buttonSet uniqueid="sk-bV2-17004" position="left">
+													<groups>
+														<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+															<buttons>
+																<skuid__button uniqueId="sk-bV2-17008" icon="sk-webicon-material-icons:mic" styleSettingsVariant="circular"/>
+																<skuid__button uniqueId="sk-2ZDf-37974" icon="sk-webicon-material-icons:signal_wifi_4_bar" styleSettingsVariant="circular"/>
+																<skuid__button uniqueId="sk-2ZDf-38188" icon="sk-webicon-material-icons:done" styleSettingsVariant="circular">
+																	<hotkeys/>
+																</skuid__button>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+												</skuid__buttonSet>
+												<skuid__text contents="Icon without border" uniqueid="sk-2ZDG-33487" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+													<styles>
+														<spacing top="1.5" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9"/>
+													</styles>
+												</skuid__text>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components>
+												<skuid__buttonSet uniqueid="sk-2ZD6-28901" position="left">
+													<groups>
+														<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+															<buttons>
+																<skuid__button uniqueId="sk-2ZD6-28903" icon="sk-webicon-material-icons:mic_off" styleSettingsVariant="circularWithBorder"/>
+																<skuid__button uniqueId="sk-2ZDx-39670" icon="sk-webicon-material-icons:equalizer" styleSettingsVariant="circularWithBorder"/>
+																<skuid__button uniqueId="sk-2ZDx-39939" styleSettingsVariant="circularWithBorder" icon="sk-webicon-material-icons:edit"/>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+												</skuid__buttonSet>
+												<skuid__text contents="Icon with border" uniqueid="sk-2ZDL-34498" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+													<styles>
+														<spacing top="1.5" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9"/>
+													</styles>
+												</skuid__text>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components>
+												<skuid__buttonSet uniqueid="sk-2ZD9-30497" position="left">
+													<groups>
+														<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+															<buttons>
+																<skuid__button uniqueId="sk-2ZD9-30500" icon="sk-webicon-material-icons:thumb_up" styleSettingsVariant="d76a75ce-ab5e-4df1-bde0-f7cacbae707f"/>
+																<skuid__button uniqueId="sk-2ZE4-41255" icon="sk-webicon-material-icons:share" styleSettingsVariant="d76a75ce-ab5e-4df1-bde0-f7cacbae707f">
+																	<tooltip position="top"/>
+																</skuid__button>
+																<skuid__button uniqueId="sk-2ZE5-41482" icon="sk-webicon-material-icons:history" styleSettingsVariant="d76a75ce-ab5e-4df1-bde0-f7cacbae707f"/>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__buttonSet>
+												<skuid__text contents="Muted icon" uniqueid="sk-2ZDN-35161" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+													<styles>
+														<spacing top="1.5" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9"/>
+													</styles>
+												</skuid__text>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="2" bottom="3"/>
+									</styles>
+								</skuid__grid>
+								<skuid__text contents="Floating Action Buttons" uniqueid="sk-bWB-22825">
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__text>
+								<skuid__buttonSet uniqueid="sk-bWE-23177" position="left">
+									<groups>
+										<skuid__buttonGroup displayType="detached">
+											<buttons>
+												<skuid__button uniqueId="sk-bWE-23178" icon="sk-webicon-material-icons:location_on" styleSettingsVariant="835866c6-a61f-496d-886c-bbfa35c820aa">
+													<hotkeys/>
+													<tooltip position="top"/>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup>
+											<buttons>
+												<skuid__button uniqueId="sk-bWE-23179" icon="sk-webicon-material-icons:navigation" styleSettingsVariant="835866c6-a61f-496d-886c-bbfa35c820aa" label="Floating Action"/>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+									<styles>
+										<spacing top="1.5" bottom="3"/>
+									</styles>
+								</skuid__buttonSet>
+								<skuid__text contents="Button Groups" uniqueid="sk-bah-8568"/>
+								<skuid__buttonSet uniqueid="sk-bah-8694" position="left">
+									<groups>
+										<skuid__buttonGroup displayType="detached">
+											<buttons>
+												<skuid__button label="Detached" uniqueId="sk-bak-9547"/>
+												<skuid__button label="Detached 2" uniqueId="sk-bal-9796"/>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup displayType="attached">
+											<buttons>
+												<skuid__button label="Attached" uniqueId="sk-bap-10199" styleSettingsVariant="primary"/>
+												<skuid__button label="Attached" uniqueId="sk-bar-10612"/>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup displayType="attached">
+											<buttons>
+												<skuid__button label="Attached" uniqueId="sk-bat-10870"/>
+												<skuid__button label="Attached" uniqueId="sk-bav-11335"/>
+											</buttons>
+										</skuid__buttonGroup>
+										<skuid__buttonGroup displayType="combo">
+											<buttons>
+												<skuid__button label="Combo" uniqueId="sk-baz-11579"/>
+												<skuid__button label="Combo" uniqueId="sk-bb1-12099"/>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+									<styles>
+										<spacing top="1.5" bottom="3"/>
+									</styles>
+								</skuid__buttonSet>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-31il-18905" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-31il-18906" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Forms&lt;/div&gt;&#10;" uniqueid="sk-31il-18907" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2OCh-16643" styleSettingsVariant="70e8d34e-e1c6-4ec5-bbd4-c326ac629fe0">
+									<components>
+										<skuid__tabSet uniqueid="sk-2OCj-17215">
+											<tabs>
+												<skuid__tabPanel name="LABEL ON LEFT">
+													<components>
+														<skuid__wrapper uniqueid="sk-29Wz-20235">
+															<components>
+																<skuid__form showErrorsInline="true" model="PlanetaryFacts" uniqueid="sk-29UR-9102" mode="edit" labelPlacement="beside" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Name"/>
+																						<skuid__field id="RingSystem"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Mass"/>
+																						<skuid__field id="Diameter"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Density"/>
+																						<skuid__field id="Gravity"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Mean_Temp"/>
+																						<skuid__field id="Num_Moons"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing bottom="3" top="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="LABEL ON TOP">
+													<components>
+														<skuid__wrapper uniqueid="sk-29W_-21104">
+															<components>
+																<skuid__form showErrorsInline="true" model="PlanetaryFacts" uniqueid="sk-29W_-21106" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Name"/>
+																						<skuid__field id="RingSystem"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Mass"/>
+																						<skuid__field id="Diameter"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Density"/>
+																						<skuid__field id="Gravity"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="Mean_Temp"/>
+																						<skuid__field id="Num_Moons"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing top="3" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+											</tabs>
+										</skuid__tabSet>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2PAE-18291" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2PAE-18292" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Selection Controls&lt;/div&gt;&#10;" uniqueid="sk-2PAE-18293" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2PAE-18294" styleSettingsVariant="70e8d34e-e1c6-4ec5-bbd4-c326ac629fe0">
+									<components>
+										<skuid__tabSet uniqueid="sk-2PAE-18295">
+											<tabs>
+												<skuid__tabPanel name="CHECKBOXES">
+													<components>
+														<skuid__wrapper uniqueid="sk-2PAE-18296">
+															<components>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PAE-18297" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="MultiPicklist" selectedList="15" displayAs="CHECKBOX_LIST"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing bottom="3" top="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="RADIO BUTTONS">
+													<components>
+														<skuid__wrapper uniqueid="sk-2PKm-26037">
+															<components>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PKm-26038" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Picklist" displayAs="RADIO"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing top="3" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="BUTTON GROUPS">
+													<components>
+														<skuid__wrapper uniqueid="sk-2PKd-23032">
+															<components>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PKd-23033" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Picklist" displayAs="BUTTON_GROUP"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing top="3" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="SWITCHES">
+													<components>
+														<skuid__wrapper uniqueid="sk-2PGN-17881">
+															<components>
+																<skuid__text contents="Label on top" uniqueid="sk-2PNC-48628">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PGN-17882" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="Label on top" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Boolean" displayAs="SWITCH"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																	<styles>
+																		<spacing bottom="3"/>
+																	</styles>
+																</skuid__form>
+																<skuid__text contents="Label on left" uniqueid="sk-2PNI-50234">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PLX-33324" mode="edit" minLabelWidth="130px" flexRatioLabel="0" minValueWidth="0" flexRatioValue="1" labelPlacement="beside" maxLabelWidth="130px">
+																	<sections>
+																		<section title="Label on left" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Boolean" displayAs="SWITCH">
+																							<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																							<enableConditions/>
+																						</skuid__field>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																	<styles>
+																		<spacing bottom="3"/>
+																	</styles>
+																</skuid__form>
+																<skuid__text contents="Label on right" uniqueid="sk-2PNM-52097"/>
+																<skuid__text contents="*Not an option for the Form component, but through a combination of form, text, and responsive grid" uniqueid="sk-2PNv-55837" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+																	<styles>
+																		<spacing bottom="1.5" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9"/>
+																	</styles>
+																</skuid__text>
+																<skuid__grid uniqueid="sk-2PLs-37192" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1">
+																	<divisions>
+																		<division ratio="0" alignSelf="auto" minWidth="40px">
+																			<components>
+																				<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PLw-37909" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																					<sections>
+																						<section title="Label on right" showHeading="false">
+																							<rows>
+																								<row>
+																									<fields>
+																										<skuid__field id="Boolean" label=" " displayAs="SWITCH"/>
+																									</fields>
+																								</row>
+																							</rows>
+																						</section>
+																					</sections>
+																					<styles>
+																						<spacing top="0.25"/>
+																					</styles>
+																				</skuid__form>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__text contents="&lt;strong&gt;Has Ring System&lt;/strong&gt;" uniqueid="sk-2PMl-44006">
+																					<styles>
+																						<spacing top="0.5"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__grid>
+															</components>
+															<styles>
+																<spacing top="3" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="MENU">
+													<components>
+														<skuid__wrapper uniqueid="sk-2PAE-18298">
+															<components>
+																<skuid__form showErrorsInline="true" model="SelectionControls" uniqueid="sk-2PAE-18299" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+																	<sections>
+																		<section title="New Section" showHeading="false">
+																			<rows>
+																				<row>
+																					<fields>
+																						<skuid__field id="Picklist" label="Select one comet"/>
+																					</fields>
+																				</row>
+																				<row>
+																					<fields>
+																						<skuid__field id="MultiPicklist" selectedList="6" label="Select multiple comets"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing top="3" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+											</tabs>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__tabSet>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2TEX-18920" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="0">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2TEX-18921" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Cards&lt;/div&gt;&#10;" uniqueid="sk-2TEX-18922" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__grid uniqueid="sk-2TK3-27480" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="5">
+									<divisions>
+										<division minWidth="100px" ratio="1" alignSelf="auto">
+											<components>
+												<skuid__text contents="Large Cards" uniqueid="sk-2U2v-36434">
+													<styles>
+														<spacing bottom="1.5"/>
+													</styles>
+												</skuid__text>
+												<skuid__wrapper uniqueid="sk-2TK6-28279" styleSettingsVariant="b625184a-4305-4174-978c-b6816ceec965">
+													<components>
+														<skuid__image source="url" uniqueid="sk-2TKA-28888" datasource="Ui-Only" model="PlanetaryFacts" url="https://picsum.photos/id/1043/600/320">
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__image>
+														<skuid__wrapper uniqueid="sk-2TKN-30134">
+															<components>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Planetary Facts&lt;/div&gt;&#10;" uniqueid="sk-2TKR-31084" styleSettingsVariant="f81a573b-348e-475a-9b00-469a436ec2b0"/>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;The Earth&amp;rsquo;s rotation is gradually slowing&lt;/div&gt;&#10;" uniqueid="sk-2TL4-33428" styleSettingsVariant="148cc9e6-a331-400e-96e6-9a927b353e14">
+																	<styles>
+																		<spacing bottom="1.5" top="0.5" styleSettingsVariant="148cc9e6-a331-400e-96e6-9a927b353e14"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;This deceleration is happening almost imperceptibly, at approximately 17 milliseconds per hundred years, although the rate at which it occurs is not perfectly uniform.&lt;/div&gt;&#10;" uniqueid="sk-2TKY-32139">
+																	<styles>
+																		<spacing top="0.5" bottom="0.5"/>
+																	</styles>
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																</skuid__text>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Source: &lt;a href=&quot;https://space-facts.com/earth/&quot; target=&quot;_blank&quot;&gt;space-facts.com&lt;/a&gt;&lt;/div&gt;&#10;" uniqueid="sk-2T-C-25152" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing top="2" bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<styles>
+																<spacing top="4" bottom="3" left="3" right="3"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+													<background/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components>
+												<skuid__text contents="Small Cards - Style 1" uniqueid="sk-2U2D-32296">
+													<styles>
+														<spacing bottom="1.5"/>
+													</styles>
+												</skuid__text>
+												<skuid__deck model="PlanetaryFacts" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-2Tpr-26028" setMaxWidth="auto" pageSize="2" showLoadMore="false" showListHeader="false" showListFooter="false" rowGutter="8px">
+													<components>
+														<skuid__grid uniqueid="sk-2Tpz-27969" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="3">
+															<divisions>
+																<division minWidth="0" ratio="0" alignSelf="auto">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-2Tq9-30022" datasource="Ui-Only" model="PlanetaryFacts" url="{{{Image_URL}}}" imageWidth="96px">
+																			<styles>
+																				<spacing/>
+																			</styles>
+																			<interactions/>
+																		</skuid__image>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-2Tsy-27731">
+																			<components>
+																				<skuid__text contents="A study of {{Name}}" uniqueid="sk-2TqM-31713" model="PlanetaryFacts" styleSettingsVariant="89019020-c36c-4192-b61d-1163cc6d16ed"/>
+																				<skuid__text contents="12 mins 40 seconds" uniqueid="sk-2TrS-35366" model="PlanetaryFacts" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																				</skuid__text>
+																			</components>
+																			<styles>
+																				<spacing bottom="0.5"/>
+																			</styles>
+																			<background/>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="0px" ratio="0">
+																	<components>
+																		<skuid__buttonSet uniqueid="sk-2TuG-21640" position="center">
+																			<groups>
+																				<skuid__buttonGroup>
+																					<buttons>
+																						<skuid__button label="Watch" uniqueId="sk-2TuG-21639" icon="sk-webicon-material-icons:play_circle_outline" styleSettingsVariant="borderless"/>
+																					</buttons>
+																				</skuid__buttonGroup>
+																			</groups>
+																		</skuid__buttonSet>
+																	</components>
+																</division>
+															</divisions>
+															<interactions/>
+															<styles>
+																<spacing right="1.5"/>
+															</styles>
+														</skuid__grid>
+													</components>
+													<filtering enableSearch="false"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__deck>
+												<skuid__text contents="Small Cards - Style 2" uniqueid="sk-2U2H-33031">
+													<styles>
+														<spacing top="4" bottom="1.5"/>
+													</styles>
+												</skuid__text>
+												<skuid__deck model="PlanetaryFacts" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-2TvM-25168" setMaxWidth="auto" pageSize="2" showLoadMore="false" showListHeader="false" showListFooter="false" rowGutter="16px" styleSettingsVariant="63417e19-1ffe-4a27-96f1-e9ab46494188">
+													<components>
+														<skuid__grid uniqueid="sk-2TvM-25169" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="4">
+															<divisions>
+																<division minWidth="0" ratio="0" alignSelf="auto">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-2TvM-25170" datasource="Ui-Only" model="PlanetaryFacts" styleSettingsVariant="f1f7b227-dfae-49fd-b23b-e6811789f5ba" imageWidth="68px" url="{{{Image_URL}}}">
+																			<interactions/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__grid uniqueid="sk-2TwJ-23127" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="3">
+																			<divisions>
+																				<division alignSelf="auto" ratio="1" maxWidth="400px" minWidth="240px">
+																					<components>
+																						<skuid__wrapper uniqueid="sk-2TwJ-23129">
+																							<components>
+																								<skuid__text contents="A study of {{Name}}" uniqueid="sk-2TwJ-23130" model="PlanetaryFacts" styleSettingsVariant="89019020-c36c-4192-b61d-1163cc6d16ed">
+																									<styles>
+																										<spacing bottom="0.5"/>
+																									</styles>
+																								</skuid__text>
+																								<skuid__text contents="12 mins 40 seconds" uniqueid="sk-2U8h-27223" model="PlanetaryFacts" styleSettingsVariant="a7c91dd1-e236-423a-b30e-7fb4ecaaeff9">
+																									<renderConditions logictype="and"/>
+																									<styleVariantConditions/>
+																								</skuid__text>
+																							</components>
+																							<styles>
+																								<spacing bottom="0.5"/>
+																							</styles>
+																							<background/>
+																						</skuid__wrapper>
+																					</components>
+																				</division>
+																			</divisions>
+																			<interactions/>
+																			<styles>
+																				<spacing right="1.5"/>
+																			</styles>
+																		</skuid__grid>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="0" ratio="0">
+																	<components>
+																		<skuid__buttonSet uniqueid="sk-2U6A-48394">
+																			<groups>
+																				<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+																					<buttons>
+																						<skuid__button uniqueId="sk-2U6A-48393" icon="sk-webicon-material-icons:play_arrow" styleSettingsVariant="circularWithBorder">
+																							<tooltip position="top" text="Play video" compact="true"/>
+																						</skuid__button>
+																					</buttons>
+																				</skuid__buttonGroup>
+																				<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+																					<buttons>
+																						<skuid__button uniqueId="sk-2U6l-53482" icon="sk-webicon-material-icons:share" styleSettingsVariant="d76a75ce-ab5e-4df1-bde0-f7cacbae707f">
+																							<hotkeys/>
+																							<tooltip position="top" text="Share" compact="true"/>
+																						</skuid__button>
+																						<skuid__button uniqueId="sk-2U6l-53483" icon="sk-webicon-material-icons:thumb_up" styleSettingsVariant="d76a75ce-ab5e-4df1-bde0-f7cacbae707f">
+																							<tooltip position="top" text="Like" compact="true"/>
+																							<actions/>
+																						</skuid__button>
+																					</buttons>
+																				</skuid__buttonGroup>
+																			</groups>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__buttonSet>
+																	</components>
+																</division>
+															</divisions>
+															<interactions/>
+														</skuid__grid>
+													</components>
+													<filtering enableSearch="false"/>
+													<styles>
+														<spacing right="0.25"/>
+													</styles>
+												</skuid__deck>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__grid>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="6"/>
+					</styles>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2U3F-38500" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2U3F-38501" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Quote&lt;/div&gt;&#10;" uniqueid="sk-2U3F-38502" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2U3F-38503">
+									<components>
+										<skuid__grid uniqueid="sk-2U9Z-30803" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+											<divisions>
+												<division minWidth="160px" ratio="1" alignSelf="auto" maxWidth="160px">
+													<components>
+														<skuid__wrapper uniqueid="sk-2U9a-31571" heightStrategy="fixed" height="custom" heightCustom="160px" styleSettingsVariant="a29e1b67-3a57-444c-b198-ac1b3ed74921">
+															<components/>
+															<background/>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+															<interactions/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="2">
+													<components>
+														<skuid__wrapper uniqueid="sk-2UBX-29730">
+															<components>
+																<skuid__text contents="We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically." uniqueid="sk-2U9i-32962" styleSettingsVariant="07cab02a-7503-43b5-a137-31422b805e5a">
+																	<styles>
+																		<spacing top="6"/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<styles>
+																<spacing left="-12"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</division>
+											</divisions>
+											<styles>
+												<spacing bottom="6"/>
+											</styles>
+										</skuid__grid>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4" top="1.5"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2ZF8-45926" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="0">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2ZF8-45927" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Lists&lt;/div&gt;&#10;" uniqueid="sk-2ZF8-45928" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2ZF8-45929">
+									<components>
+										<skuid__grid uniqueid="sk-2ZFE-47803" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="6">
+											<divisions>
+												<division minWidth="100px" ratio="1" alignSelf="auto">
+													<components>
+														<skuid__text contents="List - Style 1" uniqueid="sk-2ZOY-47203">
+															<styles>
+																<spacing bottom="1.5"/>
+															</styles>
+														</skuid__text>
+														<skuid__list model="PlanetaryFacts" uniqueid="sk-2ZFM-49226" pageSize="5" showPageSizeSelect="false" resetPaginationOnQuery="false" showLoadMore="false" showListHeader="true" showListFooter="false" title="Planetary Facts">
+															<columns>
+																<column fillRatio="0">
+																	<items>
+																		<item displayType="avatar" size="large" url="{{Image_URL}}"/>
+																	</items>
+																</column>
+																<column fillRatio="1">
+																	<items>
+																		<item fieldId="Name" displayType="field"/>
+																		<item displayType="template" template="{{Diameter}} (km) in diameter"/>
+																		<item displayType="template" displayStyle="tertiary" template="Has {{Num_Moons}} moons"/>
+																	</items>
+																</column>
+															</columns>
+															<rowActions>
+																<action type="multi" icon="sk-webicon-material-icons:favorite_border"/>
+																<action type="multi" icon="sk-webicon-material-icons:more_vert"/>
+															</rowActions>
+															<massActions/>
+															<filtering enableSearch="false"/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__list>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="1">
+													<components>
+														<skuid__text contents="List - Style 2" uniqueid="sk-2ZOa-47989">
+															<styles>
+																<spacing bottom="1.5"/>
+															</styles>
+														</skuid__text>
+														<skuid__list model="PlanetaryFacts" uniqueid="sk-2ZKR-75780" pageSize="Infinity" showPageSizeSelect="true" resetPaginationOnQuery="true" showLoadMore="false" showListHeader="true" showListFooter="true" styleSettingsVariant="d10a9489-bb8b-47ac-abdd-d164df6d587b">
+															<columns>
+																<column fillRatio="1">
+																	<items>
+																		<item fieldId="Name" displayType="field"/>
+																		<item displayType="template" displayStyle="tertiary" template="Has {{Num_Moons}} moons"/>
+																	</items>
+																</column>
+																<column fillRatio="0">
+																	<items>
+																		<item fieldId="Density" displayType="field" displayStyle="secondary"/>
+																	</items>
+																</column>
+															</columns>
+															<rowActions/>
+															<massActions>
+																<action type="multi" label="Compare"/>
+															</massActions>
+															<filtering enableSearch="true" searchMethod="client" emptySearchBehavior="query" searchPlaceholder="Search"/>
+														</skuid__list>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="5" top="1.5"/>
+					</styles>
+					<interactions/>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2UGv-44011" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="0">
+					<divisions>
+						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2UGv-44012" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
+									<components>
+										<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Chart&lt;/div&gt;&#10;" uniqueid="sk-2UGv-44013" styleSettingsVariant="fffc7921-55be-46dc-a82b-5b6a6b1ba975"/>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="400px" ratio="3" maxWidth="1208px">
+							<components>
+								<skuid__wrapper uniqueid="sk-2UGv-44014">
+									<components>
+										<skuid__chart model="PlanetaryFacts" maintitle="Comparing Planets" type="column" uniqueid="sk-2UHl-51208" export="off" subtitle="By Gravity and Density">
+											<dataaxes>
+												<axis id="Gravity" title="Gravity"/>
+												<axis id="Density" title="Density" flip="true"/>
+											</dataaxes>
+											<categoryaxes>
+												<axis id="Planets" categorytype="field" field="Name" title="Planets"/>
+											</categoryaxes>
+											<serieslist>
+												<series dataAxisId="Gravity" valuefield="Gravity" splittype="none"/>
+												<series dataAxisId="Density" valuefield="Density" splittype="none"/>
+											</serieslist>
+											<colors/>
+											<legend layout="horizontal" halign="center" valign="bottom" showlabels="true"/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__chart>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4" top="6"/>
+					</styles>
+				</skuid__grid>
+			</components>
+			<background/>
+			<styles>
+				<spacing right="3"/>
+			</styles>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+			<interactions/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences>
+			<actionsequence id="b5fefdc7-2552-4e6c-8fe5-4f9b40340add" label="Populate Demo Data" type="event-triggered" event-scope="component" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="action-sequence" action-sequence-id="91d496d3-eec2-4cd9-95e5-31e147070a54"/>
+				</actions>
+			</actionsequence>
+			<actionsequence id="91d496d3-eec2-4cd9-95e5-31e147070a54" label="Populate Planet data" type="reusable">
+				<description/>
+				<actions>
+					<action type="createRow" model="PlanetaryFacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Mercury"/>
+							<default valuesource="fieldvalue" field="Mass" enclosevalueinquotes="true" value="0.330"/>
+							<default valuesource="fieldvalue" field="Diameter" enclosevalueinquotes="true" value="4879"/>
+							<default valuesource="fieldvalue" field="Density" enclosevalueinquotes="true" value="5427"/>
+							<default valuesource="fieldvalue" field="Gravity" enclosevalueinquotes="true" value="3.7"/>
+							<default valuesource="fieldvalue" field="Num_Moons" enclosevalueinquotes="true" value="0"/>
+							<default valuesource="fieldvalue" field="Mean_Temp" enclosevalueinquotes="true" value="167"/>
+							<default valuesource="fieldvalue" field="RingSystem" enclosevalueinquotes="false" value="false"/>
+							<default valuesource="fieldvalue" field="Image_URL" enclosevalueinquotes="true" value="https://picsum.photos/id/57/160"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="PlanetaryFacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Venus"/>
+							<default valuesource="fieldvalue" field="Mass" enclosevalueinquotes="true" value="4.87"/>
+							<default valuesource="fieldvalue" field="Diameter" enclosevalueinquotes="true" value="12104"/>
+							<default valuesource="fieldvalue" field="Density" enclosevalueinquotes="true" value="5243"/>
+							<default valuesource="fieldvalue" field="Gravity" enclosevalueinquotes="true" value="8.9"/>
+							<default valuesource="fieldvalue" field="Num_Moons" enclosevalueinquotes="true" value="0"/>
+							<default valuesource="fieldvalue" field="Mean_Temp" enclosevalueinquotes="true" value="464"/>
+							<default valuesource="fieldvalue" field="RingSystem" enclosevalueinquotes="false" value="false"/>
+							<default valuesource="fieldvalue" field="Image_URL" enclosevalueinquotes="true" value="https://picsum.photos/id/558/160"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="PlanetaryFacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Jupiter"/>
+							<default valuesource="fieldvalue" field="Mass" enclosevalueinquotes="true" value="1898"/>
+							<default valuesource="fieldvalue" field="Diameter" enclosevalueinquotes="true" value="142984"/>
+							<default valuesource="fieldvalue" field="Density" enclosevalueinquotes="true" value="1326"/>
+							<default valuesource="fieldvalue" field="Gravity" enclosevalueinquotes="true" value="23.1"/>
+							<default valuesource="fieldvalue" field="Num_Moons" enclosevalueinquotes="true" value="79"/>
+							<default valuesource="fieldvalue" field="Mean_Temp" enclosevalueinquotes="true" value="-110"/>
+							<default valuesource="fieldvalue" field="RingSystem" enclosevalueinquotes="false" value="true"/>
+							<default valuesource="fieldvalue" field="Image_URL" enclosevalueinquotes="true" value="https://picsum.photos/id/1015/160"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="PlanetaryFacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Earth"/>
+							<default valuesource="fieldvalue" field="Mass" enclosevalueinquotes="true" value="5.97"/>
+							<default valuesource="fieldvalue" field="Diameter" enclosevalueinquotes="true" value="12756"/>
+							<default valuesource="fieldvalue" field="Density" enclosevalueinquotes="true" value="5514"/>
+							<default valuesource="fieldvalue" field="Gravity" enclosevalueinquotes="true" value="9.8"/>
+							<default valuesource="fieldvalue" field="Num_Moons" enclosevalueinquotes="true" value="1"/>
+							<default valuesource="fieldvalue" field="Mean_Temp" enclosevalueinquotes="true" value="15"/>
+							<default valuesource="fieldvalue" field="RingSystem" enclosevalueinquotes="false" value="false"/>
+							<default valuesource="fieldvalue" field="Image_URL" enclosevalueinquotes="true" value="https://picsum.photos/id/1069/160"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="PlanetaryFacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Mars"/>
+							<default valuesource="fieldvalue" field="Mass" enclosevalueinquotes="true" value="0.642"/>
+							<default valuesource="fieldvalue" field="Diameter" enclosevalueinquotes="true" value="6792"/>
+							<default valuesource="fieldvalue" field="Density" enclosevalueinquotes="true" value="3933"/>
+							<default valuesource="fieldvalue" field="Gravity" enclosevalueinquotes="true" value="3.7"/>
+							<default valuesource="fieldvalue" field="Num_Moons" enclosevalueinquotes="true" value="2"/>
+							<default valuesource="fieldvalue" field="Mean_Temp" enclosevalueinquotes="true" value="-65"/>
+							<default valuesource="fieldvalue" field="RingSystem" enclosevalueinquotes="false" value="false"/>
+							<default valuesource="fieldvalue" field="Image_URL" enclosevalueinquotes="true" value="https://picsum.photos/id/1055/160"/>
+						</defaults>
+					</action>
+					<action type="save">
+						<models>
+							<model>PlanetaryFacts</model>
+						</models>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<interactions/>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__masthead uniqueid="sk-Zng-1437">
+							<divisions>
+								<division type="separator" flex="1"/>
+								<division type="logo" flex="0">
+									<components>
+										<skuid__image source="staticresource" height="custom" heightCustom="100%" datasource="" resource="polli_logo" resourceContentType="image/png" imageWidth="109px">
+											<interactions/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__image>
+									</components>
+								</division>
+								<division type="separator" flex="1"/>
+							</divisions>
+						</skuid__masthead>
+					</components>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+		<pageregioncontent uniqueid="__footer">
+			<components>
+				<skuid__layoutRegion sticky="true" isFooter="true">
+					<components>
+						<skuid__buttonSet model="" uniqueid="sk-aH4-15412">
+							<groups>
+								<skuid__buttonGroup>
+									<buttons>
+										<skuid__button uniqueId="sk-aH4-15411" styleSettingsVariant="835866c6-a61f-496d-886c-bbfa35c820aa" icon="sk-webicon-ink:add">
+											<tooltip position="top"/>
+										</skuid__button>
+									</buttons>
+								</skuid__buttonGroup>
+							</groups>
+							<styles>
+								<spacing right="2" bottom="2"/>
+							</styles>
+						</skuid__buttonSet>
+					</components>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background/>
+</skuid__page>

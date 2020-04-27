@@ -3,9 +3,11 @@ One of the major new innovations in the Spark Release was the Design System Stud
 
 We have not yet included reference design systems in the product, but you can find reference files here. The process to download and install is very simple.  Use these example design systems to explore capabilities.  Maybe one of them will work for your company's graphic identity in Skuid.  Once you have downloaded one,  tweak as you see fit. 
 
-## Contents
-- [Sales App Design System](Sales_App_Design_System)
-
+## List of Design Systems
+- [Simple CRM](SimpleCRM)
+- [Material](Material)
+- [HR Mobile Portal](HR_Mobile_Portal)
+- [Compact Data Workspace](Compact_Data_Workspace)
 
 ## Related Links
 - [Skuid Documentation](https://docs.skuid.com/latest/v2/en/skuid/design-system-studio/)

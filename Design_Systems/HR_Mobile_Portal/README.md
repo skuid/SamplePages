@@ -2,7 +2,9 @@
 
 ## Description
 The HR Mobile Portal design system is hip and trendy, familiar and similar to personal mobile app, featuring bold colors, lots of imagery, and a human-friendly font option. 
-*Demo Page coming soon*
+
+## Preview
+[Preview HR Portal design system](https://portal.skuidsite.com/designsystems/hr-portal)
 
 ## Example Screenshots
 #### Quick Actions
@@ -30,5 +32,6 @@ The HR Mobile Portal design system is hip and trendy, familiar and similar to pe
 - Import the design system and demo page to your Skuid instance
 
 ## Notes
-Illustrations by [undraw](https://undraw.co/).
+- Ui only data
+- Illustrations by [undraw](https://undraw.co/).
 
