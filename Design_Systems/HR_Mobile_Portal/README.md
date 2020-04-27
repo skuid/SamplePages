@@ -28,10 +28,12 @@ The HR Mobile Portal design system is hip and trendy, familiar and similar to pe
 - Integration of images and illustrations make for an visually interesting app.
 
 ## Usage
-- Download the [HR Portal Design System](HR_Portal.designsystem) and [Demo Page](HRPortal_DemoPage.xml)
-- Import the design system and demo page to your Skuid instance
+- API: v2
+- Design System: Download [HR Portal Design System](HR_Portal.designsystem) and import it to Skuid's Design Systems.
+- Demo page: Download the [Demo Page](HRPortal_DemoPage.xml). In Skuid, create a new page and select Import XML file to import this demo page.
 
 ## Notes
+- For usage in Salesforce, this design system works for version [Spark Update 3](https://docs.skuid.com/v12.4.2/v2/en/release-notes.html) or higher. Older versions of Skuid can result in styling losses.
 - Ui only data
 - Illustrations by [undraw](https://undraw.co/).
 

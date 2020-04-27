@@ -30,8 +30,10 @@ The Compact Data Workspace design system is compact, practical, with plenty of v
 - Use of "Configure View" sliding panel to hide left and right sidebar if needed.
 
 ## Usage
-- Download the [Compact Data Workspace Design System](CompactDataWorkspace.designsystem) and [Demo Page](CompactDataWorkspace_DemoPage.xml)
-- Import the design system and demo page to your Skuid instance
+- API: v2
+- Design System: Download [Compact Data Workspace Design System](CompactDataWorkspace.designsystem) and import it to Skuid's Design Systems.
+- Demo page: Download the [Demo Page](CompactDataWorkspace_DemoPage.xml). In Skuid, create a new page and select Import XML file to import this demo page.
 
 ## Notes
+- For usage in Salesforce, this design system works for version [Spark Update 3](https://docs.skuid.com/v12.4.2/v2/en/release-notes.html) or higher. Older versions of Skuid can result in styling losses.
 - The Demo Page uses standard Salesforce objects (Accounts, Contacts, Opportunities, Tasks).

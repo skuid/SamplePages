@@ -1,4 +1,4 @@
-<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="HR_Portal">
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="HR_Portal">
 	<models>
 		<model id="Request_PTO" query="true" createrowifnonefound="false" datasource="Ui-Only">
 			<fields>
@@ -390,25 +390,6 @@
 										<spacing top="2" styleSettingsVariant="e52c3598-67be-4594-8dd7-b4405df16b46"/>
 									</styles>
 								</skuid__text>
-								<skuid__chart model="VolunteerHours" maintitle="{{Model.labelPlural}}" type="line" uniqueid="sk-i10-18639">
-									<dataaxes>
-										<axis id="axis1"/>
-									</dataaxes>
-									<categoryaxes>
-										<axis id="categories" categorytype="field" field="Date" fillvals="true" dategranularity="calmonth"/>
-									</categoryaxes>
-									<serieslist>
-										<series valuefield="NumberOfHours" splittype="none" aggfunction="count">
-											<actions/>
-										</series>
-									</serieslist>
-									<colors/>
-									<legend layout="horizontal" halign="center" valign="bottom"/>
-									<renderConditions logictype="and">
-										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true"/>
-									</renderConditions>
-									<styleVariantConditions/>
-								</skuid__chart>
 							</components>
 							<background/>
 							<styles>
