@@ -8,16 +8,16 @@ A Skuid design system for web apps that follow [Material design guidelines](http
 
 ## Example Screenshots
 #### Form
-<img src="Screenshots/quick_actions.png" alt="Screenshot: Quick Actions" width="400"/>
+<img src="Screenshots/form.png" alt="Screenshot: Form" width="600"/>
 
 #### Card
-<img src="Screenshots/news.png" alt="Screenshot: News" width="400"/>
+<img src="Screenshots/card.png" alt="Screenshot: Card" width="600"/>
 
 #### Button
-<img src="Screenshots/request_pto.png" alt="Screenshot: Full Page Form" width="400"/>
+<img src="Screenshots/button.png" alt="Screenshot: Button" width="600"/>
 
 #### List
-<img src="Screenshots/chart.png" alt="Screenshot: Chart" width="400"/>
+<img src="Screenshots/list.png" alt="Screenshot: List" width="600"/>
 
 ## Features
 - Components are customized to closely follow Material design guidelines.

@@ -8,19 +8,16 @@ A design system customized to provide a consistent CRM user interface.
 
 ## Example Screenshots
 #### KPI dashboard
-<img src="Screenshots/quick_actions.png" alt="Screenshot: Quick Actions" width="400"/>
+<img src="Screenshots/kpi_dashboard.png" alt="Screenshot: KPI Dashboard" width="400"/>
 
 #### Card
-<img src="Screenshots/news.png" alt="Screenshot: News" width="400"/>
+<img src="Screenshots/large_cards.png" alt="Screenshot: Large Cards" width="400"/>
 
-#### Task list
-<img src="Screenshots/request_pto.png" alt="Screenshot: Full Page Form" width="400"/>
-
-#### Event list
-<img src="Screenshots/chart.png" alt="Screenshot: Chart" width="400"/>
+#### Task & Event Lists
+<img src="Screenshots/tasks_events.png" alt="Screenshot: Tasks & Events" width="400"/>
 
 #### Wizard
-<img src="Screenshots/success_modal.png" alt="Screenshot: Success Modal" width="400"/>
+<img src="Screenshots/wizard.png" alt="Screenshot: Wizard" width="400"/>
 
 ## Features
 - Customization to support CRM functionalities: empty state, step-by-step wizard, KPIs, chart. 
