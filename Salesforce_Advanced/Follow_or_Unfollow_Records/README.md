@@ -15,7 +15,7 @@ Skuid pages can be configured to include this process.  The example below shows 
 ## Notes
 - Chatter must be turned on in the org for this to function correctly. 
 
-- Remember that a single user can only follow 500 records.  A Skuid page that uses an aggregate model counting entity subscription records by user may be helpful to see if anyone is in trouble. 
+- Remember that a single user can only follow 500 records.  A Skuid page that uses an aggregate model counting `entitySubscription` records by user may be helpful to see if anyone has gone over that limit. 
 
 ## Related Links
 - [Salesforce Developer Docs](hhttps://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_entitysubscription.htm) 

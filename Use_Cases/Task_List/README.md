@@ -1,4 +1,4 @@
-# A better To-Do list
+# A Better To-Do List
 
 We all need a better to-do list. A Skuid list provide the tools to make just what you need.
 
@@ -9,8 +9,6 @@ We all need a better to-do list. A Skuid list provide the tools to make just wha
 - Data source: Uses default Salesforce data source.   
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
 - Page XML:  [Copy the XML from this page](Task_List.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
-
-## Notes
 
 ## Related Links
 - [View page in App Gallery](https://portal.skuidsite.com/designsystem/samplepages/preview/todolist)

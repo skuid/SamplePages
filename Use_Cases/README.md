@@ -1,6 +1,6 @@
 # Use Cases
 
-Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 
+Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work!! 
 
 ## Contents
 

@@ -11,11 +11,11 @@ The combination of dynamic data access and dynamic UI components makes Skuid a g
 - Page XML:  [Copy the XML from this page](KeyIndicators.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
-The key disciplines to a KPI block: 
-- Use aggregate models to query a single number.   Total Leads YTD for example. 
-- Use Wrappers and Grids to create a dashboard page structure 
-- Use text component to show data, headers, supporting information, etc
-- Use UI only models for calculated values.  In this example,  I also used a UI only model for populating "target" values - that are then compared to the actuals in a "calculations" model.  Those targets could come from a custom salesforce object,  or from another datasource.  (Airtable, SQL server)  The integration to determine the percent comlete happens in the page. 
+Key disciplines for building a KPI block: 
+- Use aggregate models to deliver a single number.   Total Leads YTD for example. 
+- Use wrappers and grids to create a dashboard page structure 
+- Use a text component to show labels, data, supporting information, etc
+- Use UI only models for calculated values.  In this example, there is a UI only model for populating "target" values - that are then compared to the actuals in a "calculations" model.  Those targets could come from a custom salesforce object,  or from another data source like Airtable or SQL server. The integration to calculate percent complete happens in the "calculations" model.  
 
 ## Related Links 
 - [Skuid Learn - Visualization Journey](https://portal.skuidsite.com/learning/journeydetail/Visualization%20Basics)

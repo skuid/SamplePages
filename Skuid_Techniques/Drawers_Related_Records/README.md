@@ -1,8 +1,8 @@
 # Showing Child Related Data in Table Drawers
 
-Skuid offers a number of ways of interacting with related data.  One powerful way is using Table drawers. This allows a simple list interface in the table, but also allows immediate access to additional details about the primary record, and its related information. In addition, drawers let you open up more than one primary record to see the details contained in each on. Unlike pop-ups or sliding detail panels,  the drawer lets you compare details from more than one primary record. 
+Skuid offers a number of ways of interacting with related data.  One powerful way is using table drawers. This allows a clean list of records presented in a table, as well as immediate access to additional details about the primary record, and any related information. In addition, you can open more than one drawer at a time. Unlike pop-ups or sliding detail panels, drawers let you compare details from more than one primary record. 
 
-This page shows an account list, with a drawer that provides additional detail about the account - as well as a list of all related contacts for the account. Learn from this page and implement this technique in other Skuid pages.
+This page shows an account list, with a drawer that provides additional detail about the account - including a list of all related contacts for the account. Learn from this page and implement this technique in other Skuid pages.
 
 
 <img src="AccountContactDrawers.png" width="300"></img>
@@ -18,9 +18,9 @@ Here are the key areas to be reviewed.
 -  Model properties: The contact model has a filterable condition,  and does not load data on page load. 
 -  Table display properties: Drawers are enabled
 -  Drawer icon:  Click icon on left of table to expose Drawer Properties. 
--  Before Load Actions: This sequence of actions only runs the first time the drawer is opened.  You don't need to query for ACME's contacts on the second time the drawer is opened.  
+-  Before Load Actions: This sequence of actions only runs the first time the drawer is opened.  You don't need to query for ACME's contacts on the second time ACME's drawer is opened.  
 -  Query Model Action: Note the "Gets more" property.  The contacts model will grow as the user interacts with different accounts. Component context is used to put the right contacts with the right account. 
--  Configure the Drawer to explore the components inside.  Each component has a "Context" property that instructs Skuid to only show the data relevant to that account.  Especially look at this property on the table of contacts.
+-  Configure the Drawer to explore the components inside.  Each component has a "Context" property that instructs Skuid to only show the data relevant to that account. Look at this property on the table of contacts.
 
 ## Related Links
 

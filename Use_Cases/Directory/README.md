@@ -1,6 +1,6 @@
 # Photo Directory of Contacts in Skuid 
 
-A highly scannable view of records in individual cards. Usually contacts, but it really could be anything.
+A highly scannable view of records in individual cards. Usually contacts or leads, but it really could be anything.
 
 <img src="directory.png" width="300"></img>
 
@@ -9,8 +9,6 @@ A highly scannable view of records in individual cards. Usually contacts, but it
 - Data source: Uses default Salesforce data source.   
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
 - Page XML:  [Copy the XML from this page](Directory.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
-
-## Notes
 
 
 ## Related Links

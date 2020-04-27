@@ -35,6 +35,7 @@ Related Links:
    - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=ApprovalProcessActions&id=500U0000004ieGnIAI) (for Skuid Employees only)
 
 
+
  ### <a href="SkuidLicenseUse.xml" download="SkuidLicenseUse.xml">License Use - Six Months</a>  
 
 Summary report that shows logins by month for users that have license to the Skuid Package.  Report shows 6 months of login activity. 
@@ -47,6 +48,8 @@ Instructions:
 
 Related Links:  
    - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=SkuidLicenseUse) (for Skuid Employees only)
+
+
 
 
 ### <a href="SkuidLicenes_1Month.xml" download="SkuidLicenes_1Month.xml">License Use - One Month</a>  

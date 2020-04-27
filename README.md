@@ -5,19 +5,19 @@ Example Skuid pages to help get you started or learn how to do cool and complica
 ## Five basic categories of material here
 
 ### [Use Cases](/Use_Cases)
-Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work. 
+Samples of pages we see used commonly within business applications. Gain inspiration from our best-practice work. Install these pages in your org to see how they work.  Steal our work! 
 
 ### [Design Systems](/Design_Systems)
-Download and install reference design systems for your V2 pages. Make your pages beautiful. Every design system has a "style guide" page that shows how to construct pages with this system in effective and elegant ways. 
+Download and install completed design systems for your V2 pages. Make your pages beautiful. Every design system has a "style guide" page that shows how to construct pages with this system in effective and elegant ways. 
 
 ### [Advanced Salesforce techniques](/Salesforce_Advanced) 
-There are complicated features provided by Salesforce that provide TONS of value. Can they be used in Skuid? Approval process? Duplicate Management rules? YES! These pages provide examples for you to explore and include in your Skuid Applications.
+There are complicated features provided by Salesforce that provide TONS of value. How can they be used in Skuid? What about approval processes? Duplicate Management rules? YES! These pages provide examples for you to explore and include in your Skuid Applications.
 
 ### [Skuid Techniques](/Skuid_Techniques)
 We know its true - some of the coolest capabilities provided by Skuid are complicated to set up. These pages provide examples of things like complicated filters, action sequences, etc. 
 
 ### [Tools](/Tools)
-Pages used for license management. Understand who has access to Skuid and how much it is being used. 
+Pages used for license management. Understand who has access to Skuid within your Salesforce Org and how much it is being used. 
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:

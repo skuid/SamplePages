@@ -1,8 +1,8 @@
 # Salesforce Approval Processes
 
-Salesforce approval processes allow for very complicated workflows and multi-party transactions to be managed and tracked effectively. It's a powerful platform. Often Skuid builders want to expose approval history for a particular record and enable the relevant approval actions to facilitate these workflows.
+Salesforce approval processes allow for complicated workflows and multi-party transactions to be managed and tracked effectively. It's a powerful platform. Often Skuid builders want to expose approval history for a particular record and enable the relevant approval actions to facilitate these workflows.
 
-This sample page shows both of these in action. A chain of models is used to show approval history for a particular record along with the details about this approval. Salesforce data source actions enable the various approval actions. 
+This sample page shows both of these in action. A set of interrelated models is used to show approval history for a particular record along with the details about this approval. Salesforce data source actions enable the various approval actions. 
 
 <img src="ApprovalActions.png" width="300"></img>
 
@@ -32,7 +32,7 @@ This sample page shows both of these in action. A chain of models is used to sho
 
 
 <!--
-Rnh Notes. 
+Notes. 
 
 Approval and Reject actions:  If you immediately requery the approval process models,  the APEX required to perform the actions may not have completed.  Bug with components not listening to requery changes. 
 

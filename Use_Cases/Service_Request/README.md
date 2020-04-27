@@ -4,14 +4,14 @@ This page shows how Skuid can take a complicated data model and create very simp
 
 <img src="ServiceRequest.png" width="300"></img>
 
-In the standard CRM data model,  there is good reason to have records separated out into categories.  It makes sense to keep Accounts, Contacts, Opportunities, Cases and Tasks all in different objects.  But in the standard Lightning Experience, it is difficult to present an simple user interface while interacting with all these objects and records.  Each record in each objects is often a different popup or page. 
+In the standard CRM data model,  there is good reason to have records separated out into categories.  It makes sense to keep Accounts, Contacts, Opportunities, Cases and Tasks all in different objects.  But in the standard Lightning Experience, it is difficult to present an simple user interface while interacting with these different objects and records.  Each record in each object is often a different popup or page. 
 
-However, With Skuid you can make a very simple looking form,  that creates records in all these objects. 
+However, With Skuid you can make a very simple looking form, that creates records in all these objects in one page. 
 
 ## Instructions
 - Page API:  V2
 - Data source: Uses default Salesforce data source
-    - This page uses the following custom fields on the case object.  You will need to set these fields up for the optimal experience. 
+    - Custom fields on the case object.  You will need to create these custom fields or you will get some errors in the page. 
         - `Additional_Contact__c`:   A lookup to contact. 
         - `Service_Requested_For__c`: A date field. 
 
@@ -23,7 +23,7 @@ However, With Skuid you can make a very simple looking form,  that creates recor
 - Multiple models: Interacting with various objects throughout the Salesforce data model. Each configured to create a new row on page load. 
 - Ui-Only fields: Look at the contact model. An "Additional Contact" boolean is in that model as a UI-Only field. It is connected to model actions that trigger creation of a new row in the "Additional Contact" model. 
 - Seamless form UI: Notice that there are lots of forms on the page. Each is bound to a different model, but at run-time it appears to be a single - well designed - form. 
-- Conditional rendering by viewport: The Service Type field appears twice.  If a larger viewport - it shows as a button list.  If a smaller viewport - it shows as a pick-list.  (expand and narrow your browser window to see this in action.)
+- Conditional rendering by viewport: The Service Type field appears twice.  If a larger viewport - it shows as a button list.  If a smaller viewport - it shows as a picklist.  (expand and narrow your browser window to see this in action.)
 - Submit Request button: Notice the set of actions that saves information in each model,  moves reference data into the case and finishes with an elegant confirmation modal. 
 
 
@@ -32,5 +32,3 @@ This application is frequently used in the Skuid "Build an App Workshop" where u
 ## Related Links: 
 
 - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=ServiceRequests) (for Skuid Employees only)
-
-

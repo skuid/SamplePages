@@ -1,0 +1,111 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
+    <models>
+<model id="Accounts" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+    <fields>
+        <field id="RecordTypeId"/>
+        <field id="Name"/>
+        <field id="BillingCity"/>
+        <field id="BillingState"/>
+        <field id="BillingCountry"/>
+        <field id="ParentId"/>
+        <field id="Parent.Name"/>
+    </fields>
+    <conditions/>
+    <actions/>
+</model>
+<model id="Opps" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity">
+    <fields>
+        <field id="AccountId"/>
+        <field id="Account.Name"/>
+        <field id="Name"/>
+        <field id="Amount"/>
+        <field id="CloseDate"/>
+        <field id="StageName"/>
+    </fields>
+    <conditions/>
+    <actions/>
+</model>
+</models>
+    <components>
+<skuid__grid uniqueid="sk-1bB3-4735" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+    <divisions>
+        <division minWidth="100px" ratio="1">
+            <components/>
+        </division>
+        <division alignSelf="auto" minWidth="60%" ratio="1">
+            <components>
+                <skuid__table model="Accounts" uniqueid="sk-1bB6-5975" mode="read">
+                    <fields>
+                        <field id="Name" uniqueid="fi-1bB6-6466"/>
+                        <field id="BillingCity" uniqueid="fi-1bB6-6467"/>
+                        <field id="BillingState" uniqueid="fi-1bB6-6468"/>
+                        <field id="BillingCountry" uniqueid="fi-1bB6-6469"/>
+                        <field id="ParentId" uniqueid="fi-1bB6-6470"/>
+                    </fields>
+                    <filtering enableSearch="false" instantSearch="false"/>
+                    <rowActions/>
+                    <massActions>
+                        <action type="multi" label="Mass Update">
+                            <actions>
+                                <action type="massUpdate"/>
+                            </actions>
+                        </action>
+                    </massActions>
+                    <actions>
+                        <action type="multi" label="New Account">
+                            <actions>
+                                <action type="createRow" model="Accounts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+                            </actions>
+                        </action>
+                    </actions>
+                </skuid__table>
+                <skuid__table model="Opps" uniqueid="sk-1bB7-7006" mode="read">
+                    <fields>
+                        <field id="AccountId" uniqueid="fi-1bB8-7458"/>
+                        <field id="Account.Name" uniqueid="fi-1bB8-7459"/>
+                        <field id="Name" uniqueid="fi-1bB8-7460"/>
+                        <field id="Amount" horizontalAlignment="right" uniqueid="fi-1bB8-7461"/>
+                        <field id="CloseDate" uniqueid="fi-1bB8-7462"/>
+                        <field id="StageName" uniqueid="fi-1bB8-7463"/>
+                    </fields>
+                    <filtering enableSearch="false" instantSearch="false"/>
+                    <rowActions/>
+                    <massActions>
+                        <action type="multi" label="Mass Update">
+                            <actions>
+                                <action type="massUpdate"/>
+                            </actions>
+                        </action>
+                    </massActions>
+                    <styles>
+                        <spacing top="4"/>
+                    </styles>
+                    <actions>
+                        <action type="multi" label="New Opp">
+                            <actions>
+                                <action type="createRow" model="Opps" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+                            </actions>
+                        </action>
+                    </actions>
+                </skuid__table>
+            </components>
+        </division>
+        <division alignSelf="auto" minWidth="100px" ratio="1">
+            <components/>
+        </division>
+    </divisions>
+    <styles>
+        <spacing top="5"/>
+    </styles>
+</skuid__grid>
+</components>
+    <resources>
+        <labels/>
+        <javascript/>
+        <css/>
+        <actionsequences/>
+    </resources>
+    <styles>
+        <styleitem type="background" bgtype="none"/>
+    </styles>
+</skuid__page>
