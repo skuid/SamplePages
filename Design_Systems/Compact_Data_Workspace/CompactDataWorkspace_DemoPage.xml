@@ -1,4 +1,4 @@
-<skuid__page personalizationmode="client" showsidebar="true" showheader="true" theme="CompactDataWorkspace" globalfeedbackenabled="false">
+<skuid__page personalizationmode="client" showsidebar="false" showheader="false" theme="CompactDataWorkspace" globalfeedbackenabled="false">
 	<models>
 		<model id="AccountList" limit="20" query="true" datasource="salesforce" sobject="Account" async="false">
 			<fields>
@@ -17,7 +17,6 @@
 				<field id="NumberOfEmployees"/>
 				<field id="ParentId"/>
 				<field id="Parent.Name"/>
-				<field id="IsPartner"/>
 				<field id="ShippingAddress"/>
 				<field id="TickerSymbol"/>
 				<field id="LastModifiedDate"/>
@@ -54,7 +53,6 @@
 			</fields>
 			<conditions>
 				<condition type="fieldvalue" field="AccountId" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__AccountId" clientorserver="server" state="filterableoff" value=""/>
-				<condition type="fieldvalue" field="ContactId" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__ContactId" clientorserver="server" state="filterableoff" value=""/>
 				<condition type="fieldvalue" field="Amount" operator="gte" inactive="true" enclosevalueinquotes="false" name="__autofilter__nstart__Amount" clientorserver="server" state="filterableoff" value=""/>
 				<condition type="fieldvalue" field="Amount" operator="lte" inactive="true" enclosevalueinquotes="false" name="__autofilter__nend__Amount" clientorserver="server" state="filterableoff" value=""/>
 				<condition type="fieldvalue" field="CloseDate" operator="gte" inactive="true" enclosevalueinquotes="false" name="__autofilter__start__CloseDate" clientorserver="server" state="filterableoff" value=""/>
@@ -72,13 +70,10 @@
 				<field id="Name"/>
 				<field id="LastName"/>
 				<field id="Title"/>
-				<field id="HasOptedOutOfEmail"/>
-				<field id="DoNotCall"/>
 			</fields>
 			<conditions>
 				<condition type="fieldvalue" field="AccountId" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__AccountId" clientorserver="server" state="filterableoff" value=""/>
 				<condition type="fieldvalue" field="LeadSource" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__LeadSource" clientorserver="server" state="filterableoff" value=""/>
-				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="HasOptedOutOfEmail" clientorserver="server" operator="=" state="filterableoff" inactive="true" name="NotOptOutOfEmail"/>
 			</conditions>
 			<actions/>
 		</model>
@@ -112,7 +107,6 @@
 				<field id="Owner.Name"/>
 				<field id="ParentId"/>
 				<field id="Parent.Name"/>
-				<field id="IsPartner"/>
 				<field id="ShippingCity"/>
 				<field id="ShippingCountry"/>
 				<field id="ShippingLatitude"/>
@@ -158,7 +152,6 @@
 				<field id="Priority"/>
 				<field id="Subject"/>
 				<field id="Status"/>
-				<field id="Type"/>
 				<field id="IsClosed"/>
 			</fields>
 			<conditions/>
@@ -241,7 +234,6 @@
 														<skuid__filterSet model="OppList" uniqueid="sk-1G_p-20483" resetButtonBehavior="render" styleSettingsVariant="7cb3fb4e-72aa-4a75-8a98-4556a09ca90f" layout="vertical">
 															<filters>
 																<skuid__filter uniqueId="sk-1G_x-22802" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="AccountId" fieldtargetobjects="Account" conditionName="__autofilter__AccountId" label="Account"/>
-																<skuid__filter uniqueId="sk-1G_y-23882" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="ContactId" fieldtargetobjects="Contact" conditionName="__autofilter__ContactId" label="Contact"/>
 																<skuid__filter uniqueId="sk-1G__-24988" type="numericrange" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="Amount" startConditionName="__autofilter__nstart__Amount" endConditionName="__autofilter__nend__Amount" label="Amount"/>
 																<skuid__filter uniqueId="sk-1G-0-26412" type="daterange" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="CloseDate" startConditionName="__autofilter__start__CloseDate" endConditionName="__autofilter__end__CloseDate" label="Close Date"/>
 															</filters>
@@ -281,31 +273,6 @@
 							<components>
 								<skuid__wrapper uniqueid="sk-1qSu-21708" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
 									<components>
-										<skuid__chart model="AccountList" maintitle="Sample Chart Title" type="spline" uniqueid="sk-1qbO-77388" stacking="true" export="off">
-											<dataaxes>
-												<axis id="axis1"/>
-											</dataaxes>
-											<categoryaxes>
-												<axis id="categories" categorytype="field" field="CreatedDate" dategranularity="calmonth"/>
-											</categoryaxes>
-											<serieslist>
-												<series valuefield="Id" splittype="field" aggfunction="count" splitfield="Industry"/>
-											</serieslist>
-											<colors/>
-											<legend layout="horizontal" halign="center" valign="bottom"/>
-											<allowedtypes>
-												<type>line</type>
-												<type>spline</type>
-												<type>area</type>
-												<type>areaspline</type>
-												<type>column</type>
-												<type>bar</type>
-											</allowedtypes>
-											<renderConditions logictype="and">
-												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true"/>
-											</renderConditions>
-											<styleVariantConditions/>
-										</skuid__chart>
 										<skuid__accordion uniqueid="sk-1qVC-34957" styleSettingsVariant="490af5db-8792-4e19-ba71-42a8377f7de4" iconStyle="separate" icon="sk-webicon-material-icons:remove" iconClose="sk-webicon-material-icons:add" iconOnRight="true">
 											<sections>
 												<section title="Overview">
@@ -424,10 +391,10 @@
 																					</items>
 																				</column>
 																				<column fillRatio="1">
-						<items>
-							<item fieldId="BillingState" displayType="field" displayStyle="secondary"/>
-						</items>
-					</column>
+																					<items>
+																						<item fieldId="BillingState" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
 																				<column fillRatio="1">
 																					<items>
 																						<item fieldId="Type" displayType="field" displayStyle="secondary"/>
@@ -437,952 +404,934 @@
 																					<items>
 																						<item fieldId="Owner.Name" displayType="field" displayStyle="secondary"/>
 																					</items>
-																					</column>
-					
-				
-					
-				</columns>
-																					<rowActions>
-																						<action type="multi" icon="sk-webicon-material-icons:add">
-																							<tooltip position="top" text="Create New" compact="true"/>
-																							<actions>
-																								<action type="toggleMenu">
-																									<optionGroups>
-																										<optionGroup>
-																											<options>
-																												<option label="New Opportunity"/>
-																												<option label="New Contact"/>
-																											</options>
-																										</optionGroup>
-																									</optionGroups>
-																								</action>
-																							</actions>
+																				</column>
+																			</columns>
+																			<rowActions>
+																				<action type="multi" icon="sk-webicon-material-icons:add">
+																					<tooltip position="top" text="Create New" compact="true"/>
+																					<actions>
+																						<action type="toggleMenu">
+																							<optionGroups>
+																								<optionGroup>
+																									<options>
+																										<option label="New Opportunity"/>
+																										<option label="New Contact"/>
+																									</options>
+																								</optionGroup>
+																							</optionGroups>
+																						</action>
+																					</actions>
+																					<renderConditions logictype="and"/>
+																				</action>
+																				<action type="multi" icon="sk-webicon-material-icons:equalizer">
+																					<actions/>
+																					<tooltip position="top" text="Show Summary" compact="true"/>
+																				</action>
+																			</rowActions>
+																			<massActions/>
+																			<filtering enableSearch="false"/>
+																			<interactions>
+																				<interaction type="tap">
+																					<action type="setCondition" model="AccountDetail" valuesource="fieldvalue" condition="Id" value="{{Id}}"/>
+																					<action type="requeryModel" model="AccountDetail" behavior="standard"/>
+																					<action type="showModal">
+																						<skuid__modal title="Editing: {{Name}}" width="640px">
+																							<components>
+																								<skuid__form showErrorsInline="true" model="AccountDetail" uniqueid="sk-1r3M-63242" mode="edit">
+																									<sections>
+																										<section showHeading="true" title="Basic Info">
+																											<rows>
+																												<row>
+																													<fields>
+																														<skuid__field id="Name"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="BillingState"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Industry"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Description"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="OwnerId"/>
+																													</fields>
+																												</row>
+																											</rows>
+																										</section>
+																										<section title="Additional Details">
+																											<rows>
+																												<row>
+																													<fields>
+																														<skuid__field id="Phone"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Rating"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Site"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="AccountSource"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Type"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="AnnualRevenue"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="NumberOfEmployees"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="Industry"/>
+																													</fields>
+																												</row>
+																												<row>
+																													<fields>
+																														<skuid__field id="ParentId"/>
+																													</fields>
+																												</row>
+																											</rows>
+																										</section>
+																									</sections>
+																								</skuid__form>
+																							</components>
+																							<buttons>
+																								<skuid__button label="Save" uniqueId="sk-1r3e-73325" styleSettingsVariant="primary">
+																									<actions/>
+																									<tooltip position="top"/>
+																								</skuid__button>
+																								<skuid__button label="Cancel" uniqueId="sk-1r3f-73919"/>
+																							</buttons>
+																						</skuid__modal>
+																					</action>
+																				</interaction>
+																			</interactions>
+																		</skuid__list>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:edit">
+																	<components>
+																		<skuid__table allowColumnFreezing="dragDropAndModal" model="AccountList" uniqueid="sk-1GNl-25126" mode="read" pageSize="25" numFrozenColumns="1" adaptiveColumns="false" allowColumnOrdering="true" allowColumnHiding="true">
+																			<fields>
+																				<field id="Name" uniqueid="fi-1GNl-25845" redirectType="none" hideable="trueShowByDefault" clipText="true" columnWidth="240px">
+																					<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																					<enableConditions/>
+																				</field>
+																				<field id="Industry" uniqueid="fi-1GON-38500"/>
+																				<field id="Type" uniqueid="fi-1GQZ-48384"/>
+																				<field id="Owner.Name" label="Owner" uniqueid="fi-1GRC-56466"/>
+																				<field id="NumberOfEmployees" horizontalAlignment="right" uniqueid="fi-1HKG-35127" hideable="trueShowByDefault" label="Size"/>
+																				<field id="LastModifiedDate" uniqueid="fi-1HKG-35128" hideable="trueShowByDefault" label="Updated"/>
+																				<field id="BillingState" hideable="trueShowByDefault"/>
+																				<field id="Site"/>
+																			</fields>
+																			<filtering enableSearch="false"/>
+																			<rowActions/>
+																			<massActions/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__table>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="View_Control_UI" uniqueid="sk-1VrJ-19849" mode="edit">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row>
+																							<fields>
+																								<skuid__field id="TimeFiltersForDashboard" label=" " showHelp="false" displayAs="BUTTON_GROUP"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																			<styles>
+																				<spacing bottom="2"/>
+																			</styles>
+																		</skuid__form>
+																		<skuid__grid uniqueid="sk-1VrQ-23636" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="3">
+																			<divisions>
+																				<division ratio="1" alignSelf="auto" minWidth="240px">
+																					<components>
+																						<skuid__chart model="AccountList" maintitle="Account Growth" type="line" uniqueid="sk-1VrU-25586" export="off" height="240px">
+																							<dataaxes>
+																								<axis id="axis1" title="No of New Accounts"/>
+																							</dataaxes>
+																							<categoryaxes>
+																								<axis id="categories" categorytype="field" field="CreatedDate" dategranularity="calmonth" fillvals="true"/>
+																							</categoryaxes>
+																							<serieslist>
+																								<series valuefield="Id" splittype="none" aggfunction="count" categoryField="CreatedDate"/>
+																							</serieslist>
+																							<colors/>
+																							<legend layout="off" halign="center" valign="bottom"/>
+																							<styles>
+																								<spacing/>
+																							</styles>
 																							<renderConditions logictype="and"/>
-																						</action>
-																						<action type="multi" icon="sk-webicon-material-icons:equalizer">
-																							<actions/>
-																							<tooltip position="top" text="Show Summary" compact="true"/>
-																						</action>
-																					</rowActions>
-																					<massActions/>
-																					<filtering enableSearch="false"/>
-																					<interactions>
-																						<interaction type="tap">
-																							<action type="setCondition" model="AccountDetail" valuesource="fieldvalue" condition="Id" value="{{Id}}"/>
-																							<action type="requeryModel" model="AccountDetail" behavior="standard"/>
-																							<action type="showModal">
-																								<skuid__modal title="Editing: {{Name}}" width="640px">
+																							<styleVariantConditions/>
+																						</skuid__chart>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="240px" ratio="3">
+																					<components>
+																						<skuid__grid uniqueid="sk-1VrT-24852" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5" rowGutter="1.5">
+																							<divisions>
+																								<division minWidth="144px" ratio="1" alignSelf="auto">
 																									<components>
-																										<skuid__form showErrorsInline="true" model="AccountDetail" uniqueid="sk-1r3M-63242" mode="edit">
-																											<sections>
-																												<section showHeading="true" title="Basic Info">
-																													<rows>
-																														<row>
-																															<fields>
-																																<skuid__field id="Name"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="BillingState"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Industry"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Description"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="OwnerId"/>
-																															</fields>
-																														</row>
-																													</rows>
-																												</section>
-																												<section title="Additional Details">
-																													<rows>
-																														<row>
-																															<fields>
-																																<skuid__field id="Phone"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Rating"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Site"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="AccountSource"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Type"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="AnnualRevenue"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="NumberOfEmployees"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="Industry"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="ParentId"/>
-																															</fields>
-																														</row>
-																														<row>
-																															<fields>
-																																<skuid__field id="IsPartner"/>
-																															</fields>
-																														</row>
-																													</rows>
-																												</section>
-																											</sections>
-																										</skuid__form>
+																										<skuid__wrapper uniqueid="sk-1WYq-24299" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
+																											<components>
+																												<skuid__text contents="Retention Rate" uniqueid="sk-1WYq-24300" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																												<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WYq-24301" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																												<skuid__grid uniqueid="sk-1WYq-24302" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="90%" uniqueid="sk-1WYq-24303" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="0">
+																															<components>
+																																<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WYq-24304">
+																																	<groups>
+																																		<skuid__buttonGroup>
+																																			<buttons>
+																																				<skuid__button uniqueId="sk-1WYq-24308" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
+																																			</buttons>
+																																		</skuid__buttonGroup>
+																																	</groups>
+																																</skuid__buttonSet>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																												<skuid__grid uniqueid="sk-1WYq-24305" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="Target:" uniqueid="sk-1WYq-24306" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="1">
+																															<components>
+																																<skuid__text contents="80%" uniqueid="sk-1WYq-24307">
+																																	<styles>
+																																		<spacing/>
+																																	</styles>
+																																</skuid__text>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																											</components>
+																											<background/>
+																										</skuid__wrapper>
 																									</components>
-																									<buttons>
-																										<skuid__button label="Save" uniqueId="sk-1r3e-73325" styleSettingsVariant="primary">
-																											<actions/>
-																											<tooltip position="top"/>
-																										</skuid__button>
-																										<skuid__button label="Cancel" uniqueId="sk-1r3f-73919"/>
-																									</buttons>
-																								</skuid__modal>
-																							</action>
-																						</interaction>
-																					</interactions>
-																				</skuid__list>
-																			</components>
-																		</skuid__tabPanel>
-																		<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:edit">
+																								</division>
+																								<division alignSelf="auto" minWidth="144px" ratio="1">
+																									<components>
+																										<skuid__wrapper uniqueid="sk-1Vs5-42891" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
+																											<components>
+																												<skuid__text contents="Churn Rate" uniqueid="sk-1Vs5-43597" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																												<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1VsU-51191" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																												<skuid__grid uniqueid="sk-1VsZ-53288" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="90%" uniqueid="sk-1VsK-45941" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="0">
+																															<components>
+																																<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1Vsb-55091">
+																																	<groups>
+																																		<skuid__buttonGroup>
+																																			<buttons>
+																																				<skuid__button uniqueId="sk-1Vsb-55090" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
+																																			</buttons>
+																																		</skuid__buttonGroup>
+																																	</groups>
+																																</skuid__buttonSet>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																												<skuid__grid uniqueid="sk-1WXw-23345" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="Target:" uniqueid="sk-1VsQ-48026" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="1">
+																															<components>
+																																<skuid__text contents="80%" uniqueid="sk-1WXx-25124">
+																																	<styles>
+																																		<spacing/>
+																																	</styles>
+																																</skuid__text>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																											</components>
+																											<background/>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																										</skuid__wrapper>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="144px" ratio="1">
+																									<components>
+																										<skuid__wrapper uniqueid="sk-1WZd-24810" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
+																											<components>
+																												<skuid__text contents="Support Requests" uniqueid="sk-1WZd-24811" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																												<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WZd-24812" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																												<skuid__grid uniqueid="sk-1WZd-24813" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="90%" uniqueid="sk-1WZd-24814" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="0">
+																															<components>
+																																<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WZd-24815">
+																																	<groups>
+																																		<skuid__buttonGroup>
+																																			<buttons>
+																																				<skuid__button uniqueId="sk-1WZd-24819" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
+																																			</buttons>
+																																		</skuid__buttonGroup>
+																																	</groups>
+																																</skuid__buttonSet>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																												<skuid__grid uniqueid="sk-1WZd-24816" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="Target:" uniqueid="sk-1WZd-24817" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="1">
+																															<components>
+																																<skuid__text contents="80%" uniqueid="sk-1WZd-24818">
+																																	<styles>
+																																		<spacing/>
+																																	</styles>
+																																</skuid__text>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																											</components>
+																											<background/>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																										</skuid__wrapper>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="144px" ratio="1">
+																									<components>
+																										<skuid__wrapper uniqueid="sk-1WZX-22337" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
+																											<components>
+																												<skuid__text contents="Satisfaction Score" uniqueid="sk-1WZX-22338" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																												<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WZX-22339" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																												<skuid__grid uniqueid="sk-1WZX-22340" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="3.8" uniqueid="sk-1WZX-22341" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="0">
+																															<components>
+																																<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WZX-22342">
+																																	<groups>
+																																		<skuid__buttonGroup>
+																																			<buttons>
+																																				<skuid__button uniqueId="sk-1WZX-22346" icon="sk-webicon-ink:arrow-down" styleSettingsVariant="8abdc8bb-85e4-48e8-96a8-89705fe7c8f8"/>
+																																			</buttons>
+																																		</skuid__buttonGroup>
+																																	</groups>
+																																</skuid__buttonSet>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																												<skuid__grid uniqueid="sk-1WZX-22343" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
+																													<divisions>
+																														<division minWidth="0px" ratio="0" alignSelf="auto">
+																															<components>
+																																<skuid__text contents="Target:" uniqueid="sk-1WZX-22344" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
+																															</components>
+																														</division>
+																														<division alignSelf="auto" minWidth="0px" ratio="1">
+																															<components>
+																																<skuid__text contents="4.5" uniqueid="sk-1WZX-22345">
+																																	<styles>
+																																		<spacing/>
+																																	</styles>
+																																</skuid__text>
+																															</components>
+																														</division>
+																													</divisions>
+																												</skuid__grid>
+																											</components>
+																											<background/>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																										</skuid__wrapper>
+																									</components>
+																								</division>
+																							</divisions>
+																						</skuid__grid>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																</skuid__tabPanel>
+															</tabs>
+														</skuid__tabSet>
+													</components>
+												</section>
+												<section title="Opportunities">
+													<components>
+														<skuid__tabSet uniqueid="sk-1HG4-102763">
+															<tabs>
+																<skuid__tabPanel name="List" icon="sk-webicon-material-icons:view_list">
+																	<components>
+																		<skuid__list model="OppList" uniqueid="sk-1MPj-17482">
+																			<columns>
+																				<column fillRatio="1">
+																					<items>
+																						<item fieldId="Account.Name" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
+																				<column>
+																					<items>
+																						<item fieldId="Amount" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
+																				<column>
+																					<items>
+																						<item fieldId="CloseDate" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
+																				<column>
+																					<items>
+																						<item fieldId="Type" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
+																				<column fillRatio="1">
+																					<items>
+																						<item fieldId="StageName" displayType="field" displayStyle="secondary"/>
+																					</items>
+																				</column>
+																			</columns>
+																			<rowActions/>
+																			<massActions/>
+																			<filtering enableSearch="false"/>
+																		</skuid__list>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:mode_edit">
+																	<components>
+																		<skuid__table allowColumnFreezing="dragDropAndModal" model="OppList" uniqueid="sk-1GNn-26985" mode="read" pageSize="25" numFrozenColumns="1" allowColumnOrdering="true" allowColumnHiding="true" sortOnClient="true" adaptiveColumns="false">
+																			<fields>
+																				<field id="Name" hideable="trueShowByDefault" clipText="true" uniqueid="fi-1HRf-45594" columnWidth="240px"/>
+																				<field id="Account.Name" uniqueid="fi-1GNn-27990" label="Account" hideable="trueShowByDefault" clipText="true"/>
+																				<field id="Amount" horizontalAlignment="right" uniqueid="fi-1GNn-27991" hideable="trueShowByDefault"/>
+																				<field id="CloseDate" uniqueid="fi-1GNn-27992" hideable="trueShowByDefault"/>
+																				<field id="Type" uniqueid="fi-1GNn-27994" hideable="trueShowByDefault" label="Type"/>
+																				<field id="Owner.Name" uniqueid="fi-1GNn-27996" label="Owner"/>
+																				<field id="StageName" uniqueid="fi-1HRf-45595"/>
+																				<field id="ForecastCategoryName" uniqueid="fi-1HRf-45596" hideable="trueShowByDefault" label="Forecast"/>
+																			</fields>
+																			<filtering enableSearch="false"/>
+																			<rowActions/>
+																			<massActions/>
+																		</skuid__table>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
+																	<components/>
+																</skuid__tabPanel>
+															</tabs>
+														</skuid__tabSet>
+													</components>
+												</section>
+												<section title="Contacts">
+													<components>
+														<skuid__tabSet uniqueid="sk-1HGt-110758">
+															<tabs>
+																<skuid__tabPanel name="List" icon="sk-webicon-material-icons:view_list">
+																	<components/>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:mode_edit">
+																	<components>
+																		<skuid__table allowColumnFreezing="dragDrop" model="ContactList" uniqueid="sk-1GNq-29010" mode="read" pageSize="25">
+																			<fields>
+																				<field id="Name" uniqueid="fi-1GNq-30019"/>
+																				<field id="Account.Name" uniqueid="fi-1GNq-30015"/>
+																				<field id="Email" uniqueid="fi-1GNq-30017"/>
+																				<field id="Title" uniqueid="fi-1GNq-30021"/>
+																			</fields>
+																			<filtering enableSearch="false"/>
+																			<rowActions/>
+																			<massActions/>
+																		</skuid__table>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
+																	<components/>
+																</skuid__tabPanel>
+															</tabs>
+														</skuid__tabSet>
+													</components>
+												</section>
+											</sections>
+										</skuid__accordion>
+									</components>
+									<background color="#FCFCFC"/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1" maxWidth="320px">
+							<components>
+								<skuid__wrapper uniqueid="sk-1GMh-17883" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
+									<components>
+										<skuid__accordion uniqueid="sk-1HEo-95870" iconStyle="separate" icon="sk-webicon-material-icons:remove" iconClose="sk-webicon-material-icons:add" iconOnRight="true" sectionsInitiallyOpen="all" styleSettingsVariant="490af5db-8792-4e19-ba71-42a8377f7de4">
+											<sections>
+												<section title="Customer Support">
+													<components>
+														<skuid__deck model="SupportTickets" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-1Loy-16731" pageSize="5" setMaxWidth="auto" showLoadMore="false" showListHeader="false" showListFooter="false" showPageSizeSelect="false" resetPaginationOnQuery="false">
+															<components>
+																<skuid__grid uniqueid="sk-1LpU-25419" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0.5">
+																	<divisions>
+																		<division minWidth="0" ratio="0" alignSelf="auto">
 																			<components>
-																				<skuid__table allowColumnFreezing="dragDropAndModal" model="AccountList" uniqueid="sk-1GNl-25126" mode="read" pageSize="25" numFrozenColumns="1" adaptiveColumns="false" allowColumnOrdering="true" allowColumnHiding="true">
-																					<fields>
-																						<field id="Name" uniqueid="fi-1GNl-25845" redirectType="none" hideable="trueShowByDefault" clipText="true" columnWidth="240px">
-																							<renderConditions logictype="and" onhidedatabehavior="keep"/>
-																							<enableConditions/>
-																						</field>
-																						<field id="Industry" uniqueid="fi-1GON-38500"/>
-																						<field id="Type" uniqueid="fi-1GQZ-48384"/>
-																						<field id="Owner.Name" label="Owner" uniqueid="fi-1GRC-56466"/>
-																						<field id="NumberOfEmployees" horizontalAlignment="right" uniqueid="fi-1HKG-35127" hideable="trueShowByDefault" label="Size"/>
-																						<field id="LastModifiedDate" uniqueid="fi-1HKG-35128" hideable="trueShowByDefault" label="Updated"/>
-																						<field id="BillingState" hideable="trueShowByDefault"/>
-																						<field id="Site"/>
-																					</fields>
-																					<filtering enableSearch="false"/>
-																					<rowActions/>
-																					<massActions/>
+																				<skuid__wrapper uniqueid="sk-1L-G-13746" styleSettingsVariant="d0f824c2-097e-4553-91d1-0fbff5cc0ac6">
+																					<components>
+																						<skuid__text contents="{{Id}}" uniqueid="sk-1Lq7-27483" model="SupportTickets" styleSettingsVariant="a28aa112-f847-4f60-9be1-62c55af8d721">
+																							<renderConditions logictype="and"/>
+																							<styleVariantConditions/>
+																						</skuid__text>
+																					</components>
+																					<background/>
 																					<styles>
 																						<spacing/>
 																					</styles>
-																				</skuid__table>
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																				</skuid__wrapper>
 																			</components>
-																		</skuid__tabPanel>
-																		<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
+																		</division>
+																		<division alignSelf="auto" minWidth="0" ratio="0">
 																			<components>
-																				<skuid__form showErrorsInline="true" model="View_Control_UI" uniqueid="sk-1VrJ-19849" mode="edit">
-																					<sections>
-																						<section title="New Section" showHeading="false">
-																							<rows>
-																								<row>
-																									<fields>
-																										<skuid__field id="TimeFiltersForDashboard" label=" " showHelp="false" displayAs="BUTTON_GROUP"/>
-																									</fields>
-																								</row>
-																							</rows>
-																						</section>
-																					</sections>
+																				<skuid__wrapper uniqueid="sk-1L-I-15257" styleSettingsVariant="e4c9f9b6-9efe-493f-bd7a-53ee9843da9d">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;{{Type}}&lt;/div&gt;&#10;" uniqueid="sk-1LxR-33338" model="SupportTickets" styleSettingsVariant="small">
+																							<renderConditions logictype="and"/>
+																							<styleVariantConditions/>
+																						</skuid__text>
+																					</components>
+																					<background/>
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions>
+																						<rule logictype="and" styleSettingsVariantOverride="c544fa10-ef65-464d-b704-200d2fd73e0a">
+																							<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" field="Type" value="Troubleshoot"/>
+																						</rule>
+																					</styleVariantConditions>
+																					<interactions/>
 																					<styles>
-																						<spacing bottom="2"/>
+																						<spacing/>
 																					</styles>
-																				</skuid__form>
-																				<skuid__grid uniqueid="sk-1VrQ-23636" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="3">
-																					<divisions>
-																						<division ratio="1" alignSelf="auto" minWidth="240px">
-																							<components>
-																								<skuid__chart model="AccountList" maintitle="Account Growth" type="line" uniqueid="sk-1VrU-25586" export="off" height="240px">
-																									<dataaxes>
-																										<axis id="axis1" title="No of New Accounts"/>
-																									</dataaxes>
-																									<categoryaxes>
-																										<axis id="categories" categorytype="field" field="CreatedDate" dategranularity="calmonth" fillvals="true"/>
-																									</categoryaxes>
-																									<serieslist>
-																										<series valuefield="Id" splittype="none" aggfunction="count" categoryField="CreatedDate"/>
-																									</serieslist>
-																									<colors/>
-																									<legend layout="off" halign="center" valign="bottom"/>
-																									<styles>
-																										<spacing/>
-																									</styles>
-																									<renderConditions logictype="and"/>
-																									<styleVariantConditions/>
-																								</skuid__chart>
-																							</components>
-																						</division>
-																						<division alignSelf="auto" minWidth="240px" ratio="3">
-																							<components>
-																								<skuid__grid uniqueid="sk-1VrT-24852" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5" rowGutter="1.5">
-																									<divisions>
-																										<division minWidth="144px" ratio="1" alignSelf="auto">
-																											<components>
-																												<skuid__wrapper uniqueid="sk-1WYq-24299" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
-																													<components>
-																														<skuid__text contents="Retention Rate" uniqueid="sk-1WYq-24300" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
-																														<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WYq-24301" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																														<skuid__grid uniqueid="sk-1WYq-24302" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="90%" uniqueid="sk-1WYq-24303" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="0">
-																																	<components>
-																																		<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WYq-24304">
-																																			<groups>
-																																				<skuid__buttonGroup>
-																																					<buttons>
-																																						<skuid__button uniqueId="sk-1WYq-24308" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
-																																					</buttons>
-																																				</skuid__buttonGroup>
-																																			</groups>
-																																		</skuid__buttonSet>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																														<skuid__grid uniqueid="sk-1WYq-24305" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="Target:" uniqueid="sk-1WYq-24306" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="1">
-																																	<components>
-																																		<skuid__text contents="80%" uniqueid="sk-1WYq-24307">
-																																			<styles>
-																																				<spacing/>
-																																			</styles>
-																																		</skuid__text>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																													</components>
-																													<background/>
-																												</skuid__wrapper>
-																											</components>
-																										</division>
-																										<division alignSelf="auto" minWidth="144px" ratio="1">
-																											<components>
-																												<skuid__wrapper uniqueid="sk-1Vs5-42891" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
-																													<components>
-																														<skuid__text contents="Churn Rate" uniqueid="sk-1Vs5-43597" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
-																														<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1VsU-51191" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																														<skuid__grid uniqueid="sk-1VsZ-53288" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="90%" uniqueid="sk-1VsK-45941" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="0">
-																																	<components>
-																																		<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1Vsb-55091">
-																																			<groups>
-																																				<skuid__buttonGroup>
-																																					<buttons>
-																																						<skuid__button uniqueId="sk-1Vsb-55090" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
-																																					</buttons>
-																																				</skuid__buttonGroup>
-																																			</groups>
-																																		</skuid__buttonSet>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																														<skuid__grid uniqueid="sk-1WXw-23345" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="Target:" uniqueid="sk-1VsQ-48026" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="1">
-																																	<components>
-																																		<skuid__text contents="80%" uniqueid="sk-1WXx-25124">
-																																			<styles>
-																																				<spacing/>
-																																			</styles>
-																																		</skuid__text>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																													</components>
-																													<background/>
-																													<styles>
-																														<spacing/>
-																													</styles>
-																												</skuid__wrapper>
-																											</components>
-																										</division>
-																										<division alignSelf="auto" minWidth="144px" ratio="1">
-																											<components>
-																												<skuid__wrapper uniqueid="sk-1WZd-24810" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
-																													<components>
-																														<skuid__text contents="Support Requests" uniqueid="sk-1WZd-24811" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
-																														<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WZd-24812" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																														<skuid__grid uniqueid="sk-1WZd-24813" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="90%" uniqueid="sk-1WZd-24814" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="0">
-																																	<components>
-																																		<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WZd-24815">
-																																			<groups>
-																																				<skuid__buttonGroup>
-																																					<buttons>
-																																						<skuid__button uniqueId="sk-1WZd-24819" icon="sk-webicon-ink:arrow-up" styleSettingsVariant="8edbf8c7-309a-4fad-9df4-bad587ae7850"/>
-																																					</buttons>
-																																				</skuid__buttonGroup>
-																																			</groups>
-																																		</skuid__buttonSet>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																														<skuid__grid uniqueid="sk-1WZd-24816" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="Target:" uniqueid="sk-1WZd-24817" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="1">
-																																	<components>
-																																		<skuid__text contents="80%" uniqueid="sk-1WZd-24818">
-																																			<styles>
-																																				<spacing/>
-																																			</styles>
-																																		</skuid__text>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																													</components>
-																													<background/>
-																													<styles>
-																														<spacing/>
-																													</styles>
-																												</skuid__wrapper>
-																											</components>
-																										</division>
-																										<division alignSelf="auto" minWidth="144px" ratio="1">
-																											<components>
-																												<skuid__wrapper uniqueid="sk-1WZX-22337" styleSettingsVariant="bc2b678e-5923-4c6a-a69d-bac2c95db7ea">
-																													<components>
-																														<skuid__text contents="Satisfaction Score" uniqueid="sk-1WZX-22338" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
-																														<skuid__text contents="{{TimeFiltersForDashboard}}" uniqueid="sk-1WZX-22339" model="View_Control_UI" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																														<skuid__grid uniqueid="sk-1WZX-22340" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="3.8" uniqueid="sk-1WZX-22341" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="0">
-																																	<components>
-																																		<skuid__buttonSet model="View_Control_UI" uniqueid="sk-1WZX-22342">
-																																			<groups>
-																																				<skuid__buttonGroup>
-																																					<buttons>
-																																						<skuid__button uniqueId="sk-1WZX-22346" icon="sk-webicon-ink:arrow-down" styleSettingsVariant="8abdc8bb-85e4-48e8-96a8-89705fe7c8f8"/>
-																																					</buttons>
-																																				</skuid__buttonGroup>
-																																			</groups>
-																																		</skuid__buttonSet>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																														<skuid__grid uniqueid="sk-1WZX-22343" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
-																															<divisions>
-																																<division minWidth="0px" ratio="0" alignSelf="auto">
-																																	<components>
-																																		<skuid__text contents="Target:" uniqueid="sk-1WZX-22344" styleSettingsVariant="c9dd1d41-b102-4ff9-a1d9-c28d44c72b5b"/>
-																																	</components>
-																																</division>
-																																<division alignSelf="auto" minWidth="0px" ratio="1">
-																																	<components>
-																																		<skuid__text contents="4.5" uniqueid="sk-1WZX-22345">
-																																			<styles>
-																																				<spacing/>
-																																			</styles>
-																																		</skuid__text>
-																																	</components>
-																																</division>
-																															</divisions>
-																														</skuid__grid>
-																													</components>
-																													<background/>
-																													<styles>
-																														<spacing/>
-																													</styles>
-																												</skuid__wrapper>
-																											</components>
-																										</division>
-																									</divisions>
-																								</skuid__grid>
-																							</components>
-																						</division>
-																					</divisions>
-																				</skuid__grid>
+																				</skuid__wrapper>
 																			</components>
-																		</skuid__tabPanel>
-																	</tabs>
-																</skuid__tabSet>
-															</components>
-														</section>
-														<section title="Opportunities">
-															<components>
-																<skuid__tabSet uniqueid="sk-1HG4-102763">
-																	<tabs>
-																		<skuid__tabPanel name="List" icon="sk-webicon-material-icons:view_list">
+																		</division>
+																		<division alignSelf="auto" minWidth="0px" ratio="1">
+																			<components/>
+																		</division>
+																		<division alignSelf="auto" minWidth="0px" ratio="0">
 																			<components>
-																				<skuid__list model="OppList" uniqueid="sk-1MPj-17482">
-																					<columns>
-																						<column fillRatio="1">
-						<items>
-							
-						<item fieldId="Account.Name" displayType="field" displayStyle="secondary"/>
-																						</items>
-					</column>
-					
-				
-					<column>
-						<items>
-							<item fieldId="Amount" displayType="field" displayStyle="secondary"/>
-						</items>
-					</column>
-				
-					<column>
-						<items>
-							<item fieldId="CloseDate" displayType="field" displayStyle="secondary"/>
-						</items>
-					</column>
-				
-					
-				
-					<column>
-						<items>
-							<item fieldId="Type" displayType="field" displayStyle="secondary"/>
-						</items>
-					</column>
-				
-					<column fillRatio="1">
-						<items>
-							<item fieldId="StageName" displayType="field" displayStyle="secondary"/>
-						</items>
-					</column>
-				
-					
-				</columns>
-																						<rowActions/>
-																						<massActions/>
-																						<filtering enableSearch="false"/>
-																					</skuid__list>
-																				</components>
-																			</skuid__tabPanel>
-																			<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:mode_edit">
-																				<components>
-																					<skuid__table allowColumnFreezing="dragDropAndModal" model="OppList" uniqueid="sk-1GNn-26985" mode="read" pageSize="25" numFrozenColumns="1" allowColumnOrdering="true" allowColumnHiding="true" sortOnClient="true" adaptiveColumns="false">
-																						<fields>
-																							<field id="Name" hideable="trueShowByDefault" clipText="true" uniqueid="fi-1HRf-45594" columnWidth="240px"/>
-																							<field id="Account.Name" uniqueid="fi-1GNn-27990" label="Account" hideable="trueShowByDefault" clipText="true"/>
-																							<field id="Amount" horizontalAlignment="right" uniqueid="fi-1GNn-27991" hideable="trueShowByDefault"/>
-																							<field id="CloseDate" uniqueid="fi-1GNn-27992" hideable="trueShowByDefault"/>
-																							<field id="Type" uniqueid="fi-1GNn-27994" hideable="trueShowByDefault" label="Type"/>
-																							<field id="Owner.Name" uniqueid="fi-1GNn-27996" label="Owner"/>
-																							<field id="StageName" uniqueid="fi-1HRf-45595"/>
-																							<field id="ForecastCategoryName" uniqueid="fi-1HRf-45596" hideable="trueShowByDefault" label="Forecast"/>
-																						</fields>
-																						<filtering enableSearch="false"/>
-																						<rowActions/>
-																						<massActions/>
-																					</skuid__table>
-																				</components>
-																			</skuid__tabPanel>
-																			<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
-																				<components/>
-																			</skuid__tabPanel>
-																		</tabs>
-																	</skuid__tabSet>
-																</components>
-															</section>
-															<section title="Contacts">
-																<components>
-																	<skuid__tabSet uniqueid="sk-1HGt-110758">
-																		<tabs>
-																			<skuid__tabPanel name="List" icon="sk-webicon-material-icons:view_list">
-																				<components/>
-																			</skuid__tabPanel>
-																			<skuid__tabPanel name="Table" icon="sk-webicon-material-icons:mode_edit">
-																				<components>
-																					<skuid__table allowColumnFreezing="dragDrop" model="ContactList" uniqueid="sk-1GNq-29010" mode="read" pageSize="25">
-																						<fields>
-																							<field id="Name" uniqueid="fi-1GNq-30019"/>
-																							<field id="Account.Name" uniqueid="fi-1GNq-30015"/>
-																							<field id="Email" uniqueid="fi-1GNq-30017"/>
-																							<field id="Title" uniqueid="fi-1GNq-30021"/>
-																						</fields>
-																						<filtering enableSearch="false"/>
-																						<rowActions/>
-																						<massActions/>
-																					</skuid__table>
-																				</components>
-																			</skuid__tabPanel>
-																			<skuid__tabPanel name="Summary" icon="sk-webicon-material-icons:equalizer">
-																				<components/>
-																			</skuid__tabPanel>
-																		</tabs>
-																	</skuid__tabSet>
-																</components>
-															</section>
-														</sections>
-													</skuid__accordion>
-												</components>
-												<background color="#FCFCFC"/>
-												<styles>
-													<spacing/>
-												</styles>
-											</skuid__wrapper>
-										</components>
-									</division>
-									<division alignSelf="auto" minWidth="100px" ratio="1" maxWidth="320px">
-										<components>
-											<skuid__wrapper uniqueid="sk-1GMh-17883" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
-												<components>
-													<skuid__accordion uniqueid="sk-1HEo-95870" iconStyle="separate" icon="sk-webicon-material-icons:remove" iconClose="sk-webicon-material-icons:add" iconOnRight="true" sectionsInitiallyOpen="all" styleSettingsVariant="490af5db-8792-4e19-ba71-42a8377f7de4">
-														<sections>
-															<section title="Customer Support">
-																<components>
-																	<skuid__deck model="SupportTickets" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-1Loy-16731" pageSize="5" setMaxWidth="auto" showLoadMore="false" showListHeader="false" showListFooter="false" showPageSizeSelect="false" resetPaginationOnQuery="false">
-																		<components>
-																			<skuid__grid uniqueid="sk-1LpU-25419" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0.5">
-																				<divisions>
-																					<division minWidth="0" ratio="0" alignSelf="auto">
-																						<components>
-																							<skuid__wrapper uniqueid="sk-1L-G-13746" styleSettingsVariant="d0f824c2-097e-4553-91d1-0fbff5cc0ac6">
-																								<components>
-																									<skuid__text contents="{{Id}}" uniqueid="sk-1Lq7-27483" model="SupportTickets" styleSettingsVariant="a28aa112-f847-4f60-9be1-62c55af8d721">
-																										<renderConditions logictype="and"/>
-																										<styleVariantConditions/>
-																									</skuid__text>
-																								</components>
-																								<background/>
-																								<styles>
-																									<spacing/>
-																								</styles>
-																								<renderConditions logictype="and"/>
-																								<styleVariantConditions/>
-																							</skuid__wrapper>
-																						</components>
-																					</division>
-																					<division alignSelf="auto" minWidth="0" ratio="0">
-																						<components>
-																							<skuid__wrapper uniqueid="sk-1L-I-15257" styleSettingsVariant="e4c9f9b6-9efe-493f-bd7a-53ee9843da9d">
-																								<components>
-																									<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;{{Type}}&lt;/div&gt;&#10;" uniqueid="sk-1LxR-33338" model="SupportTickets" styleSettingsVariant="small">
-																										<renderConditions logictype="and"/>
-																										<styleVariantConditions/>
-																									</skuid__text>
-																								</components>
-																								<background/>
-																								<renderConditions logictype="and"/>
-																								<styleVariantConditions>
-																									<rule logictype="and" styleSettingsVariantOverride="c544fa10-ef65-464d-b704-200d2fd73e0a">
-																										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" field="Type" value="Troubleshoot"/>
-																									</rule>
-																								</styleVariantConditions>
-																								<interactions/>
-																								<styles>
-																									<spacing/>
-																								</styles>
-																							</skuid__wrapper>
-																						</components>
-																					</division>
-																					<division alignSelf="auto" minWidth="0px" ratio="1">
-																						<components/>
-																					</division>
-																					<division alignSelf="auto" minWidth="0px" ratio="0">
-																						<components>
-																							<skuid__text contents="{{Priority}}&#10;" uniqueid="sk-1LyM-53682" model="SupportTickets" styleSettingsVariant="487c68cc-fb46-418f-90ff-6b1d1388598f">
-																								<renderConditions logictype="and"/>
-																								<styleVariantConditions>
-																									<rule logictype="and" styleSettingsVariantOverride="c016345e-8e71-48c9-a022-ea6677805c8a">
-																										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Priority" value="P2"/>
-																									</rule>
-																									<rule logictype="and" styleSettingsVariantOverride="c2b4d527-85e5-4cc6-8f73-1d1387290646">
-																										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Priority" value="P1"/>
-																									</rule>
-																								</styleVariantConditions>
-																								<styles>
-																									<spacing right="0.5"/>
-																								</styles>
-																							</skuid__text>
-																						</components>
-																					</division>
-																				</divisions>
-																				<styles>
-																					<spacing bottom="0.5"/>
-																				</styles>
-																			</skuid__grid>
-																			<skuid__grid uniqueid="sk-1M0s-33630" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
-																				<divisions>
-																					<division minWidth="100px" ratio="1" alignSelf="auto">
-																						<components>
-																							<skuid__text contents="{{Name}}" uniqueid="sk-1LyM-53681" model="SupportTickets">
-																								<styles>
-																									<spacing top="0.5"/>
-																								</styles>
-																							</skuid__text>
-																						</components>
-																					</division>
-																					<division alignSelf="auto" minWidth="0px" ratio="0">
-																						<components>
-																							<skuid__buttonSet uniqueid="sk-1L-R-21242" model="SupportTickets">
-																								<groups>
-																									<skuid__buttonGroup>
-																										<buttons>
-																											<skuid__button uniqueId="sk-1L-R-21241" icon="sk-webicon-material-icons:check" styleSettingsVariant="93736588-e2de-43a3-8f0c-412c66b8094f">
-																												<tooltip position="top"/>
-																												<renderConditions logictype="and"/>
-																												<enableConditions logictype="and"/>
-																												<styleVariantConditions>
-																													<rule logictype="and" styleSettingsVariantOverride="4e394c5b-dbaf-4c01-8a91-bc06697bc316">
-																														<condition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="SupportTickets" sourcetype="fieldvalue" field="Completed" value="true"/>
-																													</rule>
-																												</styleVariantConditions>
-																												<actions>
-																													<action type="updateRow" fieldmodel="SupportTickets" affectedrows="context">
-																														<updates>
-																															<update valuesource="formula" field="Completed" enclosevalueinquotes="false" value="true">
-																																<formula>NOT({{Completed}})</formula>
-																															</update>
-																														</updates>
-																													</action>
-																												</actions>
-																											</skuid__button>
-																										</buttons>
-																									</skuid__buttonGroup>
-																								</groups>
-																								<conditions>
-																									<condition type="contextrow" field="Id" mergefield="Id"/>
-																								</conditions>
-																							</skuid__buttonSet>
-																						</components>
-																					</division>
-																				</divisions>
-																			</skuid__grid>
-																		</components>
-																		<filtering enableSearch="false"/>
-																		<styles>
-																			<spacing/>
-																		</styles>
-																	</skuid__deck>
-																</components>
-															</section>
-															<section title="Upcoming Tasks">
-																<components>
-																	<skuid__deck model="TaskList" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-1HXm-34269" pageSize="5" showPageSizeSelect="false" resetPaginationOnQuery="false" showListHeader="false" showListFooter="false" showLoadMore="false" setMaxWidth="auto">
-																		<components>
-																			<skuid__grid uniqueid="sk-1MIm-47180" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
-																				<divisions>
-																					<division minWidth="100px" ratio="1" alignSelf="auto">
-																						<components>
-																							<skuid__text contents="{{{Subject}}}" uniqueid="sk-1HYB-38704" model="TaskList"/>
-																						</components>
-																					</division>
-																					<division alignSelf="auto" minWidth="0px" ratio="0">
-																						<components>
-																							<skuid__wrapper uniqueid="sk-1MOk-101789" styleSettingsVariant="d0f824c2-097e-4553-91d1-0fbff5cc0ac6">
-																								<components>
-																									<skuid__text contents="{{Type}}" uniqueid="sk-1MOp-102882" model="TaskList" styleSettingsVariant="a28aa112-f847-4f60-9be1-62c55af8d721">
-																										<renderConditions logictype="and"/>
-																										<styleVariantConditions/>
-																									</skuid__text>
-																								</components>
-																								<background/>
-																								<styles>
-																									<spacing/>
-																								</styles>
-																							</skuid__wrapper>
-																						</components>
-																					</division>
-																					<division alignSelf="auto" minWidth="0px" ratio="0">
-																						<components>
-																							<skuid__buttonSet uniqueid="sk-1MIn-48824" model="TaskList">
-																								<groups>
-																									<skuid__buttonGroup>
-																										<buttons>
-																											<skuid__button uniqueId="sk-1MIn-48823" styleSettingsVariant="93736588-e2de-43a3-8f0c-412c66b8094f" icon="sk-webicon-material-icons:check">
-																												<renderConditions logictype="and"/>
-																												<enableConditions logictype="and"/>
-																												<styleVariantConditions>
-																													<rule logictype="and" styleSettingsVariantOverride="4e394c5b-dbaf-4c01-8a91-bc06697bc316">
-																														<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskList" sourcetype="fieldvalue" field="Status" fieldtargetobjects="Task" value="Completed"/>
-																													</rule>
-																												</styleVariantConditions>
-																												<actions>
-																													<action type="updateRow" fieldmodel="TaskList" affectedrows="context">
-																														<updates>
-																															<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Completed">
-																																<formula>NOT({{IsClosed}})</formula>
-																															</update>
-																														</updates>
-																													</action>
-																												</actions>
-																												<hotkeys/>
-																												<tooltip position="top"/>
-																											</skuid__button>
-																										</buttons>
-																									</skuid__buttonGroup>
-																								</groups>
-																								<renderConditions logictype="and"/>
-																								<styleVariantConditions/>
-																								<conditions>
-																									<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
-																								</conditions>
-																							</skuid__buttonSet>
-																						</components>
-																					</division>
-																				</divisions>
-																			</skuid__grid>
-																		</components>
-																		<filtering enableSearch="false"/>
-																		<styles>
-																			<spacing/>
-																		</styles>
-																	</skuid__deck>
-																</components>
-															</section>
-															<section title="Preview Text Stylings">
-																<components>
-																	<skuid__wrapper uniqueid="sk-1q-v-33753">
-																		<components>
-																			<skuid__header title="Default Heading" uniqueid="sk-1q-b-29918">
-																				<styles>
-																					<spacing bottom="1.5"/>
-																				</styles>
-																			</skuid__header>
-																			<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit. &lt;strong&gt;Morbi in facilisis libero, eget congue lorem.&lt;/strong&gt; Nulla non ligula eget erat aliquam lacinia a eget felis. &lt;a href=&quot;http://example&quot;&gt;Nulla turpis sapien, ultricies sit amet suscipit quis, auctor id risus. &lt;/a&gt;" uniqueid="sk-1q-d-31726">
-																				<styles>
-																					<spacing bottom="1.5"/>
-																				</styles>
-																			</skuid__text>
-																			<skuid__text contents="Large Text" uniqueid="sk-1r00-39227" styleSettingsVariant="large">
-																				<styles>
-																					<spacing bottom="1.5"/>
-																				</styles>
-																			</skuid__text>
-																			<skuid__text contents="Increased Text" uniqueid="sk-1r05-41683" styleSettingsVariant="increased">
-																				<styles>
-																					<spacing bottom="1.5" styleSettingsVariant="increased"/>
-																				</styles>
-																			</skuid__text>
-																			<skuid__text contents="Medium Text" uniqueid="sk-1r0i-51996" styleSettingsVariant="medium">
-																				<styles>
-																					<spacing bottom="1.5"/>
-																				</styles>
-																			</skuid__text>
-																			<skuid__text contents="Default Text" uniqueid="sk-1r0p-55676">
-																				<styles>
-																					<spacing bottom="1.5"/>
-																				</styles>
-																			</skuid__text>
-																			<skuid__text contents="Small Text" uniqueid="sk-1r07-43570" styleSettingsVariant="small"/>
-																		</components>
-																		<styles>
-																			<spacing top="2" bottom="2" left="2" right="2"/>
-																		</styles>
-																		<background/>
-																	</skuid__wrapper>
-																</components>
-															</section>
-														</sections>
-													</skuid__accordion>
-												</components>
-												<background/>
-												<styles>
-													<spacing/>
-												</styles>
-											</skuid__wrapper>
-										</components>
-										<renderConditions logictype="and">
-											<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="View_Control_UI" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showTasksEvents" value="true"/>
-										</renderConditions>
-									</division>
-								</divisions>
-								<styles>
-									<spacing left="4" right="4" top="4" bottom="4"/>
-								</styles>
-								<renderConditions logictype="and"/>
-								<styleVariantConditions/>
-							</skuid__grid>
-						</components>
-						<styles>
-							<spacing/>
-						</styles>
-						<background/>
-					</skuid__wrapper>
-				</components>
-				<resources>
-					<labels/>
-					<javascript/>
-					<css/>
-					<actionsequences>
-						<actionsequence id="9cadac28-6171-490c-a61f-737d12ec7ffb" label="Open View Config Panel" type="reusable">
-							<actions>
-								<action type="openSlidingPanel" openbehavior="open">
-									<skuid__slidingPanel uniqueid="sk-1HHX-117832" size="240px" origin="right" closeOnPageClick="true">
-										<components>
-											<skuid__wrapper uniqueid="sk-1HIT-136409">
-												<components>
-													<skuid__header model="View_Control_UI" title="Settings" uniqueid="sk-1HIW-137506" titleTag="h3">
-														<styles>
-															<spacing bottom="3"/>
-														</styles>
-														<skuid__buttonSet>
-															<groups>
-																<skuid__buttonGroup>
-																	<buttons>
-																		<skuid__button uniqueId="sk-1HJ7-11071" styleSettingsVariant="borderless" icon="sk-webicon-ink:close">
-																			<tooltip position="top"/>
-																			<actions>
-																				<action type="closeSlidingPanel" closebehavior="close"/>
-																			</actions>
-																		</skuid__button>
-																	</buttons>
-																</skuid__buttonGroup>
-															</groups>
-														</skuid__buttonSet>
-													</skuid__header>
-													<skuid__form showErrorsInline="true" model="View_Control_UI" uniqueid="sk-1HHk-121174" mode="edit">
-														<sections>
-															<section title="New Section" showHeading="false">
-																<rows>
-																	<row>
-																		<fields>
-																			<skuid__field id="showTasksEvents" displayAs="SWITCH"/>
-																		</fields>
-																	</row>
-																	<row>
-																		<fields>
-																			<skuid__field id="showFilters" displayAs="SWITCH"/>
-																		</fields>
-																	</row>
-																</rows>
-															</section>
-														</sections>
-													</skuid__form>
-												</components>
-												<styles>
-													<spacing bottom="2" left="2" right="2" top="1.5"/>
-												</styles>
-												<background/>
-											</skuid__wrapper>
-										</components>
-									</skuid__slidingPanel>
-								</action>
-							</actions>
-							<description/>
-						</actionsequence>
-						<actionsequence id="f375b3e4-4632-4a3d-81a7-a1103b3c8e53" label="Populate dummy data" type="event-triggered" event-scope="component" event-name="page.rendered">
-							<description/>
-							<actions>
-								<action type="action-sequence" action-sequence-id="7a3b22e3-56a5-4d78-a6a2-091d46cb37c1"/>
-							</actions>
-						</actionsequence>
-						<actionsequence id="7a3b22e3-56a5-4d78-a6a2-091d46cb37c1" label="Populate Customer Support Ticket Data" type="reusable">
-							<description/>
-							<actions>
-								<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-									<defaults>
-										<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-123"/>
-										<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Contact shipping party regarding order #212"/>
-										<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P2"/>
-										<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
-										<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
-									</defaults>
-								</action>
-								<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-									<defaults>
-										<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-456"/>
-										<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Product stopped working"/>
-										<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P1"/>
-										<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
-									</defaults>
-								</action>
-								<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-									<defaults>
-										<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-789"/>
-										<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Respond to customer review"/>
-										<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
-										<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Improvement"/>
-										<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
-									</defaults>
-								</action>
-								<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-									<defaults>
-										<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-594"/>
-										<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Product defect from supplier"/>
-										<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
-										<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
-									</defaults>
-								</action>
-								<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
-									<defaults>
-										<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-555"/>
-										<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Improve shipment speed"/>
-										<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
-										<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Improvement"/>
-										<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
-									</defaults>
-								</action>
-							</actions>
-						</actionsequence>
-					</actionsequences>
-				</resources>
-				<styles>
-					<styleitem type="background" bgtype="none"/>
-				</styles>
-				<background/>
-			</skuid__page>
+																				<skuid__text contents="{{Priority}}&#10;" uniqueid="sk-1LyM-53682" model="SupportTickets" styleSettingsVariant="487c68cc-fb46-418f-90ff-6b1d1388598f">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions>
+																						<rule logictype="and" styleSettingsVariantOverride="c016345e-8e71-48c9-a022-ea6677805c8a">
+																							<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Priority" value="P2"/>
+																						</rule>
+																						<rule logictype="and" styleSettingsVariantOverride="c2b4d527-85e5-4cc6-8f73-1d1387290646">
+																							<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="SupportTickets" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Priority" value="P1"/>
+																						</rule>
+																					</styleVariantConditions>
+																					<styles>
+																						<spacing right="0.5"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																	</divisions>
+																	<styles>
+																		<spacing bottom="0.5"/>
+																	</styles>
+																</skuid__grid>
+																<skuid__grid uniqueid="sk-1M0s-33630" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+																	<divisions>
+																		<division minWidth="100px" ratio="1" alignSelf="auto">
+																			<components>
+																				<skuid__text contents="{{Name}}" uniqueid="sk-1LyM-53681" model="SupportTickets">
+																					<styles>
+																						<spacing top="0.5"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="0px" ratio="0">
+																			<components>
+																				<skuid__buttonSet uniqueid="sk-1L-R-21242" model="SupportTickets">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button uniqueId="sk-1L-R-21241" icon="sk-webicon-material-icons:check" styleSettingsVariant="93736588-e2de-43a3-8f0c-412c66b8094f">
+																									<tooltip position="top"/>
+																									<renderConditions logictype="and"/>
+																									<enableConditions logictype="and"/>
+																									<styleVariantConditions>
+																										<rule logictype="and" styleSettingsVariantOverride="4e394c5b-dbaf-4c01-8a91-bc06697bc316">
+																											<condition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="SupportTickets" sourcetype="fieldvalue" field="Completed" value="true"/>
+																										</rule>
+																									</styleVariantConditions>
+																									<actions>
+																										<action type="updateRow" fieldmodel="SupportTickets" affectedrows="context">
+																											<updates>
+																												<update valuesource="formula" field="Completed" enclosevalueinquotes="false" value="true">
+																													<formula>NOT({{Completed}})</formula>
+																												</update>
+																											</updates>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<conditions>
+																						<condition type="contextrow" field="Id" mergefield="Id"/>
+																					</conditions>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																</skuid__grid>
+															</components>
+															<filtering enableSearch="false"/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__deck>
+													</components>
+												</section>
+												<section title="Upcoming Tasks">
+													<components>
+														<skuid__deck model="TaskList" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-1HXm-34269" pageSize="5" showPageSizeSelect="false" resetPaginationOnQuery="false" showListHeader="false" showListFooter="false" showLoadMore="false" setMaxWidth="auto">
+															<components>
+																<skuid__grid uniqueid="sk-1MIm-47180" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																	<divisions>
+																		<division minWidth="100px" ratio="1" alignSelf="auto">
+																			<components>
+																				<skuid__text contents="{{{Subject}}}" uniqueid="sk-1HYB-38704" model="TaskList"/>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="0px" ratio="0">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-1MOk-101789" styleSettingsVariant="d0f824c2-097e-4553-91d1-0fbff5cc0ac6">
+																					<components>
+																						<skuid__text contents="{{Type}}" uniqueid="sk-1MOp-102882" model="TaskList" styleSettingsVariant="a28aa112-f847-4f60-9be1-62c55af8d721">
+																							<renderConditions logictype="and"/>
+																							<styleVariantConditions/>
+																						</skuid__text>
+																					</components>
+																					<background/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="0px" ratio="0">
+																			<components>
+																				<skuid__buttonSet uniqueid="sk-1MIn-48824" model="TaskList">
+																					<groups>
+																						<skuid__buttonGroup>
+																							<buttons>
+																								<skuid__button uniqueId="sk-1MIn-48823" styleSettingsVariant="93736588-e2de-43a3-8f0c-412c66b8094f" icon="sk-webicon-material-icons:check">
+																									<renderConditions logictype="and"/>
+																									<enableConditions logictype="and"/>
+																									<styleVariantConditions>
+																										<rule logictype="and" styleSettingsVariantOverride="4e394c5b-dbaf-4c01-8a91-bc06697bc316">
+																											<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskList" sourcetype="fieldvalue" field="Status" fieldtargetobjects="Task" value="Completed"/>
+																										</rule>
+																									</styleVariantConditions>
+																									<actions>
+																										<action type="updateRow" fieldmodel="TaskList" affectedrows="context">
+																											<updates>
+																												<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Completed">
+																													<formula>NOT({{IsClosed}})</formula>
+																												</update>
+																											</updates>
+																										</action>
+																									</actions>
+																									<hotkeys/>
+																									<tooltip position="top"/>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<conditions>
+																						<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																					</conditions>
+																				</skuid__buttonSet>
+																			</components>
+																		</division>
+																	</divisions>
+																</skuid__grid>
+															</components>
+															<filtering enableSearch="false"/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__deck>
+													</components>
+												</section>
+												<section title="Preview Text Stylings">
+													<components>
+														<skuid__wrapper uniqueid="sk-1q-v-33753">
+															<components>
+																<skuid__header title="Default Heading" uniqueid="sk-1q-b-29918">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__header>
+																<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit. &lt;strong&gt;Morbi in facilisis libero, eget congue lorem.&lt;/strong&gt; Nulla non ligula eget erat aliquam lacinia a eget felis. &lt;a href=&quot;http://example&quot;&gt;Nulla turpis sapien, ultricies sit amet suscipit quis, auctor id risus. &lt;/a&gt;" uniqueid="sk-1q-d-31726">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="Large Text" uniqueid="sk-1r00-39227" styleSettingsVariant="large">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="Increased Text" uniqueid="sk-1r05-41683" styleSettingsVariant="increased">
+																	<styles>
+																		<spacing bottom="1.5" styleSettingsVariant="increased"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="Medium Text" uniqueid="sk-1r0i-51996" styleSettingsVariant="medium">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="Default Text" uniqueid="sk-1r0p-55676">
+																	<styles>
+																		<spacing bottom="1.5"/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="Small Text" uniqueid="sk-1r07-43570" styleSettingsVariant="small"/>
+															</components>
+															<styles>
+																<spacing top="2" bottom="2" left="2" right="2"/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</section>
+											</sections>
+										</skuid__accordion>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+							<renderConditions logictype="and">
+								<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="View_Control_UI" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showTasksEvents" value="true"/>
+							</renderConditions>
+						</division>
+					</divisions>
+					<styles>
+						<spacing left="4" right="4" top="4" bottom="4"/>
+					</styles>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+				</skuid__grid>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences>
+			<actionsequence id="9cadac28-6171-490c-a61f-737d12ec7ffb" label="Open View Config Panel" type="reusable">
+				<actions>
+					<action type="openSlidingPanel" openbehavior="open">
+						<skuid__slidingPanel uniqueid="sk-1HHX-117832" size="240px" origin="right" closeOnPageClick="true">
+							<components>
+								<skuid__wrapper uniqueid="sk-1HIT-136409">
+									<components>
+										<skuid__header model="View_Control_UI" title="Settings" uniqueid="sk-1HIW-137506" titleTag="h3">
+											<styles>
+												<spacing bottom="3"/>
+											</styles>
+											<skuid__buttonSet>
+												<groups>
+													<skuid__buttonGroup>
+														<buttons>
+															<skuid__button uniqueId="sk-1HJ7-11071" styleSettingsVariant="borderless" icon="sk-webicon-ink:close">
+																<tooltip position="top"/>
+																<actions>
+																	<action type="closeSlidingPanel" closebehavior="close"/>
+																</actions>
+															</skuid__button>
+														</buttons>
+													</skuid__buttonGroup>
+												</groups>
+											</skuid__buttonSet>
+										</skuid__header>
+										<skuid__form showErrorsInline="true" model="View_Control_UI" uniqueid="sk-1HHk-121174" mode="edit">
+											<sections>
+												<section title="New Section" showHeading="false">
+													<rows>
+														<row>
+															<fields>
+																<skuid__field id="showTasksEvents" displayAs="SWITCH"/>
+															</fields>
+														</row>
+														<row>
+															<fields>
+																<skuid__field id="showFilters" displayAs="SWITCH"/>
+															</fields>
+														</row>
+													</rows>
+												</section>
+											</sections>
+										</skuid__form>
+									</components>
+									<styles>
+										<spacing bottom="2" left="2" right="2" top="1.5"/>
+									</styles>
+									<background/>
+								</skuid__wrapper>
+							</components>
+						</skuid__slidingPanel>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+			<actionsequence id="f375b3e4-4632-4a3d-81a7-a1103b3c8e53" label="Populate dummy data" type="event-triggered" event-scope="component" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="action-sequence" action-sequence-id="7a3b22e3-56a5-4d78-a6a2-091d46cb37c1"/>
+				</actions>
+			</actionsequence>
+			<actionsequence id="7a3b22e3-56a5-4d78-a6a2-091d46cb37c1" label="Populate Customer Support Ticket Data" type="reusable">
+				<description/>
+				<actions>
+					<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-123"/>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Contact shipping party regarding order #212"/>
+							<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P2"/>
+							<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
+							<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-456"/>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Product stopped working"/>
+							<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P1"/>
+							<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-789"/>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Respond to customer review"/>
+							<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
+							<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Improvement"/>
+							<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-594"/>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Product defect from supplier"/>
+							<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
+							<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Troubleshoot"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="SupportTickets" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="Id" enclosevalueinquotes="true" value="ACME-555"/>
+							<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="Improve shipment speed"/>
+							<default valuesource="fieldvalue" field="Priority" enclosevalueinquotes="true" value="P3"/>
+							<default valuesource="fieldvalue" field="Type" enclosevalueinquotes="true" value="Improvement"/>
+							<default valuesource="fieldvalue" field="Completed" enclosevalueinquotes="false" value="true"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background/>
+</skuid__page>

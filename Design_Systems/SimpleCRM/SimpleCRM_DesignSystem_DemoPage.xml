@@ -1,4 +1,4 @@
-<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="SimpleCRM">
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="SimpleCRM">
 	<models>
 		<model id="Accounts" limit="20" query="true" createrowifnonefound="true" datasource="salesforce" sobject="Account">
 			<fields>
@@ -72,7 +72,6 @@
 				<field id="ReminderDateTime"/>
 				<field id="Status"/>
 				<field id="Subject"/>
-				<field id="Type"/>
 				<field id="OwnerId"/>
 				<field id="Owner.Name"/>
 				<field id="due_date_ui" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
@@ -87,7 +86,6 @@
 		</model>
 		<model id="Events" limit="4" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Event">
 			<fields>
-				<field id="RecordTypeId"/>
 				<field id="Id"/>
 				<field id="Description"/>
 				<field id="EndDateTime"/>
@@ -95,7 +93,6 @@
 				<field id="What.Name"/>
 				<field id="Subject"/>
 				<field id="StartDateTime"/>
-				<field id="Type"/>
 				<field id="date" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
 					<formula>DAY_NAME_SHORT({{StartDateTime}})</formula>
 				</field>
