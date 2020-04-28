@@ -1,0 +1,509 @@
+<skuid__page personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="To Do List">
+	<models>
+		<model id="Tasks" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Task">
+			<fields>
+				<field id="Description" accessible="true" createable="true" defaultvalue="" displaytype="TEXTAREA" editable="true" filterable="true" groupable="true" label="Description" required="false" sortable="true" rel="description__rel" relationshipname="description__rel" ogdisplaytype="TEXT"/>
+				<field id="ActivityDate" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="Due Date/Time" required="false" sortable="true" rel="due_date_time__rel" relationshipname="due_date_time__rel"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="Priority" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Priority" required="false" sortable="true" rel="priority__rel" relationshipname="priority__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Medium"/>
+				<field id="RecurrenceType" accessible="true" createable="true" defaultvalue="" displaytype="BOOLEAN" editable="true" filterable="false" groupable="true" required="false" sortable="true" rel="recurring_activity__rel" relationshipname="recurring_activity__rel" label="Task is recurring"/>
+				<field id="AccountId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="related_account" required="false" sortable="true" rel="related_account__rel" relationshipname="related_account__rel" ref="accounts" datasource="salesforce"/>
+				<field id="ReminderDateTime" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="remind_at" required="false" sortable="true" rel="remind_at__rel" relationshipname="remind_at__rel"/>
+				<field id="Status" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Status" required="false" sortable="true" rel="status__rel" relationshipname="status__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT"/>
+				<field id="Subject" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Subject" required="true" sortable="true" rel="subject__rel" relationshipname="subject__rel"/>
+				<field id="OwnerId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="task_owner" required="true" sortable="true" rel="task_owner__rel" relationshipname="task_owner__rel" ref="users" datasource="salesforce"/>
+				<field id="Type" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Type" required="true" sortable="true" rel="type__rel" relationshipname="type__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="Account.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" field="Type" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Type" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="Priority" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Priority" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="Status" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Status" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="ActivityDate" operator="gte" inactive="true" enclosevalueinquotes="false" name="__autofilter__start__ActivityDate" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="ActivityDate" operator="lte" inactive="true" enclosevalueinquotes="false" name="__autofilter__end__ActivityDate" state="filterableoff" value=""/>
+				<condition type="blank" value="null" field="Subject" operator="!=" enclosevalueinquotes="false"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="uiOnly" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field displaytype="PICKLIST" id="list-label" label="List Label" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Today">
+					<picklistentries>
+						<entry value="Overdue" label="Overdue"/>
+						<entry value="Today" label="Today"/>
+						<entry value="Next 7 Days" label="Next 7 Days"/>
+					</picklistentries>
+				</field>
+				<field id="today" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" defaultvaluetype="fieldvalue">
+					<formula>FORMAT_DATE( "D M d", TODAY() )</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__grid uniqueid="sk-L2b-362" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1" rowGutter="0" fullWidth="true">
+			<divisions>
+				<division minWidth="100px" ratio="1" alignSelf="auto" maxWidth="240px">
+					<components>
+						<skuid__filterSet model="Tasks" uniqueid="sk-L34-427" styleSettingsVariant="ca859aad-2bda-4679-adac-cff921b31ee4" layout="vertical">
+							<filters>
+								<skuid__filter uniqueId="sk-3D0x-5409" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="Type" conditionName="__autofilter__Type" filterOffOptionLabel="All Types" label="Type"/>
+								<skuid__filter uniqueId="sk-3D0x-5527" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="Priority" conditionName="__autofilter__Priority" filterOffOptionLabel="All Priorities" label="Priority"/>
+								<skuid__filter uniqueId="sk-3D0y-5628" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="Status" conditionName="__autofilter__Status" label="Status" filterOffOptionLabel="All Status"/>
+								<skuid__filter uniqueId="sk-3D1B-6412" type="daterange" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="ActivityDate" startConditionName="__autofilter__start__ActivityDate" endConditionName="__autofilter__end__ActivityDate" label="Due Date"/>
+							</filters>
+							<filtering enableSearch="true" instantSearch="false" instantFilters="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search tasks"/>
+							<renderConditions logictype="and"/>
+							<styles>
+								<spacing top="2"/>
+							</styles>
+						</skuid__filterSet>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="3">
+					<components>
+						<skuid__wrapper uniqueid="sk-L2o-384" maxHeight="custom" maxHeightCustom="94vh">
+							<components>
+								<skuid__wrapper uniqueid="sk-L2p-392">
+									<components>
+										<skuid__grid uniqueid="sk-L2r-400" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="0" rowGutter="0">
+											<divisions>
+												<division alignSelf="auto">
+													<components>
+														<skuid__text uniqueid="sk-L30-419" model="uiOnly" contents="{{list-label}}" styleSettingsVariant="increased">
+															<styles>
+																<spacing right="1.5"/>
+															</styles>
+														</skuid__text>
+													</components>
+												</division>
+												<division alignSelf="auto" ratio="1">
+													<components>
+														<skuid__wrapper uniqueid="sk-L38-430">
+															<components>
+																<skuid__text uniqueid="sk-L32-423" model="uiOnly" contents="{{today}}" styleSettingsVariant="aceea022-8b08-4ffe-84b2-9e6181ab67dd">
+																	<styles>
+																		<spacing right="2"/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<background/>
+															<renderConditions logictype="and"/>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="0px" ratio="1">
+													<components>
+														<skuid__buttonSet model="Tasks" uniqueid="sk-2WXB-5147">
+															<groups>
+																<skuid__buttonGroup>
+																	<buttons/>
+																</skuid__buttonGroup>
+																<skuid__buttonGroup>
+																	<buttons>
+																		<skuid__button label="New" uniqueid="sk-2WcE-8291" icon="sk-webicon-material-icons:add">
+																			<actions>
+																				<action type="action-sequence" action-sequence-id="c58ea929-cae6-4893-928c-6b103d8d3e1a"/>
+																			</actions>
+																			<renderConditions logictype="and">
+																				<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Tasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="false" operator="="/>
+																			</renderConditions>
+																			<enableConditions/>
+																			<styleVariantConditions/>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+														</skuid__buttonSet>
+													</components>
+													<renderConditions logictype="and"/>
+												</division>
+											</divisions>
+											<styles>
+												<spacing top="4" bottom="4" left="4" right="4"/>
+											</styles>
+											<interactions/>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__grid>
+										<skuid__list model="Tasks" uniqueid="sk-L2y-411" pageSize="25" showListHeader="true" showListFooter="true" styleSettingsVariant="9f18b7c5-8f74-4ead-9895-6dc8d335bf11">
+											<columns>
+												<column uniqueid="sk-LJm-539" fillRatio="2">
+													<items>
+														<item displayType="template" template="{{Subject}}{{#Type}} • {{Type}}{{/Type}}" uniqueid="sk-LJq-546"/>
+														<item fieldId="Description" uniqueid="sk-LJ--562" displayType="field"/>
+													</items>
+												</column>
+												<column uniqueid="sk-LKj-612">
+													<items>
+														<item fieldId="Status" uniqueid="sk-LKj-611" displayType="field"/>
+														<item fieldId="Priority" uniqueid="sk-LKl-616" displayType="field"/>
+													</items>
+												</column>
+												<column uniqueid="sk-LKo-621">
+													<items>
+														<item fieldId="ActivityDate" uniqueid="sk-LKo-620" displayType="template" template="Due {{ActivityDate}}"/>
+													</items>
+												</column>
+											</columns>
+											<rowActions>
+												<action type="multi" uniqueid="sk-2WRX-1646" icon="sk-webicon-material-icons:check_circle">
+													<actions>
+														<action type="updateRow" fieldmodel="Tasks" affectedrows="context">
+															<updates>
+																<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Completed"/>
+															</updates>
+														</action>
+														<action type="save">
+															<models>
+																<model>Tasks</model>
+															</models>
+														</action>
+													</actions>
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" operator="!=" enclosevalueinquotes="true" fieldmodel="Tasks" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Status" value="Completed" fieldtargetobjects="Task"/>
+													</renderConditions>
+												</action>
+												<action type="multi" uniqueid="sk-2foW-1611" icon="sk-webicon-material-icons:cancel">
+													<actions>
+														<action type="updateRow" fieldmodel="Tasks" affectedrows="context">
+															<updates>
+																<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Not Started"/>
+															</updates>
+														</action>
+														<action type="save">
+															<models>
+																<model>Tasks</model>
+															</models>
+														</action>
+													</actions>
+													<renderConditions logictype="and">
+														<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Tasks" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Status" value="Completed"/>
+													</renderConditions>
+												</action>
+											</rowActions>
+											<massActions>
+												<action type="multi" label="Mark as Complete" uniqueid="sk-2WWO-4874" icon="sk-webicon-material-icons:done_all">
+													<actions>
+														<action type="updateRow" fieldmodel="Tasks" affectedrows="context">
+															<updates>
+																<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Completed"/>
+															</updates>
+														</action>
+														<action type="showToast" duration="4" styleSettingsVariant="default" message="Tasks completed! Well done!"/>
+													</actions>
+												</action>
+											</massActions>
+											<filtering enableSearch="false" instantSearch="false"/>
+											<filters/>
+											<interactions>
+												<interaction type="tap">
+													<action type="showModal">
+														<skuid__modal width="560px" title="{{Subject}}" buttonsJustification="center">
+															<components>
+																<skuid__form showErrorsInline="true" model="Tasks" uniqueid="sk-2WRg-1765" mode="edit">
+																	<sections>
+																		<section title="" showHeading="false">
+																			<rows>
+																				<row uniqueid="sk-2WRk-1802">
+																					<fields>
+																						<skuid__field id="Subject" uniqueid="sk-2WRk-1801"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1806">
+																					<fields>
+																						<skuid__field id="Type" uniqueid="sk-2WRk-1805"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1810">
+																					<fields>
+																						<skuid__field id="Priority" uniqueid="sk-2WRk-1809"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1814">
+																					<fields>
+																						<skuid__field id="ActivityDate" uniqueid="sk-2WRk-1813"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1818">
+																					<fields>
+																						<skuid__field id="Description" uniqueid="sk-2WRk-1817"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1822">
+																					<fields>
+																						<skuid__field id="ReminderDateTime" uniqueid="sk-2WRk-1821"/>
+																					</fields>
+																				</row>
+																				<row uniqueid="sk-2WRk-1826">
+																					<fields>
+																						<skuid__field id="Status" uniqueid="sk-2WRk-1825"/>
+																					</fields>
+																				</row>
+																			</rows>
+																		</section>
+																	</sections>
+																</skuid__form>
+															</components>
+															<afterCloseActions>
+																<action type="cancel">
+																	<models>
+																		<model>Tasks</model>
+																	</models>
+																</action>
+															</afterCloseActions>
+															<buttons>
+																<skuid__button label="Save" uniqueid="sk-2WRq-1894" styleSettingsVariant="primary">
+																	<actions>
+																		<action type="blockUI" message="Saving" subtext="Thanks for keeping things up to date!" timeout="2000" styleSettingsVariant="dark"/>
+																		<action type="save">
+																			<models>
+																				<model>Tasks</model>
+																			</models>
+																		</action>
+																		<action type="closeAllPopups"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Tasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																	</renderConditions>
+																	<enableConditions logictype="and"/>
+																</skuid__button>
+																<skuid__button label="Cancel" uniqueid="sk-2WRr-1901">
+																	<actions>
+																		<action type="cancel">
+																			<models>
+																				<model>Tasks</model>
+																			</models>
+																		</action>
+																		<action type="closeAllPopups"/>
+																	</actions>
+																	<renderConditions logictype="and">
+																		<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Tasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																	</renderConditions>
+																	<enableConditions logictype="and"/>
+																</skuid__button>
+																<skuid__button label="Done" uniqueid="sk-2WRr-1908" styleSettingsVariant="primary">
+																	<renderConditions logictype="and">
+																		<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Tasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="false" operator="="/>
+																	</renderConditions>
+																	<enableConditions/>
+																	<actions>
+																		<action type="closeAllPopups"/>
+																	</actions>
+																</skuid__button>
+															</buttons>
+														</skuid__modal>
+													</action>
+												</interaction>
+											</interactions>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="Tasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+											</renderConditions>
+											<styles>
+												<spacing bottom="4" left="4" right="4"/>
+											</styles>
+										</skuid__list>
+									</components>
+									<background/>
+									<styles>
+										<spacing top="1"/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+							<background type="color" color="white"/>
+							<renderConditions logictype="and"/>
+							<styles>
+								<spacing bottom="1.5" left="2"/>
+							</styles>
+							<interactions/>
+						</skuid__wrapper>
+					</components>
+					<renderConditions logictype="and"/>
+				</division>
+			</divisions>
+			<interactions/>
+			<renderConditions logictype="and"/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences uniqueid="sk-K-t-240">
+			<actionsequence id="2c074992-3d04-4ab1-9523-53fa19230a10" label="FilterType" type="reusable" uniqueid="sk-2QX5-2748">
+				<actions>
+					<action type="setCondition" model="Tasks" condition="type" value="{{$Input.Type}}"/>
+					<action type="requeryModels" behavior="standard">
+						<models>
+							<model>Tasks</model>
+						</models>
+					</action>
+				</actions>
+				<inputs>
+					<input type="value" name="Type"/>
+				</inputs>
+			</actionsequence>
+			<actionsequence id="c58ea929-cae6-4893-928c-6b103d8d3e1a" label="Create New Task" uniqueid="sk-2WdS-9892" type="reusable">
+				<actions>
+					<action type="createRow" model="Tasks" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="status" enclosevalueinquotes="true" value="Not Started"/>
+						</defaults>
+					</action>
+					<action type="showModal" duration="4" styleSettingsVariant="default">
+						<skuid__modal title="Edit New Task" width="560px" buttonsJustification="right">
+							<components>
+								<skuid__form showErrorsInline="true" model="Tasks" uniqueid="sk-2Wbu-7919" mode="edit">
+									<sections>
+										<section title="" showHeading="false">
+											<rows>
+												<row uniqueid="sk-2Wb_-7962">
+													<fields>
+														<skuid__field id="Subject" uniqueid="sk-2Wb_-7961"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2Wb_-7966">
+													<fields>
+														<skuid__field id="Type" uniqueid="sk-2Wb_-7965"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2Wb_-7970">
+													<fields>
+														<skuid__field id="Priority" uniqueid="sk-2Wb_-7969"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2Wb_-7974">
+													<fields>
+														<skuid__field id="Description" uniqueid="sk-2Wb_-7973"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2Wb_-7978">
+													<fields>
+														<skuid__field id="ActivityDate" uniqueid="sk-2Wb_-7977"/>
+													</fields>
+												</row>
+												<row uniqueid="sk-2Wb_-7982">
+													<fields>
+														<skuid__field id="ReminderDateTime" uniqueid="sk-2Wb_-7981"/>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+							<buttons>
+								<skuid__button label="Cancel" uniqueid="sk-2Wbg-7728">
+									<actions>
+										<action type="cancel">
+											<models>
+												<model>Tasks</model>
+											</models>
+										</action>
+										<action type="closeAllPopups"/>
+									</actions>
+								</skuid__button>
+								<skuid__button label="Save" uniqueid="sk-2Wbg-7721" styleSettingsVariant="primary">
+									<actions>
+										<action type="blockUI" message="Saving New Task" subtext="Stay on top of things" styleSettingsVariant="dark" timeout="2500"/>
+										<action type="save">
+											<models>
+												<model>Tasks</model>
+											</models>
+										</action>
+										<action type="closeAllPopups"/>
+									</actions>
+								</skuid__button>
+							</buttons>
+							<afterCloseActions>
+								<action type="cancel">
+									<models>
+										<model>Tasks</model>
+									</models>
+								</action>
+							</afterCloseActions>
+						</skuid__modal>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__wrapper uniqueid="sk-K-7-115" styleSettingsVariant="4635c499-d62c-4819-996b-fc66da610988">
+							<components>
+								<skuid__grid uniqueid="sk-K-7-116" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="2" rowGutter="0">
+									<divisions>
+										<division alignSelf="auto" ratio="0">
+											<components>
+												<skuid__text contents="To Do List" uniqueid="sk-gBn-186" styleSettingsVariant="5dd99c73-4291-4a9f-9f16-102b8137fd0d">
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__text>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components>
+												<skuid__buttonSet uniqueid="sk-K-7-122">
+													<groups>
+														<skuid__buttonGroup>
+															<buttons>
+																<skuid__button uniqueid="sk-K-7-123" icon="sk-webicon-ink:notification" styleSettingsVariant="050703d5-0c90-4fc8-9a80-df63cee6f9b4">
+																	<actions/>
+																</skuid__button>
+																<skuid__button uniqueid="sk-K-7-124" icon="sk-webicon-ink:settings" styleSettingsVariant="050703d5-0c90-4fc8-9a80-df63cee6f9b4">
+																	<actions/>
+																</skuid__button>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+													<styles>
+														<spacing/>
+													</styles>
+													<renderConditions logictype="and"/>
+												</skuid__buttonSet>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="1" bottom="1" left="2" right="2"/>
+									</styles>
+									<interactions/>
+									<renderConditions logictype="and"/>
+								</skuid__grid>
+							</components>
+							<background type="color" color="#004a94"/>
+							<interactions/>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>

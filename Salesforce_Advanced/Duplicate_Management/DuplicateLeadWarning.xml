@@ -1,0 +1,272 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false">
+	<models>
+		<model id="LeadData" limit="1" query="true" createrowifnonefound="false" sobject="Lead" datasource="salesforce">
+			<fields>
+				<field id="FirstName"/>
+				<field id="LastName"/>
+				<field id="Company"/>
+				<field id="CreatedDate"/>
+				<field id="LeadSource"/>
+				<field id="Email"/>
+				<field id="Status"/>
+				<field id="Street"/>
+				<field id="City"/>
+				<field id="State"/>
+				<field id="Country"/>
+				<field id="Phone"/>
+				<field id="MobilePhone"/>
+				<field id="Title"/>
+				<field id="IsConverted"/>
+				<field id="Description"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="Rating"/>
+				<field id="PostalCode"/>
+				<field id="NumberOfEmployees"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name" targetobjects="User"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="Website"/>
+				<field id="Industry"/>
+				<field id="AnnualRevenue"/>
+			</fields>
+			<conditions>
+				<condition type="param" enclosevalueinquotes="true" operator="=" field="Id" value="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="DupeRecordSet" limit="20" query="true" createrowifnonefound="false" sobject="DuplicateRecordItem">
+			<fields>
+				<field id="DuplicateRecordSetId"/>
+				<field id="DuplicateRecordSet.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="RecordId" operator="=" model="LeadData" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="DupeLeadsList" limit="20" query="true" createrowifnonefound="false" sobject="DuplicateRecordItem" datasource="salesforce">
+			<fields>
+				<field id="RecordId"/>
+				<field id="Record.Name"/>
+				<field id="CreatedDate"/>
+				<field id="IsDeleted"/>
+				<field id="Name"/>
+				<field id="Record.Type"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="DuplicateRecordSetId" operator="=" model="DupeRecordSet" enclosevalueinquotes="true" mergefield="DuplicateRecordSetId" novaluebehavior="noquery"/>
+				<condition type="modelmerge" value="" field="RecordId" operator="not in" model="LeadData" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2mD4-8782">
+			<components>
+				<skuid__wrapper uniqueid="sk-2mD0-8031">
+					<components>
+						<skuid__messageArea uniqueid="sk-2mCX-3461">
+							<group>
+								<skuid__messageBlock title="Warning - Duplicate leads found" description="Please consider using the Record below and deleting this one" styleSettingsVariant="warningStrong"/>
+							</group>
+							<renderconditions logictype="and"/>
+							<enableconditions/>
+							<styles>
+								<spacing top="2" left="2" right="2"/>
+							</styles>
+						</skuid__messageArea>
+						<skuid__table allowColumnFreezing="dragDrop" model="DupeLeadsList" uniqueid="sk-2mC_-7627" mode="readonly" showSaveCancel="false" pageSize="Infinity" showListHeader="false" showListFooter="false" allowSortingByColumn="false">
+							<fields>
+								<field id="RecordId" redirectType="none" window="self" uniqueid="fi-2mSM-125356"/>
+								<field id="Record.Type" uniqueid="fi-2mSM-125357"/>
+								<field id="IsDeleted" uniqueid="fi-2mSM-125358"/>
+								<field id="CreatedDate" uniqueid="fi-2mSM-125359"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions>
+								<action type="multi" label="Use this record" icon="sk-webicon-ink:avatar">
+									<tooltip position="top" text="Use This Lead and Delete the one I just created"/>
+									<actions>
+										<action type="markRowsForDeletion" model="LeadData" affectedrows="context"/>
+										<action type="save">
+											<models>
+												<model>LeadData</model>
+											</models>
+											<onerroractions>
+												<action type="blockUI" message="There was an error" timeout="3000"/>
+											</onerroractions>
+										</action>
+										<action type="redirect" window="self" url="/{{RecordId}}"/>
+									</actions>
+								</action>
+							</rowActions>
+							<massActions/>
+							<styles>
+								<spacing top="2" bottom="2" left="2" right="2"/>
+							</styles>
+						</skuid__table>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#DADACD"/>
+					<renderConditions logictype="and">
+						<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="DupeLeadsList" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+					</renderConditions>
+					<styleVariantConditions/>
+				</skuid__wrapper>
+				<skuid__grid uniqueid="sk-2mHb-84711" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+					<divisions>
+						<division minWidth="100px" ratio="1">
+							<components>
+								<skuid__form showErrorsInline="true" model="LeadData" uniqueid="sk-2mHe-86126" mode="edit">
+									<sections>
+										<section title="Lead Overview">
+											<rows>
+												<row>
+													<fields>
+														<skuid__field id="FirstName"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="LastName"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Company"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Title"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Description"/>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components>
+								<skuid__form showErrorsInline="true" model="LeadData" uniqueid="sk-2mHf-86716" mode="edit">
+									<sections>
+										<section title="Contact">
+											<rows>
+												<row>
+													<fields>
+														<skuid__field id="Email"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Phone"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="MobilePhone"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field type="COMBO" label="Address" template="{{Street}}&#10;{{City}}, {{State}} {{PostalCode}}&#10;{{Country}}" redirectType="datasourcedefault" window="self">
+															<renderConditions logictype="and" onhidedatabehavior="keep"/>
+															<enableConditions/>
+														</skuid__field>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components>
+								<skuid__form showErrorsInline="true" model="LeadData" uniqueid="sk-2mHZ-84220" mode="edit">
+									<sections>
+										<section title="System Info">
+											<rows>
+												<row>
+													<fields>
+														<skuid__field id="OwnerId" redirectType="none"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Status"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="IsConverted"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field type="COMBO" label="Created" template="{{{CreatedBy.Name}}} (on {{CreatedDate}})" readOnly="true" redirectType="none"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field type="COMBO" label="Last Modified" template="{{{LastModifiedBy.Name}}} (On {{LastModifiedDate}})" redirectType="none" readOnly="true"/>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing top="4"/>
+					</styles>
+				</skuid__grid>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;Duplicate Lead Warning&lt;/span&gt;" uniqueid="sk-2mBm-2336" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4" styleSettingsVariant="large"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#7f7f7f"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>

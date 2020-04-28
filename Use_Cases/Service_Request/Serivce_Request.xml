@@ -1,0 +1,418 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="Crispin Construction" title="Crispin Construction">
+    <models>
+        <model id="Household" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="Account">
+            <fields>
+                <field id="RecordTypeId"/>
+                <field id="Name"/>
+                <field id="BillingCity"/>
+                <field id="BillingState"/>
+                <field id="BillingStreet"/>
+                <field id="BillingPostalCode"/>
+                <field id="Id"/>
+            </fields>
+            <conditions/>
+            <actions/>
+        </model>
+        <model id="Contact" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="Contact">
+            <fields>
+                <field id="AccountId"/>
+                <field id="Account.Name"/>
+                <field id="Id"/>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="Email"/>
+                <field id="HomePhone"/>
+                <field uionly="true" displaytype="BOOLEAN" length="255" id="AddContact" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false" label="Add Contact"/>
+            </fields>
+            <conditions>
+                <condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="=" model="Household" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+            </conditions>
+            <actions>
+                <action>
+                    <actions>
+                        <action type="branch" whenfinished="stop">
+                            <formula>{{AddContact}}</formula>
+                            <iftrueactions>
+                                <action type="createRow" model="AdditionalContact" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+                            </iftrueactions>
+                        </action>
+                        <action type="emptyModelData">
+                            <models>
+                                <model>AdditionalContact</model>
+                            </models>
+                        </action>
+                    </actions>
+                    <events>
+                        <event>row.updated</event>
+                    </events>
+                    <fields>
+                        <field>AddContact</field>
+                    </fields>
+                </action>
+            </actions>
+        </model>
+        <model id="Case" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="Case">
+            <fields>
+                <field id="RecordTypeId"/>
+                <field id="AccountId"/>
+                <field id="Account.Name"/>
+                <field id="Id"/>
+                <field id="Description"/>    
+                <field id="ContactId"/>
+                <field id="Contact.Name"/>
+                <field id="Additional_Contact__c"/>
+                <field id="Additional_Contact__r.Name"/>
+                <field id="Service_Requested_For__c"/>
+            <field id="ClosedDate"/>
+        <field id="Type"/>
+        </fields>
+            <conditions>
+                <condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="=" model="Household" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+                <condition type="fieldvalue" value="0120P000000NJfLQAW" enclosevalueinquotes="true" field="RecordTypeId" fieldtargetobjects="RecordType"/>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="AdditionalContact" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Contact">
+            <fields>
+                <field id="AccountId"/>
+                <field id="Account.Name"/>
+                <field id="Id"/>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="Email"/>
+                <field id="HomePhone"/>
+            </fields>
+            <conditions>
+                <condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="=" model="Household" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+            </conditions>
+            <actions/>
+        </model>
+    </models>
+	<components>
+        <skuid__text contents="&lt;style type=&quot;text/css&quot;&gt;.slds-page-header {&#10;        display: none !important;&#10;    }&#10;    &#10;    .flexipageDefaultAppHomeTemplate {&#10;        margin-right:0px !important;&#10;        margin-left:0px !important;&#10;    }&#10;    &#10;    .oneFlexipage .pageBody {&#10;        margin-top: 0px !important;&#10;    }&#10;    &#10;    .oneFlexipage {&#10;        padding-bottom: 0px !important;&#10;    }&#10;    &#10;    .lafMobileWebLayoutContainer .uiScroller .scroller.actionBarPlugin {&#10;        padding-bottom: 0 !important;&#10;    }&#10;&lt;/style&gt;&#10;" uniqueid="sk-1VuL-12121"/>
+        <skuid__wrapper uniqueid="sk-tfF-13916" heightStrategy="fixed" height="custom" heightCustom="72px">
+            <components>
+                <skuid__grid uniqueid="sk-tfS-14577" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1">
+                    <divisions>
+                        <division ratio="0" alignSelf="center" minWidth="10px">
+                            <components>
+                                <skuid__text uniqueid="sk-thL-7032" contents="&lt;svg fill=&quot;none&quot; height=&quot;40&quot; viewbox=&quot;0 0 40 40&quot; width=&quot;40&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt; &lt;path clip-rule=&quot;evenodd&quot; d=&quot;M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40ZM20 10C24.8379 10 28.8734 13.4355 29.8 18H31.8341C30.8819 12.3246 25.946 8 20 8C13.3726 8 8 13.3726 8 20C8 26.6274 13.3726 32 20 32C25.946 32 30.8819 27.6754 31.8341 22H29.8C28.8734 26.5645 24.8379 30 20 30C14.4772 30 10 25.5228 10 20C10 14.4772 14.4772 10 20 10ZM20 29C24.2832 29 27.8675 26.008 28.777 22H26.7101C25.8496 24.8915 23.171 27 20 27C16.134 27 13 23.866 13 20C13 16.134 16.134 13 20 13C23.171 13 25.8496 15.1085 26.7101 18H28.777C27.8675 13.992 24.2832 11 20 11C15.0294 11 11 15.0294 11 20C11 24.9706 15.0294 29 20 29ZM20 14C22.6124 14 24.8349 15.6696 25.6586 18H23.4649C22.7733 16.8044 21.4806 16 20 16C17.7909 16 16 17.7909 16 20C16 22.2091 17.7909 24 20 24C21.4806 24 22.7733 23.1956 23.4649 22H25.6586C24.8349 24.3304 22.6124 26 20 26C16.6863 26 14 23.3137 14 20C14 16.6863 16.6863 14 20 14Z&quot; fill=&quot;#00C9BB&quot; fill-rule=&quot;evenodd&quot;&gt;&lt;/path&gt; &lt;/svg&gt;">
+                                    <styles>
+                                        <spacing left="2.75"/>
+                                    </styles>
+                                </skuid__text>
+                            </components>
+                        </division>
+                        <division alignSelf="center" minWidth="100px" ratio="0">
+                            <components>
+                                <skuid__text contents="Crispin Construction" uniqueid="sk-th1-15700" styleSettingsVariant="b038c4cb-df3d-4c8b-b4f9-adcb299efdcb"/>
+                            </components>
+                        </division>
+                        <division alignSelf="auto" minWidth="100px" ratio="1">
+                            <components>
+                                <skuid__wrapper uniqueid="sk-tkY-8610" heightStrategy="fixed" height="custom" heightCustom="72px">
+                                    <components/>
+                                    <background/>
+                                    <styles>
+                                        <spacing/>
+                                    </styles>
+                                </skuid__wrapper>
+                            </components>
+                        </division>
+                        <division alignSelf="center" minWidth="100px" ratio="0">
+                            <components>
+                                <skuid__text contents="{{$User.name}}" uniqueid="sk-thZ-7982" styleSettingsVariant="9910eaca-91ac-45bd-88b5-3e36af5742c2">
+                                    <styles>
+                                        <spacing right="2.75"/>
+                                    </styles>
+                                </skuid__text>
+                            </components>
+                        </division>
+                    </divisions>
+                </skuid__grid>
+            </components>
+            <background type="color" color="#333"/>					
+			<styles>
+                <spacing/>
+            </styles>
+        </skuid__wrapper>
+        <skuid__grid uniqueid="sk-JUB-1226" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+            <divisions>
+                <division ratio="1" alignSelf="auto" minWidth="0">
+                    <components/>
+                </division>
+                <division alignSelf="auto" minWidth="300px" ratio="1" maxWidth="580px">
+                    <components>
+                        <skuid__form showErrorsInline="true" model="Contact" uniqueid="sk-tpI-7930" mode="edit">
+                            <sections>
+                                <section title="Contact">
+                                    <rows>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="FirstName" showHelp="true"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="LastName"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="HomePhone" showHelp="true"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="Email"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="AddContact" showHelp="true" displayAs="SWITCH" label="Add Second Contact"/>
+                                            </fields>
+                                        </row>
+                                    </rows>
+                                </section>
+                            </sections>
+                        </skuid__form>
+                        <skuid__form showErrorsInline="true" model="AdditionalContact" uniqueid="sk-yCP-12092" mode="edit">
+                            <sections>
+                                <section title="Second Contact">
+                                    <rows>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="FirstName" showHelp="true"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="LastName"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="HomePhone" showHelp="true"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="Email"/>
+                                            </fields>
+                                        </row>
+                                    </rows>
+                                </section>
+                            </sections>
+                            <renderConditions logictype="and"/>
+                            <styleVariantConditions/>
+                            <styles>
+                                <spacing top="6"/>
+                            </styles>
+                        </skuid__form>
+                        <skuid__form showErrorsInline="true" model="Household" uniqueid="sk-tqO-9677" mode="edit">
+                            <sections>
+                                <section title="Service Location &amp; Details" showHeading="true">
+                                    <rows>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="BillingStreet"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="BillingCity" showHelp="true" label="City"/>
+                                                <skuid__field id="BillingState" showHelp="true" label="State"/>
+                                                <skuid__field id="BillingPostalCode" showHelp="true" label="Zip"/>
+                                            </fields>
+                                        </row>
+                                    </rows>
+                                </section>
+                            </sections>
+                            <styles>
+                                <spacing top="6"/>
+                            </styles>
+                        </skuid__form>
+                        <skuid__form showErrorsInline="true" model="Case" uniqueid="sk-tqt-11970" mode="edit">
+                            <sections>
+                                <section title="New Section" showHeading="false">
+                                    <rows>
+                                        <row>
+                                            <fields>            
+                                               <skuid__field id="Service_Requested_For__c"/>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="Type" showHelp="true" label="Service Type">
+                                                    <renderConditions logictype="and" onhidedatabehavior="keep">
+                                                        <renderCondition type="fieldvalue" operator="lte" enclosevalueinquotes="true" fieldmodel="Case" sourcetype="viewport" value="1160"/>
+                                                    </renderConditions>
+                                                    <enableConditions/>
+                                                </skuid__field>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="Type" showHelp="true" displayAs="BUTTON_GROUP" label="Service Type">
+                                                    <renderConditions logictype="and" onhidedatabehavior="keep">
+                                                        <renderCondition type="fieldvalue" operator="gt" enclosevalueinquotes="true" fieldmodel="Case" sourcetype="viewport" value="1160"/>
+                                                    </renderConditions>
+                                                    <enableConditions/>
+                                                </skuid__field>
+                                            </fields>
+                                        </row>
+                                        <row>
+                                            <fields>
+                                                <skuid__field id="Description"/>
+                                            </fields>
+                                        </row>
+                                    </rows>
+                                </section>
+                            </sections>
+                            <styles>
+                                <spacing top="3"/>
+                            </styles>
+                        </skuid__form>
+                        <skuid__buttonSet model="Contact" uniqueid="sk-yE5-14733" expandToFill="true">
+                            <groups>
+                                <skuid__buttonGroup>
+                                    <buttons>
+                                        <skuid__button label="Submit Request" uniqueId="sk-yE5-14732" styleSettingsVariant="primary">
+                                            <actions>
+                                                <action type="blockUI" styleSettingsVariant="dark" message="Saving and submitting..."/>
+                                                <action type="updateRow" fieldmodel="Household" affectedrows="context">
+                                                    <updates>
+                                                        <update valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="{{$Model.Contact.data.0.LastName}} Household"/>
+                                                    </updates>
+                                                </action>
+                                                <action type="save">
+                                                    <models>
+                                                        <model>Household</model>
+                                                    </models>
+                                                </action>
+                                                <action type="save">
+                                                    <models>
+                                                        <model>Contact</model>
+                                                        <model>AdditionalContact</model>
+                                                    </models>
+                                                </action>
+                                                <action type="updateRow" fieldmodel="Case" affectedrows="context">
+                                                    <updates>
+                                                        <update valuesource="modelmerge" field="ContactId" fieldtargetobjects="Contact" enclosevalueinquotes="true" sourcemodel="Contact" sourcefield="Id"/>
+                                                        <update valuesource="modelmerge" field="Additional_Contact__c" fieldtargetobjects="Contact" enclosevalueinquotes="true" sourcemodel="AdditionalContact" sourcefield="Id"/>
+                                                    </updates>
+                                                </action>
+                                                <action type="save">
+                                                    <models>
+                                                        <model>Case</model>
+                                                    </models>
+                                                </action>
+                                                <action type="showModal">
+                                                    <skuid__modal title="Service Request Submitted" width="85%" buttonsJustification="right">
+                                                        <components>
+                                                            <skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;You&amp;#39;re all set,&amp;nbsp;{{{FirstName}}}!&lt;/div&gt;&#10;" uniqueid="sk-yHp-8970" model="Contact" styleSettingsVariant="16efc4a5-feec-4dfc-bbcc-f5bd67b4d4aa">                                                        
+                                                                <styles>
+                                                                  <spacing/>
+                                                                </styles>
+                                                                </skuid__text>
+                                                            <skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;!--(figmeta)eyJmaWxlS2V5IjoiYllHYVZETWRrYm1idEI5c1VxdUR4QiIsInBhc3RlSUQiOi0xLCJkYXRhVHlwZSI6InNjZW5lIn0K(/figmeta)--&gt;&lt;!--(figma)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(/figma)--&gt;Your service has been scheduled successfully. See below for the details of your request.&lt;/div&gt;&#10;" uniqueid="sk-yIE-9449" styleSettingsVariant="038bd594-5308-4237-821c-f30d50d98f86">
+                                                                <styles>
+                                                                    <spacing top="1.5"/>
+                                                                </styles>
+                                                            </skuid__text>
+                                                            <skuid__grid uniqueid="sk-yIK-9688" flexDirection="row" justifyContent="center" alignItems="flex-start" columnGutter="3">
+                                                                <divisions>
+                                                                    <division minWidth="10px" ratio="0" alignSelf="center">
+                                                                        <components>
+                                                                            <skuid__form showErrorsInline="true" model="Case" uniqueid="sk-yIS-10898" mode="readonly" styleSettingsVariant="981d43f5-0d99-4f3b-b8bb-ffeb8878d7ae">
+                                                                                <sections>
+                                                                                    <section title="New Section" showHeading="false">
+                                                                                        <rows>
+                                                                                            <row>
+                                                                                                <fields>
+                                                                                                </fields>
+                                                                                            </row>
+                                                                                        </rows>
+                                                                                    </section>
+                                                                                </sections>
+                                                                                <styles>
+                                                                                    <spacing/>
+                                                                                </styles>
+                                                                            </skuid__form>
+                                                                        </components>
+                                                                    </division>
+                                                                    <division alignSelf="center" minWidth="10px" ratio="0">
+                                                                        <components>
+                                                                            <skuid__form showErrorsInline="true" model="Case" uniqueid="sk-yIL-10092" mode="readonly" styleSettingsVariant="981d43f5-0d99-4f3b-b8bb-ffeb8878d7ae">
+                                                                                <sections>
+                                                                                    <section title="New Section" showHeading="false">
+                                                                                        <rows>
+                                                                                            <row>
+                                                                                                <fields>
+                                                                                                    <skuid__field id="Service_Requested_For__c" showHelp="true" label="Service Date"/>
+                                                                                                </fields>
+                                                                                            </row>
+                                                                                        </rows>
+                                                                                    </section>
+                                                                                </sections>
+                                                                                <styles>
+                                                                                    <spacing/>
+                                                                                </styles>
+                                                                            </skuid__form>
+                                                                        </components>
+                                                                    </division>
+                                                                </divisions>
+                                                                <styles>
+                                                                    <spacing top="2"/>
+                                                                </styles>
+                                                            </skuid__grid>
+                                                        <skuid__buttonSet uniqueid="sk-1R7m-11447" position="center">
+                                                            <groups>
+                                                                <skuid__buttonGroup>
+                                                                    <buttons>
+                                                                        <skuid__button label="New Request" uniqueId="sk-1R7m-11446" styleSettingsVariant="primary">
+                                                                            <actions>
+                                                                                <action type="redirect" window="self" url="/apex/skuid__ui?page=ServiceRequests"/>
+                                                                            </actions>
+                                                                        </skuid__button>
+                                                                    </buttons>
+                                                                </skuid__buttonGroup>
+                                                            </groups>
+                                                            </skuid__buttonSet>
+                                                            </components>
+                                                        <afterCloseActions/>
+                                                        <buttons>                                                      
+                                                        </buttons>
+                                                    </skuid__modal>
+                                                </action>
+                                                <action type="unblockUI"/>
+                                            </actions>
+                                        </skuid__button>
+                                    </buttons>
+                                </skuid__buttonGroup>
+                            </groups>
+                            <styles>
+                                <spacing top="2"/>
+                            </styles>
+                        </skuid__buttonSet>
+                    </components>
+                </division>
+                <division alignSelf="auto" ratio="1" minWidth="0">
+                    <components/>
+                </division>
+            </divisions>
+            <styles>
+                <spacing top="6" bottom="6"/>
+            </styles>
+        </skuid__grid>
+</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+</skuid__page>

@@ -1,0 +1,179 @@
+<skuidpage unsavedchangeswarning="" showsidebar="false" showheader="false" tabtooverride="UserLogin">
+   <models>
+      <model id="ProfileSelector_FromUser" limit="1" query="false" createrowifnonefound="true" sobject="User" doclone="" type="">
+         <fields>
+            <field id="ProfileId"/>
+            <field id="Profile.Name"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ProfileId" state="filterableoff" inactive="true" name="ProfileId"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="SkuidPackage" limit="1" query="true" createrowifnonefound="false" sobject="PackageLicense" doclone="" type="">
+         <fields>
+            <field id="Id"/>
+         </fields>
+         <conditions>
+            <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="Users" limit="" query="true" createrowifnonefound="false" sobject="User" doclone="" type="">
+         <fields>
+            <field id="Id"/>
+            <field id="ProfileId"/>
+            <field id="Profile.Name"/>
+            <field id="Name"/>
+         </fields>
+         <conditions>
+            <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
+               <conditions>
+                  <condition type="modelmerge" value="" field="PackageLicenseId" operator="=" model="SkuidPackage" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+               </conditions>
+            </condition>
+            <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ProfileId" state="filterableoff" inactive="true" name="ProfileId"/>
+         </conditions>
+         <actions/>
+      </model>
+      <model id="UserLogin" limit="" query="true" createrowifnonefound="false" sobject="LoginHistory" doclone="" type="aggregate" orderby="CALENDAR_YEAR(LoginTime) DESC, CALENDAR_MONTH(LoginTime) DESC" queryallrows="true">
+         <fields>
+            <field id="Id" name="countId" function="COUNT"/>
+         </fields>
+         <conditions>
+            <condition type="join" value="" field="UserId" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
+               <conditions>
+                  <condition type="modelmerge" value="" field="PackageLicenseId" operator="=" model="SkuidPackage" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+               </conditions>
+            </condition>
+            <condition type="modelmerge" value="" field="UserId" operator="in" model="Users" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery" state=""/>
+            <condition type="fieldvalue" value="Browser" enclosevalueinquotes="true" field="Application" state=""/>
+         </conditions>
+         <actions/>
+         <groupby method="simple">
+            <field id="LoginTime" alias="LoginYear" function="CALENDAR_YEAR" name="LoginYear"/>
+            <field id="LoginTime" alias="LoginMonth" function="CALENDAR_MONTH" name="LoginMonth"/>
+         </groupby>
+      </model>
+   </models>
+   <components>
+      <panelset type="standard" scroll="">
+         <panels>
+            <panel width="500" type="left">
+               <components>
+                  <pagetitle model="ProfileSelector_FromUser">
+                     <maintitle># of Logins by Calendar Month</maintitle>
+                     <actions/>
+                     <subtitle>Users with Skuid License</subtitle>
+                  </pagetitle>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <basicfieldeditor showheader="true" showsavecancel="false" model="ProfileSelector_FromUser" buttonposition="" mode="edit" layout="">
+                     <columns>
+                        <column width="100%">
+                           <sections>
+                              <section title="Section A" collapsible="no" showheader="false">
+                                 <fields>
+                                    <field id="ProfileId" valuehalign="" type="REFPICK" addnoneoption="true">
+                                       <label>Choose Profile</label>
+                                    </field>
+                                 </fields>
+                              </section>
+                           </sections>
+                        </column>
+                     </columns>
+                  </basicfieldeditor>
+               </components>
+            </panel>
+            <panel width="350" type="right">
+               <components>
+                  <pagetitle model="UserLogin">
+                     <actions>
+                        <action type="multi" label="Filter by Profile" icon="ui-silk-magnifier">
+                           <actions>
+                              <action type="setCondition" model="Users" condition="ProfileId" value="{{$Model.ProfileSelector_FromUser.data.0.ProfileId}}"/>
+                              <action type="requeryModels" model="Users" behavior="standard">
+                                 <models>
+                                    <model>Users</model>
+                                    <model>UserLogin</model>
+                                 </models>
+                              </action>
+                           </actions>
+                        </action>
+                        <action type="multi" label="Show All Profiles" icon="ui-silk-magifier-zoom-out">
+                           <actions>
+                              <action type="cancel">
+                                 <models>
+                                    <model>ProfileSelector_FromUser</model>
+                                 </models>
+                              </action>
+                              <action type="deactivateCondition" model="Users" condition="ProfileId"/>
+                              <action type="requeryModels" behavior="standard">
+                                 <models>
+                                    <model>Users</model>
+                                    <model>UserLogin</model>
+                                 </models>
+                              </action>
+                           </actions>
+                        </action>
+                     </actions>
+                     <maintitle> </maintitle>
+                     <subtitle> </subtitle>
+                  </pagetitle>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+      <panelset type="standard" scroll="">
+         <panels>
+            <panel type="left" width="150">
+               <components>
+                  <pagetitle model="UserLogin">
+                     <maintitle>{{$Model.Users.data.length}}</maintitle>
+                     <subtitle>Number of Users in Report</subtitle>
+                     <actions/>
+                  </pagetitle>
+               </components>
+            </panel>
+            <panel>
+               <components>
+                  <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="false" showexportbuttons="false" pagesize="10" createrecords="false" model="UserLogin" mode="readonly" emptysearchbehavior="query">
+                     <fields>
+                        <field id="LoginTime" name="LoginYear" valuehalign="" type="">
+                           <label>Calendar Year</label>
+                        </field>
+                        <field id="LoginTime" name="LoginMonth" valuehalign="" type="">
+                           <label>Calendar Month</label>
+                        </field>
+                        <field id="Id" name="countId" valuehalign="" type="">
+                           <label># of Logins</label>
+                           <summaries>
+                              <summary>sum</summary>
+                              <summary>avg</summary>
+                              <summary>max</summary>
+                           </summaries>
+                        </field>
+                     </fields>
+                     <rowactions/>
+                     <massactions usefirstitemasdefault="true"/>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                     <searchfields/>
+                  </skootable>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <css>
+         <cssitem location="inline" name="customStyles" cachelocation="false">.nx-panel {
+min-height: 50px;}</cssitem>
+      </css>
+      <javascript/>
+   </resources>
+</skuidpage>

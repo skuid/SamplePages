@@ -1,0 +1,1277 @@
+<skuid__page personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="Simple Dashboard">
+	<models>
+		<model id="uiModel" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only" processonclient="true">
+			<fields>
+				<field id="view" displaytype="PICKLIST" defaultvaluetype="fieldvalue" defaultValue="Accounts" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Accounts" label="Accounts"/>
+						<entry value="Opportunities" label="Opportunities"/>
+						<entry value="Leads" label="Leads"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="AccountsChart" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account" type="aggregate">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+			<groupby method="simple">
+				<field id="Industry" name="industry"/>
+			</groupby>
+		</model>
+		<model id="OpportunitiesChart" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" type="aggregate">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+			<groupby method="simple">
+				<field id="StageName" name="stageName"/>
+			</groupby>
+		</model>
+		<model id="LeadsChart" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Lead" type="aggregate">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions/>
+			<actions/>
+			<groupby method="simple">
+				<field id="Status" name="status"/>
+			</groupby>
+		</model>
+		<model id="Accounts" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+			<fields>
+				<field id="Name" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Account Name" required="true" sortable="true" rel="name__rel" relationshipname="name__rel"/>
+				<field id="OwnerId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Account Owner" required="true" sortable="true" rel="owner__rel" relationshipname="owner__rel" ref="users" datasource="salesforce"/>
+				<field id="Industry" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Industry" required="false" sortable="true" rel="industry__rel" relationshipname="industry__rel"/>
+				<field id="BillingCity" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Billing City" required="false" sortable="true" rel="billing_city__rel" relationshipname="billing_city__rel"/>
+				<field id="BillingCountry" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Billing Country" required="false" sortable="true" rel="billing_country__rel" relationshipname="billing_country__rel"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="Account Id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="Website" label="Account Site" ispolymorphic="false" isnamepointing="false" displaytype="URL" accessible="true" filterable="true"/>
+				<field id="Type" label="Account Type" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="AnnualRevenue" label="Annual Revenue" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="BillingState" label="Billing State Province" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="BillingStreet" label="Billing Street" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="BillingPostalCode" label="Billing Zip Postal" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="5" scale="0" accessible="true" filterable="true"/>
+				<field id="Description" label="Description" ispolymorphic="false" isnamepointing="false" displaytype="TEXTAREA" accessible="true" filterable="true" ogdisplaytype="STRING"/>
+				<field id="Fax" label="Fax" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="NumberOfEmployees" label="No Of Employees" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="2" scale="0" accessible="true" filterable="true"/>
+				<field id="ParentId" label="Parent Account" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Phone" label="Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Rating" label="Rating" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="TickerSymbol" label="Ticker Symbol" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" sourcetype="fieldvalue" field="Industry" clientorserver="server" state="filterableoff" inactive="true" name="industry"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Opportunities" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity">
+			<fields>
+				<field id="CloseDate" accessible="true" createable="true" defaultvalue="" displaytype="DATE" editable="true" filterable="false" groupable="true" label="Close Date" required="true" sortable="true" rel="close_date__rel" relationshipname="close_date__rel" overridemetadata="true" ogdisplaytype="DATETIME"/>
+				<field id="ExpectedRevenue" accessible="true" createable="true" defaultvalue="" displaytype="CURRENCY" editable="true" filterable="false" groupable="true" label="Expected Revenue" required="false" sortable="true" rel="expected_revenue__rel" relationshipname="expected_revenue__rel" overridemetadata="true" ogdisplaytype="INTEGER"/>
+				<field id="Amount" accessible="true" createable="true" defaultvalue="" displaytype="CURRENCY" editable="true" filterable="false" groupable="true" label="Opportunity Amount" required="false" sortable="true" rel="amount__rel" relationshipname="amount__rel" overridemetadata="true" ogdisplaytype="INTEGER"/>
+				<field id="Name" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Opportunity Name" required="true" sortable="true" rel="name__rel" relationshipname="name__rel"/>
+				<field id="OwnerId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Opportunity Owner" required="true" sortable="true" rel="owner__rel" relationshipname="owner__rel" ref="users" datasource="salesforce"/>
+				<field id="AccountId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Related to Account" required="true" sortable="true" rel="account__rel" relationshipname="account__rel" ref="accounts" datasource="salesforce"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="Opportunity Id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="Probability" accessible="true" createable="true" defaultvalue="" displaytype="INTEGER" editable="true" filterable="false" groupable="true" label="Probability" required="false" sortable="true" rel="probability__rel" relationshipname="probability__rel"/>
+				<field id="Type" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Type" required="false" sortable="true" rel="type__rel" relationshipname="type__rel"/>
+				<field id="NextStep" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Next Step" required="false" sortable="true" rel="next_step__rel" relationshipname="next_step__rel"/>
+				<field id="LeadSource" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Lead Source" required="false" sortable="true" rel="lead_source__rel" relationshipname="lead_source__rel"/>
+				<field id="Pricebook2Id" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Default Pricebook" required="false" sortable="true" rel="default_pricebook__rel" relationshipname="default_pricebook__rel" ref="pricebooks" datasource="salesforce"/>
+				<field id="StageName"/>
+				<field id="LastModifiedDate"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="Account.Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" sourcetype="fieldvalue" field="StageName" clientorserver="server" state="filterableoff" inactive="true" name="stage"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Leads" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Lead">
+			<fields>
+				<field id="Name" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="First Name" required="true" sortable="true" rel="first_name__rel" relationshipname="first_name__rel"/>
+				<field id="FirstName" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="First Name" required="true" sortable="true" rel="first_name__rel" relationshipname="first_name__rel"/>
+				<field id="LastName" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Last Name" required="true" sortable="true" rel="last_name__rel" relationshipname="last_name__rel"/>
+				<field id="City" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Mailing City" required="false" sortable="true" rel="mailing_city__rel" relationshipname="mailing_city__rel"/>
+				<field id="Country" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Mailing Country" required="false" sortable="true" rel="mailing_country__rel" relationshipname="mailing_country__rel"/>
+				<field id="Status" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Status" required="false" sortable="true" rel="status__rel" relationshipname="status__rel"/>
+				<field id="Company" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Company" required="false" sortable="true" rel="company__rel" relationshipname="company__rel"/>
+				<field id="Description" accessible="true" createable="true" defaultvalue="" displaytype="TEXTAREA" editable="true" filterable="true" groupable="true" label="Description" required="false" sortable="true" rel="description__rel" relationshipname="description__rel" ogdisplaytype="TEXT"/>
+				<field id="Title" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Title" required="false" sortable="true" rel="title__rel" relationshipname="title__rel"/>
+				<field id="LeadSource" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Lead Source" required="false" sortable="true" rel="lead_source__rel" relationshipname="lead_source__rel"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="Lead Id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="OwnerId" label="Owner" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Industry" label="Industry" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" sourcetype="fieldvalue" field="Status" clientorserver="client" state="filterableoff" inactive="true" name="status"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Task" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Task">
+			<fields>
+				<field id="Description" accessible="true" createable="true" defaultvalue="" displaytype="TEXTAREA" editable="true" filterable="true" groupable="true" label="Description" required="false" sortable="true" rel="description__rel" relationshipname="description__rel" ogdisplaytype="TEXT"/>
+				<field id="ActivityDate" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="Due Date/Time" required="false" sortable="true" rel="due_date_time__rel" relationshipname="due_date_time__rel"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="Priority" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Priority" required="false" sortable="true" rel="priority__rel" relationshipname="priority__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Medium"/>
+				<field id="RecurrenceType" accessible="true" createable="true" defaultvalue="" displaytype="BOOLEAN" editable="true" filterable="false" groupable="true" required="false" sortable="true" rel="recurring_activity__rel" relationshipname="recurring_activity__rel" label="Task is recurring"/>
+				<field id="AccountId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="related_account" required="false" sortable="true" rel="related_account__rel" relationshipname="related_account__rel" ref="accounts" datasource="salesforce"/>
+				<field id="ReminderDateTime" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="remind_at" required="false" sortable="true" rel="remind_at__rel" relationshipname="remind_at__rel"/>
+				<field id="Status" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Status" required="false" sortable="true" rel="status__rel" relationshipname="status__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT"/>
+				<field id="Subject" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Subject" required="true" sortable="true" rel="subject__rel" relationshipname="subject__rel"/>
+				<field id="OwnerId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="task_owner" required="true" sortable="true" rel="task_owner__rel" relationshipname="task_owner__rel" ref="users" datasource="salesforce"/>
+				<field id="Type" accessible="true" createable="true" defaultvalue="" displaytype="PICKLIST" editable="true" filterable="true" groupable="true" label="Type" required="true" sortable="true" rel="type__rel" relationshipname="type__rel" overridemetadata="true" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="Account.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Event" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Event" limit="20">
+			<fields>
+				<field id="Description" accessible="true" createable="true" defaultvalue="" displaytype="TEXTAREA" editable="true" filterable="true" groupable="true" label="Description" required="false" sortable="true" rel="description__rel" relationshipname="description__rel" ogdisplaytype="TEXT"/>
+				<field id="EndDateTime" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="End Date/Time" required="true" sortable="true" rel="end_date_time__rel" relationshipname="end_date_time__rel"/>
+				<field id="OwnerId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Event Owner" required="true" sortable="true" rel="event_owner__rel" relationshipname="event_owner__rel" ref="users" datasource="salesforce"/>
+				<field id="AccountId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Related to Account" required="false" sortable="true" rel="related_account__rel" relationshipname="related_account__rel" ref="accounts" datasource="salesforce"/>
+				<field id="ReminderDateTime" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="Set reminder" required="false" sortable="true" rel="remind_at__rel" relationshipname="remind_at__rel"/>
+				<field id="StartDateTime" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="Start Date/Time" required="true" sortable="true" rel="start_date_time__rel" relationshipname="start_date_time__rel"/>
+				<field id="Subject" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Subject" required="true" sortable="true" rel="subject__rel" relationshipname="subject__rel"/>
+				<field id="Location" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Venue" required="false" sortable="true" rel="venue__rel" relationshipname="venue__rel"/>
+				<field id="CreatedDate" accessible="true" createable="true" defaultvalue="" displaytype="DATETIME" editable="true" filterable="false" groupable="true" label="created_date" required="false" sortable="true" rel="created_date__rel" relationshipname="created_date__rel"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__masthead uniqueid="sk-2Lz4-3191" position="relativeFixed">
+			<divisions>
+				<division type="navigation">
+					<components>
+						<skuid__navigation uniqueid="sk-35Gf-972" type="horizontal" overflowToMenu="false">
+							<itemGroups>
+								<itemGroup>
+									<items>
+										<item label="Accounts" uniqueid="sk-35Gf-960">
+											<actions/>
+										</item>
+										<item uniqueid="sk-35Gf-979" label="Contacts">
+											<actions/>
+										</item>
+										<item label="Opportunities" uniqueid="sk-35Gf-985">
+											<actions/>
+										</item>
+										<item label="Leads" uniqueid="sk-35Gg-991">
+											<actions/>
+										</item>
+									</items>
+								</itemGroup>
+							</itemGroups>
+						</skuid__navigation>
+					</components>
+				</division>
+			</divisions>
+		</skuid__masthead>
+		<skuid__header title="Sales Dashboard" uniqueid="sk-1hSM-615" styleSettingsVariant="dde7ff71-a9f5-4958-ab02-f371019d61e8">
+			<styles>
+				<spacing bottom="2" left="4" right="4" top="4"/>
+			</styles>
+			<renderConditions logictype="and"/>
+			<skuid__buttonSet model="OpportunitiesChart" uniqueid="sk-tqh-3200">
+				<groups>
+					<skuid__buttonGroup>
+						<buttons/>
+					</skuid__buttonGroup>
+				</groups>
+			</skuid__buttonSet>
+		</skuid__header>
+		<skuid__grid uniqueid="sk-29-0-2748" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5" rowGutter="1.5" fullWidth="true">
+			<divisions>
+				<division minWidth="600px" ratio="4" alignSelf="auto" uniqueid="div-1">
+					<components>
+						<skuid__wrapper uniqueid="sk-1mP9-1394" styleSettingsVariant="c751a925-b822-436c-88e0-8a8683ca26aa">
+							<components>
+								<skuid__grid uniqueid="sk-29-P-2806" flexDirection="x-axis" justifyContent="spaced" alignItems="top" columnGutter="2" rowGutter="1.5" fullWidth="true">
+									<divisions>
+										<division minWidth="100px" ratio="1" alignSelf="auto">
+											<components>
+												<skuid__chart model="LeadsChart" maintitle="Leads by Status" type="donut" export="off" uniqueid="sk-3GiH-474">
+													<dataaxes>
+														<axis id="axis1"/>
+													</dataaxes>
+													<categoryaxes>
+														<axis id="categories" categorytype="field" field="status"/>
+													</categoryaxes>
+													<serieslist>
+														<series valuefield="countId" splittype="template" aggfunction="sum" splitfield="status" splittemplate="Status: {{status}}">
+															<actions>
+																<action type="blockUI" message="Filtering Leads by Status {{rows.0.status}}" styleSettingsVariant="dark" showPlaceholder="true">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="setCondition" client-side="true" model="Leads" method="desc" field="status" condition="status" value="{{rows.0.status}}">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="requeryModel" model="Leads" behavior="standard">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<onerroractions>
+																		<action type="blockUI" message="There was an error" timeout="3000"/>
+																	</onerroractions>
+																</action>
+																<action type="updateRow" duration="4" styleSettingsVariant="default" message="clicked" fieldmodel="uiModel" affectedrows="all">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" enclosevalueinquotes="true" value="Leads"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+																<action type="unblockUI">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+															</actions>
+														</series>
+													</serieslist>
+													<colors/>
+													<legend layout="off" halign="center" valign="bottom" showlabels="false"/>
+													<allowedtypes>
+														<type>pie</type>
+													</allowedtypes>
+													<renderconditions logictype="and"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__chart>
+											</components>
+										</division>
+										<division alignSelf="top" minWidth="100px" ratio="1" maxWidth="640px">
+											<components>
+												<skuid__chart model="OpportunitiesChart" maintitle="Opportunities by Stage" type="column" uniqueid="sk-tno-2563" stacking="false" export="off">
+													<dataaxes>
+														<axis id="axis1"/>
+													</dataaxes>
+													<categoryaxes>
+														<axis id="categories" categorytype="field" field="stage"/>
+													</categoryaxes>
+													<serieslist>
+														<series valuefield="countId" splittype="template" aggfunction="sum" splitfield="stageName" splittemplate="Stage: {{stageName}}">
+															<actions>
+																<action type="blockUI" message="Filtering Opportunities by Amount {{$Chart.point.name}}" showPlaceholder="true" styleSettingsVariant="dark">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="setCondition" model="Opportunities" condition="stage" value="{{$Chart.point.name}}">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="requeryModel" model="Opportunities" behavior="standard">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<onerroractions>
+																		<action type="blockUI" message="There was an error" timeout="3000"/>
+																	</onerroractions>
+																</action>
+																<action type="updateRow" behavior="hide" componentid="leads" fieldmodel="uiModel" affectedrows="all">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" enclosevalueinquotes="true" value="Opportunities"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+																<action type="unblockUI">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+															</actions>
+														</series>
+													</serieslist>
+													<colors/>
+													<legend layout="off" halign="center" valign="bottom"/>
+													<allowedtypes>
+														<type>spline</type>
+														<type>area</type>
+														<type>bar</type>
+													</allowedtypes>
+													<renderconditions logictype="and"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__chart>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components>
+												<skuid__chart model="AccountsChart" maintitle="Accounts by Industry" type="donut" export="off" height="400px" uniqueid="sk-3GiH-496">
+													<dataaxes>
+														<axis id="axis1"/>
+													</dataaxes>
+													<categoryaxes>
+														<axis id="categories" categorytype="field"/>
+													</categoryaxes>
+													<serieslist>
+														<series valuefield="countId" splittype="template" aggfunction="sum" splittemplate="Industry: {{industry}}" splitfield="industry">
+															<actions>
+																<action type="blockUI" message="Filtering Accounts by Industry {{rows.0.industry}}" showPlaceholder="true" styleSettingsVariant="dark">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="setCondition" model="Accounts" condition="industry" value="{{rows.0.industry}}">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="requeryModel" model="Accounts" behavior="standard">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+																<action type="updateRow" fieldmodel="uiModel" affectedrows="all">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" enclosevalueinquotes="true" value="Accounts"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+																<action type="unblockUI">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																</action>
+															</actions>
+														</series>
+													</serieslist>
+													<colors/>
+													<legend layout="off" halign="center" valign="bottom" showlabels="false"/>
+													<renderconditions logictype="and"/>
+													<allowedtypes>
+														<type>pie</type>
+													</allowedtypes>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__chart>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing left="4" right="4" top="0.5" bottom="1.5"/>
+									</styles>
+									<renderConditions logictype="and"/>
+								</skuid__grid>
+							</components>
+							<background color="rgba(255,255,255,0.9)"/>
+							<interactions/>
+							<styles>
+								<spacing bottom="3"/>
+							</styles>
+						</skuid__wrapper>
+						<skuid__wrapper uniqueid="sk-pxU-1118" styleSettingsVariant="c751a925-b822-436c-88e0-8a8683ca26aa">
+							<components>
+								<skuid__wrapper uniqueid="sk-3L0A-2626">
+									<components>
+										<skuid__buttonSet uniqueid="sk-1hVx-698" model="uiModel" expandToFill="false">
+											<groups>
+												<skuid__buttonGroup displayType="attached">
+													<buttons>
+														<skuid__button label="Accounts" uniqueid="sk-1hVx-706" styleSettingsVariant="4be64612-55d8-43ab-aa3c-96d201694f72">
+															<actions>
+																<action type="updateRow" fieldmodel="uiModel" affectedrows="all" enclosevalueinquotes="true">
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" value="Accounts"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+															</actions>
+															<renderConditions logictype="and"/>
+															<enableConditions logictype="and"/>
+														</skuid__button>
+														<skuid__button label="Opportunities" uniqueid="sk-1hVz-722" styleSettingsVariant="4be64612-55d8-43ab-aa3c-96d201694f72">
+															<actions>
+																<action type="updateRow" fieldmodel="uiModel" affectedrows="all" enclosevalueinquotes="true">
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" value="Opportunities"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+															</actions>
+															<renderConditions logictype="and"/>
+															<enableConditions logictype="and"/>
+															<hotkeys/>
+														</skuid__button>
+														<skuid__button label="Leads" uniqueid="sk-1hVz-718" styleSettingsVariant="4be64612-55d8-43ab-aa3c-96d201694f72">
+															<actions>
+																<action type="updateRow" fieldmodel="uiModel" affectedrows="all" enclosevalueinquotes="true">
+																	<updates>
+																		<update valuesource="fieldvalue" field="view" value="Leads"/>
+																	</updates>
+																</action>
+																<action type="save">
+																	<models>
+																		<model>uiModel</model>
+																	</models>
+																</action>
+															</actions>
+															<renderConditions logictype="and"/>
+															<enableConditions logictype="and"/>
+															<hotkeys/>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+											<renderConditions logictype="and"/>
+											<styles>
+												<spacing bottom="1.5" right="0.5"/>
+											</styles>
+										</skuid__buttonSet>
+										<skuid__header title="Recently Added {{view}}" uniqueid="sk-q6z-1657" model="uiModel" styleSettingsVariant="extraSmall">
+											<buttons/>
+											<styles>
+												<spacing bottom="2"/>
+											</styles>
+										</skuid__header>
+										<skuid__wrapper uniqueid="accounts" styleSettingsVariant="5c73d5e9-be83-4236-8e23-59147111d744">
+											<components>
+												<skuid__table model="Accounts" uniqueid="sk-u5q-1842" mode="read" showSaveCancel="false" styleSettingsVariant="88c06128-4f90-4665-b0f3-e517e2701ab9" pageSize="10" showListFooter="true" allowColumnOrdering="true" allowColumnHiding="false" rowActionsOnLeft="false">
+													<fields>
+														<field id="Name" uniqueid="sk-u5--1892"/>
+														<field id="Industry" uniqueid="sk-u6A-2020"/>
+														<field id="Type" uniqueid="sk-u6A-2026"/>
+														<field id="AnnualRevenue" uniqueid="sk-u6A-2028"/>
+													</fields>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<rowActions>
+														<action type="multi" label="Edit" icon="sk-webicon-material-icons:edit">
+															<actions>
+																<action type="showModal">
+																	<skuid__modal title="Edit Account: {{Name}}" width="560px" buttonsJustification="right">
+																		<components>
+																			<skuid__form showErrorsInline="true" model="Accounts" uniqueid="sk-2L-S-4383" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row uniqueid="sk-2L-h-4432">
+																								<fields>
+																									<skuid__field id="Name" uniqueid="sk-2L-h-4431"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4464">
+																								<fields>
+																									<skuid__field id="Description" uniqueid="sk-2L-h-4463"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4436">
+																								<fields>
+																									<skuid__field id="Type" uniqueid="sk-2L-h-4435"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4440">
+																								<fields>
+																									<skuid__field id="AnnualRevenue" uniqueid="sk-2L-h-4439"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4444">
+																								<fields>
+																									<skuid__field id="BillingStreet" uniqueid="sk-2L-h-4443"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4448">
+																								<fields>
+																									<skuid__field id="BillingCity" uniqueid="sk-2L-h-4447"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4452">
+																								<fields>
+																									<skuid__field id="BillingState" uniqueid="sk-2L-h-4451"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4456">
+																								<fields>
+																									<skuid__field id="BillingPostalCode" uniqueid="sk-2L-h-4455"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4460">
+																								<fields>
+																									<skuid__field id="BillingCountry" uniqueid="sk-2L-h-4459"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4472">
+																								<fields>
+																									<skuid__field id="Industry" uniqueid="sk-2L-h-4471"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4476">
+																								<fields>
+																									<skuid__field id="Rating" uniqueid="sk-2L-h-4475"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4480">
+																								<fields>
+																									<skuid__field id="Phone" uniqueid="sk-2L-h-4479"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4484">
+																								<fields>
+																									<skuid__field id="TickerSymbol" uniqueid="sk-2L-h-4483"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2L-h-4488">
+																								<fields/>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="CreatedById" showHelp="true"/>
+																									<skuid__field id="CreatedDate"/>
+																								</fields>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="LastModifiedById"/>
+																									<skuid__field id="LastModifiedDate"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																			</skuid__form>
+																		</components>
+																		<buttons>
+																			<skuid__button label="Cancel" uniqueid="sk-2M1X-2221" styleSettingsVariant="borderless">
+																				<actions>
+																					<action type="cancel">
+																						<models>
+																							<model>Accounts</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Accounts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																			<skuid__button label="Save" uniqueid="sk-2M1X-2228" styleSettingsVariant="primary">
+																				<actions>
+																					<action type="save">
+																						<models>
+																							<model>Accounts</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Accounts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																		</buttons>
+																	</skuid__modal>
+																</action>
+															</actions>
+															<renderConditions logictype="and"/>
+															<tooltip position="top"/>
+														</action>
+													</rowActions>
+													<massActions/>
+													<renderConditions logictype="and"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__table>
+											</components>
+											<background/>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="uiModel" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="view" value="Accounts"/>
+											</renderConditions>
+											<interactions/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__wrapper>
+										<skuid__wrapper uniqueid="opps">
+											<components>
+												<skuid__table model="Opportunities" uniqueid="sk-u6Q-2257" mode="read" showSaveCancel="false" styleSettingsVariant="88c06128-4f90-4665-b0f3-e517e2701ab9">
+													<fields>
+														<field id="Name" uniqueid="sk-u6d-2295"/>
+														<field id="AccountId" uniqueid="fi-35Yc-37697" label="Account"/>
+														<field id="Amount" uniqueid="sk-u6d-2297"/>
+														<field id="CloseDate" uniqueid="sk-u6d-2299"/>
+														<field id="StageName" uniqueid="fi-35YQ-35829"/>
+														<field id="LastModifiedDate" uniqueid="fi-35YQ-35830"/>
+													</fields>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<rowActions>
+														<action type="multi" label="Edit" icon="sk-webicon-material-icons:edit">
+															<actions>
+																<action type="showModal">
+																	<skuid__modal title="Edit Opportunity: {{Name}}" width="560px" buttonsJustification="right">
+																		<components>
+																			<skuid__form showErrorsInline="true" model="Opportunities" uniqueid="sk-2M5U-4609" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row uniqueid="sk-2M5a-4652">
+																								<fields>
+																									<skuid__field id="Name" uniqueid="sk-2M5a-4651"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4656">
+																								<fields>
+																									<skuid__field id="Amount" uniqueid="sk-2M5a-4655"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4660">
+																								<fields>
+																									<skuid__field id="Probability" uniqueid="sk-2M5a-4659"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4664">
+																								<fields>
+																									<skuid__field id="StageName"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4668">
+																								<fields>
+																									<skuid__field id="Type" uniqueid="sk-2M5a-4667"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4672">
+																								<fields>
+																									<skuid__field id="LeadSource" uniqueid="sk-2M5a-4671"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4676">
+																								<fields>
+																									<skuid__field id="ExpectedRevenue" uniqueid="sk-2M5a-4675"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4680">
+																								<fields>
+																									<skuid__field id="CloseDate" uniqueid="sk-2M5a-4679"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M5a-4684">
+																								<fields>
+																									<skuid__field id="AccountId" uniqueid="sk-2M5a-4683"/>
+																								</fields>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="CreatedById"/>
+																									<skuid__field id="CreatedDate"/>
+																								</fields>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="LastModifiedById"/>
+																									<skuid__field id="LastModifiedDate"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																			</skuid__form>
+																		</components>
+																		<buttons>
+																			<skuid__button label="Cancel" uniqueid="sk-2M5b-4692">
+																				<actions>
+																					<action type="cancel">
+																						<models>
+																							<model>Opportunities</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Opportunities" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																			<skuid__button label="Save" uniqueid="sk-2M5b-4685" styleSettingsVariant="primary">
+																				<actions>
+																					<action type="save">
+																						<models>
+																							<model>Opportunities</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Opportunities" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																		</buttons>
+																	</skuid__modal>
+																</action>
+															</actions>
+														</action>
+													</rowActions>
+													<massActions/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__table>
+											</components>
+											<background/>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="uiModel" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="view" value="Opportunities"/>
+											</renderConditions>
+										</skuid__wrapper>
+										<skuid__wrapper uniqueid="leads">
+											<components>
+												<skuid__table model="Leads" uniqueid="sk-qD3-858" mode="read" showSaveCancel="false" pageSize="10" styleSettingsVariant="88c06128-4f90-4665-b0f3-e517e2701ab9">
+													<fields>
+														<field label="Lead" type="COMBO" uniqueid="sk-qDL-1044" template="{{FirstName}} {{LastName}}"/>
+														<field id="Company" uniqueid="sk-qDV-1199"/>
+														<field label="Location" type="COMBO" uniqueid="sk-qDX-1225" template="{{#City}}{{City}}, {{/City}}{{Country}}"/>
+														<field id="OwnerId" uniqueid="sk-uKP-2372"/>
+														<field id="LeadSource" uniqueid="sk-qDK-1006"/>
+														<field id="Status" uniqueid="sk-qDK-1015"/>
+														<field label="Created" type="COMBO" uniqueid="sk-qD9-909" template="{{CreatedDate}} by {{CreatedBy.Name}}" readOnly="true"/>
+													</fields>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<rowActions>
+														<action type="multi" label="Edit" icon="sk-webicon-material-icons:edit">
+															<actions>
+																<action type="showModal">
+																	<skuid__modal title="Edit Lead: {{Name}}" width="560px" buttonsJustification="right">
+																		<components>
+																			<skuid__form showErrorsInline="true" model="Leads" uniqueid="sk-2M6R-5243" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row uniqueid="sk-2M6X-5286">
+																								<fields>
+																									<skuid__field id="FirstName" uniqueid="sk-2M6X-5285"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5290">
+																								<fields>
+																									<skuid__field id="LastName" uniqueid="sk-2M6X-5289"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5294">
+																								<fields>
+																									<skuid__field id="Description" uniqueid="sk-2M6X-5293"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5298">
+																								<fields>
+																									<skuid__field id="Company" uniqueid="sk-2M6X-5297"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5302">
+																								<fields>
+																									<skuid__field id="Industry"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5306">
+																								<fields>
+																									<skuid__field id="LeadSource" uniqueid="sk-2M6X-5305"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5310">
+																								<fields>
+																									<skuid__field id="City" uniqueid="sk-2M6X-5309"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5314">
+																								<fields>
+																									<skuid__field id="Country" uniqueid="sk-2M6X-5313"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5318">
+																								<fields>
+																									<skuid__field id="Status" uniqueid="sk-2M6X-5317"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5322">
+																								<fields>
+																									<skuid__field id="Title" uniqueid="sk-2M6X-5321"/>
+																								</fields>
+																							</row>
+																							<row uniqueid="sk-2M6X-5326">
+																								<fields>
+																									<skuid__field id="OwnerId" uniqueid="sk-2M6X-5325" showHelp="true"/>
+																								</fields>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="CreatedById"/>
+																									<skuid__field id="CreatedDate"/>
+																								</fields>
+																							</row>
+																							<row>
+																								<fields>
+																									<skuid__field id="LastModifiedById"/>
+																									<skuid__field id="LastModifiedDate"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																			</skuid__form>
+																		</components>
+																		<buttons>
+																			<skuid__button label="Cancel" uniqueid="sk-2M6v-5604">
+																				<actions>
+																					<action type="cancel">
+																						<models>
+																							<model>Leads</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Leads" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																			<skuid__button label="Save" uniqueid="sk-2M6P-5227" styleSettingsVariant="primary">
+																				<actions>
+																					<action type="save">
+																						<models>
+																							<model>Leads</model>
+																						</models>
+																					</action>
+																					<action type="closeAllPopups"/>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and">
+																					<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Leads" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																				</enableConditions>
+																			</skuid__button>
+																		</buttons>
+																	</skuid__modal>
+																</action>
+															</actions>
+														</action>
+													</rowActions>
+													<massActions/>
+													<renderConditions logictype="and"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__table>
+											</components>
+											<background/>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="uiModel" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="view" value="Leads"/>
+											</renderConditions>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__wrapper>
+										<skuid__buttonSet uniqueid="sk-qEz-1283">
+											<groups>
+												<skuid__buttonGroup>
+													<buttons>
+														<skuid__button label="Cancel" uniqueid="sk-qE_-1300">
+															<actions>
+																<action type="cancel">
+																	<models>
+																		<model>Accounts</model>
+																		<model>Opportunities</model>
+																		<model>Leads</model>
+																	</models>
+																</action>
+															</actions>
+														</skuid__button>
+														<skuid__button label="Save" uniqueid="sk-qEz-1291" styleSettingsVariant="primary">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>Accounts</model>
+																		<model>Opportunities</model>
+																		<model>Leads</model>
+																	</models>
+																</action>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+											<renderConditions logictype="or">
+												<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Accounts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+												<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Opportunities" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+												<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Leads" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+											</renderConditions>
+											<styles>
+												<spacing top="2" bottom="1.5"/>
+											</styles>
+										</skuid__buttonSet>
+									</components>
+									<background/>
+									<renderConditions logictype="and"/>
+									<styles>
+										<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+							<background color="rgba(255,255,255,0.9)"/>
+							<styles>
+								<spacing top="2" bottom="4"/>
+							</styles>
+							<renderConditions logictype="and"/>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="240px" ratio="1" uniqueid="div-2">
+					<components>
+						<skuid__wrapper uniqueid="sk-pxP-963" styleSettingsVariant="c751a925-b822-436c-88e0-8a8683ca26aa">
+							<components>
+								<skuid__accordion uniqueid="sk-1hJT-547" styleSettingsVariant="small">
+									<sections>
+										<section title="Upcoming Events">
+											<components>
+												<skuid__list model="Event" uniqueid="sk-1hTo-581" pageSize="5" styleSettingsVariant="6e24b78a-cd62-4678-aa72-8f5f85abb2ef" showPageSizeSelect="false" showLoadMore="false" showListHeader="false" showListFooter="false">
+													<columns>
+														<column uniqueid="sk-1hTp-597" width="6" fillRatio="0">
+															<items>
+																<item displayType="avatar" uniqueid="sk-1hTp-595" size="medium" fallbackType="icon" fallback="sk-webicon-ink:weekly-view" styleSettingsVariant="circular"/>
+															</items>
+														</column>
+														<column uniqueid="sk-1hTr-611">
+															<items>
+																<item fieldId="Subject" uniqueid="sk-1hTr-609" displayType="field"/>
+																<item displayType="template" uniqueid="sk-1hTt-624" template="{{StartDateTime}} - {{EndDateTime}}" displayStyle="tertiary"/>
+															</items>
+														</column>
+													</columns>
+													<rowActions>
+														<action type="multi" uniqueid="sk-3L2S-1133" icon="sk-webicon-ink:social-share"/>
+														<action type="multi" uniqueid="sk-3L2S-1149" icon="sk-webicon-ink:delete"/>
+													</rowActions>
+													<massActions/>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<interactions>
+														<interaction type="tap">
+															<action type="showModal">
+																<skuid__modal title="Event Detail" width="560px" buttonsJustification="right">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Event" uniqueid="sk-2Lki-1725" mode="edit">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-2Lkt-1760">
+																							<fields>
+																								<skuid__field id="Subject" uniqueid="sk-2Lkt-1759"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lkt-1764">
+																							<fields>
+																								<skuid__field id="Location" uniqueid="sk-2Lkt-1763"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lkt-1768">
+																							<fields>
+																								<skuid__field id="StartDateTime" uniqueid="sk-2Lkt-1767"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lkt-1772">
+																							<fields>
+																								<skuid__field id="EndDateTime" uniqueid="sk-2Lkt-1771"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lkt-1776">
+																							<fields>
+																								<skuid__field id="Description" uniqueid="sk-2Lkt-1775"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lkt-1812">
+																							<fields>
+																								<skuid__field id="ReminderDateTime" uniqueid="sk-2Lkt-1811"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="AccountId"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="WhoId"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="CreatedById"/>
+																								<skuid__field id="CreatedDate"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="LastModifiedById"/>
+																								<skuid__field id="LastModifiedDate"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																		</skuid__form>
+																	</components>
+																	<buttons>
+																		<skuid__button label="Done" uniqueid="sk-2Lku-1823" styleSettingsVariant="primary">
+																			<actions>
+																				<action type="closeAllPopups"/>
+																			</actions>
+																		</skuid__button>
+																	</buttons>
+																</skuid__modal>
+															</action>
+														</interaction>
+													</interactions>
+													<renderConditions logictype="and"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__list>
+											</components>
+										</section>
+									</sections>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__accordion>
+							</components>
+							<background color="rgba(255,255,255,0.9)"/>
+							<interactions/>
+							<styles>
+								<spacing bottom="3"/>
+							</styles>
+						</skuid__wrapper>
+						<skuid__wrapper uniqueid="sk-qGz-1539" styleSettingsVariant="c751a925-b822-436c-88e0-8a8683ca26aa">
+							<components>
+								<skuid__accordion uniqueid="sk-qGz-1540" styleSettingsVariant="small">
+									<sections>
+										<section title="Upcoming Tasks">
+											<components>
+												<skuid__list model="Task" uniqueid="sk-qGz-1541" pageSize="5" styleSettingsVariant="6e24b78a-cd62-4678-aa72-8f5f85abb2ef" showPageSizeSelect="false" showLoadMore="false" showListHeader="false" showListFooter="false">
+													<columns>
+														<column uniqueid="sk-qGz-1542" width="6" fillRatio="0">
+															<items>
+																<item displayType="avatar" uniqueid="sk-qGz-1543" size="medium" fallbackType="icon" fallback="sk-webicon-ink:task" styleSettingsVariant="circular"/>
+															</items>
+														</column>
+														<column uniqueid="sk-qGz-1544">
+															<items>
+																<item fieldId="Subject" uniqueid="sk-qGz-1545" displayType="field"/>
+																<item fieldId="ActivityDate" uniqueid="sk-qGz-1546" displayType="field" displayStyle="tertiary"/>
+															</items>
+														</column>
+													</columns>
+													<rowActions>
+														<action type="multi" uniqueid="sk-3L2A-883" icon="sk-webicon-ink:check"/>
+														<action type="multi" uniqueid="sk-3L2A-916" icon="sk-webicon-ink:delete"/>
+													</rowActions>
+													<massActions/>
+													<interactions>
+														<interaction type="tap">
+															<action type="showModal">
+																<skuid__modal title="Task Details" width="560px" buttonsJustification="right">
+																	<components>
+																		<skuid__form showErrorsInline="true" model="Task" uniqueid="sk-2Lwn-2698" mode="edit">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<rows>
+																						<row uniqueid="sk-2Lwu-2735">
+																							<fields>
+																								<skuid__field id="Subject" uniqueid="sk-2Lwu-2734"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2739">
+																							<fields>
+																								<skuid__field id="Status" uniqueid="sk-2Lwu-2738"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2743">
+																							<fields>
+																								<skuid__field id="Type" uniqueid="sk-2Lwu-2742"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2747">
+																							<fields>
+																								<skuid__field id="Priority" uniqueid="sk-2Lwu-2746"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2751">
+																							<fields>
+																								<skuid__field id="Description" uniqueid="sk-2Lwu-2750"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2755">
+																							<fields>
+																								<skuid__field id="ActivityDate" uniqueid="sk-2Lwu-2754"/>
+																							</fields>
+																						</row>
+																						<row uniqueid="sk-2Lwu-2763">
+																							<fields>
+																								<skuid__field id="ReminderDateTime" uniqueid="sk-2Lwu-2762"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="AccountId"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="WhoId"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="CreatedById"/>
+																								<skuid__field id="CreatedDate"/>
+																							</fields>
+																						</row>
+																						<row>
+																							<fields>
+																								<skuid__field id="LastModifiedById"/>
+																								<skuid__field id="LastModifiedDate"/>
+																							</fields>
+																						</row>
+																					</rows>
+																				</section>
+																			</sections>
+																		</skuid__form>
+																	</components>
+																	<buttons>
+																		<skuid__button label="Done" uniqueid="sk-2Lwu-2772" styleSettingsVariant="primary">
+																			<actions>
+																				<action type="closeAllPopups"/>
+																			</actions>
+																		</skuid__button>
+																	</buttons>
+																</skuid__modal>
+															</action>
+														</interaction>
+													</interactions>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__list>
+											</components>
+										</section>
+									</sections>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__accordion>
+							</components>
+							<background color="rgba(255,255,255,0.9)"/>
+							<interactions/>
+							<styles>
+								<spacing top="2"/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing left="4" right="4"/>
+			</styles>
+			<interactions/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<css/>
+		<javascript/>
+		<actionsequences uniqueid="sk-1hWF-943"/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="color">
+			<styles>
+				<styleitem property="background-color" value="#f9f9fa"/>
+			</styles>
+		</styleitem>
+	</styles>
+	<interactions/>
+	<background type="color" datasource="salesforce" source="url" size="cover" model="uiModel" url="https://images.unsplash.com/photo-1483444308400-fb9510501d23?ixlib=rb-0.3.5&amp;s=ee4397dfee173a9a3aa512400160218e&amp;auto=format&amp;fit=crop&amp;w=2253&amp;q=80" position="center center" color="#045668"/>
+</skuid__page>

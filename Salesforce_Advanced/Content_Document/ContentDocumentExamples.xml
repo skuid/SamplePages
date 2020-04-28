@@ -1,0 +1,736 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false">
+	<models>
+<model id="Account" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="Name"/>
+		<field id="Type"/>
+		<field id="OwnerId"/>
+		<field id="Owner.Name"/>
+	</fields>
+	<conditions>
+		<condition type="param" value="id" field="Id" clientorserver="server" operator="=" enclosevalueinquotes="true"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="AccountContentDocumentLink" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="ContentDocumentLink">
+	<fields>
+		<field id="ContentDocumentId"/>
+		<field id="ContentDocument.Title"/>
+		<field id="LinkedEntityId"/>
+		<field id="LinkedEntity.Name"/>
+		<field id="ShareType"/>
+		<field id="Visibility"/>
+		<field id="ContentDocument.LatestPublishedVersion.ContentUrl"/>
+		<field id="ContentDocument.LatestPublishedVersion.Id"/>
+		<field id="ContentDocument.LatestPublishedVersionId"/>
+		<field id="ContentDocument.LatestPublishedVersion.Title"/>
+		<field id="ContentDocument.LatestPublishedVersion.FileExtension"/>
+		<field id="ContentDocument.LatestPublishedVersion.TextPreview"/>
+		<field id="ContentDocument.Description"/>
+		<field id="ContentDocument.FileType"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="LinkedEntityId" fieldtargetobjects="Account,Ad_Campaign__c,Announcements__c,ApexDemos__c,Asset,AssetRelationship,BeerRating__c,Big_Complicated_Object__c,Broker__c,Bundle__c,Campaign,Case,CaseFile__c,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ChannelProgramMember,Circle__c,Client_Encounter__c,Client__c,CollaborationGroup,College_Application__c,Comment__c,Contact,Contact_Address__c,Contact_Circle_Association__c,Contact_Phone__c,ContentWorkspace,Contract,Contribution__c,Country__c,Custom_Event_Assignment__c,Custom_Event_Test__c,DS_Declaration__c,DS_Financial__c,DS_Loan__c,DS_Mortgage__c,DS_Personal__c,DS_Property__c,DS_Rate__c,DS_Summary__c,Daily_Numbers__c,Dashboard,DashboardComponent,Dashboard_Fact__c,Demo_Custom_Code_Inventory__c,Demo_Inventory_Entry__c,Demo_Usage__c,Design_Brief__c,Document_Status__c,Dynamics_Certs__c,EF_Category__c,EF_DistribHeader__c,EF_DistribItems__c,EF_Selection__c,EmailMessage,EmailTemplate,Emily_s_Custom_Object__c,Epic__c,Event,FakeAccountObject__c,FastCall__Call_Score__c,Fitting__c,Form_Instance__c,Fund_Relationship__c,Fund__c,Grant__c,Grantee__c,Holiday__c,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,KW_Testing_Bug__c,Knowledge__ka,Knowledge__kav,Lead,LinkedArticle,ListEmail,Location,MPI_Survey__c,MP_Fleet__c,Marketing_Consent__c,Marketing_Resource__c,Moment__c,NN_Forecast__c,Network,NewCustomerReq__c,OppFilter__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,Order__c,Organization,OutgoingEmail,Page_Analytics__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,Product2,Project__c,Property__c,QR_Instance__c,QR_Master__c,Quarterly_Forecast__c,Question_Response__c,Question__c,Questionaire__c,Quote,Related_Product__c,Report,SOAT__c,Sales_Order__c,Scholarship_Request__c,Session_Pause__c,Session__c,Shopping_Cart_Item__c,Site,Site__c,SkuidVideo__c,Skuid_POC_Tracking__c,SocialPost,Solution,Sort_Order__c,StateCode__c,State__c,Statement__c,Stock_Holding__c,Stock_Offering__c,Stock__c,Survey__c,TSA_Form__c,TapStatus__c,Task,Territory__c,TestCustomObject__c,TestObject__c,Test_Object2__c,Time_Card__c,Topic,UniqueEntry__Custom_Field_Mapping__c,UniqueEntry__Scanned_Field_Config__c,UniqueEntry__Scanned_Field__c,UniqueEntry__systemSettings__c,User,User_Story__c,WorkOrder,WorkOrderLineItem,Workout__c,jSignatureTest__c,qbdialer__DialerQueryAttendee__c,qbdialer__DialerQueryItem__c,qbdialer__DialerQuery__c,qbdialer__SeekInitiativeAttendee__c,qbdialer__SeekInitiativeItem__c,qbdialer__SeekInitiative__c,qbdialer__UserStatusLog__c,qbdialer__isDialerConfig__c,skuid__Auth_Provider_Credential__c,skuid__Auth_Provider__c,skuid__Component_Pack__c,skuid__Data_Service__c,skuid__Encryption_Settings__c,skuid__Feedback_Response__c,skuid__Feedback__c,skuid__Image__c,skuid__Loader_Service_Modstamp__c,skuid__Model_Service_Adapter__c,skuid__Model_Service_Credential__c,skuid__Model_Service__c,skuid__Page_Assignment__c,skuid__Page_Interaction__c,skuid__Page_Version__c,skuid__Page__c,skuid__Personalization_Settings__c,skuid__Preferences__c,skuid__Theme__c" operator="=" model="Account" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="AccountContentVersions" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="ContentVersion">
+	<fields>
+		<field id="Description"/>
+		<field id="IsLatest"/>
+		<field id="IsMajorVersion"/>
+		<field id="Title"/>
+		<field id="VersionNumber"/>
+		<field id="Id"/>
+		<field id="ContentDocumentId"/>
+		<field id="ContentDocument.Title"/>
+		<field id="ContentDocument.FileType"/>
+	</fields>
+	<conditions>
+		<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ContentDocumentId" fieldtargetobjects="ContentDocument" clientorserver="server" state="filterableoff" inactive="true" name="ContentDocumentId"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="AccountContentDocumentSelected" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="ContentDocument">
+	<fields>
+		<field id="Description"/>
+		<field id="Title"/>
+	</fields>
+	<conditions>
+		<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="LibraryContentWorkspaces" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="ContentWorkspace">
+	<fields>
+		<field id="Description"/>
+		<field id="Id"/>
+		<field id="WorkspaceType"/>
+		<field id="Name"/>
+		<field id="NamespacePrefix"/>
+		<field id="TagModel"/>
+		<field id="IsRestrictContentTypes"/>
+		<field id="IsRestrictLinkedContentTypes"/>
+		<field id="RootContentFolderId"/>
+	</fields>
+	<conditions/>
+	<actions/>
+</model>
+<model id="LibraryContentNonImages" limit="500" query="true" createrowifnonefound="false" datasource="salesforce" sobject="ContentDocument" orderby="LastModifiedDate DESC">
+	<fields>
+		<field id="FileExtension"/>
+		<field id="Description"/>
+		<field id="FileType"/>
+		<field id="LatestPublishedVersionId"/>
+		<field id="LatestPublishedVersion.Title"/>
+		<field id="PublishStatus"/>
+		<field id="ContentSize"/>
+		<field id="Title"/>
+		<field id="CreatedDate"/>
+		<field id="LastModifiedDate"/>
+		<field id="ParentId"/>
+		<field id="Id"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="ParentId" fieldtargetobjects="ContentWorkspace" clientorserver="server" state="filterableoff" inactive="true" name="ParentId" operator="not in" model="LibraryContentWorkspaces" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+		<condition type="multiple" value="" field="FileType" operator="not in" enclosevalueinquotes="true">
+			<values>
+				<value>JPG</value>
+				<value>GIF</value>
+				<value>PNG</value>
+			</values>
+		</condition>
+	</conditions>
+	<actions/>
+</model>
+<model id="LibraryContentImages" limit="500" query="true" createrowifnonefound="false" datasource="salesforce" sobject="ContentDocument" orderby="LastModifiedDate DESC">
+	<fields>
+		<field id="FileExtension"/>
+		<field id="Description"/>
+		<field id="FileType"/>
+		<field id="LatestPublishedVersionId"/>
+		<field id="LatestPublishedVersion.Title"/>
+		<field id="PublishStatus"/>
+		<field id="ContentSize"/>
+		<field id="Title"/>
+		<field id="CreatedDate"/>
+		<field id="LastModifiedDate"/>
+		<field id="ParentId"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="ParentId" fieldtargetobjects="ContentWorkspace" clientorserver="server" state="filterableoff" inactive="true" name="ParentId" operator="in" model="LibraryContentWorkspaces" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+		<condition type="multiple" value="" field="FileType" operator="in" enclosevalueinquotes="true">
+			<values>
+				<value>JPG</value>
+				<value>GIF</value>
+				<value>PNG</value>
+			</values>
+		</condition>
+	</conditions>
+	<actions/>
+</model>
+</models>
+	<components>
+<skuid__tabSet uniqueid="sk-36oZ-19262" rememberActiveTab="true">
+	<tabs>
+		<skuid__tabPanel name="Account Related List">
+			<components>
+				<skuid__grid uniqueid="sk-2Xr6-53194" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+					<divisions>
+						<division minWidth="150px" ratio="0" alignSelf="auto">
+							<components>
+								<skuid__form showErrorsInline="true" model="Account" uniqueid="sk-361P-4887" mode="readonly" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+									<sections>
+										<section showHeading="false">
+											<rows>
+												<row>
+													<fields>
+														<skuid__field id="Name" redirectType="none"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="Type"/>
+													</fields>
+												</row>
+												<row>
+													<fields>
+														<skuid__field id="OwnerId" redirectType="none"/>
+													</fields>
+												</row>
+											</rows>
+										</section>
+									</sections>
+								</skuid__form>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components>
+								<skuid__wrapper uniqueid="sk-2XrI-55096">
+									<components>
+										<skuid__file storeAs="contentdocumentwithrecord" displayAs="filename" uniqueid="sk-362T-16331" datasource="salesforce" model="Account" buttonLabel="Upload Content">
+											<uploadSuccessActions>
+												<action type="requeryModel" model="AccountContentDocumentLink" behavior="standard"/>
+											</uploadSuccessActions>
+											<uploadFailureActions/>
+											<styles>
+												<spacing top="4" bottom="4" left="4" right="4"/>
+											</styles>
+										</skuid__file>
+										<skuid__table model="AccountContentDocumentLink" uniqueid="sk-362K-11098" mode="readonly" title="Related Content Documents" showSaveCancel="false">
+											<fields>
+												<field id="ContentDocument.Title" uniqueid="fi-362K-11529"/>
+												<field id="ContentDocument.FileType" label="File Type" uniqueid="fi-2brt-35058"/>
+												<field id="ShareType" uniqueid="fi-362K-11532"/>
+												<field id="Visibility" uniqueid="fi-36eu-3207"/>
+												<field id="ContentDocument.Description" uniqueid="fi-2Y7Z-90354"/>
+											</fields>
+											<filtering enableSearch="false" instantSearch="false"/>
+											<rowActions>
+												<action type="multi" label="Edit Details">
+													<actions>
+														<action type="setCondition" model="AccountContentDocumentSelected" condition="Id" value="{{ContentDocumentId}}"/>
+														<action type="requeryModel" model="AccountContentDocumentSelected" behavior="standard"/>
+														<action type="showModal">
+															<skuid__modal title="Content Document Details" width="640px">
+																<components>
+																	<skuid__form showErrorsInline="true" model="AccountContentDocumentSelected" uniqueid="sk-2Y6_-82318" mode="edit">
+																		<sections>
+																			<section showHeading="false">
+																				<rows>
+																					<row>
+																						<fields>
+																							<skuid__field id="Title"/>
+																						</fields>
+																					</row>
+																					<row>
+																						<fields>
+																							<skuid__field id="Description"/>
+																						</fields>
+																					</row>
+																				</rows>
+																			</section>
+																		</sections>
+																		<conditions>
+																			<condition type="contextrow" field="Id" mergefield="ContentDocumentId" operator="=" fieldtargetobjects="ContentDocument"/>
+																		</conditions>
+																		<styles>
+																			<spacing bottom="4"/>
+																		</styles>
+																	</skuid__form>
+																</components>
+																<buttons>
+																	<skuid__button label="Save" uniqueId="sk-2Y6v-81314" styleSettingsVariant="primary">
+																		<actions>
+																			<action type="save">
+																				<models>
+																					<model>AccountContentDocumentSelected</model>
+																				</models>
+																			</action>
+																			<action type="requeryModel" model="AccountContentDocumentLink" behavior="standard"/>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																	</skuid__button>
+																	<skuid__button label="Cancel" uniqueId="sk-2Y6v-81537">
+																		<actions>
+																			<action type="cancel">
+																				<models>
+																					<model>AccountContentDocumentSelected</model>
+																				</models>
+																			</action>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																	</skuid__button>
+																</buttons>
+																<afterCloseActions>
+																	<action type="cancel">
+																		<models>
+																			<model>AccountContentDocumentSelected</model>
+																		</models>
+																	</action>
+																</afterCloseActions>
+															</skuid__modal>
+														</action>
+													</actions>
+												</action>
+												<action type="multi" label="Preview">
+													<actions>
+														<action type="showModal">
+															<skuid__modal title="Document Preview" width="80%">
+																<components>
+																	<skuid__text contents="&lt;img src=&quot;/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;amp;versionId={{{ContentDocument.LatestPublishedVersion.Id}}}&amp;amp;operationContext=CHATTER&amp;amp;contentId={{{ContentDocumentId}}}&quot; /&gt;" uniqueid="sk-36kK-13787" model="AccountContentDocumentLink">
+																		<conditions>
+																			<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																		</conditions>
+																		<styles>
+																			<spacing/>
+																		</styles>
+																	</skuid__text>
+																</components>
+															</skuid__modal>
+														</action>
+													</actions>
+													<renderConditions logictype="and">
+														<renderCondition type="multiple" operator="in" fieldmodel="AccountContentDocumentLink" sourcetype="fieldvalue" field="ContentDocument.FileType" value="" enclosevalueinquotes="true">
+															<values>
+																<value>PNG</value>
+																<value>GIF</value>
+																<value>JPG</value>
+															</values>
+														</renderCondition>
+													</renderConditions>
+												</action>
+												<action type="multi" label="Download">
+													<actions>
+														<action type="redirect" window="self" url="/sfc/servlet.shepherd/version/download/{{ContentDocument.LatestPublishedVersion.Id}}?asPdf=false&amp;operationContext=CHATTER"/>
+													</actions>
+												</action>
+												<action type="multi" label="Review Versions">
+													<actions>
+														<action type="blockUI" message="Loading Versions"/>
+														<action type="setCondition" model="AccountContentVersions" condition="ContentDocumentId" value="{{ContentDocumentId}}"/>
+														<action type="requeryModel" model="AccountContentVersions" behavior="standard"/>
+														<action type="unblockUI"/>
+														<action type="showModal">
+															<skuid__modal title="Versions of {{ContentDocument.Title}}" width="80%">
+																<components>
+																	<skuid__file storeAs="contentdocumentwithrecord" displayAs="filename" uniqueid="sk-36gj-8632" datasource="salesforce" model="AccountContentVersions" buttonLabel="Upload New Version" autorefreshmodels="false">
+																		<uploadSuccessActions>
+																			<action type="requeryModel" model="ContentVersions" behavior="standard"/>
+																		</uploadSuccessActions>
+																		<uploadFailureActions/>
+																		<styles>
+																			<spacing bottom="2"/>
+																		</styles>
+																	</skuid__file>
+																	<skuid__table model="AccountContentVersions" uniqueid="sk-36gd-7786" mode="readonly" showSaveCancel="false" pageSize="Infinity" showPageSizeSelect="false" resetPaginationOnQuery="false" showListFooter="false">
+																		<fields>
+																			<field id="VersionNumber" uniqueid="fi-36hR-10840"/>
+																			<field id="IsMajorVersion" uniqueid="fi-36hR-10841"/>
+																			<field id="IsLatest" uniqueid="fi-36hR-10842"/>
+																			<field id="Description" uniqueid="fi-36hR-10843"/>
+																		</fields>
+																		<filtering enableSearch="false" instantSearch="false"/>
+																		<rowActions>
+																			<action type="multi" label="Download">
+																				<actions>
+																					<action type="redirect" window="self" url="/sfc/servlet.shepherd/version/download/{{Id}}?asPdf=false&amp;operationContext=CHATTER"/>
+																				</actions>
+																			</action>
+																			<action type="multi" label="Preview">
+																				<actions>
+																					<action type="showModal">
+																						<skuid__modal title="Document Preview" width="80%">
+																							<components>
+																								<skuid__text contents="&lt;img src=&quot;/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;amp;versionId={{{Id}}}&amp;amp;operationContext=CHATTER&amp;amp;contentId={{{ContentDocumentId}}}&quot; /&gt;" uniqueid="sk-36jh-12498" model="AccountContentVersions"/>
+																							</components>
+																						</skuid__modal>
+																					</action>
+																				</actions>
+																				<renderConditions logictype="and">
+																					<renderCondition type="multiple" operator="in" fieldmodel="AccountContentVersions" sourcetype="fieldvalue" field="ContentDocument.FileType" value="" enclosevalueinquotes="true">
+																						<values>
+																							<value>PNG</value>
+																							<value>JPG</value>
+																							<value>GIF</value>
+																						</values>
+																					</renderCondition>
+																				</renderConditions>
+																			</action>
+																		</rowActions>
+																		<massActions/>
+																	</skuid__table>
+																</components>
+																<buttons>
+																	<skuid__button label="Done" uniqueId="sk-36gx-9555" styleSettingsVariant="primary">
+																		<actions>
+																			<action type="closeTopmostPopup"/>
+																			<action type="abandonRows" model="AccountContentVersions" affectedrows="context"/>
+																		</actions>
+																	</skuid__button>
+																</buttons>
+															</skuid__modal>
+														</action>
+													</actions>
+													<renderConditions logictype="and"/>
+												</action>
+											</rowActions>
+											<massActions/>
+											<styles>
+												<spacing top="4" bottom="4" left="4" right="4"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="AccountContentDocumentLink" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__table>
+									</components>
+									<styles>
+										<spacing/>
+									</styles>
+									<background type="color" color="white"/>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing top="4"/>
+					</styles>
+				</skuid__grid>
+			</components>
+			<onInitialShowActions/>
+			<onShowActions/>
+			<renderConditions logictype="and"/>
+		</skuid__tabPanel>
+		<skuid__tabPanel name="Content Libraries">
+			<components>
+				<skuid__buttonSet model="LibraryContentImages" uniqueid="sk-36tl-10792" position="left">
+					<groups>
+						<skuid__buttonGroup>
+							<buttons>
+								<skuid__button label="New Library" uniqueId="sk-36tl-10791">
+									<actions>
+										<action type="createRow" model="LibraryContentWorkspaces" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+										<action type="showModal">
+											<skuid__modal title="New Workspace" width="640px">
+												<components>
+													<skuid__form showErrorsInline="true" model="LibraryContentWorkspaces" uniqueid="sk-36ty-12239" mode="edit">
+														<sections>
+															<section showHeading="false">
+																<rows>
+																	<row>
+																		<fields>
+																			<skuid__field id="Name"/>
+																		</fields>
+																	</row>
+																	<row>
+																		<fields>
+																			<skuid__field id="WorkspaceType"/>
+																		</fields>
+																	</row>
+																	<row>
+																		<fields>
+																			<skuid__field id="Description"/>
+																		</fields>
+																	</row>
+																	<row>
+																		<fields>
+																			<skuid__field id="TagModel"/>
+																		</fields>
+																	</row>
+																</rows>
+															</section>
+														</sections>
+													</skuid__form>
+												</components>
+												<buttons>
+													<skuid__button label="Save" uniqueId="sk-36u4-13755" styleSettingsVariant="primary">
+														<actions>
+															<action type="save">
+																<models>
+																	<model>LibraryContentWorkspaces</model>
+																</models>
+															</action>
+															<action type="closeAllPopups"/>
+														</actions>
+													</skuid__button>
+													<skuid__button label="Cancel" uniqueId="sk-36u6-13857">
+														<actions>
+															<action type="cancel">
+																<models>
+																	<model>LibraryContentWorkspaces</model>
+																</models>
+															</action>
+															<action type="closeAllPopups"/>
+														</actions>
+													</skuid__button>
+												</buttons>
+												<afterCloseActions>
+													<action type="cancel">
+														<models>
+															<model>LibraryContentWorkspaces</model>
+														</models>
+													</action>
+												</afterCloseActions>
+											</skuid__modal>
+										</action>
+									</actions>
+								</skuid__button>
+							</buttons>
+						</skuid__buttonGroup>
+					</groups>
+					<styles>
+						<spacing top="2" bottom="2"/>
+					</styles>
+				</skuid__buttonSet>
+				<skuid__deck columnGutter=".75em" rowGutter=".75em" model="LibraryContentWorkspaces" showSaveCancel="false" verticalAlign="top" minWidth="1000px" uniqueid="sk-36r7-60408" setMaxWidth="auto" pageSize="10">
+					<components>
+						<skuid__grid uniqueid="sk-2ZMV-14019" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+							<divisions>
+								<division minWidth="100px" ratio="1" alignSelf="flex-start">
+									<components>
+										<skuid__text contents="{{{Name}}}" uniqueid="sk-36rF-60780" model="LibraryContentWorkspaces" styleSettingsVariant="large">
+											<conditions>
+												<condition type="contextrow" field="Id" mergefield="Id"/>
+											</conditions>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__text>
+										<skuid__text contents="{{Description}}" uniqueid="sk-2buA-74756" model="LibraryContentWorkspaces" styleSettingsVariant="medium">
+											<conditions>
+												<condition type="contextrow" field="Id" mergefield="Id"/>
+											</conditions>
+										</skuid__text>
+									</components>
+								</division>
+								<division alignSelf="flex-start" minWidth="100px" ratio="2">
+									<components/>
+								</division>
+								<division alignSelf="flex-start" minWidth="0" ratio="0">
+									<components>
+										<skuid__file storeAs="contentdocumentwithrecord" displayAs="filename" uniqueid="sk-36pu-42929" datasource="salesforce" model="LibraryContentWorkspaces" buttonLabel="Upload Document">
+											<styles>
+												<spacing top="4" bottom="4"/>
+											</styles>
+											<conditions>
+												<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+											</conditions>
+											<uploadSuccessActions>
+												<action type="requeryModels" behavior="standard">
+													<models>
+														<model>LibraryContentDocuments</model>
+													</models>
+												</action>
+											</uploadSuccessActions>
+											<uploadFailureActions/>
+											<renderConditions logictype="and">
+												<renderCondition fieldmodel="LibraryContentWorkspaces" sourcetype="rowproperty" nosourcerowbehavior="deactivate" sourceproperty="isSaved" enclosevalueinquotes="false"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__file>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__grid>
+						<skuid__deck columnGutter=".75em" rowGutter=".75em" model="LibraryContentImages" showSaveCancel="false" verticalAlign="top" minWidth="300px" uniqueid="sk-2ZNK-18931" setMaxWidth="manual" pageSize="Infinity" showPageSizeSelect="false" resetPaginationOnQuery="false" showListHeader="true" showListFooter="false" showLoadMore="false" maxWidth="300px" title="Images in Library">
+							<components>
+								<skuid__text contents="&lt;img src=&quot;/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;amp;versionId={{{LatestPublishedVersion.Id}}}&amp;amp;operationContext=CHATTER&amp;amp;contentId={{{Id}}}&quot; width=&quot;270px&quot; /&gt;" uniqueid="sk-2ZNf-20767">
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__text>
+							</components>
+							<filtering enableSearch="false"/>
+							<conditions>
+								<condition type="contextrow" field="ParentId" mergefield="Id" operator="=" fieldtargetobjects="ContentWorkspace"/>
+							</conditions>
+							<styles>
+								<spacing bottom="4"/>
+							</styles>
+						</skuid__deck>
+						<skuid__table model="LibraryContentNonImages" uniqueid="sk-2buu-89505" mode="readonly" title="Other Documents" showSaveCancel="false">
+							<fields>
+								<field id="Title" uniqueid="fi-2bvC-94374"/>
+								<field id="FileType" uniqueid="fi-2bvC-94375"/>
+								<field id="PublishStatus" uniqueid="fi-2bvC-94376"/>
+								<field id="Description" uniqueid="fi-2bvC-94377"/>
+							</fields>
+							<filtering enableSearch="false" instantSearch="false"/>
+							<rowActions>
+								<action type="multi" label="Edit Details">
+									<actions>
+										<action type="showModal">
+											<skuid__modal title="Content Document Details" width="640px">
+												<components>
+													<skuid__form showErrorsInline="true" model="LibraryContentNonImages" uniqueid="sk-2buu-89511" mode="edit">
+														<sections>
+															<section showHeading="false">
+																<rows>
+																	<row>
+																		<fields>
+																			<skuid__field id="Title"/>
+																		</fields>
+																	</row>
+																	<row>
+																		<fields>
+																			<skuid__field id="Description"/>
+																		</fields>
+																	</row>
+																</rows>
+															</section>
+														</sections>
+														<conditions/>
+														<styles>
+															<spacing bottom="4"/>
+														</styles>
+													</skuid__form>
+												</components>
+												<buttons>
+													<skuid__button label="Save" uniqueId="sk-2buu-89520" styleSettingsVariant="primary">
+														<actions>
+															<action type="save">
+																<models>
+																	<model>LibraryContentNonImages</model>
+																</models>
+															</action>
+															<action type="closeAllPopups"/>
+														</actions>
+													</skuid__button>
+													<skuid__button label="Cancel" uniqueId="sk-2buu-89521">
+														<actions>
+															<action type="cancel">
+																<models>
+																	<model>AccountContentDocumentSelected</model>
+																</models>
+															</action>
+															<action type="closeAllPopups"/>
+														</actions>
+													</skuid__button>
+												</buttons>
+												<afterCloseActions>
+													<action type="cancel">
+														<models>
+															<model>AccountContentDocumentSelected</model>
+														</models>
+													</action>
+												</afterCloseActions>
+											</skuid__modal>
+										</action>
+									</actions>
+								</action>
+								<action type="multi" label="Download">
+									<actions>
+										<action type="redirect" window="self" url="/sfc/servlet.shepherd/version/download/{{LatestPublishedVersionId}}?asPdf=false&amp;operationContext=CHATTER"/>
+									</actions>
+								</action>
+								<action type="multi" label="Review Versions">
+									<actions>
+										<action type="blockUI" message="Loading Versions"/>
+										<action type="setCondition" model="AccountContentVersions" condition="ContentDocumentId" value="{{Id}}"/>
+										<action type="requeryModel" model="AccountContentVersions" behavior="standard"/>
+										<action type="unblockUI"/>
+										<action type="showModal">
+											<skuid__modal title="Versions of {{ContentDocument.Title}}" width="80%">
+												<components>
+													<skuid__file storeAs="contentdocumentwithrecord" displayAs="filename" uniqueid="sk-2buu-89513" datasource="salesforce" model="AccountContentVersions" buttonLabel="Upload New Version" autorefreshmodels="false">
+														<uploadSuccessActions>
+															<action type="requeryModel" model="ContentVersions" behavior="standard"/>
+														</uploadSuccessActions>
+														<uploadFailureActions/>
+														<styles>
+															<spacing bottom="2"/>
+														</styles>
+													</skuid__file>
+													<skuid__table model="AccountContentVersions" uniqueid="sk-2buu-89514" mode="readonly" showSaveCancel="false" pageSize="Infinity" showPageSizeSelect="false" resetPaginationOnQuery="false" showListFooter="false">
+														<fields>
+															<field id="VersionNumber" uniqueid="sk-2buu-89515"/>
+															<field id="IsMajorVersion" uniqueid="sk-2buu-89516"/>
+															<field id="IsLatest" uniqueid="sk-2buu-89517"/>
+															<field id="Description" uniqueid="sk-2buu-89518"/>
+														</fields>
+														<filtering enableSearch="false" instantSearch="false"/>
+														<rowActions>
+															<action type="multi" label="Download">
+																<actions>
+																	<action type="redirect" window="self" url="/sfc/servlet.shepherd/version/download/{{Id}}?asPdf=false&amp;operationContext=CHATTER"/>
+																</actions>
+															</action>
+															<action type="multi" label="Preview">
+																<actions>
+																	<action type="showModal">
+																		<skuid__modal title="Document Preview" width="80%">
+																			<components>
+																				<skuid__text contents="&lt;img src=&quot;/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;amp;versionId={{{Id}}}&amp;amp;operationContext=CHATTER&amp;amp;contentId={{{ContentDocumentId}}}&quot; /&gt;" uniqueid="sk-2buu-89519" model="AccountContentVersions"/>
+																			</components>
+																		</skuid__modal>
+																	</action>
+																</actions>
+																<renderConditions logictype="and">
+																	<renderCondition type="multiple" operator="in" fieldmodel="AccountContentVersions" sourcetype="fieldvalue" field="ContentDocument.FileType" value="" enclosevalueinquotes="true">
+																		<values>
+																			<value>PNG</value>
+																			<value>JPG</value>
+																			<value>GIF</value>
+																		</values>
+																	</renderCondition>
+																</renderConditions>
+															</action>
+														</rowActions>
+														<massActions/>
+													</skuid__table>
+												</components>
+												<buttons>
+													<skuid__button label="Done" uniqueId="sk-2buu-89522" styleSettingsVariant="primary">
+														<actions>
+															<action type="closeTopmostPopup"/>
+															<action type="abandonRows" model="AccountContentVersions" affectedrows="context"/>
+														</actions>
+													</skuid__button>
+												</buttons>
+											</skuid__modal>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+								</action>
+							</rowActions>
+							<massActions/>
+							<renderConditions logictype="and">
+								<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="LibraryContentNonImages" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+							</renderConditions>
+							<styleVariantConditions/>
+							<conditions>
+								<condition type="contextrow" field="ParentId" mergefield="Id" operator="=" fieldtargetobjects="ContentWorkspace"/>
+							</conditions>
+						</skuid__table>
+					</components>
+					<filtering enableSearch="false" instantSearch="false"/>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+					<styles>
+						<spacing/>
+					</styles>
+					<interactions/>
+				</skuid__deck>
+			</components>
+		</skuid__tabPanel>
+	</tabs>
+	<styles>
+		<spacing top="4" bottom="4" left="4" right="4"/>
+	</styles>
+</skuid__tabSet>
+</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+<pageregioncontents>
+<pageregioncontent uniqueid="__header">
+	<components>
+		<skuid__layoutRegion sticky="true">
+			<components>
+				<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;&lt;span style=&quot;font-size:26px;&quot;&gt;Content Document Examples&lt;/span&gt;&lt;/span&gt;" uniqueid="sk-3616-2386">
+					<styles>
+						<spacing top="2" bottom="2" left="4" right="4"/>
+					</styles>
+				</skuid__text>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background type="color" color="#a5a5a5"/>
+		</skuid__layoutRegion>
+	</components>
+</pageregioncontent>
+</pageregioncontents>
+<background type="color" color="#f2f2f2"/>
+</skuid__page>

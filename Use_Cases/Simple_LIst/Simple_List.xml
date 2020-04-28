@@ -1,0 +1,323 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="SamplePages" title="Simple List">
+	<models>
+		<model id="Contacts" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Contact">
+			<fields>
+				<field id="AssistantName" label="Assistant Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="AssistantPhone" label="Assistant Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingCity" label="City" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingCountry" label="Country" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Department" label="Department" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Email" label="Email" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="FirstName" label="First Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Name" label="Full Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Id" label="Id" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Title" label="Job Title" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="LastName" label="Last Name" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="Phone" label="Phone" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingState" label="State" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingStreet" label="Street" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="MailingPostalCode" label="Postal Code" ispolymorphic="false" isnamepointing="false" displaytype="DOUBLE" precision="5" scale="0" accessible="true" filterable="true"/>
+				<field id="profile_img" displaytype="FORMULA" uionly="true" label="Photo" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>JOIN_TEXT("","https://randomuser.me/api/portraits/thumb/",IF({{gender}}=="M","men/","women/"), {{index}}, ".jpg")</formula>
+				</field>
+				<field id="index" displaytype="FORMULA" uionly="true" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+					<formula>{{index}}</formula>
+				</field>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="Opportunities" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity">
+			<fields>
+				<field id="CloseDate" accessible="true" createable="true" defaultvalue="" displaytype="DATE" editable="true" filterable="false" groupable="true" label="Close Date" required="true" sortable="true" rel="close_date__rel" relationshipname="close_date__rel" overridemetadata="true" ogdisplaytype="DATETIME"/>
+				<field id="Name" accessible="true" createable="true" defaultvalue="" displaytype="TEXT" editable="true" filterable="true" groupable="true" label="Opportunity Name" required="true" sortable="true" rel="name__rel" relationshipname="name__rel"/>
+				<field id="AccountId" accessible="true" createable="true" defaultvalue="" displaytype="REFERENCE" editable="true" filterable="true" groupable="true" label="Related to Account" required="true" sortable="true" rel="account__rel" relationshipname="account__rel" ref="accounts" datasource="salesforce"/>
+				<field id="Id" accessible="true" createable="true" defaultvalue="" displaytype="UUID" editable="true" filterable="false" groupable="true" label="Opportunity Id" required="false" sortable="true" rel="id__rel" relationshipname="id__rel"/>
+				<field id="StageName"/>
+				<field id="CreatedDate"/>
+				<field id="Account.Name"/>
+				<field id="Account.BillingCity"/>
+				<field id="Account.BillingState"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" sourcetype="fieldvalue" field="StageName" clientorserver="server" state="filterableoff" inactive="true" name="stage"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="UiOnly" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields/>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-1OVT-524">
+			<components>
+				<skuid__tabSet uniqueid="sk-2RVZ-7570">
+					<tabs>
+						<skuid__tabPanel name="List with Avatar">
+							<components>
+								<skuid__grid uniqueid="sk-2RaM-7984" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+									<divisions>
+										<division minWidth="100px" ratio="1" alignSelf="auto" maxWidth="800px">
+											<components>
+												<skuid__wrapper uniqueid="sk-3wP4-1106" styleSettingsVariant="d1f655bd-eebf-4534-97df-3b16bd199f57">
+													<components>
+														<skuid__wrapper uniqueid="sk-S_A-1046">
+															<components>
+																<skuid__text contents="Contacts" uniqueid="sk-3wOx-1060" styleSettingsVariant="increased">
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__text>
+																<skuid__list model="Contacts" uniqueid="sk-3u6D-459" pageSize="10" showPageSizeSelect="true" styleSettingsVariant="9f18b7c5-8f74-4ead-9895-6dc8d335bf11">
+																	<columns>
+																		<column uniqueid="sk-15oy-874" widthBehavior="fixed" width="6">
+																			<items>
+																				<item displayType="avatar" uniqueid="sk-15oy-872" size="large" styleSettingsVariant="circular" fallbackType="icon" fallback="sk-webicon-ink:user" url="https://randomuser.me/api/portraits/{{#male}}men{{/male}}{{^male}}women{{/male}}/{{index}}.jpg"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-3u8w-855" fillRatio="1" width="48">
+																			<items>
+																				<item displayType="template" template="{{FirstName}} {{LastName}}" uniqueid="sk-3u8w-853" displayStyle="primary"/>
+																				<item fieldId="Account.Name" uniqueid="sk-2RSi-2699" displayType="field" displayStyle="secondary"/>
+																				<item displayType="template" template="{{MailingCity}}, {{MailingCountry}}" uniqueid="sk-2RSb-2650"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-11wl-1612" width="24">
+																			<items>
+																				<item fieldId="Phone" uniqueid="sk-2QIw-2378" displayType="field" displayStyle="secondary"/>
+																				<item fieldId="Email" uniqueid="sk-2RSf-2681"/>
+																			</items>
+																		</column>
+																	</columns>
+																	<rowActions>
+																		<action type="multi" uniqueid="sk-3uEN-1157" icon="sk-webicon-ink:edit">
+																			<actions>
+																				<action type="blockUI" message="Loading..."/>
+																				<action type="showModal">
+																					<skuid__modal width="560px" title="{{FirstName}} {{LastName}}" fullScreen="false" buttonsJustification="center">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="Contacts" uniqueid="sk-2Rin-1572" mode="edit">
+																								<sections>
+																									<section title="New Section" showHeading="false">
+																										<rows>
+																											<row uniqueid="sk-2Rjf-1616">
+																												<fields>
+																													<skuid__field id="FirstName" uniqueid="sk-2Rjf-1615"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1620">
+																												<fields>
+																													<skuid__field id="LastName" uniqueid="sk-2Rjf-1619"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1624">
+																												<fields>
+																													<skuid__field id="Title" uniqueid="sk-2Rjf-1623"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1628">
+																												<fields>
+																													<skuid__field id="Department" uniqueid="sk-2Rjf-1627"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1632">
+																												<fields>
+																													<skuid__field id="AccountId" uniqueid="sk-2Rjf-1631"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1636">
+																												<fields>
+																													<skuid__field id="Email" uniqueid="sk-2Rjf-1635"/>
+																												</fields>
+																											</row>
+																											<row uniqueid="sk-2Rjf-1640">
+																												<fields>
+																													<skuid__field id="Phone" uniqueid="sk-2Rjf-1639"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																							</skuid__form>
+																						</components>
+																						<buttons>
+																							<skuid__button label="Cancel" uniqueid="sk-120o-2569" icon="sk-webicon-ink:close">
+																								<actions>
+																									<action type="cancel">
+																										<models>
+																											<model>Contacts</model>
+																										</models>
+																									</action>
+																									<action type="closeAllPopups"/>
+																								</actions>
+																								<renderConditions logictype="and"/>
+																								<enableConditions logictype="and">
+																									<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																								</enableConditions>
+																							</skuid__button>
+																							<skuid__button label="Save" uniqueid="sk-120o-2565" icon="sk-webicon-ink:check" styleSettingsVariant="primary">
+																								<actions>
+																									<action type="save">
+																										<models>
+																											<model>Contacts</model>
+																										</models>
+																									</action>
+																									<action type="closeAllPopups"/>
+																								</actions>
+																								<renderConditions logictype="and"/>
+																								<enableConditions logictype="and">
+																									<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																								</enableConditions>
+																							</skuid__button>
+																							<skuid__button label="Done" uniqueid="sk-2Rjk-1741" styleSettingsVariant="primary">
+																								<actions>
+																									<action type="closeAllPopups"/>
+																								</actions>
+																								<renderConditions logictype="and">
+																									<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Contacts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="false" operator="="/>
+																								</renderConditions>
+																								<enableConditions logictype="and"/>
+																							</skuid__button>
+																						</buttons>
+																					</skuid__modal>
+																				</action>
+																				<action type="unblockUI"/>
+																			</actions>
+																			<tooltip position="bottom" text="View and edit." compact="false"/>
+																		</action>
+																	</rowActions>
+																	<massActions/>
+																	<interactions/>
+																	<renderConditions logictype="and"/>
+																	<filtering enableSearch="false" instantSearch="false"/>
+																</skuid__list>
+															</components>
+															<background/>
+															<styles>
+																<spacing top="1" bottom="1" left="1" right="1"/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+													<background/>
+													<styles>
+														<spacing bottom="0.5" top="0.5" left="0.5" right="0.5"/>
+													</styles>
+												</skuid__wrapper>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="2"/>
+									</styles>
+								</skuid__grid>
+							</components>
+						</skuid__tabPanel>
+						<skuid__tabPanel name="List with Header Row">
+							<components>
+								<skuid__grid uniqueid="sk-2RaP-8045" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0" rowGutter="0">
+									<divisions>
+										<division minWidth="100px" ratio="1" alignSelf="auto" maxWidth="600px">
+											<components>
+												<skuid__wrapper uniqueid="sk-3wQ6-753" styleSettingsVariant="d1f655bd-eebf-4534-97df-3b16bd199f57">
+													<components>
+														<skuid__wrapper uniqueid="sk-S_Q-1110">
+															<components>
+																<skuid__text contents="Opportunities" uniqueid="sk-3wQ6-754" styleSettingsVariant="increased">
+																	<styles>
+																		<spacing bottom="2"/>
+																	</styles>
+																</skuid__text>
+																<skuid__list model="UiOnly" uniqueid="sk-3wPp-573" styleSettingsVariant="9f18b7c5-8f74-4ead-9895-6dc8d335bf11" pageSize="Infinity" showLoadMore="false" showListHeader="false" showListFooter="false">
+																	<columns>
+																		<column uniqueid="sk-2RQi-1548" fillRatio="2">
+																			<items>
+																				<item fieldId="order_id" uniqueid="sk-2RQi-1547" displayType="template" template="Name"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-3wPy-627" fillRatio="1">
+																			<items>
+																				<item fieldId="category" uniqueid="sk-3wQr-970" displayType="template" displayStyle="primary" template="Stage"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-3wP_-641" fillRatio="1">
+																			<items>
+																				<item fieldId="customer_name" uniqueid="sk-3wP_-639" displayType="template" template="Customer"/>
+																			</items>
+																		</column>
+																	</columns>
+																	<rowActions/>
+																	<massActions/>
+																	<filtering enableSearch="false" instantSearch="false"/>
+																	<interactions/>
+																</skuid__list>
+																<skuid__list model="Opportunities" uniqueid="sk-2RQ_-1749" styleSettingsVariant="9f18b7c5-8f74-4ead-9895-6dc8d335bf11" pageSize="10">
+																	<columns>
+																		<column uniqueid="sk-2RQ_-1750" fillRatio="2">
+																			<items>
+																				<item uniqueid="sk-2RQ_-1751" displayType="template" template="{{{Name}}}"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-2RQ_-1752" fillRatio="1">
+																			<items>
+																				<item fieldId="StageName" uniqueid="sk-2RQ_-1753" displayType="field" displayStyle="primary"/>
+																				<item fieldId="CloseDate" uniqueid="sk-2RQ_-1754" displayType="template" displayStyle="tertiary" template="Closing  {{CloseDate}}"/>
+																			</items>
+																		</column>
+																		<column uniqueid="sk-2RQ_-1755" fillRatio="1">
+																			<items>
+																				<item fieldId="Account.Name" uniqueid="sk-2RQ_-1756" displayType="field"/>
+																				<item fieldId="city" uniqueid="sk-2RQ_-1757" displayType="template" template="{{Account.BillingCity}}, {{Account.BillingState}}" displayStyle="tertiary"/>
+																			</items>
+																		</column>
+																	</columns>
+																	<rowActions/>
+																	<massActions/>
+																	<filtering enableSearch="false" instantSearch="false"/>
+																	<interactions/>
+																</skuid__list>
+															</components>
+															<background/>
+															<styles>
+																<spacing top="1" bottom="1" left="1" right="1"/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+													<background/>
+													<styles>
+														<spacing right="0.5" top="0.5" bottom="0.5" left="0.5"/>
+													</styles>
+												</skuid__wrapper>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="2"/>
+									</styles>
+								</skuid__grid>
+							</components>
+						</skuid__tabPanel>
+					</tabs>
+				</skuid__tabSet>
+			</components>
+			<background color="white"/>
+			<styles>
+				<spacing left="4" right="4" top="4"/>
+			</styles>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences uniqueid="sk-3wO0-709"/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<interactions/>
+	<background/>
+</skuid__page>

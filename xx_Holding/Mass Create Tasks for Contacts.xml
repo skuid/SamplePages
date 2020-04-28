@@ -1,0 +1,203 @@
+<skuidpage showsidebar="false" showheader="true" tabtooverride="Contact">
+   <models>
+      <model id="Contact" limit="100" query="true" createrowifnonefound="false" sobject="Contact">
+         <fields>
+            <field id="CreatedDate"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+            <field id="Birthdate"/>
+            <field id="Name"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="NewTasks" limit="" query="false" createrowifnonefound="false" sobject="Task">
+         <fields>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+            <field id="Subject"/>
+            <field id="Priority"/>
+            <field id="Status"/>
+            <field id="ActivityDate"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+         </fields>
+         <conditions/>
+      </model>
+      <model id="ProtoTask" limit="" query="false" createrowifnonefound="true" sobject="Task">
+         <fields>
+            <field id="Status"/>
+            <field id="Priority"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="ActivityDate"/>
+            <field id="WhatId"/>
+            <field id="What.Name"/>
+            <field id="Subject"/>
+         </fields>
+         <conditions/>
+      </model>
+   </models>
+   <components>
+      <pagetitle model="Contact">
+         <maintitle>Create Tasks</maintitle>
+         <subtitle/>
+         <actions/>
+      </pagetitle>
+      <basicfieldeditor showheader="true" showsavecancel="false" model="ProtoTask" buttonposition="" mode="edit">
+         <columns>
+            <column width="33.3%">
+               <sections>
+                  <section title="With...">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="Status" addnoneoption="true"/>
+                        <field id="Priority" addnoneoption="true"/>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Related to...">
+                     <fields>
+                        <field id="WhatId">
+                           <label>What</label>
+                        </field>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+            <column width="33.3%">
+               <sections>
+                  <section title="Assigned To">
+                     <fields>
+                        <field id="OwnerId">
+                           <label>Assigned To</label>
+                        </field>
+                        <field id="ActivityDate">
+                           <label>Due Date</label>
+                        </field>
+                     </fields>
+                  </section>
+               </sections>
+            </column>
+         </columns>
+      </basicfieldeditor>
+      <pagetitle model="Contact">
+         <maintitle>for Contacts</maintitle>
+         <subtitle/>
+         <actions/>
+      </pagetitle>
+      <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="Contact" mode="read">
+         <fields>
+            <field id="Name" allowordering="true"/>
+            <field id="AccountId"/>
+            <field id="Birthdate"/>
+            <field id="CreatedDate" allowordering="true"/>
+         </fields>
+         <rowactions>
+            <action type="custom" label="Create Task for {{Name}}" icon="ui-silk-basket-add" snippet="CreateTasksForContacts"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="custom" label="Create Tasks for selected" icon="ui-silk-basket-add" snippet="CreateTasksForContacts"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+      </skootable>
+      <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="NewTasks" buttonposition="" mode="edit">
+         <fields>
+            <field id="Subject"/>
+            <field id="WhoId">
+               <label>Who</label>
+            </field>
+            <field id="WhatId">
+               <label>What</label>
+            </field>
+            <field id="Priority"/>
+            <field id="Status"/>
+            <field id="ActivityDate">
+               <label>Due Date</label>
+            </field>
+            <field id="OwnerId">
+               <label>Assigned To</label>
+            </field>
+         </fields>
+         <rowactions>
+            <action type="edit"/>
+            <action type="delete"/>
+         </rowactions>
+         <massactions usefirstitemasdefault="true">
+            <action type="massupdate"/>
+            <action type="massdelete"/>
+         </massactions>
+         <views>
+            <view type="standard"/>
+         </views>
+      </skootable>
+   </components>
+   <resources>
+      <labels/>
+      <css/>
+      <javascript>
+         <jsitem location="inlinesnippet" name="CreateTasksForContacts" cachelocation="false">var params = arguments[0],
+   $ = skuid.$,
+   items = params.item ? [params.item] : params.list.getSelectedItems(),
+   NewTasksModel = skuid.model.getModel('NewTasks'),
+   ProtoModel = skuid.model.getModel('ProtoTask'),
+   ProtoRow = ProtoModel.getFirstRow();
+
+var newRowIds = {};
+var protoConditions = [];
+var protoUpdates = {};
+
+$.each(ProtoModel.changes,function(rowId,changes){
+    $.each(changes,function(field,value){
+        var fieldMetadata = ProtoModel.getField(field);
+       if (fieldMetadata &amp;&amp; (typeof value !== 'undefined')) {
+           var c = {
+              field: field,
+              value: value
+           };
+           if (fieldMetadata.displaytype === 'REFERENCE'){
+               protoUpdates[fieldMetadata.rel]=ProtoRow[fieldMetadata.rel];
+           }
+           protoConditions.push(c);
+       } 
+    });
+})
+
+$.each(items,function(i,item){
+    var conditions = [];
+    $.each(protoConditions,function(){conditions.push(this);});
+    conditions.push({
+        field: 'WhoId',
+        value:item.row.Id
+    });
+    var row = NewTasksModel.createRow({
+        additionalConditions: conditions
+   });
+   var updates = {};
+   $.each(protoUpdates,function(field,value){
+       updates[field]=value;
+   });
+   updates['Who']=item.row;
+   NewTasksModel.updateRow(row,updates);
+   newRowIds[row.Id]=1;
+});
+
+// Refresh the fields in the NewTasks model
+// so that they will show the related field data
+$.each(NewTasksModel.registeredLists,function(i,list){
+   $.each(list.renderedItems,function(rowId,item){
+      if (rowId in newRowIds) {
+          item.refreshFields();
+      } 
+   });
+});
+</jsitem>
+      </javascript>
+   </resources>
+</skuidpage>

@@ -1,0 +1,137 @@
+<skuidpage unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" tabtooverride="User">
+    <models>
+        <model id="User" limit="100" query="true" createrowifnonefound="false" sobject="User" orderby="LastLoginDate ASC" datasource="salesforce">
+            <fields>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="CreatedDate"/>
+                <field id="LastLoginDate"/>
+                <field id="IsActive"/>
+                <field id="Username"/>
+                <field id="ProfileId"/>
+                <field id="Profile.Name"/>
+            </fields>
+            <conditions>
+                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="SelectedUserPackageLicense" limit="1" query="false" createrowifnonefound="false" sobject="UserPackageLicense" datasource="salesforce">
+            <fields>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="ProfileId"/>
+                <field id="Profile.Name"/>
+                <field id="IsActive"/>
+                <field id="UserRoleId"/>
+                <field id="UserRole.Name"/>
+                <field id="Username"/>
+                <field id="Email"/>
+                <field id="CreatedDate"/>
+            </fields>
+            <conditions>
+                <condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id"/>
+                <condition type="modelmerge" value="" field="Id" operator="not in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id1"/>
+            </conditions>
+            <actions/>
+        </model>
+        <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" sobject="PackageLicense" datasource="salesforce">
+            <fields>
+                <field id="AllowedLicenses"/>
+                <field id="UsedLicenses"/>
+                <field id="AvailableLicenses" uionly="true" displaytype="FORMULA" label="Available Licenses" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+                    <formula>{{{AllowedLicenses}}} - {{{UsedLicenses}}}</formula>
+                </field>
+            </fields>
+            <conditions>
+                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
+            </conditions>
+            <actions/>
+        </model>
+    </models>
+    <components>
+        <grid uniqueid="sk-xuyaW-380">
+            <divisions>
+                <division behavior="flex" minwidth="100px" ratio="4" verticalalign="top">
+                    <components>
+                        <pagetitle model="User" uniqueid="sk-xt7jv-81">
+                            <maintitle>Users with a Skuid package License</maintitle>
+                            <subtitle>                            </subtitle>
+                            <actions/>
+                        </pagetitle>
+                    </components>
+                </division>
+                <division behavior="flex" verticalalign="top" minwidth="100px" ratio="6">
+                    <components>
+                        <basicfieldeditor showheader="true" showsavecancel="false" showerrorsinline="true" model="SkuidLicenses" uniqueid="sk-xv0df-389" mode="readonly" layout="">
+                            <columns>
+                                <column width="100%">
+                                    <sections>
+                                        <section title="Section A" collapsible="no" showheader="false">
+                                            <fields>
+                                                <field type="COMBO" editmodebehavior="autopopup" uniqueid="sk-296JVz-309">
+                                                    <label>License Usage</label>
+                                                    <template>{{UsedLicenses}} Deployed / {{AllowedLicenses}} Allowed
+Contract Expiration: {{ExpirationDate}}
+Status: {{Status}}</template>
+                                                </field>
+                                            </fields>
+                                        </section>
+                                    </sections>
+                                </column>
+                            </columns>
+                        </basicfieldeditor>
+                    </components>
+                </division>
+            </divisions>
+            <styles>
+                <styleitem type="background" bgtype="none"/>
+            </styles>
+        </grid>
+        <skootable showconditions="true" showsavecancel="false" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="false" model="User" mode="readonly" uniqueid="sk-xt7jv-82">
+            <fields>
+                <field id="FirstName" allowordering="true" uniqueid="sk-296JWJ-312"/>
+                <field id="LastName" allowordering="true" uniqueid="sk-296JWO-314"/>
+                <field id="Username" valuehalign="" type="" uniqueid="sk-296JWT-316"/>
+                <field id="IsActive" type="" valuehalign="" uniqueid="sk-296JWU-318"/>
+<field id="ProfileId" hideable="true" uniqueid="fi-2sE4-372"/>
+                <field id="LastLoginDate" valuehalign="" type="" allowordering="true" uniqueid="sk-296JWW-320"/>
+            </fields>
+            <rowactions/>
+            <massactions usefirstitemasdefault="true"/>
+            <views>
+                <view type="standard"/>
+            </views>
+            <filters>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users with Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users without Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id1"/>
+                        <effect action="deactivate" value="" condition="Id"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="All Users">
+                    <effects>
+                        <effect action="deactivate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+            </filters>
+            <exportproperties usetablecolumns="true"/>
+        </skootable>
+    </components>
+    <resources>
+        <labels/>
+        <css/>
+        <javascript/>
+    <actionsequences uniqueid="sk-2sD_-347"/>
+</resources>
+    <styles>
+        <styleitem type="background" bgtype="none"/>
+    </styles>
+</skuidpage>

@@ -1,0 +1,172 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false">
+	<models>
+		<model id="Account" limit="100" query="true" createrowifnonefound="false" sobject="Account" datasource="salesforce">
+			<fields>
+				<field id="Name"/>
+				<field id="CreatedDate"/>
+				<field id="FeedSubscriptionsForEntity" type="childRelationship" limit="1">
+					<conditions>
+						<condition operator="=" type="userinfo" field="SubscriberId" value="" enclosevalueinquotes="true" userinfotype="userid"/>
+					</conditions>
+				</field>
+				<field id="UserIsFollowingRecord__ui" uionly="true" displaytype="FORMULA" label="Running User is Following This Record" readonly="true" returntype="BOOLEAN">
+					<formula>{{FeedSubscriptionsForEntity.totalSize}}==1</formula>
+				</field>
+				<field id="Industry"/>
+				<field id="Type"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="EntitySubscriptions" limit="999" query="false" createrowifnonefound="false" sobject="EntitySubscription" doclone="" processonclient="false" datasource="salesforce">
+			<fields>
+				<field id="ParentId"/>
+				<field id="Parent.Name"/>
+				<field id="SubscriberId"/>
+				<field id="Subscriber.Name"/>
+			</fields>
+			<conditions>
+				<condition type="userinfo" value="" field="SubscriberId" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ParentId" state="filterableoff" inactive="true" name="ParentId"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2mD4-8782">
+			<components>
+				<skuid__table allowColumnFreezing="dragDrop" model="Account" uniqueid="sk-2nDQ-2733" mode="readonly" showSaveCancel="false">
+					<fields>
+						<field id="Name" uniqueid="fi-2nDQ-3250" redirectType="datasourcedefault"/>
+						<field id="Industry" uniqueid="fi-2nDQ-3254"/>
+						<field id="UserIsFollowingRecord__ui" uniqueid="fi-2nDQ-3253"/>
+						<field id="Type" uniqueid="fi-2nDQ-3255"/>
+						<field id="OwnerId" uniqueid="fi-2nDQ-3256" redirectType="none"/>
+						<field id="CreatedDate" uniqueid="fi-2nDQ-3251"/>
+					</fields>
+					<filtering enableSearch="false"/>
+					<rowActions>
+						<action type="multi" label="Follow Record. " icon="sk-webicon-ink:link">
+							<actions>
+								<action type="blockUI" message="Following record..."/>
+								<action type="createRow" model="EntitySubscriptions" appendorprepend="prepend" defaultmodefornewitems="edit">
+									<defaults>
+										<default field="ParentId" value="{{{Id}}}" valuesource="fieldvalue"/>
+									</defaults>
+								</action>
+								<action type="save">
+									<models>
+										<model>EntitySubscriptions</model>
+									</models>
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="emptyModelData">
+									<models>
+										<model>EntitySubscriptions</model>
+									</models>
+								</action>
+								<action type="save">
+									<models>
+										<model>Account</model>
+									</models>
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="requeryModel" model="Account" behavior="standard">
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="unblockUI"/>
+							</actions>
+							<renderConditions logictype="and">
+								<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="Account" sourcetype="fieldvalue" field="UserIsFollowingRecord__ui" fieldtargetobjects="Account" value="false"/>
+							</renderConditions>
+							<tooltip position="top"/>
+						</action>
+						<action type="multi" label="Unfollow Record" icon="sk-webicon-ink:remove-link">
+							<actions>
+								<action type="blockUI" sourcemodel="Account" targetmodel="Account" message="Unfollowing record..."/>
+								<action type="emptyModelData" model="Account">
+									<models>
+										<model>EntitySubscriptions</model>
+									</models>
+								</action>
+								<action type="setCondition" model="EntitySubscriptions" condition="ParentId" value="{{{Id}}}"/>
+								<action type="requeryModel" model="EntitySubscriptions" behavior="standard">
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="markRowsForDeletion" model="EntitySubscriptions"/>
+								<action type="save">
+									<models>
+										<model>EntitySubscriptions</model>
+									</models>
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="save">
+									<models>
+										<model>Account</model>
+									</models>
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="requeryModel" model="Account" behavior="standard">
+									<onerroractions>
+										<action type="unblockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="unblockUI"/>
+							</actions>
+							<renderConditions logictype="and">
+								<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="Account" sourcetype="fieldvalue" field="UserIsFollowingRecord__ui" fieldtargetobjects="Account" value="true"/>
+							</renderConditions>
+						</action>
+					</rowActions>
+					<massActions/>
+				</skuid__table>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;Follow or Unfollow Records&lt;/span&gt;" uniqueid="sk-2mBm-2336" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4" styleSettingsVariant="large"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#7f7f7f"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>
