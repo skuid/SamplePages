@@ -1,0 +1,108 @@
+<skuidpage unsavedchangeswarning="yes" showsidebar="true" showheader="true">
+   <models>
+      <model id="ContactModel" limit="20" query="false" createrowifnonefound="true" sobject="Contact">
+         <fields>
+            <field id="FirstName"/>
+            <field id="LastName"/>
+            <field id="Email"/>
+            <field id="Phone"/>
+            <field id="AccountId"/>
+            <field id="Account.Name"/>
+         </fields>
+         <conditions/>
+         <actions>
+            <action>
+               <actions>
+                  <action type="createRow" model="AutoTask"/>
+                  <action type="updateRow" fieldmodel="AutoTask" field="Subject" enclosevalueinquotes="true" value="Contact {{$Model.ContactModel.data.0.FirstName}}&amp;nbsp; {{$Model.ContactModel.data.0.LastName}}"/>
+               </actions>
+               <events>
+                  <event>models.saved</event>
+               </events>
+            </action>
+         </actions>
+      </model>
+      <model id="AutoTask" limit="20" query="false" createrowifnonefound="false" sobject="Task">
+         <fields>
+            <field id="Subject"/>
+            <field id="ActivityDate"/>
+            <field id="OwnerId"/>
+            <field id="Owner.Name"/>
+            <field id="Status"/>
+            <field id="WhoId"/>
+            <field id="Who.Name"/>
+         </fields>
+         <conditions>
+            <condition type="modelmerge" value="" field="WhoId" operator="=" model="ContactModel" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+         </conditions>
+         <actions/>
+      </model>
+   </models>
+   <components>
+      <panelset type="custom">
+         <panels>
+            <panel width="50%">
+               <components>
+                  <pagetitle model="ContactModel">
+                     <maintitle>{{Model.label}}</maintitle>
+                     <actions/>
+                  </pagetitle>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="ContactModel" buttonposition="" mode="edit">
+                     <fields>
+                        <field id="FirstName"/>
+                        <field id="LastName"/>
+                        <field id="AccountId"/>
+                        <field id="Phone"/>
+                        <field id="Email"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </panel>
+            <panel width="50%">
+               <components>
+                  <pagetitle model="AutoTask">
+                     <maintitle>{{Model.label}}</maintitle>
+                     <actions/>
+                  </pagetitle>
+                  <skootable showconditions="true" showsavecancel="true" searchmethod="server" searchbox="true" showexportbuttons="false" pagesize="10" createrecords="true" model="AutoTask" buttonposition="" mode="read">
+                     <fields>
+                        <field id="Subject"/>
+                        <field id="OwnerId"/>
+                        <field id="ActivityDate"/>
+                        <field id="Status"/>
+                        <field id="WhoId"/>
+                     </fields>
+                     <rowactions>
+                        <action type="edit"/>
+                        <action type="delete"/>
+                     </rowactions>
+                     <massactions usefirstitemasdefault="true">
+                        <action type="massupdate"/>
+                        <action type="massdelete"/>
+                     </massactions>
+                     <views>
+                        <view type="standard"/>
+                     </views>
+                  </skootable>
+               </components>
+            </panel>
+         </panels>
+      </panelset>
+   </components>
+   <resources>
+      <labels/>
+      <javascript/>
+      <css/>
+   </resources>
+</skuidpage>

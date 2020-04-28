@@ -12,30 +12,36 @@
                 <field id="Profile.Name"/>
             </fields>
             <conditions>
-                <condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
-                    <conditions>
-                        <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
-                    </conditions>
-                </condition>
+                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
             </conditions>
             <actions/>
         </model>
         <model id="SelectedUserPackageLicense" limit="1" query="false" createrowifnonefound="false" sobject="UserPackageLicense" datasource="salesforce">
             <fields>
-                <field id="Id"/>
+                <field id="FirstName"/>
+                <field id="LastName"/>
+                <field id="ProfileId"/>
+                <field id="Profile.Name"/>
+                <field id="IsActive"/>
+                <field id="UserRoleId"/>
+                <field id="UserRole.Name"/>
+                <field id="Username"/>
+                <field id="Email"/>
+                <field id="CreatedDate"/>
             </fields>
             <conditions>
-                <condition type="fieldvalue" value="" enclosevalueinquotes="true" field="UserId" state="filterableoff" inactive="true" name="UserId"/>
-                <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+                <condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id"/>
+                <condition type="modelmerge" value="" field="Id" operator="not in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="Id1"/>
             </conditions>
             <actions/>
         </model>
         <model id="SkuidLicenses" limit="1" query="true" createrowifnonefound="false" sobject="PackageLicense" datasource="salesforce">
             <fields>
-                <field id="ExpirationDate"/>
-                <field id="UsedLicenses"/>
-                <field id="Status"/>
                 <field id="AllowedLicenses"/>
+                <field id="UsedLicenses"/>
+                <field id="AvailableLicenses" uionly="true" displaytype="FORMULA" label="Available Licenses" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+                    <formula>{{{AllowedLicenses}}} - {{{UsedLicenses}}}</formula>
+                </field>
             </fields>
             <conditions>
                 <condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
@@ -91,30 +97,32 @@ Status: {{Status}}</template>
 <field id="ProfileId" hideable="true" uniqueid="fi-2sE4-372"/>
                 <field id="LastLoginDate" valuehalign="" type="" allowordering="true" uniqueid="sk-296JWW-320"/>
             </fields>
-            <rowactions>
-                <action type="multi" label="Revoke License" icon="sk-icon-remove-reference">
-                    <actions>
-                        <action type="custom" snippet="Confirm">
-                            <onerroractions/>
-                        </action>
-                        <action type="blockUI" message="Revoking License for User..."/>
-                        <action type="setCondition" model="SelectedUserPackageLicense" condition="UserId" value="}"/>
-                        <action type="requeryModel" model="SelectedUserPackageLicense" behavior="standard"/>
-                        <action type="markRowsForDeletion" model="SelectedUserPackageLicense"/>
-                        <action type="save">
-                            <models>
-                                <model>SelectedUserPackageLicense</model>
-                            </models>
-                        </action>
-                        <action type="requeryModel" model="User" behavior="standard"/>
-                        <action type="blockUI" message="License revoked." timeout="1000"/>
-                    </actions>
-                </action>
-            </rowactions>
+            <rowactions/>
             <massactions usefirstitemasdefault="true"/>
             <views>
                 <view type="standard"/>
             </views>
+            <filters>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users with Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="Users without Skuid">
+                    <effects>
+                        <effect action="activate" value="" condition="Id1"/>
+                        <effect action="deactivate" value="" condition="Id"/>
+                    </effects>
+                </filter>
+                <filter type="toggle" filteroffoptionlabel="New Filter" createfilteroffoption="true" affectcookies="true" autocompthreshold="25" conditionsource="manual" labelmode="auto" filtermethod="server" label="All Users">
+                    <effects>
+                        <effect action="deactivate" value="" condition="Id"/>
+                        <effect action="deactivate" value="" condition="Id1"/>
+                    </effects>
+                </filter>
+            </filters>
+            <exportproperties usetablecolumns="true"/>
         </skootable>
     </components>
     <resources>
