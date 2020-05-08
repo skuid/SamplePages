@@ -10,7 +10,7 @@ The list of Accounts on the left is filtered to only display Global/Parent accou
 ## Instructions
 - Page API:  V2
 - Data source: Uses default Salesforce data source
-- Design system: [Download this Design System file](Salesforce_Demo.designsystem).  Use the Import function on the Design System page to add this system to your org. 
+- Design system: [Download this Design System file](AccountHierarchy.designsystem).  Use the Import function on the Design System page to add this system to your org. 
 - Page XML:  [Copy the XML from this page](Account_Hierarchy.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
