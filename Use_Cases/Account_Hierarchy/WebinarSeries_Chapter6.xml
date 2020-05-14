@@ -1,0 +1,684 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="AccountHierarchy">
+	<models>
+<model id="AccountList" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="Id"/>
+		<field id="Name"/>
+		<field id="Industry"/>
+		<field id="BillingCity"/>
+		<field id="BillingState"/>
+		<field id="BillingPostalCode"/>
+		<field id="BillingCountry"/>
+		<field id="ChildAccounts" type="childRelationship" limit="10">
+			<fields/>
+		</field>
+	</fields>
+	<conditions>
+		<condition type="fieldvalue" value="Global" field="Name" operator="contains" enclosevalueinquotes="true"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="AccountViewer" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="Id"/>
+		<field id="Name"/>
+		<field id="Industry"/>
+		<field id="BillingCity"/>
+		<field id="BillingState"/>
+		<field id="BillingPostalCode"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="Id" operator="=" model="AccountList" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate" clientorserver="server" state="filterableon" inactive="false" name="Id"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="ChildAccounts" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="Id"/>
+		<field id="Name"/>
+		<field id="Industry"/>
+		<field id="BillingCity"/>
+		<field id="BillingState"/>
+		<field id="BillingPostalCode"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="ParentId" operator="=" model="AccountViewer" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate" clientorserver="server" state="filterableon" inactive="false" name="Id" fieldtargetobjects="Account"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="ChildAccounts_Opps_Open" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" orderby="StageName">
+	<fields>
+		<field id="AccountId"/>
+		<field id="Account.Name"/>
+		<field id="Name"/>
+		<field id="Amount"/>
+		<field id="StageName"/>
+		<field id="CloseDate"/>
+		<field id="IsClosed"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="in" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery" clientorserver="server"/>
+		<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsClosed"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="ChildAccounts_Opps_Closed" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity">
+	<fields>
+		<field id="AccountId"/>
+		<field id="Account.Name"/>
+		<field id="Name"/>
+		<field id="Amount"/>
+		<field id="StageName"/>
+		<field id="CloseDate"/>
+		<field id="IsClosed"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="in" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate" clientorserver="server"/>
+		<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="ChildAccounts_OpenCases" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Case">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="AccountId"/>
+		<field id="Account.Name"/>
+		<field id="Id"/>
+		<field id="SuppliedName"/>
+		<field id="Subject"/>
+		<field id="Status"/>
+		<field id="Description"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="in" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+		<condition type="fieldvalue" value="Closed" enclosevalueinquotes="true" field="Status" operator="!="/>
+	</conditions>
+	<actions/>
+</model>
+<model id="ChildAccounts_NewCase" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Case">
+	<fields>
+		<field id="RecordTypeId"/>
+		<field id="AccountId"/>
+		<field id="Account.Name"/>
+		<field id="Id"/>
+		<field id="SuppliedName"/>
+		<field id="Subject"/>
+		<field id="Status"/>
+		<field id="Description"/>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="in" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+		<condition type="fieldvalue" value="Closed" enclosevalueinquotes="true" field="Status" operator="!="/>
+	</conditions>
+	<actions/>
+</model>
+<model id="PipelineOpps" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" type="aggregate">
+	<fields>
+		<field id="Amount" name="sumAmount" function="SUM"/>
+		<field id="SumFriendly" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="2">
+			<formula>{{sumAmount}}/1000000</formula>
+		</field>
+	</fields>
+	<conditions>
+		<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="in" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+		<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" operator="!="/>
+	</conditions>
+	<actions/>
+	<groupby method="simple"/>
+</model>
+<model id="UI_Display" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+	<fields>
+		<field id="ToggleChart" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="true"/>
+	</fields>
+	<conditions/>
+	<actions/>
+</model>
+</models>
+	<components>
+<skuid__wrapper uniqueid="sk-1bhK-34298" heightStrategy="fixed" height="custom" heightCustom="100vh">
+	<components>
+		<skuid__grid uniqueid="sk-1be4-9781" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+			<divisions>
+				<division minWidth="100px" ratio=".5" alignSelf="auto">
+					<components>
+						<skuid__wrapper uniqueid="sk-29F4-91630" styleSettingsVariant="8b968ba1-8489-4354-8239-ca02389d83cc">
+							<components>
+								<skuid__filterSet model="AccountList" uniqueid="sk-29Pe-152218" resetButtonBehavior="hide" layout="vertical">
+									<filters/>
+									<filtering enableSearch="true" instantSearch="true" instantFilters="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search Accounts"/>
+									<styles>
+										<spacing top="1" bottom="1"/>
+									</styles>
+								</skuid__filterSet>
+								<skuid__list model="AccountList" uniqueid="sk-1be8-10375" pageSize="10" showPageSizeSelect="false" showLoadMore="false" showListFooter="false">
+									<columns>
+										<column fillRatio="1">
+											<items>
+												<item displayType="template" template="{{{Name}}}" displayStyle="primary"/>
+												<item displayType="template" template="{{BillingCity}} {{BillingCountry}}" displayStyle="secondary"/>
+												<item displayType="template" template="{{ChildAccounts.records.length}} Child Accounts" displayStyle="tertiary"/>
+											</items>
+										</column>
+									</columns>
+									<rowActions/>
+									<massActions/>
+									<filtering enableSearch="false" instantSearch="false"/>
+									<interactions>
+										<interaction type="tap">
+											<action type="setCondition" model="AccountViewer" condition="Id" value="{{Id}}"/>
+											<action type="requeryModel" model="AccountViewer" behavior="standard"/>
+											<action type="requeryModels" behavior="standard">
+												<models>
+													<model>ChildAccounts</model>
+													<model>ChildAccounts_Opps_Open</model>
+													<model>ChildAccounts_Opps_Closed</model>
+													<model>ChildAccounts_OpenCases</model>
+													<model>PipelineOpps</model>
+												</models>
+											</action>
+										</interaction>
+									</interactions>
+								</skuid__list>
+							</components>
+							<background/>
+							<styles>
+								<spacing top="1.5" bottom="1.5" left="1.5"/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="2">
+					<components>
+						<skuid__wrapper uniqueid="sk-29FQ-95869" styleSettingsVariant="8b968ba1-8489-4354-8239-ca02389d83cc">
+							<components>
+								<skuid__wrapper uniqueid="sk-29F7-92421">
+									<components>
+										<skuid__grid uniqueid="sk-1bge-24791" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+											<divisions>
+												<division minWidth="100px" ratio="1">
+													<components>
+														<skuid__text contents="{{{Name}}}" uniqueid="sk-1bgj-25405" model="AccountViewer" styleSettingsVariant="2c869cc0-afb8-4191-b2a3-e0c340affd56">
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__text>
+														<skuid__text contents="{{BillingCity}}, {{BillingState}}" uniqueid="sk-1bgq-26262" model="AccountViewer" styleSettingsVariant="f02bafb4-d7d3-4dec-92b3-e161760f41cc">
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__text>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="1">
+													<components>
+														<skuid__buttonSet model="ChildAccounts_Opps_Closed" uniqueid="sk-29Jf-115502">
+															<groups>
+																<skuid__buttonGroup>
+																	<buttons>
+																		<skuid__button label="View Cases" uniqueId="sk-29Jf-115501" styleSettingsVariant="67363fb4-e40c-482d-b8bb-18137dc33bab">
+																			<actions>
+																				<action type="openSlidingPanel" openbehavior="open">
+																					<skuid__slidingPanel uniqueid="sk-29Mp-134935" size="25%" origin="left" closeOnPageClick="false">
+																						<components>
+																							<skuid__wrapper uniqueid="sk-29Mr-135056">
+																								<components>
+																									<skuid__buttonSet model="ChildAccounts_NewCase" uniqueid="sk-29Mw-135535">
+																										<groups>
+																											<skuid__buttonGroup>
+																												<buttons>
+																													<skuid__button uniqueId="sk-29Mw-135534" icon="sk-webicon-ink:close">
+																														<actions>
+																															<action type="closeSlidingPanel" closebehavior="close"/>
+																														</actions>
+																													</skuid__button>
+																												</buttons>
+																											</skuid__buttonGroup>
+																										</groups>
+																										<styles>
+																											<spacing top="1.5" bottom="1.5"/>
+																										</styles>
+																									</skuid__buttonSet>
+																									<skuid__buttonSet model="ChildAccounts_NewCase" uniqueid="sk-29Mw-136065">
+																										<groups>
+																											<skuid__buttonGroup>
+																												<buttons>
+																													<skuid__button label="Cancel" uniqueId="sk-29Mw-136066" styleSettingsVariant="67363fb4-e40c-482d-b8bb-18137dc33bab">
+																														<actions>
+																															<action type="cancel">
+																																<models>
+																																	<model>ChildAccounts_OpenCases</model>
+																																</models>
+																															</action>
+																															<action type="closeSlidingPanel" closebehavior="close"/>
+																														</actions>
+																													</skuid__button>
+																												</buttons>
+																											</skuid__buttonGroup>
+																											<skuid__buttonGroup>
+																												<buttons>
+																													<skuid__button label="Save" uniqueId="sk-29NF-141080" styleSettingsVariant="c1123b81-07ee-4276-b74e-5b0243294c4e">
+																														<actions>
+																															<action type="save">
+																																<models>
+																																	<model>ChildAccounts_OpenCases</model>
+																																</models>
+																															</action>
+																															<action type="closeSlidingPanel" closebehavior="close"/>
+																														</actions>
+																													</skuid__button>
+																												</buttons>
+																											</skuid__buttonGroup>
+																										</groups>
+																										<styles>
+																											<spacing top="1.5" bottom="1.5"/>
+																										</styles>
+																										<renderConditions logictype="custom" logic="1 AND 2 AND 3">
+																											<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="ChildAccounts_OpenCases" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasChanged" value="true" operator="="/>
+																										</renderConditions>
+																										<styleVariantConditions/>
+																									</skuid__buttonSet>
+																									<skuid__deck columnGutter="0px" rowGutter=".75em" model="ChildAccounts_OpenCases" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-29NT-144021" pageSize="10" showPageSizeSelect="false" showLoadMore="false" showListFooter="false" setMaxWidth="auto" styleSettingsVariant="5476c247-2869-475d-8cd5-8ba7e8bbd5b5">
+																										<components>
+																											<skuid__form showErrorsInline="true" model="ChildAccounts_OpenCases" uniqueid="sk-29Nl-146410" mode="edit">
+																												<sections>
+																													<section title="New Section" showHeading="false">
+																														<rows>
+																															<row>
+																																<fields>
+																																	<skuid__field id="Subject"/>
+																																	<skuid__field id="Status" showHelp="true"/>
+																																</fields>
+																															</row>
+																															<row>
+																																<fields>
+																																	<skuid__field id="Description"/>
+																																</fields>
+																															</row>
+																															<row>
+																																<fields>
+																																	<skuid__field id="AccountId" showHelp="true" displayAs="PICKLIST"/>
+																																</fields>
+																															</row>
+																														</rows>
+																													</section>
+																												</sections>
+																												<styles>
+																													<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+																												</styles>
+																											</skuid__form>
+																										</components>
+																										<filtering enableSearch="false" instantSearch="false"/>
+																										<styles>
+																											<spacing top="1.5"/>
+																										</styles>
+																									</skuid__deck>
+																								</components>
+																								<background/>
+																								<styles>
+																									<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+																								</styles>
+																							</skuid__wrapper>
+																						</components>
+																					</skuid__slidingPanel>
+																				</action>
+																			</actions>
+																			<renderConditions logictype="and"/>
+																			<enableConditions logictype="and" message="No Open Cases">
+																				<condition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="ChildAccounts_OpenCases" sourcetype="modelproperty" sourceproperty="hasRows"/>
+																			</enableConditions>
+																			<styleVariantConditions/>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+																<skuid__buttonGroup>
+																	<buttons>
+																		<skuid__button uniqueId="sk-29Jg-116052" label="Add Case" icon="sk-webicon-ink:add" styleSettingsVariant="c1123b81-07ee-4276-b74e-5b0243294c4e">
+																			<actions>
+																				<action type="createRow" model="ChildAccounts_NewCase" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+																				<action type="showModal">
+																					<skuid__modal title="New Case" width="640px">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="ChildAccounts_NewCase" uniqueid="sk-29Kl-124073" mode="edit">
+																								<sections>
+																									<section title="New Section" showHeading="false">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="AccountId" showHelp="true" displayAs="PICKLIST" label="Account">
+																														<filters>
+																															<filter type="modelmerge" operator="in" field="Id" fieldtargetobjects="Account" value="" model="ChildAccounts" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+																														</filters>
+																													</skuid__field>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Subject"/>
+																													<skuid__field id="Status" showHelp="true"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Description"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																								<styles>
+																									<spacing top="1.5" bottom="1.5"/>
+																								</styles>
+																							</skuid__form>
+																						</components>
+																						<buttons>
+																							<skuid__button label="Cancel" uniqueId="sk-29L6-127298" styleSettingsVariant="67363fb4-e40c-482d-b8bb-18137dc33bab">
+																								<actions>
+																									<action type="cancel">
+																										<models>
+																											<model>ChildAccounts_NewCase</model>
+																										</models>
+																									</action>
+																									<action type="closeAllPopups"/>
+																								</actions>
+																							</skuid__button>
+																							<skuid__button label="Save &amp; Close" uniqueId="sk-29L6-127513" styleSettingsVariant="c1123b81-07ee-4276-b74e-5b0243294c4e">
+																								<actions>
+																									<action type="blockUI" styleSettingsVariant="default" message="Creating Case..."/>
+																									<action type="save">
+																										<models>
+																											<model>ChildAccounts_NewCase</model>
+																										</models>
+																									</action>
+																									<action type="requeryModel" model="ChildAccounts_OpenCases" behavior="standard"/>
+																									<action type="closeAllPopups"/>
+																									<action type="unblockUI"/>
+																								</actions>
+																							</skuid__button>
+																						</buttons>
+																						<afterCloseActions>
+																							<action type="abandonRows" model="ChildAccounts_NewCase" affectedrows="context"/>
+																						</afterCloseActions>
+																					</skuid__modal>
+																				</action>
+																			</actions>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+														</skuid__buttonSet>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+										<skuid__grid uniqueid="sk-1bh1-27223" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+											<divisions>
+												<division minWidth="100px" ratio="1">
+													<components>
+														<skuid__wrapper uniqueid="sk-1bh3-28116" heightStrategy="fixed" height="custom" heightCustom="112px" styleSettingsVariant="23247c93-3531-47b1-97df-58f736bda569">
+															<components>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Child Accounts&lt;/div&gt;&#10;" uniqueid="sk-1bh5-28434" styleSettingsVariant="964d08ff-3b6b-4a97-b22e-ee070f5ae8da">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{$Model.ChildAccounts.data.length}}&lt;/div&gt;&#10;" uniqueid="sk-3gGg-8758" styleSettingsVariant="50230d1d-a72a-43b5-8f8a-402e1f23d370" model="ChildAccounts">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="1">
+													<components>
+														<skuid__wrapper uniqueid="sk-1bh9-30833" styleSettingsVariant="23247c93-3531-47b1-97df-58f736bda569" heightStrategy="fixed" height="custom" heightCustom="112px">
+															<components>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Pipeline&lt;/div&gt;&#10;" uniqueid="sk-1bh9-30834" styleSettingsVariant="964d08ff-3b6b-4a97-b22e-ee070f5ae8da">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;${{#SumFriendly}}{{SumFriendly}}m{{/SumFriendly}}{{^SumFriendly}}0{{/SumFriendly}}&lt;/div&gt;&#10;" uniqueid="sk-3gXO-61707" styleSettingsVariant="50230d1d-a72a-43b5-8f8a-402e1f23d370" model="PipelineOpps">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="1">
+													<components>
+														<skuid__wrapper uniqueid="sk-1bh8-30295" styleSettingsVariant="23247c93-3531-47b1-97df-58f736bda569" heightStrategy="fixed" height="custom" heightCustom="112px">
+															<components>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;Open Cases&lt;/div&gt;&#10;" uniqueid="sk-1bh8-30296" styleSettingsVariant="964d08ff-3b6b-4a97-b22e-ee070f5ae8da">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+																<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{$Model.ChildAccounts_OpenCases.data.length}}&lt;/div&gt;&#10;" uniqueid="sk-3gH4-13507" styleSettingsVariant="50230d1d-a72a-43b5-8f8a-402e1f23d370" model="ChildAccounts_OpenCases">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__text>
+															</components>
+															<background/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+												</division>
+											</divisions>
+											<styles>
+												<spacing top="5.875"/>
+											</styles>
+										</skuid__grid>
+										<skuid__grid uniqueid="sk-3gKn-47979" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5">
+											<divisions>
+												<division minWidth="100px" ratio="1" alignSelf="flex-end">
+													<components>
+														<skuid__text contents="Pipeline by Stage" uniqueid="sk-1bid-42465" styleSettingsVariant="92e1fc6f-36df-4cb6-9e89-581870585ef9">
+															<styles>
+																<spacing top="5.625"/>
+															</styles>
+															<renderConditions logictype="and">
+																<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_Display" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="ToggleChart" value="true"/>
+															</renderConditions>
+															<styleVariantConditions/>
+														</skuid__text>
+													</components>
+												</division>
+												<division alignSelf="center" minWidth="100px" ratio="0">
+													<components>
+														<skuid__text contents="Show/Hide Chart" uniqueid="sk-3gK_-51341"/>
+													</components>
+												</division>
+												<division alignSelf="center" minWidth="100px" ratio="0">
+													<components>
+														<skuid__form showErrorsInline="true" model="UI_Display" uniqueid="sk-3gKq-49177" mode="edit">
+															<sections>
+																<section title="New Section" showHeading="false">
+																	<rows>
+																		<row>
+																			<fields>
+																				<skuid__field id="ToggleChart" showHelp="true" displayAs="SWITCH" label=" "/>
+																			</fields>
+																		</row>
+																	</rows>
+																</section>
+															</sections>
+														</skuid__form>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+										<skuid__wrapper uniqueid="sk-3gJI-28723">
+											<components>
+												<skuid__chart model="ChildAccounts_Opps_Open" type="column" uniqueid="sk-1bhY-36656" stacking="true">
+													<dataaxes>
+														<axis id="axis1"/>
+													</dataaxes>
+													<categoryaxes>
+														<axis id="categories" categorytype="template" field="AccountId" template="{{StageName}}"/>
+													</categoryaxes>
+													<serieslist>
+														<series valuefield="Amount" splittype="field" aggfunction="sum" splitfield="StageName">
+															<actions>
+																<action type="showModal">
+																	<conditions>
+																		<condition type="contextrows" field="Id" mergefield="Id" operator="in" autocreated="true"/>
+																	</conditions>
+																	<skuid__modal title="Opp Details" width="50%">
+																		<components>
+																			<skuid__table model="ChildAccounts_Opps_Open" uniqueid="sk-29G5-100287" mode="read" pageSize="10" showPageSizeSelect="false" showListFooter="false">
+																				<fields>
+																					<field id="Name" uniqueid="fi-29GN-102296"/>
+																					<field id="Amount" horizontalAlignment="right" uniqueid="fi-29GN-102297"/>
+																					<field id="StageName" uniqueid="fi-29GN-102298"/>
+																					<field id="CloseDate" uniqueid="fi-29GN-102299"/>
+																				</fields>
+																				<filtering enableSearch="false" instantSearch="false"/>
+																				<rowActions/>
+																				<massActions>
+																					<action type="multi" label="Mass Update">
+																						<actions>
+																							<action type="massUpdate"/>
+																						</actions>
+																					</action>
+																				</massActions>
+																				<conditions>
+																					<condition type="contextrows" field="Id" mergefield="Id" operator="in"/>
+																				</conditions>
+																			</skuid__table>
+																		</components>
+																	</skuid__modal>
+																</action>
+															</actions>
+														</series>
+													</serieslist>
+													<colors/>
+													<legend layout="off" halign="center" valign="bottom" showlabels="false"/>
+												</skuid__chart>
+											</components>
+											<background/>
+											<styles>
+												<spacing top="2.5"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_Display" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="ToggleChart" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+										<skuid__text contents="Child Accounts" uniqueid="sk-1bin-44474" styleSettingsVariant="92e1fc6f-36df-4cb6-9e89-581870585ef9">
+											<styles>
+												<spacing top="5"/>
+											</styles>
+										</skuid__text>
+										<skuid__wrapper uniqueid="sk-1bip-45910" styleSettingsVariant="8cac6675-e638-4c62-9ecc-ade6e63a80f5" maxHeight="custom" maxHeightCustom="750px">
+											<components>
+												<skuid__deck rowGutter=".75em" model="ChildAccounts" showSaveCancel="false" verticalAlign="top" minWidth="100%" uniqueid="sk-1bis-46236" setMaxWidth="auto" pageSize="10" columnGutter="0px" showPageSizeSelect="false" showLoadMore="false" showListHeader="false" showListFooter="false" styleSettingsVariant="08fa51f3-681d-4ae4-a5ba-63520dfec54e">
+													<components>
+														<skuid__text contents="{{{Name}}}" uniqueid="sk-1biw-46747" model="ChildAccounts" styleSettingsVariant="d2e7adf2-5db5-4ec4-859a-baf0249efa77">
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__text>
+														<skuid__tabSet uniqueid="sk-29Hq-107280">
+															<tabs>
+																<skuid__tabPanel name="Pipeline">
+																	<components>
+																		<skuid__table model="ChildAccounts_Opps_Open" uniqueid="sk-29Hy-108450" mode="read" pageSize="10" showPageSizeSelect="false" showListHeader="false" showListFooter="false" showSaveCancel="false">
+																			<fields>
+																				<field id="Name" uniqueid="fi-29Hy-108942"/>
+																				<field id="Amount" horizontalAlignment="right" uniqueid="fi-29Hy-108943"/>
+																				<field id="StageName" uniqueid="fi-29Hy-108944"/>
+																				<field id="CloseDate" uniqueid="fi-29Hy-108945"/>
+																			</fields>
+																			<filtering enableSearch="false" instantSearch="false"/>
+																			<rowActions/>
+																			<massActions/>
+																			<conditions>
+																				<condition type="contextrow" field="AccountId" mergefield="Id" operator="=" fieldtargetobjects="Account"/>
+																			</conditions>
+																		</skuid__table>
+																	</components>
+																</skuid__tabPanel>
+																<skuid__tabPanel name="History">
+																	<components>
+																		<skuid__table model="ChildAccounts_Opps_Closed" uniqueid="sk-29Iz-112933" mode="readonly" pageSize="10" showPageSizeSelect="false" showListHeader="false" showListFooter="false" showSaveCancel="false">
+																			<fields>
+																				<field id="Name" uniqueid="sk-29Iz-112934"/>
+																				<field id="Amount" horizontalAlignment="right" uniqueid="sk-29Iz-112935"/>
+																				<field id="StageName" uniqueid="sk-29Iz-112936"/>
+																				<field id="CloseDate" uniqueid="sk-29Iz-112937"/>
+																			</fields>
+																			<filtering enableSearch="false" instantSearch="false"/>
+																			<rowActions/>
+																			<massActions/>
+																			<conditions>
+																				<condition type="contextrow" field="AccountId" mergefield="Id" operator="=" fieldtargetobjects="Account"/>
+																			</conditions>
+																		</skuid__table>
+																	</components>
+																</skuid__tabPanel>
+															</tabs>
+															<styles>
+																<spacing top="2.625"/>
+															</styles>
+														</skuid__tabSet>
+													</components>
+													<filtering enableSearch="false" instantSearch="false"/>
+													<styles>
+														<spacing top="4.25"/>
+													</styles>
+												</skuid__deck>
+											</components>
+											<background/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__wrapper>
+									</components>
+									<background/>
+									<styles>
+										<spacing top="4" bottom="4" left="4" right="4"/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+							<background/>
+							<styles>
+								<spacing top="1.5" bottom="1.5" right="1.5"/>
+							</styles>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+		</skuid__grid>
+	</components>
+	<background/>
+	<styles>
+		<spacing top="2" bottom="2" left="2" right="2"/>
+	</styles>
+</skuid__wrapper>
+</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+<background/>
+</skuid__page>
