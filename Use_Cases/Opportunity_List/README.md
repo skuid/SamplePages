@@ -18,11 +18,11 @@ The table shows all opportunities while the charts and KPIs offer an overview. S
 ## Notes
 - The chart allows you to drill down into the underlying Opportunity data and make changes if necessary.
 
+- Add filters through the Show Filters action, then hide them for more screen real estate while continuing to see the active filters on the table.
+
 - The KPIs are Skuid UI Only Formula fields - so you do not need to worry about using up any of your roll-summary fields on your Account Object.
 
-- The Modal that appears when clicking "New Case" is completely configurable and no code was necessary - it's one of the many actions available to call from Skuid's Action Framework ("Show Modal")
-
-- You can style buttons and place them anywhere on the page, highly configurable and powerful components that hook into the Action Framework and/or Salesforce actions (approval process, Apex, etc.).
+- The Modal that appears when clicking "New Opportunity" is completely configurable and no code was necessary - it's one of the many actions available to call from Skuid's Action Framework ("Show Modal").
 
 ## Related Links
 -  [View page in App Gallery](https://portal.skuidsite.com/applications/opportunitymanagement)
