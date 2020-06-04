@@ -1,0 +1,2225 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="CompactOpportunityMgt" title="Opportunity List">
+	<models>
+		<model id="Opportunities" limit="100" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" orderby="CreatedDate DESC" doclone="" unloadwarningifunsavedchanges="false" processonclient="true">
+			<fields>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="Amount" overridemetadata="false" ogdisplaytype="CURRENCY" displaytype="CURRENCY" scale="0"/>
+				<field id="CloseDate"/>
+				<field id="IsDeleted"/>
+				<field id="Description"/>
+				<field id="LeadSource"/>
+				<field id="Name"/>
+				<field id="NextStep"/>
+				<field id="Id"/>
+				<field id="Type"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="Pricebook2Id"/>
+				<field id="Pricebook2.Name"/>
+				<field id="StageName"/>
+				<field id="CreatedDate"/>
+				<field id="Fiscal"/>
+				<field id="CampaignId"/>
+				<field id="HasOpenActivity"/>
+				<field id="HasOpportunityLineItem"/>
+				<field id="LastActivityDate"/>
+				<field id="Campaign.Name"/>
+				<field id="showFilterSection" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN" label="Show Filter Section" helptext="controls filter section above opp table">
+					<formula>!{{$Model.Opportunities.conditions.1.inactive}} OR 
+!{{$Model.Opportunities.conditions.2.inactive}} OR 
+!{{$Model.Opportunities.conditions.3.inactive}} OR 
+!{{$Model.Opportunities.conditions.4.inactive}} OR 
+!{{$Model.Opportunities.conditions.5.inactive}} OR 
+!{{$Model.Opportunities.conditions.6.inactive}}</formula>
+				</field>
+				<field id="showAccountFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.2.inactive}}</formula>
+				</field>
+				<field id="showOwnerFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.3.inactive}}</formula>
+				</field>
+				<field id="showStageFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.1.inactive}}</formula>
+				</field>
+				<field id="showTypeFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.4.inactive}}</formula>
+				</field>
+				<field id="showStartCloseDateFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.5.inactive}}</formula>
+				</field>
+				<field id="showEndCloseDateFilter" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.6.inactive}}</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="RFI" enclosevalueinquotes="true" field="Name" operator="does not contain"/>
+				<condition type="multiple" field="StageName" operator="in" inactive="true" enclosevalueinquotes="true" name="StageName" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="AccountId" operator="=" inactive="true" enclosevalueinquotes="true" name="AccountId" clientorserver="server" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="OwnerId" operator="=" inactive="true" enclosevalueinquotes="true" name="OwnerId" clientorserver="server" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="Type" operator="=" inactive="true" enclosevalueinquotes="true" name="Type" clientorserver="server" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="CloseDate" operator="gte" inactive="true" enclosevalueinquotes="false" name="StartCloseDate" clientorserver="server" state="filterableoff" value=""/>
+				<condition type="fieldvalue" field="CloseDate" operator="lte" inactive="true" enclosevalueinquotes="false" name="EndCloseDate" clientorserver="server" state="filterableoff" value=""/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="setCondition" model="AccountForFilter" valuesource="fieldvalue" condition="Id" value="{{$Model.Opportunities.conditions.2.value}}"/>
+						<action type="requeryModel" model="AccountForFilter" behavior="standard"/>
+					</actions>
+					<events>
+						<event>condition.valueChanged</event>
+					</events>
+					<conditions>
+						<condition>AccountId</condition>
+					</conditions>
+				</action>
+				<action>
+					<actions>
+						<action type="setCondition" model="UserForFilter" valuesource="fieldvalue" condition="Id" value="{{$Model.Opportunities.conditions.3.value}}"/>
+						<action type="requeryModel" model="UserForFilter" behavior="standard"/>
+					</actions>
+					<events>
+						<event>condition.valueChanged</event>
+					</events>
+					<conditions>
+						<condition>OwnerId</condition>
+					</conditions>
+				</action>
+				<action>
+					<actions>
+						<action type="emptyModelData">
+							<models>
+								<model>UI_FilterControl</model>
+							</models>
+						</action>
+						<action type="createRow" model="UI_FilterControl" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+					</actions>
+					<events>
+						<event>condition.valueChanged</event>
+					</events>
+				</action>
+			</actions>
+		</model>
+		<model id="UI_FilterControl" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="showFilterSection" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN" label="Show Filter Section" helptext="controls filter section above opp table">
+					<formula>!{{$Model.Opportunities.conditions.1.inactive}} OR 
+!{{$Model.Opportunities.conditions.2.inactive}} OR 
+!{{$Model.Opportunities.conditions.3.inactive}} OR 
+!{{$Model.Opportunities.conditions.4.inactive}} OR 
+!{{$Model.Opportunities.conditions.5.inactive}} OR 
+!{{$Model.Opportunities.conditions.6.inactive}}</formula>
+				</field>
+				<field id="showAccountFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.2.inactive}}</formula>
+				</field>
+				<field id="showOwnerFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.3.inactive}}</formula>
+				</field>
+				<field id="showStageFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.1.inactive}}</formula>
+				</field>
+				<field id="showTypeFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.4.inactive}}</formula>
+				</field>
+				<field id="showStartCloseDateFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.5.inactive}}</formula>
+				</field>
+				<field id="showEndCloseDateFilter" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>!{{$Model.Opportunities.conditions.6.inactive}}</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="ForecastRevenue" limit="" query="true" createrowifnonefound="false" datasource="salesforce" type="aggregate" sobject="Opportunity" orderby="" processonclient="true">
+			<fields>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="prettyAmount" uionly="true" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="1">
+					<formula>{{sumAmount}}/1000000</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="multiple" value="" field="StageName" operator="in" enclosevalueinquotes="true">
+					<values>
+						<value>Prospecting</value>
+						<value>Qualification</value>
+						<value>Needs Analysis</value>
+						<value>Value Proposition</value>
+						<value>Id. Decision Makers</value>
+						<value>Perception Analysis</value>
+					</values>
+				</condition>
+			</conditions>
+			<actions/>
+			<groupby method="simple"/>
+		</model>
+		<model id="TotalRevenue" limit="" query="true" createrowifnonefound="false" datasource="salesforce" type="aggregate" sobject="Opportunity" orderby="" processonclient="true">
+			<fields>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="prettyAmount" uionly="true" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="1">
+					<formula>{{sumAmount}}/1000000</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+			<groupby method="simple"/>
+		</model>
+		<model id="NewRevenue" limit="" query="true" createrowifnonefound="false" datasource="salesforce" type="aggregate" sobject="Opportunity" orderby="" processonclient="true">
+			<fields>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="prettyAmount" uionly="true" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="1">
+					<formula>{{sumAmount}}/1000000</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="New Customer" field="Type" operator="=" enclosevalueinquotes="true"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple"/>
+		</model>
+		<model id="ExistingRevenue" limit="" query="true" createrowifnonefound="false" datasource="salesforce" type="aggregate" sobject="Opportunity" orderby="" processonclient="true">
+			<fields>
+				<field id="Amount" name="sumAmount" function="SUM"/>
+				<field id="prettyAmount" uionly="true" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="1">
+					<formula>{{sumAmount}}/1000000</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="New Customer" field="Type" operator="!=" enclosevalueinquotes="true"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple"/>
+		</model>
+		<model id="UI_AccountType" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="AccountType" displaytype="PICKLIST" length="255" label="Account Type" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="New Account" label="New Account"/>
+						<entry value="From an Existing Account" label="From an Existing Account"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop" model="UI_AccountType" label="if account is a new account">
+							<formula>{{AccountType}} == "New Account"</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="NewOpportunity" affectedrows="context">
+									<updates>
+										<update valuesource="blank" field="AccountId" fieldtargetobjects="Account" enclosevalueinquotes="true"/>
+									</updates>
+								</action>
+								<action type="emptyModelData">
+									<models>
+										<model>NewAccount</model>
+									</models>
+								</action>
+								<action type="createRow" model="NewAccount" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+							</iftrueactions>
+						</action>
+						<action type="branch" whenfinished="stop" model="UI_AccountType" label="if account is for existing account">
+							<formula>{{AccountType}} == "From an Existing Account"</formula>
+							<iftrueactions>
+								<action type="emptyModelData">
+									<models>
+										<model>NewAccount</model>
+									</models>
+								</action>
+							</iftrueactions>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>AccountType</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="NewAccount" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" type="" sobject="Account">
+			<fields>
+				<field id="Name"/>
+				<field id="Industry"/>
+				<field id="NumberOfEmployees"/>
+				<field id="Phone"/>
+				<field id="BillingCity"/>
+				<field id="BillingState"/>
+				<field id="BillingStreet"/>
+				<field id="BillingPostalCode"/>
+				<field id="BillingCountry"/>
+				<field id="Description"/>
+				<field id="Website"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="NewOpportunity" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="Opportunity" type="">
+			<fields>
+				<field id="Name"/>
+				<field id="CreatedDate"/>
+				<field id="StageName"/>
+				<field id="Amount"/>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="CloseDate"/>
+				<field id="Description"/>
+				<field id="ExpectedRevenue"/>
+				<field id="LeadSource"/>
+				<field id="NextStep"/>
+				<field id="Id"/>
+				<field id="Type"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="CampaignId"/>
+				<field id="Campaign.Name"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="IsDeleted"/>
+				<field id="Fiscal"/>
+				<field id="FiscalQuarter"/>
+				<field id="FiscalYear"/>
+				<field id="ForecastCategoryName"/>
+				<field id="ForecastCategory"/>
+				<field id="HasOpportunityLineItem"/>
+				<field id="HasOpenActivity"/>
+				<field id="HasOverdueTask"/>
+				<field id="LastActivityDate"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="LastReferencedDate"/>
+				<field id="LastViewedDate"/>
+				<field id="Probability"/>
+				<field id="TotalOpportunityQuantity"/>
+				<field id="SystemModstamp"/>
+				<field id="IsWon"/>
+				<field id="Pricebook2Id"/>
+				<field id="Pricebook2.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="AccountId" fieldtargetobjects="Account" operator="=" model="NewAccount" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate" state="filterableoff" inactive="true" name="AccountId"/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="emptyModelData">
+							<models>
+								<model>NewOppLineItems</model>
+							</models>
+						</action>
+						<action type="createRow" model="NewOppLineItems" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+							<defaults>
+								<default valuesource="fieldvalue" field="ServiceDate" enclosevalueinquotes="false" value="TODAY"/>
+								<default valuesource="fieldvalue" field="Quantity" enclosevalueinquotes="false" value="1"/>
+							</defaults>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>Pricebook2Id</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="NewOppLineItems" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" type="" sobject="OpportunityLineItem">
+			<fields>
+				<field id="ListPrice"/>
+				<field id="UnitPrice"/>
+				<field id="PricebookEntryId"/>
+				<field id="PricebookEntry.Name"/>
+				<field id="PricebookEntry.UnitPrice"/>
+				<field id="Description"/>
+				<field id="OpportunityId"/>
+				<field id="Opportunity.Name"/>
+				<field id="Quantity"/>
+				<field id="ServiceDate"/>
+				<field id="CreatedDate"/>
+				<field id="TotalPriceFormula" uionly="true" displaytype="FORMULA" label="TotalPriceFormula" ogdisplaytype="TEXT" readonly="true" returntype="CURRENCY" precision="9" scale="2">
+					<formula>{{UnitPriceFormula}}*{{Quantity}}</formula>
+				</field>
+				<field id="UnitPriceFormula" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="CURRENCY" precision="9" scale="2">
+					<formula>{{{PricebookEntry.UnitPrice}}}</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="OpportunityId" fieldtargetobjects="Opportunity" operator="=" novaluebehavior="deactivate" mergefield="Id" model="NewOpportunity" enclosevalueinquotes="true"/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="updateRow" fieldmodel="NewOppLineItems" affectedrows="context" field="UnitPrice" enclosevalueinquotes="false" value="{{{PricebookEntry.UnitPrice}}}"/>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>PricebookEntryId</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="OppDrilldown" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" type="" sobject="Opportunity" orderby="Account.Name ASC Nulls Last" processonclient="true">
+			<fields>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="Name"/>
+				<field id="StageName"/>
+				<field id="CloseDate"/>
+				<field id="Amount"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="CreatedDate"/>
+				<field id="Fiscal"/>
+				<field id="FiscalQuarter"/>
+				<field id="FiscalYear"/>
+				<field id="Type"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Fiscal" state="filterableoff" inactive="true" name="Fiscal"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Type" state="filterableoff" inactive="true" name="Type"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="StageName" operator="=" state="filterableoff" inactive="true" name="StageName"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="OppDrawerContacts" limit="10" query="false" createrowifnonefound="false" sobject="OpportunityContactRole" doclone="" datasource="salesforce" processonclient="true">
+			<fields>
+				<field id="ContactId"/>
+				<field id="Contact.Name"/>
+				<field id="IsPrimary"/>
+				<field id="Role"/>
+				<field id="Contact.Title"/>
+				<field id="Contact.AccountId"/>
+				<field id="Contact.Account.Name"/>
+				<field id="OpportunityId"/>
+				<field id="Opportunity.Name"/>
+				<field id="Contact.Phone"/>
+				<field id="Contact.Email"/>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="OpportunityId" state="filterableoff" inactive="true" name="OpportunityId"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="OppDrawerAccount" limit="50" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+			<fields>
+				<field id="Description"/>
+				<field id="Id"/>
+				<field id="Name"/>
+				<field id="Phone"/>
+				<field id="Type"/>
+				<field id="NumberOfEmployees"/>
+				<field id="AnnualRevenue"/>
+				<field id="BillingCity"/>
+				<field id="BillingCountry"/>
+				<field id="BillingState"/>
+				<field id="BillingStreet"/>
+				<field id="BillingPostalCode"/>
+				<field id="Industry"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="Website"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" operator="=" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="OppDrawerLineItems" limit="" query="false" createrowifnonefound="false" sobject="OpportunityLineItem" orderby="SortOrder, PricebookEntry.Product2.Name" doclone="" type="" datasource="salesforce" processonclient="true">
+			<fields>
+				<field id="SortOrder"/>
+				<field id="UnitPrice"/>
+				<field id="TotalPrice"/>
+				<field id="Quantity"/>
+				<field id="Description"/>
+				<field id="ListPrice"/>
+				<field id="ServiceDate"/>
+				<field id="PricebookEntry.Product2Id"/>
+				<field id="PricebookEntry.Product2.Name"/>
+				<field id="PricebookEntryId"/>
+				<field id="PricebookEntry.UnitPrice"/>
+				<field id="OpportunityId"/>
+				<field id="Opportunity.Name"/>
+				<field id="Product2Id"/>
+				<field id="Product2.Name"/>
+				<field id="PricebookEntry.Name"/>
+				<field id="Opportunity.Pricebook2Id"/>
+				<field id="Opportunity.Pricebook2.Name"/>
+				<field id="TotalPriceFormula" uionly="true" displaytype="FORMULA" length="255" label="Total Price" ogdisplaytype="TEXT" readonly="true" returntype="CURRENCY" precision="9" scale="2">
+					<formula>{{UnitPriceFormula}}*{{Quantity}}</formula>
+				</field>
+				<field id="UnitPriceFormula" uionly="true" displaytype="FORMULA" length="255" label="Sales Price" ogdisplaytype="TEXT" readonly="true" returntype="CURRENCY" precision="9" scale="2">
+					<formula>{{{PricebookEntry.UnitPrice}}}</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" operator="=" value="" field="OpportunityId" novaluebehavior="" enclosevalueinquotes="true" state="filterableoff" inactive="true" name="OpportunityId"/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="updateRow" fieldmodel="OppDrawerLineItems" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="UnitPrice" enclosevalueinquotes="false" value="{{{PricebookEntry.UnitPrice}}}"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>PricebookEntryId</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="OppDrawerTasks" limit="" query="false" createrowifnonefound="false" sobject="Task" doclone="" orderby="ActivityDate DESC" processonclient="true" datasource="salesforce">
+			<fields>
+				<field id="Subject"/>
+				<field id="CreatedDate"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="Status"/>
+				<field id="ActivityDate"/>
+				<field id="WhatId"/>
+				<field id="What.Name"/>
+				<field id="Description"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="WhatId" state="filterableoff" inactive="true" name="WhatId" operator="=" clientorserver="server"/>
+				<condition type="fieldvalue" field="Status" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__Status" clientorserver="server" state="filterableoff" value=""/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="AccountForFilter" limit="1" query="false" datasource="salesforce" sobject="Account">
+			<fields>
+				<field id="Id"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" operator="=" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="UserForFilter" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" sobject="User">
+			<fields>
+				<field id="Id"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="AccountsForFilterSource" limit="900" query="true" datasource="salesforce" sobject="Account" orderby="Name">
+			<fields>
+				<field id="Id"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" operator="=" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="UsersForFilterSource" limit="900" query="true" createrowifnonefound="false" datasource="salesforce" sobject="User" orderby="Name">
+			<fields>
+				<field id="Id"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Id" clientorserver="server" state="filterableoff" inactive="true" name="Id"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2PG3-21889" styleSettingsVariant="3b1c1355-4a9d-42c0-af83-73ec64dac95f">
+			<components>
+				<skuid__grid uniqueid="sk-2y5x-26917" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+					<divisions>
+						<division minWidth="100px" ratio="1" alignSelf="center">
+							<components>
+								<skuid__text contents="Opportunity List" uniqueid="sk-2PJK-34211" styleSettingsVariant="extraLarge">
+									<styles>
+										<spacing top="2" bottom="2" styleSettingsVariant="extraLarge"/>
+									</styles>
+								</skuid__text>
+							</components>
+						</division>
+						<division alignSelf="center" minWidth="100px" ratio="1">
+							<components>
+								<skuid__grid uniqueid="sk-2PH8-16101" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+									<divisions>
+										<division minWidth="100px" ratio="1">
+											<components>
+												<skuid__filterSet model="Opportunities" uniqueid="sk-2PE2-19367" resetButtonBehavior="hide" styleSettingsVariant="7cb3fb4e-72aa-4a75-8a98-4556a09ca90f">
+													<filters/>
+													<filtering enableSearch="true" instantSearch="true" instantFilters="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search"/>
+													<positioning justifyContent="flex-end" alignItems="flex-end"/>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__filterSet>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="32px" ratio="0">
+											<components>
+												<skuid__buttonSet model="UI_Control" uniqueid="sk-2PHA-17135">
+													<groups>
+														<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+															<buttons>
+																<skuid__button uniqueId="sk-2PHA-17134" icon="sk-webicon-material-icons:filter_list" styleSettingsVariant="borderless" label="Show Filters">
+																	<actions>
+																		<action type="action-sequence" action-sequence-id="34da0981-ca9d-46e3-8c69-91f6f91803b8"/>
+																	</actions>
+																	<tooltip position="top"/>
+																</skuid__button>
+															</buttons>
+														</skuid__buttonGroup>
+													</groups>
+												</skuid__buttonSet>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__grid>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing left="4" right="4"/>
+					</styles>
+				</skuid__grid>
+			</components>
+			<background/>
+			<styles>
+				<spacing/>
+			</styles>
+		</skuid__wrapper>
+		<skuid__wrapper uniqueid="sk-2PDK-33500">
+			<components>
+				<skuid__grid uniqueid="sk-2PAO-14507" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+					<divisions>
+						<division alignSelf="auto" minWidth="100px" ratio="2">
+							<components>
+								<skuid__wrapper uniqueid="sk-2PDV-13460" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
+									<components>
+										<skuid__accordion uniqueid="sk-31mG-25628" iconOnRight="true" styleSettingsVariant="490af5db-8792-4e19-ba71-42a8377f7de4">
+											<sections>
+												<section title="Opportunities by Quarter and Stage">
+													<components>
+														<skuid__grid uniqueid="sk-31n1-37179" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+															<divisions>
+																<division minWidth="100px" ratio="0" alignSelf="auto">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-2PN_-71853" styleSettingsVariant="aad0420d-8174-440c-a4f5-91972e1a8679" heightStrategy="fixed" height="custom" heightCustom="382px">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-31o6-57956">
+																					<components>
+																						<skuid__wrapper uniqueid="sk-2PMt-62293">
+																							<components>
+																								<skuid__text contents="Sales Forecast" uniqueid="sk-2PM8-53760" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																								<skuid__text contents="${{prettyAmount}}M" uniqueid="sk-2PM8-54079" model="ForecastRevenue" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																							</components>
+																							<styles>
+																								<spacing bottom="2"/>
+																							</styles>
+																							<background/>
+																						</skuid__wrapper>
+																						<skuid__wrapper uniqueid="sk-2PO6-75596">
+																							<components>
+																								<skuid__text contents="New Customer Revenue" uniqueid="sk-2PMt-62294" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																								<skuid__text contents="${{prettyAmount}}M" uniqueid="sk-2PMt-62295" model="NewRevenue" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																							</components>
+																							<styles>
+																								<spacing bottom="2"/>
+																							</styles>
+																							<background/>
+																						</skuid__wrapper>
+																						<skuid__wrapper uniqueid="sk-2PO9-78018">
+																							<components>
+																								<skuid__text contents="Existing Customer Revenue" uniqueid="sk-2PN6-65929" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																								<skuid__text contents="${{prettyAmount}}M" uniqueid="sk-2PN6-65930" model="ExistingRevenue" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																							</components>
+																							<styles>
+																								<spacing bottom="2"/>
+																							</styles>
+																							<background/>
+																						</skuid__wrapper>
+																						<skuid__wrapper uniqueid="sk-2POB-79208">
+																							<components>
+																								<skuid__text contents="Total Revenue YTD" uniqueid="sk-2PN6-65257" styleSettingsVariant="c704a98e-307e-4445-a6eb-21b04dc18ad2"/>
+																								<skuid__text contents="${{prettyAmount}}M" uniqueid="sk-2PN6-65258" model="TotalRevenue" styleSettingsVariant="63ff9bb7-ba56-4616-8ab6-9f0b277263f6"/>
+																							</components>
+																							<background/>
+																							<styles>
+																								<spacing/>
+																							</styles>
+																						</skuid__wrapper>
+																					</components>
+																					<styles>
+																						<spacing left="2" right="2" top="2" bottom="2"/>
+																					</styles>
+																					<background/>
+																				</skuid__wrapper>
+																			</components>
+																			<background/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__chart model="Opportunities" type="column" uniqueid="sk-2PAP-15806" stacking="true" height="350px" export="off">
+																			<dataaxes>
+																				<axis id="axis1" title="Amount (USD)"/>
+																			</dataaxes>
+																			<categoryaxes>
+																				<axis id="categories" categorytype="field" field="CloseDate" fillvals="true" dategranularity="calquarter"/>
+																			</categoryaxes>
+																			<serieslist>
+																				<series valuefield="Amount" splittype="template" aggfunction="sum" splittemplate="{{StageName}}">
+																					<actions>
+																						<action type="blockUI" styleSettingsVariant="dark" message="Filtering" showPlaceholder="true"/>
+																						<action type="deactivateFilterableConditions">
+																							<models>
+																								<model>OppDrilldown</model>
+																							</models>
+																						</action>
+																						<action type="setCondition" model="OppDrilldown" valuesource="fieldvalue" condition="Fiscal" value="{{rows.0.Fiscal}}"/>
+																						<action type="setCondition" model="OppDrilldown" valuesource="fieldvalue" condition="StageName" value="{{rows.0.StageName}}"/>
+																						<action type="requeryModel" model="OppDrilldown" behavior="standard"/>
+																						<action type="showModal">
+																							<skuid__modal title="{{$Model.OppDrilldown.data.0.StageName}} Opportunities in Q{{$Model.OppDrilldown.data.0.FiscalQuarter}} {{{$Model.OppDrilldown.data.0.FiscalYear}}}" width="60%">
+																								<components>
+																									<skuid__wrapper uniqueid="sk-2e8a-46508">
+																										<components>
+																											<skuid__table allowColumnFreezing="dragDrop" model="OppDrilldown" uniqueid="sk-2e7T-36246" mode="read" pageSize="10">
+																												<fields>
+																													<field id="Name" uniqueid="fi-2e8Y-45546"/>
+																													<field id="AccountId" uniqueid="fi-2e8Y-45547" label="Account"/>
+																													<field id="Amount" uniqueid="fi-2e8Y-45548"/>
+																													<field id="StageName" uniqueid="fi-2e8Y-45549"/>
+																													<field id="CloseDate" uniqueid="fi-2e8Y-45550"/>
+																													<field id="OwnerId" uniqueid="fi-2e8Y-45551" label="Owner"/>
+																												</fields>
+																												<filtering enableSearch="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search"/>
+																												<rowActions/>
+																												<massActions>
+																													<action type="multi" label="Mass Update">
+																														<actions>
+																															<action type="massUpdate"/>
+																														</actions>
+																													</action>
+																												</massActions>
+																											</skuid__table>
+																										</components>
+																										<styles>
+																											<spacing top="2" bottom="2" left="3" right="3"/>
+																										</styles>
+																										<background/>
+																									</skuid__wrapper>
+																								</components>
+																							</skuid__modal>
+																						</action>
+																						<action type="unblockUI"/>
+																					</actions>
+																				</series>
+																			</serieslist>
+																			<colors/>
+																			<legend layout="off" halign="center" valign="bottom"/>
+																			<styles>
+																				<spacing top="3" bottom="3" left="3" right="3"/>
+																			</styles>
+																		</skuid__chart>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__grid>
+													</components>
+												</section>
+											</sections>
+										</skuid__accordion>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division minWidth="100px" ratio="1" alignSelf="auto">
+							<components>
+								<skuid__wrapper uniqueid="sk-2PDU-13100" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
+									<components>
+										<skuid__accordion uniqueid="sk-31mQ-28991" iconOnRight="true" styleSettingsVariant="490af5db-8792-4e19-ba71-42a8377f7de4">
+											<sections>
+												<section title="Revenue by Type">
+													<components>
+														<skuid__chart model="Opportunities" type="donut" uniqueid="sk-2PAP-15510" height="350px" export="off">
+															<dataaxes>
+																<axis id="axis1"/>
+															</dataaxes>
+															<categoryaxes>
+																<axis id="categories" categorytype="field"/>
+															</categoryaxes>
+															<serieslist>
+																<series valuefield="Amount" splittype="template" aggfunction="sum" splittemplate="{{#Type}}{{Type}}{{/Type}}{{^Type}}Other{{/Type}}">
+																	<actions>
+																		<action type="blockUI" styleSettingsVariant="dark" message="Filtering" showPlaceholder="true"/>
+																		<action type="deactivateFilterableConditions">
+																			<models>
+																				<model>OppDrilldown</model>
+																			</models>
+																		</action>
+																		<action type="setCondition" model="OppDrilldown" valuesource="fieldvalue" condition="Type" value="{{rows.0.Type}}"/>
+																		<action type="requeryModel" model="OppDrilldown" behavior="standard"/>
+																		<action type="showModal">
+																			<skuid__modal title="{{$Model.OppDrilldown.data.0.Type}} Opportunities" width="60%">
+																				<components>
+																					<skuid__wrapper uniqueid="sk-2e83-39955">
+																						<components>
+																							<skuid__table allowColumnFreezing="dragDrop" model="OppDrilldown" uniqueid="sk-2e51-21716" mode="read" pageSize="10">
+																								<fields>
+																									<field id="Name" uniqueid="fi-2e5Q-17407"/>
+																									<field id="AccountId" uniqueid="fi-2e5Q-17408" label="Account"/>
+																									<field id="Amount" uniqueid="fi-2e5Q-17409"/>
+																									<field id="StageName" uniqueid="fi-2e5Q-17410"/>
+																									<field id="CloseDate" uniqueid="fi-2e5Q-17411"/>
+																									<field id="OwnerId" uniqueid="fi-2e5Q-17412" label="Owner"/>
+																								</fields>
+																								<filtering enableSearch="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search"/>
+																								<rowActions/>
+																								<massActions>
+																									<action type="multi" label="Mass Update">
+																										<actions>
+																											<action type="massUpdate"/>
+																										</actions>
+																									</action>
+																								</massActions>
+																							</skuid__table>
+																						</components>
+																						<styles>
+																							<spacing left="3" bottom="2" top="2" right="3"/>
+																						</styles>
+																						<background/>
+																					</skuid__wrapper>
+																				</components>
+																			</skuid__modal>
+																		</action>
+																		<action type="unblockUI"/>
+																	</actions>
+																</series>
+															</serieslist>
+															<colors/>
+															<legend layout="off" halign="center" valign="bottom" showlabels="false"/>
+														</skuid__chart>
+													</components>
+												</section>
+											</sections>
+										</skuid__accordion>
+									</components>
+									<background/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__wrapper uniqueid="sk-2PDt-16781" styleSettingsVariant="d080372e-4a6e-4e14-a55a-1052395be065">
+					<components>
+						<skuid__grid uniqueid="sk-2yPf-63812" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0">
+							<divisions>
+								<division alignSelf="auto" minWidth="100px" ratio="4">
+									<components/>
+								</division>
+								<division minWidth="60px" ratio="0" alignSelf="center">
+									<components>
+										<skuid__text contents="Filtering By:" uniqueid="sk-2yPf-63813">
+											<styles>
+												<spacing right="1"/>
+											</styles>
+										</skuid__text>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2yPf-63814" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zMq-16446" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" minWidth="100px" ratio="1">
+															<components>
+																<skuid__text contents="{{^$Model.Opportunities.conditions.2.inactive}}Account: &lt;strong&gt;{{{$Model.AccountForFilter.data.0.Name}}}&lt;/strong&gt;{{/$Model.Opportunities.conditions.2.inactive}}" uniqueid="sk-2yPf-63815" model="Opportunities">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5" styleSettingsVariant="medium" top="0.25"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zPv-26991">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zPv-26990" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="AccountId"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing right="1"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showAccountFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2yPf-63816" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zRA-36993" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" minWidth="100px" ratio="1">
+															<components>
+																<skuid__text contents="Owner: &lt;strong&gt;{{{Name}}}&lt;/strong&gt;" uniqueid="sk-2yPf-63817" model="UserForFilter">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zRA-36995">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zRA-36996" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="OwnerId"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing right="1"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showOwnerFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2yPf-63818" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zRC-40044" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" ratio="1">
+															<components>
+																<skuid__text contents="{{^$Model.Opportunities.conditions.1.inactive}}Stage: &lt;strong&gt;{{{$Model.Opportunities.conditions.1.value}}}&lt;/strong&gt;{{/$Model.Opportunities.conditions.1.inactive}}" uniqueid="sk-2yPf-63819" model="Opportunities">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zRC-40046">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zRC-40047" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="StageName"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing right="1"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showStageFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2yfu-73770" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zRF-43214" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" minWidth="100px" ratio="1">
+															<components>
+																<skuid__text contents="{{^$Model.Opportunities.conditions.4.inactive}}Type: &lt;strong&gt;{{{$Model.Opportunities.conditions.4.value}}}&lt;/strong&gt;{{/$Model.Opportunities.conditions.4.inactive}}" uniqueid="sk-2yfu-73771" model="Opportunities">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zRF-43216">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zRF-43217" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="Type"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing right="1"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showTypeFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2yPf-63820" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zRH-46413" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" minWidth="100px" ratio="1">
+															<components>
+																<skuid__text contents="{{^$Model.Opportunities.conditions.5.inactive}}Start Close Date: &lt;strong&gt;{{$Model.Opportunities.conditions.5.value}}&lt;/strong&gt;{{/$Model.Opportunities.conditions.5.inactive}}" uniqueid="sk-2yPf-63821" model="Opportunities">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zRH-46415">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zRH-46416" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="StartCloseDate"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing right="1"/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showStartCloseDateFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="center" ratio="0">
+									<components>
+										<skuid__wrapper uniqueid="sk-2zLd-79917" styleSettingsVariant="223e9fcf-18b7-4bc0-b9d3-58e5cd535fcf">
+											<components>
+												<skuid__grid uniqueid="sk-2zRK-49729" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="center" minWidth="100px" ratio="1">
+															<components>
+																<skuid__text contents="{{^$Model.Opportunities.conditions.6.inactive}}End Close Date:&amp;nbsp;&lt;strong&gt;{{$Model.Opportunities.conditions.6.value}}&lt;/strong&gt;{{/$Model.Opportunities.conditions.6.inactive}}" uniqueid="sk-2zLd-79918" model="Opportunities">
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing left="0.5" right="0.5"/>
+																	</styles>
+																</skuid__text>
+															</components>
+														</division>
+														<division minWidth="16px" alignSelf="center" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-2zRK-49731">
+																	<groups>
+																		<skuid__buttonGroup>
+																			<buttons>
+																				<skuid__button uniqueId="sk-2zRK-49732" icon="sk-webicon-ionicons:ios-close-empty" styleSettingsVariant="3677beb2-0d5f-4df6-b739-5f92857a1660">
+																					<actions>
+																						<action type="deactivateCondition" model="Opportunities" condition="EndCloseDate"/>
+																						<action type="requeryModel" model="Opportunities" behavior="standard"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+											<background/>
+											<styles>
+												<spacing/>
+											</styles>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showEndCloseDateFilter" value="true"/>
+											</renderConditions>
+											<styleVariantConditions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="2" right="2"/>
+							</styles>
+							<renderConditions logictype="and">
+								<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="UI_FilterControl" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="showFilterSection" value="true"/>
+							</renderConditions>
+							<styleVariantConditions/>
+						</skuid__grid>
+						<skuid__table allowColumnFreezing="dragDrop" model="Opportunities" uniqueid="sk-2P9q-11797" mode="read" pageSize="25">
+							<fields>
+								<field id="Name" uniqueid="fi-2PAH-13975" label="Opportunity Name"/>
+								<field id="Type" uniqueid="fi-2PAH-13976" label="Type"/>
+								<field id="AccountId" uniqueid="fi-2PAH-13977" label="Account" redirectType="none"/>
+								<field id="StageName" uniqueid="fi-2PAH-13978"/>
+								<field id="Amount" uniqueid="fi-2PAH-13979"/>
+								<field id="CloseDate" uniqueid="fi-2PAH-13980"/>
+								<field id="OwnerId" uniqueid="fi-2PAH-13982" label="Owner" redirectType="none"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions>
+								<action type="multi" label="Details">
+									<actions>
+										<action type="blockUI" styleSettingsVariant="dark" message="Loading" showPlaceholder="true"/>
+										<action type="setCondition" model="OppDrawerAccount" valuesource="fieldvalue" condition="Id" value="{{AccountId}}"/>
+										<action type="setCondition" model="OppDrawerContacts" condition="OpportunityId" value="{{Id}}"/>
+										<action type="setCondition" model="OppDrawerLineItems" condition="OpportunityId" value="{{Id}}"/>
+										<action type="setCondition" model="OppDrawerTasks" condition="WhatId" value="{{Id}}"/>
+										<action type="requeryModels" behavior="loadmore">
+											<models>
+												<model>OppDrawerContacts</model>
+												<model>OppDrawerLineItems</model>
+												<model>OppDrawerTasks</model>
+												<model>OppDrawerAccount</model>
+											</models>
+										</action>
+										<action type="drawer"/>
+										<action type="unblockUI"/>
+									</actions>
+									<renderConditions logictype="and"/>
+									<tooltip position="top"/>
+								</action>
+							</rowActions>
+							<massActions/>
+							<styles>
+								<spacing top="3" bottom="3" left="3" right="3"/>
+							</styles>
+							<actions>
+								<action type="multi" label="New Opportunity">
+									<actions>
+										<action type="emptyModelData">
+											<models>
+												<model>UI_AccountType</model>
+												<model>NewAccount</model>
+												<model>NewOpportunity</model>
+												<model>NewOppLineItems</model>
+											</models>
+										</action>
+										<action type="createRow" model="UI_AccountType" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+										<action type="createRow" model="NewOpportunity" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+										<action type="showModal">
+											<skuid__modal title="New Opportunity" width="60%">
+												<components>
+													<skuid__wizard uniqueid="sk-2Tmm-4649">
+														<steps>
+															<step stepId="step1" stepLabel="Account Details" alignButtons="right">
+																<components>
+																	<skuid__wrapper uniqueid="sk-2TvP-144050">
+																		<components>
+																			<skuid__form showErrorsInline="true" model="UI_AccountType" uniqueid="sk-36Qu-20604" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row>
+																								<fields>
+																									<skuid__field id="AccountType" displayAs="RADIO"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																				<styles>
+																					<spacing bottom="3" top="1"/>
+																				</styles>
+																			</skuid__form>
+																			<skuid__form showErrorsInline="true" model="NewOpportunity" uniqueid="sk-2TnL-8748" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row>
+																								<fields>
+																									<skuid__field id="AccountId" label="Select from Existing Accounts" pageSize="5">
+																										<filters/>
+																									</skuid__field>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																				<renderConditions logictype="and">
+																					<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_AccountType" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="AccountType" value="From an Existing Account"/>
+																				</renderConditions>
+																				<styleVariantConditions/>
+																				<styles>
+																					<spacing/>
+																				</styles>
+																			</skuid__form>
+																			<skuid__grid uniqueid="sk-2Tnb-20750" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+																				<divisions>
+																					<division minWidth="100px" ratio="1">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="NewAccount" uniqueid="sk-2Tnc-21717" mode="edit">
+																								<sections>
+																									<section title="Basic Information" showHeading="false">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="Name"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Description"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Industry"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="NumberOfEmployees"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Website"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																								<styles>
+																									<spacing/>
+																								</styles>
+																							</skuid__form>
+																						</components>
+																					</division>
+																					<division alignSelf="auto" minWidth="100px" ratio="1">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="NewAccount" uniqueid="sk-2TnW-11496" mode="edit">
+																								<sections>
+																									<section title="Contact Information" showHeading="false">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="Phone"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="BillingStreet" label="Street"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="BillingCity" label="City"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="BillingState" label="State"/>
+																													<skuid__field id="BillingPostalCode" label="Zip Code"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="BillingCountry" label="Country"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																							</skuid__form>
+																						</components>
+																					</division>
+																				</divisions>
+																				<renderConditions logictype="and">
+																					<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_AccountType" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="AccountType" value="New Account"/>
+																				</renderConditions>
+																				<styleVariantConditions/>
+																			</skuid__grid>
+																		</components>
+																		<styles>
+																			<spacing left="3" right="3" bottom="2"/>
+																		</styles>
+																		<background/>
+																	</skuid__wrapper>
+																</components>
+																<buttons>
+																	<button label="Cancel">
+																		<actions>
+																			<action type="cancel">
+																				<models>
+																					<model>NewOpportunity</model>
+																					<model>NewAccount</model>
+																					<model>UI_AccountType</model>
+																				</models>
+																			</action>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																	</button>
+																	<button label="Next" styleSettingsVariant="primary">
+																		<actions>
+																			<action type="branch" whenfinished="continue" label="if there's a new account and it hasn't been linked to the opportunity yet" model="UI_AccountType">
+																				<formula>({{AccountType}} === "New Account") AND (ISBLANK({{$Model.NewOpportunity.data.0.AccountId}}))</formula>
+																				<iftrueactions>
+																					<action type="save">
+																						<models>
+																							<model>NewAccount</model>
+																						</models>
+																					</action>
+																					<action type="activateCondition" model="NewOpportunity" condition="AccountId"/>
+																					<action type="requeryModel" model="NewOpportunity" behavior="standard"/>
+																					<action type="createRow" model="NewOpportunity" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+																				</iftrueactions>
+																			</action>
+																			<action type="runComponentAction" componentid="sk-2Tmm-4649" action="navigateToStep" stepId="step2"/>
+																		</actions>
+																		<renderConditions logictype="custom" logic="1 OR 2"/>
+																		<enableConditions logictype="custom" logic="1 OR 2">
+																			<condition type="blank" operator="!=" fieldmodel="NewOpportunity" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="AccountId" fieldtargetobjects="Account" value="null" enclosevalueinquotes="false"/>
+																			<condition type="blank" operator="!=" fieldmodel="NewAccount" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Name" fieldtargetobjects="Account" value="null" enclosevalueinquotes="false"/>
+																		</enableConditions>
+																		<styleVariantConditions/>
+																	</button>
+																</buttons>
+															</step>
+															<step stepId="step2" stepLabel="Opportunity Details" alignButtons="right">
+																<components>
+																	<skuid__wrapper uniqueid="sk-2U1O-178318">
+																		<components>
+																			<skuid__grid uniqueid="sk-2TsC-56335" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+																				<divisions>
+																					<division minWidth="100px" ratio="1">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="NewOpportunity" uniqueid="sk-2TsB-46066" mode="edit">
+																								<sections>
+																									<section title="Basics">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="AccountId" label="Account"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Name"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="StageName"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Amount"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="CloseDate"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="OwnerId" label="Owner"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																							</skuid__form>
+																						</components>
+																					</division>
+																					<division alignSelf="auto" minWidth="100px" ratio="1">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="NewOpportunity" uniqueid="sk-2TsE-58126" mode="edit">
+																								<sections>
+																									<section title="Description">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="Type"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="LeadSource"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Probability"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="Description"/>
+																												</fields>
+																											</row>
+																											<row>
+																												<fields>
+																													<skuid__field id="NextStep"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																							</skuid__form>
+																						</components>
+																					</division>
+																				</divisions>
+																			</skuid__grid>
+																		</components>
+																		<styles>
+																			<spacing bottom="2" left="3" right="3"/>
+																		</styles>
+																		<background/>
+																	</skuid__wrapper>
+																</components>
+																<buttons>
+																	<button label="Cancel">
+																		<actions>
+																			<action type="cancel">
+																				<models>
+																					<model>NewOpportunity</model>
+																				</models>
+																			</action>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																	</button>
+																	<button label="Back">
+																		<actions>
+																			<action type="runComponentAction" componentid="sk-2Tmm-4649" action="navigateToStep" stepId="step1"/>
+																		</actions>
+																	</button>
+																	<button label="Next" styleSettingsVariant="primary">
+																		<actions>
+																			<action type="runComponentAction" componentid="sk-2Tmm-4649" action="navigateToStep" stepId="step3"/>
+																		</actions>
+																		<renderConditions logictype="and"/>
+																		<enableConditions logictype="and">
+																			<condition type="blank" operator="!=" fieldmodel="NewOpportunity" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Name" fieldtargetobjects="Opportunity" value="null" enclosevalueinquotes="false"/>
+																			<condition type="blank" operator="!=" fieldmodel="NewOpportunity" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="StageName" fieldtargetobjects="Opportunity" value="null" enclosevalueinquotes="false"/>
+																			<condition type="blank" operator="!=" fieldmodel="NewOpportunity" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="CloseDate" fieldtargetobjects="Opportunity" value="null" enclosevalueinquotes="false"/>
+																		</enableConditions>
+																		<styleVariantConditions/>
+																	</button>
+																</buttons>
+															</step>
+															<step stepId="step3" stepLabel="Line Items" alignButtons="right">
+																<components>
+																	<skuid__wrapper uniqueid="sk-2U1R-180095" minHeightCustom="300px">
+																		<components>
+																			<skuid__form showErrorsInline="true" model="NewOpportunity" uniqueid="sk-2Tt6-79440" mode="edit">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row>
+																								<fields>
+																									<skuid__field id="Pricebook2Id" label="Select a Price Book" displayAs="PICKLIST"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																				<styles>
+																					<spacing bottom="3"/>
+																				</styles>
+																				<renderConditions logictype="and"/>
+																				<styleVariantConditions/>
+																			</skuid__form>
+																			<skuid__table allowColumnFreezing="dragDrop" model="NewOppLineItems" uniqueid="sk-2TtD-82707" mode="read" showSaveCancel="false" pageSize="Infinity" showPageSizeSelect="false" resetPaginationOnQuery="false" showListFooter="false">
+																				<fields>
+																					<field id="PricebookEntryId" uniqueid="fi-2TtD-83420" label="Product Name" pageSize="5" redirectType="none" displayAs="PICKLIST" displayTemplate="{{Name}}" searchTemplate="{{Name}}">
+																						<filters>
+																							<filter type="modelmerge" operator="=" field="Pricebook2Id" fieldtargetobjects="Pricebook2" value="" model="NewOpportunity" enclosevalueinquotes="true" mergefield="Pricebook2Id" novaluebehavior="deactivate"/>
+																						</filters>
+																						<searchFields>
+																							<searchField query="true" return="true" show="true" field="UnitPrice"/>
+																						</searchFields>
+																					</field>
+																					<field id="ServiceDate" uniqueid="fi-2TtD-83428"/>
+																					<field id="Quantity" uniqueid="fi-2TtD-83427"/>
+																					<field id="UnitPriceFormula" label="Sales Price" uniqueid="fi-2UIB-247715"/>
+																					<field id="TotalPriceFormula" uniqueid="fi-2TtD-83430" label="Total Price" defaultSummary="sum"/>
+																				</fields>
+																				<filtering enableSearch="false"/>
+																				<rowActions>
+																					<action type="multi" label="Remove">
+																						<actions>
+																							<action type="abandonRows" model="NewOppLineItems" affectedrows="context"/>
+																						</actions>
+																					</action>
+																				</rowActions>
+																				<massActions/>
+																				<actions>
+																					<action type="multi" label="Add Product">
+																						<actions>
+																							<action type="createRow" model="NewOppLineItems" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																								<defaults>
+																									<default valuesource="fieldvalue" field="ServiceDate" enclosevalueinquotes="false" value="TODAY"/>
+																									<default valuesource="fieldvalue" field="Quantity" enclosevalueinquotes="false" value="1"/>
+																								</defaults>
+																							</action>
+																						</actions>
+																					</action>
+																				</actions>
+																				<drawer>
+																					<components>
+																						<skuid__wrapper uniqueid="sk-2U20-194872">
+																							<components>
+																								<skuid__form showErrorsInline="true" model="NewOppLineItems" uniqueid="sk-2U21-195426" mode="readonly">
+																									<sections>
+																										<section title="New Section" showHeading="false">
+																											<rows>
+																												<row>
+																													<fields>
+																														<skuid__field id="Description" label="Line Item Description"/>
+																													</fields>
+																												</row>
+																											</rows>
+																										</section>
+																									</sections>
+																									<conditions>
+																										<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																									</conditions>
+																								</skuid__form>
+																							</components>
+																							<styles>
+																								<spacing left="4" top="1.5"/>
+																							</styles>
+																							<background/>
+																						</skuid__wrapper>
+																					</components>
+																				</drawer>
+																				<renderConditions logictype="and">
+																					<renderCondition type="blank" operator="!=" fieldmodel="NewOpportunity" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Pricebook2Id" fieldtargetobjects="Pricebook2" value="null" enclosevalueinquotes="false"/>
+																				</renderConditions>
+																				<styleVariantConditions/>
+																				<styles>
+																					<spacing/>
+																				</styles>
+																			</skuid__table>
+																		</components>
+																		<styles>
+																			<spacing bottom="2" left="3" right="3"/>
+																		</styles>
+																		<background/>
+																	</skuid__wrapper>
+																</components>
+																<buttons>
+																	<button label="Cancel">
+																		<actions>
+																			<action type="cancel">
+																				<models>
+																					<model>NewOpportunity</model>
+																					<model>NewOppLineItems</model>
+																				</models>
+																			</action>
+																			<action type="closeAllPopups"/>
+																		</actions>
+																	</button>
+																	<button label="Back">
+																		<actions>
+																			<action type="runComponentAction" componentid="sk-2Tmm-4649" action="navigateToStep" stepId="step2"/>
+																		</actions>
+																	</button>
+																	<button label="Done" styleSettingsVariant="primary">
+																		<actions>
+																			<action type="save">
+																				<models>
+																					<model>NewOpportunity</model>
+																					<model>NewOppLineItems</model>
+																				</models>
+																			</action>
+																			<action type="closeAllPopups"/>
+																			<action type="requeryModels" behavior="standard">
+																				<models>
+																					<model>Opportunities</model>
+																					<model>AccountsForFilterSource</model>
+																				</models>
+																			</action>
+																			<action type="showToast" duration="4" message="New Opportunity Saved" clickToDismiss="true" styleSettingsVariant="0d41c4d9-cbbe-4963-80bc-261f4cbadb6b"/>
+																		</actions>
+																	</button>
+																</buttons>
+															</step>
+														</steps>
+														<styles>
+															<spacing top="1" bottom="2" left="2" right="2"/>
+														</styles>
+														<renderConditions logictype="and"/>
+														<styleVariantConditions/>
+													</skuid__wizard>
+												</components>
+												<afterCloseActions>
+													<action type="cancel">
+														<models>
+															<model>NewAccount</model>
+															<model>NewOpportunity</model>
+															<model>NewOppLineItems</model>
+														</models>
+													</action>
+												</afterCloseActions>
+											</skuid__modal>
+										</action>
+									</actions>
+								</action>
+							</actions>
+							<drawer>
+								<components>
+									<skuid__wrapper uniqueid="sk-2URf-50218">
+										<components>
+											<skuid__tabSet uniqueid="sk-2UR8-35878" styleSettingsVariant="c41c6730-4f1f-483c-a80e-5f97b295d24d">
+												<tabs>
+													<skuid__tabPanel name="Contacts">
+														<components>
+															<skuid__wrapper uniqueid="sk-2jtq-32130" styleSettingsVariant="f967eabe-9af2-487e-a4ab-8501f0084e53">
+																<components>
+																	<skuid__grid uniqueid="sk-2i-s-15896" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+																		<divisions>
+																			<division minWidth="100px" ratio="1">
+																				<components>
+																					<skuid__buttonSet model="OppDrilldown" uniqueid="sk-2eMc-75414" position="left">
+																						<groups>
+																							<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+																								<buttons>
+																									<skuid__button label="Add Existing Contact" uniqueId="sk-2eMd-77546" styleSettingsVariant="primary">
+																										<actions>
+																											<action type="createRow" model="OppDrawerContacts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+																										</actions>
+																									</skuid__button>
+																								</buttons>
+																							</skuid__buttonGroup>
+																						</groups>
+																					</skuid__buttonSet>
+																				</components>
+																			</division>
+																			<division alignSelf="auto" minWidth="100px" ratio="1">
+																				<components/>
+																			</division>
+																		</divisions>
+																	</skuid__grid>
+																	<skuid__deck columnGutter=".75em" rowGutter=".75em" model="OppDrawerContacts" showSaveCancel="false" verticalAlign="top" minWidth="350px" uniqueid="sk-2i_B-19123" pageSize="Infinity" setMaxWidth="manual" maxWidth="300px" styleSettingsVariant="66367074-af73-4a70-94c6-a7d64b9ffa8a" showListFooter="false">
+																		<components>
+																			<skuid__grid uniqueid="sk-2jCm-30851" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0">
+																				<divisions>
+																					<division minWidth="100px" ratio="2" alignSelf="auto">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="OppDrawerContacts" uniqueid="sk-2jCn-31944" mode="read">
+																								<sections>
+																									<section title="New Section" showHeading="false">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="ContactId" label="Contact"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																								<renderConditions logictype="and"/>
+																								<styleVariantConditions/>
+																								<conditions>
+																									<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																								</conditions>
+																							</skuid__form>
+																						</components>
+																					</division>
+																					<division alignSelf="auto" minWidth="16px" ratio="2">
+																						<components/>
+																					</division>
+																					<division alignSelf="auto" ratio="1" minWidth="40px">
+																						<components>
+																							<skuid__form showErrorsInline="true" model="OppDrawerContacts" uniqueid="sk-2i_D-19708" mode="read">
+																								<sections>
+																									<section title="New Section" showHeading="false">
+																										<rows>
+																											<row>
+																												<fields>
+																													<skuid__field id="IsPrimary" displayAs="SWITCH"/>
+																												</fields>
+																											</row>
+																										</rows>
+																									</section>
+																								</sections>
+																								<renderConditions logictype="and"/>
+																								<styleVariantConditions/>
+																								<conditions>
+																									<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																								</conditions>
+																							</skuid__form>
+																						</components>
+																					</division>
+																				</divisions>
+																				<styles>
+																					<spacing bottom="1"/>
+																				</styles>
+																			</skuid__grid>
+																			<skuid__form showErrorsInline="true" model="OppDrawerContacts" uniqueid="sk-2jCr-34533" mode="read">
+																				<sections>
+																					<section title="New Section" showHeading="false">
+																						<rows>
+																							<row>
+																								<fields>
+																									<skuid__field id="Role"/>
+																								</fields>
+																							</row>
+																						</rows>
+																					</section>
+																				</sections>
+																				<renderConditions logictype="and"/>
+																				<styleVariantConditions/>
+																				<conditions>
+																					<condition type="contextrow" field="Id" mergefield="Id" operator="="/>
+																				</conditions>
+																			</skuid__form>
+																		</components>
+																		<filtering enableSearch="false"/>
+																		<conditions>
+																			<condition type="contextrow" field="OpportunityId" mergefield="Id" operator="=" fieldtargetobjects="Opportunity"/>
+																		</conditions>
+																		<styles>
+																			<spacing top="2" styleSettingsVariant="66367074-af73-4a70-94c6-a7d64b9ffa8a"/>
+																		</styles>
+																	</skuid__deck>
+																	<skuid__buttonSet model="OppDrilldown" uniqueid="sk-2i-t-17432" position="left">
+																		<groups>
+																			<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+																				<buttons>
+																					<skuid__button label="Save" uniqueId="sk-2i-w-19597" styleSettingsVariant="primary">
+																						<renderConditions logictype="and"/>
+																						<enableConditions logictype="and">
+																							<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="OppDrawerContacts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																						</enableConditions>
+																						<styleVariantConditions/>
+																						<actions>
+																							<action type="save">
+																								<models>
+																									<model>OppDrawerContacts</model>
+																								</models>
+																							</action>
+																						</actions>
+																					</skuid__button>
+																					<skuid__button label="Cancel" uniqueId="sk-2i-w-20005">
+																						<renderConditions logictype="and"/>
+																						<enableConditions logictype="and">
+																							<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="OppDrawerContacts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																						</enableConditions>
+																						<styleVariantConditions/>
+																						<actions>
+																							<action type="cancel">
+																								<models>
+																									<model>OppDrawerContacts</model>
+																								</models>
+																							</action>
+																						</actions>
+																					</skuid__button>
+																				</buttons>
+																			</skuid__buttonGroup>
+																		</groups>
+																		<styles>
+																			<spacing top="1.5"/>
+																		</styles>
+																	</skuid__buttonSet>
+																</components>
+																<background/>
+															</skuid__wrapper>
+														</components>
+														<renderConditions logictype="and"/>
+													</skuid__tabPanel>
+													<skuid__tabPanel name="Account">
+														<components>
+															<skuid__wrapper uniqueid="sk-2jto-29120" styleSettingsVariant="f967eabe-9af2-487e-a4ab-8501f0084e53">
+																<components>
+																	<skuid__buttonSet uniqueid="sk-3GuI-45101" model="OppDrawerAccount">
+																		<groups>
+																			<skuid__buttonGroup displayType="detached" maxSelected="Infinity">
+																				<buttons>
+																					<skuid__button label="Save" uniqueId="sk-3GuI-45100" styleSettingsVariant="primary">
+																						<actions>
+																							<action type="save">
+																								<models>
+																									<model>OppDrawerAccount</model>
+																								</models>
+																							</action>
+																						</actions>
+																						<renderConditions logictype="and"/>
+																						<enableConditions logictype="and">
+																							<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="OppDrawerAccount" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																						</enableConditions>
+																						<styleVariantConditions/>
+																					</skuid__button>
+																					<skuid__button label="Cancel" uniqueId="sk-3GuK-49899">
+																						<actions>
+																							<action type="cancel">
+																								<models>
+																									<model>OppDrawerAccount</model>
+																								</models>
+																							</action>
+																						</actions>
+																						<renderConditions logictype="and"/>
+																						<enableConditions logictype="and">
+																							<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="OppDrawerAccount" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																						</enableConditions>
+																						<styleVariantConditions/>
+																					</skuid__button>
+																				</buttons>
+																			</skuid__buttonGroup>
+																		</groups>
+																	</skuid__buttonSet>
+																	<skuid__grid uniqueid="sk-2jSq-111689" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+																		<divisions>
+																			<division minWidth="100px" ratio="1" alignSelf="auto">
+																				<components>
+																					<skuid__form showErrorsInline="true" model="OppDrawerAccount" uniqueid="sk-2jzT-37140" mode="read">
+																						<sections>
+																							<section title="Basic Information" showHeading="true">
+																								<rows>
+																									<row>
+																										<fields>
+																											<skuid__field id="Name"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="Industry"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="Type"/>
+																										</fields>
+																									</row>
+																								</rows>
+																							</section>
+																						</sections>
+																						<conditions>
+																							<condition type="contextrow" field="Id" mergefield="AccountId" operator="=" fieldtargetobjects="Account"/>
+																						</conditions>
+																					</skuid__form>
+																				</components>
+																			</division>
+																			<division alignSelf="auto" minWidth="100px" ratio="1">
+																				<components>
+																					<skuid__form showErrorsInline="true" model="OppDrawerAccount" uniqueid="sk-3Gu3-38451" mode="read">
+																						<sections>
+																							<section title="Other Information">
+																								<rows>
+																									<row>
+																										<fields>
+																											<skuid__field id="Description"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="AnnualRevenue"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="OwnerId" label="Owner" redirectType="none"/>
+																										</fields>
+																									</row>
+																								</rows>
+																							</section>
+																						</sections>
+																						<conditions>
+																							<condition type="contextrow" field="Id" mergefield="AccountId" operator="=" fieldtargetobjects="Account"/>
+																						</conditions>
+																						<renderConditions logictype="and"/>
+																						<styleVariantConditions/>
+																					</skuid__form>
+																				</components>
+																			</division>
+																			<division alignSelf="auto" minWidth="100px" ratio="1">
+																				<components>
+																					<skuid__form showErrorsInline="true" model="OppDrawerAccount" uniqueid="sk-2jRp-75628" mode="read">
+																						<sections>
+																							<section title="Contact Information" showHeading="true">
+																								<rows>
+																									<row>
+																										<fields>
+																											<skuid__field id="Phone"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="BillingStreet" label="Street"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="BillingCity" label="City"/>
+																											<skuid__field id="BillingState" label="State"/>
+																											<skuid__field id="BillingPostalCode" label="Zip Code"/>
+																										</fields>
+																									</row>
+																									<row>
+																										<fields>
+																											<skuid__field id="BillingCountry" label="Country"/>
+																										</fields>
+																									</row>
+																								</rows>
+																							</section>
+																						</sections>
+																						<conditions>
+																							<condition type="contextrow" field="Id" mergefield="AccountId" operator="=" fieldtargetobjects="Account"/>
+																						</conditions>
+																					</skuid__form>
+																				</components>
+																			</division>
+																		</divisions>
+																	</skuid__grid>
+																</components>
+																<background/>
+															</skuid__wrapper>
+														</components>
+													</skuid__tabPanel>
+													<skuid__tabPanel name="Products">
+														<components>
+															<skuid__wrapper uniqueid="sk-2jtn-26867" styleSettingsVariant="f967eabe-9af2-487e-a4ab-8501f0084e53">
+																<components>
+																	<skuid__table allowColumnFreezing="dragDrop" model="OppDrawerLineItems" uniqueid="sk-2UR8-35879" mode="read">
+																		<fields>
+																			<field id="PricebookEntryId" uniqueid="sk-2UR8-35880" label="Product" displayAs="PICKLIST" pageSize="5" displayTemplate="{{Name}}" searchTemplate="{{Name}}" redirectType="none">
+																				<filters>
+																					<filter type="dependent" operator="=" field="Pricebook2Id" fieldtargetobjects="Pricebook2" value="" enclosevalueinquotes="true" depfield="Opportunity.Pricebook2Id"/>
+																				</filters>
+																				<searchFields>
+																					<searchField query="true" return="true" show="true" field="UnitPrice"/>
+																				</searchFields>
+																			</field>
+																			<field id="ServiceDate" uniqueid="sk-2UR8-35881"/>
+																			<field id="Quantity" uniqueid="sk-2UR8-35882"/>
+																			<field id="UnitPrice" uniqueid="fi-3HNa-76849" readOnly="true">
+																				<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																				<enableConditions/>
+																			</field>
+																			<field type="COMBO" label="Total Price" template="{{#TotalPrice}}{{TotalPrice}}{{/TotalPrice}}{{^TotalPrice}}{{TotalPriceFormula}}{{/TotalPrice}}" uniqueid="fi-3W1H-28861"/>
+																		</fields>
+																		<filtering enableSearch="false"/>
+																		<rowActions>
+																			<action type="multi" label="Remove">
+																				<actions>
+																					<action type="markRowsForDeletion" model="OppDrawerLineItems" affectedrows="context"/>
+																				</actions>
+																			</action>
+																		</rowActions>
+																		<massActions/>
+																		<conditions>
+																			<condition type="contextrow" field="OpportunityId" mergefield="Id" operator="=" fieldtargetobjects="Opportunity"/>
+																		</conditions>
+																		<actions>
+																			<action type="multi" label="Add Product">
+																				<actions>
+																					<action type="createRow" model="OppDrawerLineItems" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																						<defaults>
+																							<default valuesource="fieldvalue" field="Quantity" enclosevalueinquotes="false" value="1"/>
+																							<default valuesource="fieldvalue" field="ServiceDate" enclosevalueinquotes="false" value="TODAY"/>
+																						</defaults>
+																					</action>
+																				</actions>
+																			</action>
+																		</actions>
+																	</skuid__table>
+																</components>
+																<background/>
+																<styles>
+																	<spacing/>
+																</styles>
+																<renderConditions logictype="and"/>
+																<styleVariantConditions/>
+															</skuid__wrapper>
+														</components>
+													</skuid__tabPanel>
+													<skuid__tabPanel name="Tasks">
+														<components>
+															<skuid__wrapper uniqueid="sk-2jtj-24565" styleSettingsVariant="f967eabe-9af2-487e-a4ab-8501f0084e53">
+																<components>
+																	<skuid__table allowColumnFreezing="dragDrop" model="OppDrawerTasks" uniqueid="sk-2UR8-35893" mode="read">
+																		<fields>
+																			<field id="Subject" uniqueid="sk-2UR8-35894"/>
+																			<field id="Status" uniqueid="sk-2UR8-35895"/>
+																			<field id="ActivityDate" uniqueid="sk-2UR8-35896" label="Date"/>
+																			<field id="OwnerId" uniqueid="sk-2UR8-35897" label="Assigned To"/>
+																		</fields>
+																		<filtering enableSearch="false"/>
+																		<rowActions/>
+																		<massActions/>
+																		<conditions>
+																			<condition type="contextrow" field="WhatId" mergefield="Id" operator="=" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,Demo_Inventory_Entry__c,Fitting__c,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c"/>
+																		</conditions>
+																		<actions>
+																			<action type="multi" label="Add Task">
+																				<actions>
+																					<action type="createRow" model="OppDrawerTasks" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																						<defaults>
+																							<default valuesource="userinfo" field="OwnerId" fieldtargetobjects="Group,User" enclosevalueinquotes="true" userinfotype="userid"/>
+																						</defaults>
+																					</action>
+																				</actions>
+																			</action>
+																		</actions>
+																		<filters>
+																			<skuid__filter uniqueId="sk-2iwk-31519" type="select" conditionSource="auto" filterMethod="server" labelMode="no" conditionField="Status" conditionName="__autofilter__Status" filterOffOptionLabel="Any Status" rememberInPersonalization="false"/>
+																		</filters>
+																	</skuid__table>
+																</components>
+																<background/>
+															</skuid__wrapper>
+														</components>
+													</skuid__tabPanel>
+												</tabs>
+											</skuid__tabSet>
+										</components>
+										<styles>
+											<spacing top="3" bottom="3" left="3" right="3"/>
+										</styles>
+										<background color="#EAEBEB"/>
+									</skuid__wrapper>
+								</components>
+							</drawer>
+						</skuid__table>
+					</components>
+					<background/>
+					<styles>
+						<spacing/>
+					</styles>
+					<renderConditions logictype="and"/>
+					<styleVariantConditions/>
+				</skuid__wrapper>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences>
+			<actionsequence id="34da0981-ca9d-46e3-8c69-91f6f91803b8" label="Open Filter Sliding Panel" type="reusable">
+				<actions>
+					<action type="openSlidingPanel" openbehavior="open">
+						<skuid__slidingPanel uniqueid="sk-2PIG-24085" size="340px" origin="right" closeOnPageClick="true">
+							<components>
+								<skuid__wrapper uniqueid="sk-2PIM-25833">
+									<components>
+										<skuid__grid uniqueid="sk-2eAD-65267" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+											<divisions>
+												<division minWidth="100px" ratio="1" alignSelf="flex-start">
+													<components>
+														<skuid__text contents="Filters" uniqueid="sk-2PJF-32742" styleSettingsVariant="increased">
+															<styles>
+																<spacing bottom="2" styleSettingsVariant="increased"/>
+															</styles>
+														</skuid__text>
+													</components>
+												</division>
+												<division alignSelf="flex-start" minWidth="100px" ratio="1">
+													<components>
+														<skuid__buttonSet uniqueid="sk-2eAC-64555" model="Opportunities">
+															<groups>
+																<skuid__buttonGroup>
+																	<buttons>
+																		<skuid__button uniqueId="sk-2eAC-64554" icon="sk-webicon-ink:close" styleSettingsVariant="24a951ae-9034-46e2-ae58-58313bc11798">
+																			<actions>
+																				<action type="closeSlidingPanel" closebehavior="close"/>
+																			</actions>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+														</skuid__buttonSet>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+										<skuid__filterSet model="Opportunities" uniqueid="sk-2PIM-25834" styleSettingsVariant="7cb3fb4e-72aa-4a75-8a98-4556a09ca90f" layout="vertical">
+											<filters>
+												<skuid__filter uniqueId="sk-2PIM-25835" type="select" conditionSource="manual" filterMethod="server" labelMode="manual" fieldtargetobjects="Account" filterOffOptionLabel="Any Account" label="Account" rememberInPersonalization="false" conditionName="AccountId" autocompleteThreshold="20" createFilterOffOption="true">
+													<sources>
+														<source type="model" effectsbehavior="justdefault" model="AccountsForFilterSource" labeltemplate="{{{Name}}}" valuetemplate="{{Id}}"/>
+													</sources>
+												</skuid__filter>
+												<skuid__filter uniqueId="sk-2PIM-25836" type="select" conditionSource="manual" filterMethod="server" labelMode="manual" filterOffOptionLabel="Any Owner" fieldtargetobjects="User" label="Owner" rememberInPersonalization="false" conditionName="OwnerId" autocompleteThreshold="25" createFilterOffOption="true">
+													<sources>
+														<source type="model" effectsbehavior="justdefault" model="UsersForFilterSource" labeltemplate="{{{Name}}}" valuetemplate="{{Id}}"/>
+													</sources>
+												</skuid__filter>
+												<skuid__filter uniqueId="sk-2PIM-25837" type="select" conditionSource="manual" filterMethod="server" labelMode="manual" filterOffOptionLabel="Any Stage" label="Stage" rememberInPersonalization="false" conditionName="StageName" autocompleteThreshold="25" createFilterOffOption="true">
+													<sources>
+														<source type="metadata" effectsbehavior="justdefault"/>
+													</sources>
+												</skuid__filter>
+												<skuid__filter uniqueId="sk-2PIM-25838" type="select" conditionSource="manual" filterMethod="server" labelMode="manual" filterOffOptionLabel="Any Type" label="Opportunity Type" rememberInPersonalization="false" conditionName="Type" autocompleteThreshold="25" createFilterOffOption="true">
+													<sources>
+														<source type="metadata" effectsbehavior="justdefault"/>
+													</sources>
+												</skuid__filter>
+												<skuid__filter uniqueId="sk-2PIM-25839" type="daterange" conditionSource="manual" filterMethod="server" labelMode="manual" label="Close Date" rememberInPersonalization="false" startConditionName="StartCloseDate" endConditionName="EndCloseDate">
+													<positioning/>
+												</skuid__filter>
+											</filters>
+											<filtering enableSearch="false" instantSearch="false" instantFilters="true" searchMethod="server" emptySearchBehavior="query" searchPlaceholder="Search"/>
+											<positioning justifyContent="center" alignItems="flex-start"/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__filterSet>
+									</components>
+									<background/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+									<styles>
+										<spacing top="2" bottom="2" left="2" right="2"/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</skuid__slidingPanel>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background type="color" color="#EAEBEB"/>
+</skuid__page>
