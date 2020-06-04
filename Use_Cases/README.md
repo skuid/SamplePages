@@ -10,6 +10,7 @@ Samples of pages we see used commonly within business applications. Gain inspira
 -  [Photo Directory](Directory) 
 -  [Master Detail View](Master_Detail) 
 -  [Mobile List](Mobile_List)
+-  [Opportunity List](Opportunity_List)
 -  [Product Catalog](Product_Selection) 
 -  [Service Request](Service_Request) 
 -  [Simple List](Simple_List) 
