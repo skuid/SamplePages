@@ -2,9 +2,13 @@
 
 Easily view opportunities in a single screen both in chart and table format
 
-<img  src="opportunity_list.png"  width="300"></img>
+<img  src="opportunity_list.png"></img>
 
-The table shows all opportunities while the charts and KPIs offer an overview. Search or filter to drill down to the opportunities you want to see, or click on portions of a chart to drill down and see the opportunities in that section. In addition, create a new opportunity using a step-by-step process.
+The table shows all opportunities, while the charts and KPIs offer an overview. 
+With this page you can do any of the following: 
+- Search or filter to drill down to the opportunities you want to see
+- Click on portions of a chart to drill down and see the opportunities in that section
+- Create a new opportunity using a step-by-step process
 
 ## Instructions
 - Page API: V2
