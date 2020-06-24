@@ -13,26 +13,28 @@ This page will host a number of Skuid extensions to the Work.com solution.
 <img src="WorkDotCom_CommandCenter.png" width="300"></img>
 
 ## Getting Started. 
-1. Install Work.com command center  
+### 1. Install Work.com command center  
 The easiest way to get started exploring the Work.Com solution is to install this in a Scratch org using SFDX.  This means you will need to use your terminal and have GIT and SFDX installed.  Then follow these instructions: 
-- Clone a local copy of the repo found here:  (https://github.com/forcedotcom/WorkDotCom-Partners).  `git clone https://github.com/forcedotcom/WorkDotCom-Partners.git`
-- Run the orgInit.sh file which will use SFDX to install all the necessary packages and metadata.   `./orgInit.sh`
+- Clone a local copy of the repo found here:  https://github.com/forcedotcom/WorkDotCom-Partners. 
+ `git clone https://github.com/forcedotcom/WorkDotCom-Partners.git`
+- Run the orgInit.sh file which will use SFDX to install all the necessary packages and metadata.   
+`./orgInit.sh`
 
 Now you can see the basic Work.com solution. 
 
 More information: 
-- [Help Pages](https://help.salesforce.com/articleView?id=workdotcom.htm&type=5) Overview of the solution and additional installation options. 
-- [Developer Docs](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_overview.htm) for additional configuration of this solution. 
-- [Data Model](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_data_model.htm). Understanding the Data Model will be particularly important for any Skuid development. 
+- [Help Pages.](https://help.salesforce.com/articleView?id=workdotcom.htm&type=5) Overview of the solution and additional installation options. 
+- [Developer Docs.](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_overview.htm) Additional configuration of this solution. 
+- [Data Model.](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_data_model.htm) Understanding the Data Model will be particularly important for any Skuid development. 
 
-2. Install Skuid
-Get the latests version of Skuid installed in the new Scratch org.  Go to (https://Skuid.com/releases)
+### 2. Install Skuid
+Get the latests version of Skuid installed in the new Scratch org.  Go to the [release page](https://Skuid.com/releases)
 
 # Employee Wellness Assessment
 
-The first use case will be the survey provided to Employees every day before they come to work.  The Work.Com solution uses the Salesforce Survey solution.  This survey is sent every day by email - with a user specific link to a publicly available community page. 
+The first use case will be the form provided to Employees every day before they come to work. "Are you ok?"  The Work.Com solution uses the Salesforce Surveys.  This survey is sent every day by email - with a user specific link to a publicly available community page. 
 
-With Skuid this survey can be built in a host of other ways,  and deployed in many other places: 
+With Skuid this form can be built in a host of other ways,  and deployed in many other places: 
 - Salesforce Mobile App
 - Employee Community
 - Public force.com site
@@ -60,11 +62,11 @@ Finally - because its Skuid,  it can be beautiful. We used one of the [sample de
 ## Notes
 - This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing a condition on the Individual model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
 
-- This page uses a UI Only model to drive the survey - and then creates records in 3 objects based on the answer.  Look at the actions in the `SurveyQuestions` model to see how this works. 
+- This page uses a UI Only model to drive the survey - and then creates records in 3 objects based on the answer. (`AuthorizationConsentForm`, `EmployeeCrisisAssessment`, and `PTO`) Look at the actions in the `SurveyQuestions` model to see how this works.  
 
 - The form itself builds conditionally.  Look at the render conditions on each field in the form. 
 
-- The final message,  and resulting "submit" button are rendered dynamically based on the answers provided.  Each Submit button does a different sequence of things. 
+- The final message,  and resulting "submit" button are rendered dynamically based on the answers provided.  Each Submit button executes a different sequence of actions. 
 
 
 # Other Explorations Coming Soon
