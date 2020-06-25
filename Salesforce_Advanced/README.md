@@ -9,6 +9,7 @@ There are complicated features provided by Salesforce that provide TONS of value
 -  [Making a custom Skuid Home page](Custom_Home_Page) 
 -  [Exposing Duplicate Record Warnings](Duplicate_Management) 
 -  [Using Chatter "Follow" in Skuid](Follow_or_Unfollow_Records) 
+-  [Extending Work.com Command Center with Skuid](Work_Dot_Com_Command_Center)
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:
