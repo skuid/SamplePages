@@ -14,10 +14,15 @@ This page will host a number of Skuid extensions to the Work.com solution.
 
 ## Getting Started. 
 ### 1. Install Work.com command center  
-The easiest way to get started exploring the Work.Com solution is to install this in a Scratch org using SFDX.  This means you will need to use your terminal and have GIT and SFDX installed.  Then follow these instructions: 
-- Clone a local copy of the repo found here:  https://github.com/forcedotcom/WorkDotCom-Partners. 
+The easiest way to get started exploring the Work.com solution is to install this in a scratch org using SFDX.  This means you will need to use your terminal and have git and SFDX installed.  [Read these instructions on installing SFDX](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_app_dev/sfdx_app_dev_setup_dx#Tdxn4tBK-heading7)
+
+Then follow these instructions: 
+- Clone a local copy of the [WorkDotCom-Partners repo](https://github.com/forcedotcom/WorkDotCom-Partners) and then `cd` into its directory
+
  `git clone https://github.com/forcedotcom/WorkDotCom-Partners.git`
+
 - Run the orgInit.sh file which will use SFDX to install all the necessary packages and metadata.   
+
 `./orgInit.sh`
 
 Now you can see the basic Work.com solution. 
@@ -30,44 +35,51 @@ More information:
 ### 2. Install Skuid
 Get the latests version of Skuid installed in the new Scratch org.  Go to the [release page](https://Skuid.com/releases)
 
-# Employee Wellness Assessment
+Since `orgInit.sh` assigned an alias to our scratch org, we can install Skuid v12.4.9 with this command: 
+`sfdx force:package:install -p 04t4A000000YXnLQAW -w 30 -u WDCScratchOrg`
 
-The first use case will be the form provided to Employees every day before they come to work. "Are you ok?"  The Work.Com solution uses the Salesforce Surveys.  This survey is sent every day by email - with a user specific link to a publicly available community page. 
+## Use Cases
+
+## Employee Wellness Assessment
+
+The first use case will be the form provided to employees every day before they come to work, asking "Are you ok?"  The Work.com solution uses the Salesforce Surveys feature.  This survey is sent every day by email - with a user specific link to a publicly available community page. 
 
 With Skuid this form can be built in a host of other ways,  and deployed in many other places: 
 - Salesforce Mobile App
 - Employee Community
 - Public force.com site
-- Directly in Salesforce.com web application. 
+- Directly in a Salesforce.com web application. 
 
 Skuid also allows for rich data entry experiences,  progressively answering questions,  and adjusting responses and outcomes based on the answers provided.  
 
-We also imagined that employers might have additional reporting and data collection requirements that need to be integrated with this wellness survey.  We have a custom PTO request object in our org where we request time off.  Why not automatically create this PTO request with category `Covid-19` for any employee that needs to stay away from work because of their diagnosis. 
+We also imagined that employers might have additional reporting and data collection requirements that need to be integrated with this wellness survey.  We have a custom PTO request object in our org where we request time off.  Why not automatically create this PTO request with category `COVID-19` for any employee that needs to stay away from work because of their diagnosis. 
 
-Finally - because its Skuid,  it can be beautiful. We used one of the [sample design systems](https://github.com/skuid/SamplePages/tree/master/Design_Systems) and made the page beautiful. 
+Finally - because it's Skuid, it can be beautiful. We used one of the [sample design systems](https://github.com/skuid/SamplePages/tree/master/Design_Systems) to  style our page.
 
 <img src="WorkDotCom_WellnessForm.png" width="300"></img>
 
-## Instructions
+### Instructions
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Additional sObject:  The PTO custom object can be deployed from this ZIP file. 
     - [Download this ZIP file](unpackaged.zip) to the directory where you are working on this solution. 
-    - With your terminal in that same directory use SFDX command:  `sfdx force:mdapi:deploy -u <<ScratchOrg Alias>> -f unpackaged.zip`
+    - With your terminal in that same directory use this SFDX command:  
+      `sfdx force:mdapi:deploy -u <<UserName or Alias of Scratch Org>> -f unpackaged.zip -w -1`
 
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material.designsystem), and use the Import function on the Design System page to add this system to your org.
     - You might also want to look at the [demo page](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material_DesignSystem_DemoPage.xml) for that design system. 
+
 - Page XML:  [Copy the XML from this page](ApprovalProcessActions.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
-## Notes
-- This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing a condition on the Individual model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
+### Notes
+- This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing, a condition on the `Individual` model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
 
-- This page uses a UI Only model to drive the survey - and then creates records in 3 objects based on the answer. (`AuthorizationConsentForm`, `EmployeeCrisisAssessment`, and `PTO`) Look at the actions in the `SurveyQuestions` model to see how this works.  
+- This page uses a UI-only model to drive the survey - and then creates records in 3 objects based on the answer(`AuthorizationConsentForm`, `EmployeeCrisisAssessment`, and `PTO`). Look at the actions in the `SurveyQuestions` model to see how this works.  
 
 - The form itself builds conditionally.  Look at the render conditions on each field in the form. 
 
-- The final message,  and resulting "submit" button are rendered dynamically based on the answers provided.  Each Submit button executes a different sequence of actions. 
+- The final message, and the resulting Submit button, are rendered dynamically based on the answers provided.  Each Submit button executes a different sequence of actions. 
 
 
-# Other Explorations Coming Soon
+## Other Explorations Coming Soon
 Stay tuned. 

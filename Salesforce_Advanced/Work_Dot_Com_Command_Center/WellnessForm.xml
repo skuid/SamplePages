@@ -21,29 +21,28 @@
 </model>
 <model id="SurveyQuestions" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
 			<fields>
-				<field displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="3" scale="1" label="Today's Temperature" id="Temperature"/>
 				<field id="Symptoms" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Symptoms" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue">
 <picklistentries>
-	<entry value="No" label="No Symptoms"/>
-	<entry value="Yes" label="YES - I have these symptoms"/>
+	<entry value="No" label="No symptoms"/>
+	<entry value="Yes" label="Yes - I have these symptoms"/>
 </picklistentries>
 </field>
 				<field id="Contact" displaytype="PICKLIST" length="255" label="Contact" ogdisplaytype="TEXT" precision="9" scale="2" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue">
 <picklistentries>
-	<entry value="No" label="No Contact"/>
+	<entry value="No" label="No contact"/>
 	<entry value="Yes" label="Yes - I've been in contact"/>
 </picklistentries>
-</field>
-			<field id="PTO_Request" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" label="Need to Submit COVID PTO Request" defaultvaluetype="fieldvalue" picklistsource="manual" returntype="TEXT">
+</field>	
+			<field id="PTO_Request" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" label="Need to submit COVID PTO request" defaultvaluetype="fieldvalue" picklistsource="manual" returntype="TEXT">
 <picklistentries>
-	<entry value="No" label="No Thanks"/>
-	<entry label="Yes Please" value="Yes"/>
+	<entry value="No" label="No thanks"/>
+	<entry label="Yes please" value="Yes"/>
 </picklistentries>
 </field>
 <field id="Consent" displaytype="PICKLIST" length="255" label="I agree to the collection of this information through electronic means" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
 	<picklistentries>
 		<entry value="Yes" label="Yes"/>
-		<entry value="No" label="No Thanks"/>
+		<entry value="No" label="No thanks"/>
 	</picklistentries>
 </field>
 </fields>
@@ -162,7 +161,6 @@
 </action>
 </actions>
 		</model>
-		
 	<model id="Consent" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="AuthorizationFormConsent">
 <fields>
 	<field id="ConsentGiverId"/>
@@ -269,13 +267,6 @@
 						<division alignSelf="auto" ratio="3" minWidth="400px" maxWidth="1208px">
 							<components>
 								<skuid__header title="Please answer these questions every day" uniqueid="sk-29Qc-14607" titleTag="h2"/>
-								<skuid__text contents="&lt;p&gt;We care deeply about you&lt;/p&gt;&#10;" uniqueid="sk-bUN-6061">
-									<styles>
-										<spacing/>
-									</styles>
-									<renderConditions logictype="and"/>
-									<styleVariantConditions/>
-								</skuid__text>
 							</components>
 						</division>
 					</divisions>
@@ -314,24 +305,11 @@
 		<skuid__field id="Consent" displayAs="BUTTON_GROUP"/>
 	</fields>
 </row>
-<row>
-																					<fields>
-<skuid__field id="Temperature">
-	<renderConditions logictype="and" onhidedatabehavior="keep">
-		<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
-	</renderConditions>
-	<enableConditions/>
-</skuid__field>
-																						
-																						
-																					<skuid__field type="COMBO"/>
-</fields>
-																				</row>
 																				<row>
 <fields>
 	<skuid__field type="COMBO" template="Since I last worked - I have experienced the onset of at least one of these symptoms:&#10;&#10;* Fever&#10;&#10;* Cough&#10;&#10;* Shortness of breath&#10;&#10;* Muscle aches&#10;&#10;* Chills&#10;&#10;* Sore throat&#10;&#10;* Headache&#10;&#10;* Loss of taste or smell" label="Symptoms">
 		<renderConditions logictype="and" onhidedatabehavior="keep">
-			<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Temperature" value="null" enclosevalueinquotes="false"/>
+			<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
 		</renderConditions>
 		<enableConditions/>
 	</skuid__field>
@@ -341,7 +319,7 @@
 																					<fields>
 <skuid__field id="Symptoms" displayAs="BUTTON_GROUP" label=" ">
 	<renderConditions logictype="and" onhidedatabehavior="keep">
-		<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Temperature" value="null" enclosevalueinquotes="false"/>
+		<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
 	</renderConditions>
 	<enableConditions logictype="and"/>
 	</skuid__field>
@@ -613,6 +591,8 @@
 						<spacing bottom="4" top="1.5"/>
 					</styles>
 				</skuid__grid>
+				
+				
 			</components>
 			<background/>
 			<styles>
@@ -643,12 +623,7 @@
 								<division type="separator" flex="1"/>
 								<division type="logo" flex="0">
 									<components>
-										<skuid__image source="staticresource" height="custom" heightCustom="100%" datasource="salesforce" imageWidth="109px">
-											<interactions/>
-											<styles>
-												<spacing/>
-											</styles>
-										</skuid__image>
+										
 									</components>
 								</division>
 								<division type="separator" flex="1"/>
