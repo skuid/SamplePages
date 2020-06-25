@@ -69,7 +69,7 @@ Finally - because it's Skuid, it can be beautiful. We used one of the [sample de
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material.designsystem), and use the Import function on the Design System page to add this system to your org.
     - You might also want to look at the [demo page](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material_DesignSystem_DemoPage.xml) for that design system. 
 
-- Page XML:  [Copy the XML from this page](ApprovalProcessActions.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](WellnessForm.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ### Notes
 - This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing, a condition on the `Individual` model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
