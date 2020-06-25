@@ -32,7 +32,12 @@ More information:
 - [Developer Docs.](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_overview.htm) Additional configuration of this solution. 
 - [Data Model.](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_data_model.htm) Understanding the Data Model will be particularly important for any Skuid development. 
 
-### 2. Install Skuid
+### 2.  Configure Consent Management. 
+Parts of the Work.com solution is not automatically configured in step 1.  The critical one for the Skuid solution is consent management.  [Follow these steps](https://help.salesforce.com/articleView?id=wcc_setup_configure_consent_management.htm&type=5) 
+
+After creating the `Authorization Form Text` record - copy it's  `ID` field for use in the Skuid page found below.   It is most easily viewed in the URL of the detail page.  It will look like `0cN1700000003KiEAI`
+
+### 3. Install Skuid
 Get the latests version of Skuid installed in the new Scratch org.  Go to the [release page](https://Skuid.com/releases)
 
 Since `orgInit.sh` assigned an alias to our scratch org, we can install Skuid v12.4.9 with this command: 
@@ -72,6 +77,8 @@ Finally - because it's Skuid, it can be beautiful. We used one of the [sample de
     - You might also want to look at the [demo page](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material_DesignSystem_DemoPage.xml) for that design system. 
 
 - Page XML:  [Copy the XML from this page](WellnessForm.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+    - IMPORTANT!  Before running this page you will need to find the `Consent` model,  open the Conditions,  look for `AuthorizationFormTextId` and replace the `ID` in its value with the one you copied in step 2 (Configure Consent Management) above. 
+
 
 ### Notes
 - This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing, a condition on the `Individual` model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
