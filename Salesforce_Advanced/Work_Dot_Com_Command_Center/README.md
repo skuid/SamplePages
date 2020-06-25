@@ -33,9 +33,11 @@ More information:
 - [Data Model.](https://developer.salesforce.com/docs/atlas.en-us.workdotcom_dev_guide.meta/workdotcom_dev_guide/wdc_cc_data_model.htm) Understanding the Data Model will be particularly important for any Skuid development. 
 
 ### 2.  Configure Consent Management. 
-Parts of the Work.com solution is not automatically configured in step 1.  The critical one for the Skuid solution is consent management.  [Follow these steps](https://help.salesforce.com/articleView?id=wcc_setup_configure_consent_management.htm&type=5) 
+Parts of the Work.com solution are not automatically configured in step 1.  The critical one for the Skuid solution is consent management.  [Follow these steps.](https://help.salesforce.com/articleView?id=wcc_setup_configure_consent_management.htm&type=5) 
 
-After creating the `Authorization Form Text` record - copy it's  `ID` field for use in the Skuid page found below.   It is most easily viewed in the URL of the detail page.  It will look like `0cN1700000003KiEAI`
+After creating the `Authorization Form Text` record, click into its detail screen. If you followed Salesforce's example, that means clicking `Wellness Authorization Text` in the  `Authorization Form Text` pane. 
+Once you are on the Authorization Form Text detail screen, copy its  `ID` field for use in the Skuid page found below.   It is most easily viewed in the URL of the detail page.  It will be formatted similar to `0cN1700000003KiEAI`.
+For example, in a URL like `https://your-scratch-org-000.lightning.force.com/lightning/r/AuthorizationForm/0cI3F0000008RM6UAM/view`, the ID would be `0cI3F0000008RM6UAM`.
 
 ### 3. Install Skuid
 Get the latests version of Skuid installed in the new Scratch org.  Go to the [release page](https://Skuid.com/releases)

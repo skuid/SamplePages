@@ -181,7 +181,7 @@
 			</fields>
 			<conditions>
 				<condition type="modelmerge" value="" field="ConsentGiverId" fieldtargetobjects="Account,Contact,Individual,User" operator="=" model="Individual" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
-				<condition type="fieldvalue" value="<<REPLACE WITH AuthorizationFormTextId>>" enclosevalueinquotes="true" field="AuthorizationFormTextId" fieldtargetobjects="AuthorizationFormText"/>
+				<condition type="fieldvalue" value="REPLACE WITH AuthorizationFormTextId" enclosevalueinquotes="true" field="AuthorizationFormTextId" fieldtargetobjects="AuthorizationFormText"/>
 				<condition type="fieldvalue" value="NOW" enclosevalueinquotes="false" field="ConsentCapturedDateTime"/>
 				<condition type="userinfo" value="" field="Name" operator="=" enclosevalueinquotes="true" userinfotype="name"/>
 				<condition type="fieldvalue" value="MobileApp" enclosevalueinquotes="true" field="ConsentCapturedSource"/>
