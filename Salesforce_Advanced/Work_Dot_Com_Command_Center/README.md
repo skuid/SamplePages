@@ -79,6 +79,8 @@ Finally - because it's Skuid, it can be beautiful. We used one of the [sample de
 - Page XML:  [Copy the XML from this page](WellnessForm.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
     - IMPORTANT!  Before running this page you will need to find the `Consent` model,  open the Conditions,  look for `AuthorizationFormTextId` and replace the `ID` in its value with the one you copied in step 2 (Configure Consent Management) above. 
 
+When you preview this page - it will ask you to select an `Individual`.  Make sure an Individual you select is connected to an `Employee`.   The Work.com install script should do this - but we've seen situations where it does not work.   
+
 
 ### Notes
 - This page uses both the `Employee` and `Individual` sObjects to provide identity.  For testing, a condition on the `Individual` model uses a page parameter to retrieve the context of a single individual.  In production this would be changed so it was the associated with the running user. 
