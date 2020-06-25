@@ -38,6 +38,8 @@ Get the latests version of Skuid installed in the new Scratch org.  Go to the [r
 Since `orgInit.sh` assigned an alias to our scratch org, we can install Skuid v12.4.9 with this command: 
 `sfdx force:package:install -p 04t4A000000YXnLQAW -w 30 -u WDCScratchOrg`
 
+If you run the script again you'll get a new alias to avoid duplicates. These instructions assume you're working with the first instance with alias `WDCScratchOrg`
+
 ## Use Cases
 
 ## Employee Wellness Assessment
@@ -64,7 +66,7 @@ Finally - because it's Skuid, it can be beautiful. We used one of the [sample de
 - Additional sObject:  The PTO custom object can be deployed from this ZIP file. 
     - [Download this ZIP file](unpackaged.zip) to the directory where you are working on this solution. 
     - With your terminal in that same directory use this SFDX command:  
-      `sfdx force:mdapi:deploy -u <<UserName or Alias of Scratch Org>> -f unpackaged.zip -w -1`
+      `sfdx force:mdapi:deploy -u WDCScratchOrg -f unpackaged.zip -w -1`
 
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material.designsystem), and use the Import function on the Design System page to add this system to your org.
     - You might also want to look at the [demo page](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material_DesignSystem_DemoPage.xml) for that design system. 
