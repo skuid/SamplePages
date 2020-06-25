@@ -1,220 +1,228 @@
 <skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="Material">
 	<models>
-<model id="Individual" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Individual">
-	<fields>
-		<field id="Id"/>
-	</fields>
-	<conditions>
-		<condition type="userinfo" value="" field="OwnerId" fieldtargetobjects="User" operator="=" enclosevalueinquotes="true" userinfotype="userid" clientorserver="server" state="off" inactive="true"/>
-		<condition type="param" value="ind" field="Id" operator="=" enclosevalueinquotes="true"/>
-	</conditions>
-	<actions/>
-</model>
+		<model id="Individual" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Individual">
+			<fields>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="userinfo" value="" field="OwnerId" fieldtargetobjects="User" operator="=" enclosevalueinquotes="true" userinfotype="userid" clientorserver="server" state="off" inactive="true"/>
+				<condition type="param" value="ind" field="Id" operator="=" enclosevalueinquotes="true"/>
+			</conditions>
+			<actions/>
+		</model>
 		<model id="Employee" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Employee">
-<fields>
-	<field id="CurrentWellnessStatus"/>
-</fields>
-<conditions>
-	<condition type="modelmerge" value="" field="IndividualId" fieldtargetobjects="Individual" operator="=" model="Individual" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
-</conditions>
-<actions/>
-</model>
-<model id="SurveyQuestions" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="CurrentWellnessStatus"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="IndividualId" fieldtargetobjects="Individual" operator="=" model="Individual" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Crisis" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Crisis">
+			<fields>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="COVID-19" enclosevalueinquotes="true" field="Name"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="SurveyQuestions" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
 			<fields>
 				<field id="Symptoms" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Symptoms" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue">
-<picklistentries>
-	<entry value="No" label="No symptoms"/>
-	<entry value="Yes" label="Yes - I have these symptoms"/>
-</picklistentries>
-</field>
+					<picklistentries>
+						<entry value="No" label="No Symptoms"/>
+						<entry value="Yes" label="YES - I have these symptoms"/>
+					</picklistentries>
+				</field>
 				<field id="Contact" displaytype="PICKLIST" length="255" label="Contact" ogdisplaytype="TEXT" precision="9" scale="2" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue">
-<picklistentries>
-	<entry value="No" label="No contact"/>
-	<entry value="Yes" label="Yes - I've been in contact"/>
-</picklistentries>
-</field>	
-			<field id="PTO_Request" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" label="Need to submit COVID PTO request" defaultvaluetype="fieldvalue" picklistsource="manual" returntype="TEXT">
-<picklistentries>
-	<entry value="No" label="No thanks"/>
-	<entry label="Yes please" value="Yes"/>
-</picklistentries>
-</field>
-<field id="Consent" displaytype="PICKLIST" length="255" label="I agree to the collection of this information through electronic means" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
-	<picklistentries>
-		<entry value="Yes" label="Yes"/>
-		<entry value="No" label="No thanks"/>
-	</picklistentries>
-</field>
-</fields>
+					<picklistentries>
+						<entry value="No" label="No Contact"/>
+						<entry value="Yes" label="Yes - I've been in contact"/>
+					</picklistentries>
+				</field>
+				<field id="PTO_Request" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" label="Need to Submit COVID PTO Request" defaultvaluetype="fieldvalue" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="No" label="No Thanks"/>
+						<entry label="Yes Please" value="Yes"/>
+					</picklistentries>
+				</field>
+				<field id="Consent" displaytype="PICKLIST" length="255" label="I agree to the collection of this information through electronic means" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Yes" label="Yes"/>
+						<entry value="No" label="No Thanks"/>
+					</picklistentries>
+				</field>
+			</fields>
 			<conditions/>
 			<actions>
-<action>
-	<actions>
-		<action type="branch" whenfinished="stop">
-			<formula>{{Consent}}==="No"</formula>
-			<iftrueactions>
-				<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="all">
-					<updates>
-						<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="Declined"/>
-					</updates>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop">
+							<formula>{{Consent}}==="No"</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="all">
+									<updates>
+										<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="Declined"/>
+									</updates>
+								</action>
+								<action type="updateRow" fieldmodel="Consent" affectedrows="all">
+									<updates>
+										<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Seen"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="updateRow" fieldmodel="Consent" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Signed"/>
+							</updates>
+						</action>
+						<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
+							<updates>
+								<update valuesource="blank" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Test Negative"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>Consent</field>
+					</fields>
 				</action>
-				<action type="updateRow" fieldmodel="Consent" affectedrows="all">
-					<updates>
-						<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Seen"/>
-					</updates>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop">
+							<formula>{{Symptoms}}=="Yes"</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Symptoms"/>
+									</updates>
+								</action>
+								<action type="updateRow" fieldmodel="SurveyQuestions" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="PTO_Request" enclosevalueinquotes="true" value="Yes"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 No Symptoms"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>Symptoms</field>
+					</fields>
 				</action>
-			</iftrueactions>
-		</action>
-		<action type="updateRow" fieldmodel="Consent" affectedrows="context">
-			<updates>
-				<update valuesource="fieldvalue" field="Status" enclosevalueinquotes="true" value="Signed"/>
-			</updates>
-		</action>
-		<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
-			<updates>
-				<update valuesource="blank" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Test Negative"/>
-			</updates>
-		</action>
-	</actions>
-	<events>
-		<event>row.updated</event>
-	</events>
-	<fields>
-		<field>Consent</field>
-	</fields>
-</action>
-<action>
-	<actions>
-		<action type="branch" whenfinished="stop">
-			<formula>{{Symptoms}}=="Yes"</formula>
-			<iftrueactions>
-				<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
-					<updates>
-						<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Symptoms"/>
-					</updates>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop">
+							<formula>{{Contact}}=="Yes"</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Exposed"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 No Symptoms"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>Contact</field>
+					</fields>
 				</action>
-				<action type="updateRow" fieldmodel="SurveyQuestions" affectedrows="context">
-					<updates>
-						<update valuesource="fieldvalue" field="PTO_Request" enclosevalueinquotes="true" value="Yes"/>
-					</updates>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="stop">
+							<formula>{{PTO_Request}}=="Yes"</formula>
+							<iftrueactions>
+								<action type="createRow" model="PTO_Request" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+							</iftrueactions>
+						</action>
+						<action type="cancel">
+							<models>
+								<model>PTO_Request</model>
+							</models>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>PTO_Request</field>
+					</fields>
 				</action>
-			</iftrueactions>
-		</action>
-		<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
-			<updates>
-				<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 No Symptoms"/>
-			</updates>
-		</action>
-	</actions>
-	<events>
-		<event>row.updated</event>
-	</events>
-	<fields>
-		<field>Symptoms</field>
-	</fields>
-</action>
-<action>
-	<actions>
-		<action type="branch" whenfinished="stop">
-			<formula>{{Contact}}=="Yes"</formula>
-			<iftrueactions>
-				<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
-					<updates>
-						<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 Exposed"/>
-					</updates>
-				</action>
-			</iftrueactions>
-		</action>
-		<action type="updateRow" fieldmodel="WellnessAssessment" affectedrows="context">
-			<updates>
-				<update valuesource="fieldvalue" field="Assessment" enclosevalueinquotes="true" value="COVID-19 No Symptoms"/>
-			</updates>
-		</action>
-	</actions>
-	<events>
-		<event>row.updated</event>
-	</events>
-	<fields>
-		<field>Contact</field>
-	</fields>
-</action>
-<action>
-	<actions>
-		<action type="branch" whenfinished="stop">
-			<formula>{{PTO_Request}}=="Yes"</formula>
-			<iftrueactions>
-				<action type="createRow" model="PTO_Request" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
-			</iftrueactions>
-		</action>
-		<action type="cancel">
-			<models>
-				<model>PTO_Request</model>
-			</models>
-		</action>
-	</actions>
-	<events>
-		<event>row.updated</event>
-	</events>
-	<fields>
-		<field>PTO_Request</field>
-	</fields>
-</action>
-</actions>
+			</actions>
 		</model>
-	<model id="Consent" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="AuthorizationFormConsent">
-<fields>
-	<field id="ConsentGiverId"/>
-	<field id="ConsentGiver.Name"/>
-	<field id="Status"/>
-	<field id="ConsentCapturedSource"/>
-	<field id="AuthorizationFormTextId"/>
-	<field id="AuthorizationFormText.Name"/>
-</fields>
-<conditions>
-	<condition type="modelmerge" value="" field="ConsentGiverId" fieldtargetobjects="Account,Contact,Individual,User" operator="=" model="Individual" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
-	<condition type="fieldvalue" value="0cN1700000003KiEAI" enclosevalueinquotes="true" field="AuthorizationFormTextId" fieldtargetobjects="AuthorizationFormText"/>
-	<condition type="fieldvalue" value="NOW" enclosevalueinquotes="false" field="ConsentCapturedDateTime"/>
-	<condition type="userinfo" value="" field="Name" operator="=" enclosevalueinquotes="true" userinfotype="name"/>
-	<condition type="fieldvalue" value="MobileApp" enclosevalueinquotes="true" field="ConsentCapturedSource"/>
-</conditions>
-<actions/>
-</model>
-<model id="WellnessAssessment" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="EmployeeCrisisAssessment">
-	<fields>
-		<field id="Assessment"/>
-		<field id="AssessmentDate"/>
-		<field id="EmployeeId"/>
-		<field id="Employee.Name"/>
-		<field id="SourceAssessment"/>
-		<field id="SourceSystem"/>
-	</fields>
-	<conditions>
-		<condition type="modelmerge" value="" field="EmployeeId" fieldtargetobjects="Employee" operator="=" model="Employee" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
-		<condition type="fieldvalue" value="TODAY" enclosevalueinquotes="false" field="AssessmentDate"/>
-		<condition type="fieldvalue" value="0ie170000004C9cAAE" enclosevalueinquotes="true" field="CrisisId" fieldtargetobjects="Crisis"/>
-	</conditions>
-	<actions/>
-</model>
-<model id="PTO_Request" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" sobject="PTO__c">
-	<fields>
-		<field id="Employee__c"/>
-		<field id="Employee__r.Name"/>
-		<field id="StartDate__c"/>
-		<field id="Total_days__c"/>
-		<field id="Request_Type__c"/>
-	</fields>
-	<conditions>
-		<condition type="modelmerge" value="" field="Employee__c" fieldtargetobjects="Employee" operator="=" model="Employee" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
-		<condition type="fieldvalue" value="1" enclosevalueinquotes="false" field="Total_days__c"/>
-		<condition type="fieldvalue" value="COVID19 Special" enclosevalueinquotes="true" field="Request_Type__c"/>
-		<condition type="fieldvalue" value="TOMORROW" enclosevalueinquotes="false" field="EndDate__c"/>
-		<condition type="fieldvalue" value="TODAY" enclosevalueinquotes="false" field="StartDate__c"/>
-	</conditions>
-	<actions/>
-</model>
-</models>
+		<model id="Consent" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="AuthorizationFormConsent">
+			<fields>
+				<field id="ConsentGiverId"/>
+				<field id="ConsentGiver.Name"/>
+				<field id="Status"/>
+				<field id="ConsentCapturedSource"/>
+				<field id="AuthorizationFormTextId"/>
+				<field id="AuthorizationFormText.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="ConsentGiverId" fieldtargetobjects="Account,Contact,Individual,User" operator="=" model="Individual" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+				<condition type="fieldvalue" value="0cN1700000003KiEAI" enclosevalueinquotes="true" field="AuthorizationFormTextId" fieldtargetobjects="AuthorizationFormText"/>
+				<condition type="fieldvalue" value="NOW" enclosevalueinquotes="false" field="ConsentCapturedDateTime"/>
+				<condition type="userinfo" value="" field="Name" operator="=" enclosevalueinquotes="true" userinfotype="name"/>
+				<condition type="fieldvalue" value="MobileApp" enclosevalueinquotes="true" field="ConsentCapturedSource"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="WellnessAssessment" limit="1" query="false" createrowifnonefound="true" datasource="salesforce" sobject="EmployeeCrisisAssessment">
+			<fields>
+				<field id="Assessment"/>
+				<field id="AssessmentDate"/>
+				<field id="EmployeeId"/>
+				<field id="Employee.Name"/>
+				<field id="SourceAssessment"/>
+				<field id="SourceSystem"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="EmployeeId" fieldtargetobjects="Employee" operator="=" model="Employee" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+				<condition type="fieldvalue" value="TODAY" enclosevalueinquotes="false" field="AssessmentDate"/>
+				<condition type="modelmerge" value="" field="CrisisId" fieldtargetobjects="Crisis" operator="=" model="Crisis" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="PTO_Request" limit="1" query="false" createrowifnonefound="false" datasource="salesforce" sobject="PTO__c">
+			<fields>
+				<field id="Employee__c"/>
+				<field id="Employee__r.Name"/>
+				<field id="StartDate__c"/>
+				<field id="Total_days__c"/>
+				<field id="Request_Type__c"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="Employee__c" fieldtargetobjects="Employee" operator="=" model="Employee" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+				<condition type="fieldvalue" value="1" enclosevalueinquotes="false" field="Total_days__c"/>
+				<condition type="fieldvalue" value="COVID19 Special" enclosevalueinquotes="true" field="Request_Type__c"/>
+				<condition type="fieldvalue" value="TOMORROW" enclosevalueinquotes="false" field="EndDate__c"/>
+				<condition type="fieldvalue" value="TODAY" enclosevalueinquotes="false" field="StartDate__c"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
 	<components>
-		
 		<skuid__wrapper uniqueid="sk-ZtW-2206" styleSettingsVariant="2c157577-b1fd-4339-9850-4e33fefe1d9f">
 			<components>
 				<skuid__grid uniqueid="sk-aB1-5341" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
@@ -222,14 +230,12 @@
 						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
 							<components>
 								<skuid__wrapper uniqueid="sk-bUG-5330" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
-									<components>
-										
-									</components>
+									<components/>
 									<background/>
-								<styles>
-<spacing/>
-</styles>
-</skuid__wrapper>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
 							</components>
 						</division>
 						<division alignSelf="auto" ratio="3">
@@ -254,9 +260,7 @@
 						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
 							<components>
 								<skuid__wrapper uniqueid="sk-bUN-6056" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
-									<components>
-										
-									</components>
+									<components/>
 									<background/>
 									<styles>
 										<spacing/>
@@ -267,6 +271,13 @@
 						<division alignSelf="auto" ratio="3" minWidth="400px" maxWidth="1208px">
 							<components>
 								<skuid__header title="Please answer these questions every day" uniqueid="sk-29Qc-14607" titleTag="h2"/>
+								<skuid__text contents="&lt;p&gt;We care deeply about you&lt;/p&gt;&#10;" uniqueid="sk-bUN-6061">
+									<styles>
+										<spacing/>
+									</styles>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+								</skuid__text>
 							</components>
 						</division>
 					</divisions>
@@ -274,15 +285,12 @@
 						<spacing bottom="4"/>
 					</styles>
 				</skuid__grid>
-				
 				<skuid__grid uniqueid="sk-31il-18905" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
 					<divisions>
 						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
 							<components>
 								<skuid__wrapper uniqueid="sk-31il-18906" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
-									<components>
-										
-									</components>
+									<components/>
 									<background/>
 									<styles>
 										<spacing/>
@@ -294,241 +302,215 @@
 							<components>
 								<skuid__wrapper uniqueid="sk-2OCh-16643" styleSettingsVariant="70e8d34e-e1c6-4ec5-bbd4-c326ac629fe0">
 									<components>
-<skuid__wrapper uniqueid="sk-29Wz-20235">
-															<components>
-<skuid__form showErrorsInline="true" model="SurveyQuestions" uniqueid="sk-29UR-9102" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
-																	<sections>
-																		<section title="New Section" showHeading="false">
-																			<rows>
-<row>
-	<fields>
-		<skuid__field id="Consent" displayAs="BUTTON_GROUP"/>
-	</fields>
-</row>
-																				<row>
-<fields>
-	<skuid__field type="COMBO" template="Since I last worked - I have experienced the onset of at least one of these symptoms:&#10;&#10;* Fever&#10;&#10;* Cough&#10;&#10;* Shortness of breath&#10;&#10;* Muscle aches&#10;&#10;* Chills&#10;&#10;* Sore throat&#10;&#10;* Headache&#10;&#10;* Loss of taste or smell" label="Symptoms">
-		<renderConditions logictype="and" onhidedatabehavior="keep">
-			<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
-		</renderConditions>
-		<enableConditions/>
-	</skuid__field>
-</fields>
-</row>
-<row>
-																					<fields>
-<skuid__field id="Symptoms" displayAs="BUTTON_GROUP" label=" ">
-	<renderConditions logictype="and" onhidedatabehavior="keep">
-		<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
-	</renderConditions>
-	<enableConditions logictype="and"/>
-	</skuid__field>
-																						
-																						
-																					</fields>
-																				</row>
-	<row>
-		<fields>
-			<skuid__field type="COMBO" template="Within the past 14 days, I have had contact with someone confirmed or suspected of having COVID-19." label="Contact">
-				<renderConditions logictype="and" onhidedatabehavior="keep">
-					<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Symptoms" value="null" enclosevalueinquotes="false"/>
-				</renderConditions>
-				<enableConditions/>
-			</skuid__field>
-		</fields>
-	</row>
-	<row>
-																					<fields>
-																						
-																						
-																					<skuid__field id="Contact" displayAs="BUTTON_GROUP" label=" ">
-	<renderConditions logictype="and" onhidedatabehavior="keep">
-		<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Symptoms" value="null" enclosevalueinquotes="false"/>
-	</renderConditions>
-	<enableConditions/>
-</skuid__field>
-</fields>
-																				</row>
-																				
-																				
-																				
-																			<row>
-<fields>
-	<skuid__field id="PTO_Request" displayAs="BUTTON_GROUP">
-		<renderConditions logictype="and" onhidedatabehavior="keep">
-			<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Contact" value="null" enclosevalueinquotes="false"/>
-		</renderConditions>
-		<enableConditions/>
-	</skuid__field>
-</fields>
-</row>
-</rows>
-																		</section>
-																	</sections>
-																</skuid__form>
-																
-															</components>
-															<styles>
-																<spacing bottom="3" top="3" left="3" right="3"/>
-															</styles>
-															<background/>
-														</skuid__wrapper>
-										
+										<skuid__wrapper uniqueid="sk-29Wz-20235">
+											<components>
+												<skuid__form showErrorsInline="true" model="SurveyQuestions" uniqueid="sk-29UR-9102" mode="edit" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<rows>
+																<row>
+																	<fields>
+																		<skuid__field id="Consent" displayAs="BUTTON_GROUP"/>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field type="COMBO" template="Since I last worked - I have experienced the onset of at least one of these symptoms:&#10;&#10;* Fever&#10;&#10;* Cough&#10;&#10;* Shortness of breath&#10;&#10;* Muscle aches&#10;&#10;* Chills&#10;&#10;* Sore throat&#10;&#10;* Headache&#10;&#10;* Loss of taste or smell" label="Symptoms">
+																			<renderConditions logictype="and" onhidedatabehavior="keep">
+																				<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
+																			</renderConditions>
+																			<enableConditions/>
+																		</skuid__field>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="Symptoms" displayAs="BUTTON_GROUP" label=" ">
+																			<renderConditions logictype="and" onhidedatabehavior="keep">
+																				<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Consent" value="null" enclosevalueinquotes="false"/>
+																			</renderConditions>
+																			<enableConditions logictype="and"/>
+																		</skuid__field>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field type="COMBO" template="Within the past 14 days, I have had contact with someone confirmed or suspected of having COVID-19." label="Contact">
+																			<renderConditions logictype="and" onhidedatabehavior="keep">
+																				<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Symptoms" value="null" enclosevalueinquotes="false"/>
+																			</renderConditions>
+																			<enableConditions/>
+																		</skuid__field>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="Contact" displayAs="BUTTON_GROUP" label=" ">
+																			<renderConditions logictype="and" onhidedatabehavior="keep">
+																				<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Symptoms" value="null" enclosevalueinquotes="false"/>
+																			</renderConditions>
+																			<enableConditions/>
+																		</skuid__field>
+																	</fields>
+																</row>
+																<row>
+																	<fields>
+																		<skuid__field id="PTO_Request" displayAs="BUTTON_GROUP">
+																			<renderConditions logictype="and" onhidedatabehavior="keep">
+																				<renderCondition type="blank" operator="!=" fieldmodel="SurveyQuestions" sourcetype="fieldvalue" field="Contact" value="null" enclosevalueinquotes="false"/>
+																			</renderConditions>
+																			<enableConditions/>
+																		</skuid__field>
+																	</fields>
+																</row>
+															</rows>
+														</section>
+													</sections>
+												</skuid__form>
+											</components>
+											<styles>
+												<spacing bottom="3" top="3" left="3" right="3"/>
+											</styles>
+											<background/>
+										</skuid__wrapper>
 									</components>
 									<background type="color" color="white"/>
 									<styles>
 										<spacing/>
 									</styles>
 								</skuid__wrapper>
-							<skuid__wrapper uniqueid="sk-3J89-216309">
-<components>
-	<skuid__text contents="Thanks for staying in touch.&amp;nbsp; We look forward to seeing you at work today!&amp;nbsp;" uniqueid="sk-bUp-16075"/>
-	<skuid__buttonSet uniqueid="sk-bUT-11596" position="left">
-									<groups>
-										<skuid__buttonGroup>
-											<buttons>
-												<skuid__button label="Submit" uniqueId="sk-bUT-11597" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
-													<actions>
-	<action type="save">
-		<models>
-			<model>Consent</model>
-			<model>WellnessAssessment</model>
-		</models>
-	</action>
-	<action type="blockUI" styleSettingsVariant="dark" message="Thanks!" timeout="3000"/>
-</actions>
-												<hotkeys/>
-</skuid__button>
-											</buttons>
-										</skuid__buttonGroup>
-										
-										<skuid__buttonGroup displayType="detached">
-											<buttons>
-												
-											</buttons>
-										</skuid__buttonGroup>
-										
-									</groups>
+								<skuid__wrapper uniqueid="sk-3J89-216309">
+									<components>
+										<skuid__text contents="Thanks for staying in touch.&amp;nbsp; We look forward to seeing you at work today!&amp;nbsp;" uniqueid="sk-bUp-16075"/>
+										<skuid__buttonSet uniqueid="sk-bUT-11596" position="left">
+											<groups>
+												<skuid__buttonGroup>
+													<buttons>
+														<skuid__button label="Submit" uniqueId="sk-bUT-11597" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>Consent</model>
+																		<model>WellnessAssessment</model>
+																	</models>
+																</action>
+																<action type="blockUI" styleSettingsVariant="dark" message="Thanks!" timeout="3000"/>
+															</actions>
+															<hotkeys/>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+												<skuid__buttonGroup displayType="detached">
+													<buttons/>
+												</skuid__buttonGroup>
+											</groups>
+											<styles>
+												<spacing top="1.5" bottom="3"/>
+											</styles>
+										</skuid__buttonSet>
+									</components>
 									<styles>
-										<spacing top="1.5" bottom="3"/>
+										<spacing top="4"/>
 									</styles>
-								</skuid__buttonSet>
-</components>
-<styles>
-	<spacing top="4"/>
-</styles>
-<background/>
-<renderConditions logictype="and">
-	<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 No Symptoms"/>
-	<renderCondition fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
-</renderConditions>
-<styleVariantConditions/>
-</skuid__wrapper>
-<skuid__wrapper uniqueid="sk-3JSy-69041">
-	<components>
-		<skuid__text contents="Plese Work From Home Today.&amp;nbsp; Thanks for letting us know.&amp;nbsp;" uniqueid="sk-3JSy-69042"/>
-		<skuid__buttonSet uniqueid="sk-3JSy-69043" position="left">
-									<groups>
-										<skuid__buttonGroup>
-											<buttons>
-												<skuid__button label="Submit" uniqueId="sk-3JSy-69044" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
-													<actions>
-		<action type="save">
-			<models>
-				<model>Consent</model>
-				<model>WellnessAssessment</model>
-			</models>
-		</action>
-		<action type="blockUI" styleSettingsVariant="dark" message="Thanks! " timeout="3000"/>
-		</actions>
-												</skuid__button>
-											</buttons>
-										</skuid__buttonGroup>
-										
-										<skuid__buttonGroup displayType="detached">
-											<buttons>
-												
-											</buttons>
-										</skuid__buttonGroup>
-										
-									</groups>
+									<background/>
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 No Symptoms"/>
+										<renderCondition fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
+									</renderConditions>
+									<styleVariantConditions/>
+								</skuid__wrapper>
+								<skuid__wrapper uniqueid="sk-3JSy-69041">
+									<components>
+										<skuid__text contents="Plese Work From Home Today.&amp;nbsp; Thanks for letting us know.&amp;nbsp;" uniqueid="sk-3JSy-69042"/>
+										<skuid__buttonSet uniqueid="sk-3JSy-69043" position="left">
+											<groups>
+												<skuid__buttonGroup>
+													<buttons>
+														<skuid__button label="Submit" uniqueId="sk-3JSy-69044" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>Consent</model>
+																		<model>WellnessAssessment</model>
+																	</models>
+																</action>
+																<action type="blockUI" styleSettingsVariant="dark" message="Thanks! " timeout="3000"/>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+												<skuid__buttonGroup displayType="detached">
+													<buttons/>
+												</skuid__buttonGroup>
+											</groups>
+											<styles>
+												<spacing top="1.5" bottom="3"/>
+											</styles>
+										</skuid__buttonSet>
+									</components>
 									<styles>
-										<spacing top="1.5" bottom="3"/>
+										<spacing top="4"/>
 									</styles>
-								</skuid__buttonSet>
-	</components>
-	<styles>
-		<spacing top="4"/>
-	</styles>
-	<background/>
-	<renderConditions logictype="and">
-		<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 Exposed"/>
-		<renderCondition fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
-	</renderConditions>
-	<styleVariantConditions/>
-</skuid__wrapper>
-<skuid__wrapper uniqueid="sk-3JTH-71262">
-	<components>
-		<skuid__text contents="Plese take care of yourself - we will file a COVID PTO request for you today.&amp;nbsp;" uniqueid="sk-3JTH-71263"/>
-		<skuid__buttonSet uniqueid="sk-3JTH-71264" position="left">
-									<groups>
-										<skuid__buttonGroup>
-											<buttons>
-												<skuid__button label="Submit" uniqueId="sk-3JTH-71265" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
-													<actions>
-		<action type="save">
-			<models>
-				<model>Consent</model>
-				<model>WellnessAssessment</model>
-				<model>PTO_Request</model>
-			</models>
-		</action>
-		<action type="blockUI" styleSettingsVariant="dark" message="Thanks! " timeout="3000"/>
-		</actions>
-												</skuid__button>
-											</buttons>
-										</skuid__buttonGroup>
-										
-										<skuid__buttonGroup displayType="detached">
-											<buttons>
-												
-											</buttons>
-										</skuid__buttonGroup>
-										
-									</groups>
+									<background/>
+									<renderConditions logictype="and">
+										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 Exposed"/>
+										<renderCondition fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasNoRows"/>
+									</renderConditions>
+									<styleVariantConditions/>
+								</skuid__wrapper>
+								<skuid__wrapper uniqueid="sk-3JTH-71262">
+									<components>
+										<skuid__text contents="Plese take care of yourself - we will file a COVID PTO request for you today.&amp;nbsp;" uniqueid="sk-3JTH-71263"/>
+										<skuid__buttonSet uniqueid="sk-3JTH-71264" position="left">
+											<groups>
+												<skuid__buttonGroup>
+													<buttons>
+														<skuid__button label="Submit" uniqueId="sk-3JTH-71265" styleSettingsVariant="primary" icon="sk-webicon-material-icons:add">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>Consent</model>
+																		<model>WellnessAssessment</model>
+																		<model>PTO_Request</model>
+																	</models>
+																</action>
+																<action type="blockUI" styleSettingsVariant="dark" message="Thanks! " timeout="3000"/>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+												<skuid__buttonGroup displayType="detached">
+													<buttons/>
+												</skuid__buttonGroup>
+											</groups>
+											<styles>
+												<spacing top="1.5" bottom="3"/>
+											</styles>
+										</skuid__buttonSet>
+									</components>
 									<styles>
-										<spacing top="1.5" bottom="3"/>
+										<spacing top="4"/>
 									</styles>
-								</skuid__buttonSet>
-	</components>
-	<styles>
-		<spacing top="4"/>
-	</styles>
-	<background/>
-	<renderConditions logictype="or">
-		<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 Symptoms"/>
-		<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
-	</renderConditions>
-	<styleVariantConditions/>
-</skuid__wrapper>
-</components>
+									<background/>
+									<renderConditions logictype="or">
+										<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="WellnessAssessment" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="Assessment" fieldtargetobjects="EmployeeCrisisAssessment" value="COVID-19 Symptoms"/>
+										<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="PTO_Request" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+									</renderConditions>
+									<styleVariantConditions/>
+								</skuid__wrapper>
+							</components>
 						</division>
 					</divisions>
 					<styles>
 						<spacing bottom="4"/>
 					</styles>
 				</skuid__grid>
-				
-				
-				
 				<skuid__grid uniqueid="sk-2U3F-38500" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4" rowGutter="4">
 					<divisions>
 						<division minWidth="240px" ratio="0" alignSelf="auto" maxWidth="240px">
 							<components>
 								<skuid__wrapper uniqueid="sk-2U3F-38501" styleSettingsVariant="5d85cba1-676c-4e58-81fa-cd74d201bb5a">
-									<components>
-										
-									</components>
+									<components/>
 									<background/>
 									<styles>
 										<spacing/>
@@ -591,8 +573,6 @@
 						<spacing bottom="4" top="1.5"/>
 					</styles>
 				</skuid__grid>
-				
-				
 			</components>
 			<background/>
 			<styles>
@@ -622,9 +602,7 @@
 							<divisions>
 								<division type="separator" flex="1"/>
 								<division type="logo" flex="0">
-									<components>
-										
-									</components>
+									<components/>
 								</division>
 								<division type="separator" flex="1"/>
 							</divisions>
@@ -636,9 +614,7 @@
 		<pageregioncontent uniqueid="__footer">
 			<components>
 				<skuid__layoutRegion sticky="true" isFooter="true">
-					<components>
-						
-					</components>
+					<components/>
 				</skuid__layoutRegion>
 			</components>
 		</pageregioncontent>
