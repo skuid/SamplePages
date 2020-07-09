@@ -12,6 +12,9 @@ This page will host a number of Skuid extensions to the Work.com solution.
 
 <img src="WorkDotCom_CommandCenter.png" width="300"></img>
 
+## Watch this in action. 
+We did a webinar showing off this material.  [Watch it here.](https://www.youtube.com/watch?v=6H3k2xOgTpk&t=4s)
+
 ## Getting Started. 
 ### 1. Install Work.com command center  
 The easiest way to get started exploring the Work.com solution is to install this in a scratch org using SFDX.  This means you will need to use your terminal and have git and SFDX installed.  [Read these instructions on installing SFDX](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_app_dev/sfdx_app_dev_setup_dx#Tdxn4tBK-heading7)

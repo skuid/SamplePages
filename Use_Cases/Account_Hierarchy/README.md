@@ -13,12 +13,35 @@ The list of Accounts on the left is filtered to only display Global/Parent accou
 - Design system: [Download this Design System file](AccountHierarchy.designsystem).  Use the Import function on the Design System page to add this system to your org. 
 - Page XML:  [Copy the XML from this page](Account_Hierarchy.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
+
 ## Notes
 
 - The chart allows you to drill down into the underlying Opportunity data and make changes if necessary.
 - The KPIs are Skuid UI Only Formula fields - so you do not need to worry about using up any of your roll-summary fields on your Account Object.
 - The Modal that appears when clicking "New Case" is completely configurable and no code was necessary - it's one of the many actions available to call from Skuid's Action Framework ("Show Modal")
 - You can style buttons and place them anywhere on the page, highly configurable and powerful components that hook into the Action Framework and/or Salesforce actions (approval process, Apex, etc.).
+
+## Step by Step Build Webinar.
+We did six webinars walking through building out this use case.  Each chapter discovers a different aspect of building the Skuid solution. 
+
+- [Chapter 1 | Understanding the Data Model](https://www.youtube.com/watch?v=s-99jr-zeFI)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml)
+
+- [Chapter 2 | Page Construction - Layout and Account Interactions](https://www.youtube.com/watch?v=7RqtbD7Hybs)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter2.xml)
+
+- [Chapter 3 | Opportunities Chart and Tables](https://www.youtube.com/watch?v=CSk5DR54s5E)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter3.xml)
+
+- [Chapter 4 | Creating Variants in the Design System Studio](https://www.youtube.com/watch?v=rBZZhlmnFo0)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter4.xml)
+
+- [Chapter 5 | Design System Studio Style Variants Continued](https://www.youtube.com/watch?v=sYOMx_b0U2c)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter5.xml)
+
+- [Chapter 6 | Deploying App to Lightning](https://www.youtube.com/watch?v=2DuwP8D2_8U&t=2s)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml)
+
 
 ## Related Links
 - [Internal link in Demo Org](https://skuid-demo.lightning.force.com/lightning/n/Account_Navigator) (for Skuid Employees only)
