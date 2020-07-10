@@ -21,11 +21,13 @@ The list of Accounts on the left is filtered to only display Global/Parent accou
 - The Modal that appears when clicking "New Case" is completely configurable and no code was necessary - it's one of the many actions available to call from Skuid's Action Framework ("Show Modal")
 - You can style buttons and place them anywhere on the page, highly configurable and powerful components that hook into the Action Framework and/or Salesforce actions (approval process, Apex, etc.).
 
+
 ## Step by Step Build Webinar.
-We did six webinars walking through building out this use case.  Each chapter discovers a different aspect of building the Skuid solution. 
+We did six webinars walking through the build for this use case.  Each chapter documents a different aspect of building the Skuid solution.  
 
 - [Chapter 1 | Understanding the Data Model](https://www.youtube.com/watch?v=s-99jr-zeFI)
     - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml)
+    - Additional page to help quickly create sample data:  [Quick Create Page](WebinarSeries_QuickCreatePage.xml)
 
 - [Chapter 2 | Page Construction - Layout and Account Interactions](https://www.youtube.com/watch?v=7RqtbD7Hybs)
     - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter2.xml)
