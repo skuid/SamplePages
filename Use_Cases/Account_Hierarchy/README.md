@@ -42,7 +42,7 @@ We did six webinars walking through the build for this use case.  Each chapter d
     - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter5.xml)
 
 - [Chapter 6 | Deploying App to Lightning](https://www.youtube.com/watch?v=2DuwP8D2_8U&t=2s)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter6.xml)
 
 
 ## Related Links
