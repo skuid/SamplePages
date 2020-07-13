@@ -12,6 +12,9 @@ This page will host a number of Skuid extensions to the Work.com solution.
 
 <img src="WorkDotCom_CommandCenter.png" width="300"></img>
 
+## Watch this in action. 
+We did a webinar showing off this material.  [Watch it here.](https://www.youtube.com/watch?v=6H3k2xOgTpk&t=4s)
+
 ## Getting Started. 
 ### 1. Install Work.com command center  
 The easiest way to get started exploring the Work.com solution is to install this in a scratch org using SFDX.  This means you will need to use your terminal and have git and SFDX installed.  [Read these instructions on installing SFDX](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_app_dev/sfdx_app_dev_setup_dx#Tdxn4tBK-heading7)
@@ -37,7 +40,7 @@ Parts of the Work.com solution are not automatically configured in step 1.  The 
 
 After creating the `Authorization Form Text` record, click into its detail screen. If you followed Salesforce's example, that means clicking `Wellness Authorization Text` in the  `Authorization Form Text` pane. 
 Once you are on the Authorization Form Text detail screen, copy its  `ID` field for use in the Skuid page found below.   It is most easily viewed in the URL of the detail page.  It will be formatted similar to `0cN1700000003KiEAI`.
-For example, in a URL like `https://your-scratch-org-000.lightning.force.com/lightning/r/AuthorizationFormText/0cI3F0000008RM6UAM/view`, the ID would be `0cI3F0000008RM6UAM`.
+For example, in a URL  like `https://your-scratch-org-000.lightning.force.com/lightning/r/AuthorizationFormText/0cI3F0000008RM6UAM/view`, the ID would be `0cI3F0000008RM6UAM`.
 
 ### 3. Install Skuid
 Get the latests version of Skuid installed in the new Scratch org.  Go to the [release page](https://Skuid.com/releases)
