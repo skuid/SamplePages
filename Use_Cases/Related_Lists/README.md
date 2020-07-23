@@ -11,7 +11,7 @@ The Lightning Account detail page is extended by using Skuid to display related 
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: [Download this Design System file](Skuid_Appetizer.designsystem).  Use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](FilteredLists.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](FilteredLists.xml), or save it as an XML file, and upload it as a new page in your Salesforce org.  
 - You can preview this page by itself to see the Skuid functionality,  but to see it on the Lightning Detail page you will have to add the Skuid Page component to a Lightning Page  and refer to this page there. 
 
 ## Notes
