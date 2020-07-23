@@ -18,8 +18,6 @@
 		<field id="Probability"/>
 		<field id="IsClosed"/>
 		<field id="Account.Type"/>
-		<field id="Account.RecordTypeId"/>
-		<field id="Account.RecordType.Name"/>
 	</fields>
 	<conditions>
 		<condition type="multiple" field="StageName" operator="in" inactive="true" enclosevalueinquotes="true" name="__autofilter__StageName" clientorserver="server" state="filterableoff" value=""/>
