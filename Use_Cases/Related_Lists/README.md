@@ -20,7 +20,7 @@ The Lightning Account detail page is extended by using Skuid to display related 
 
 - In addition to inline editing, users can efficiently mass update related records without needing to leave the detail page.
 
-- The “Lead Source” column on the table of Opportunity records is dynamic - conditionally rendering only when the Parent Account’s “Type” field is equal to “Prospect”. Skuid components can listen to changes in Lightning components and reflect those changes immediately. Conditional rendering works across objects and dynamically displays components, fields, columns, buttons, etc. - ensuring the user sees the data they need when and where they need to see it.
+- The “Lead Source” column on the table of Opportunity records is dynamic - conditionally rendering only when the parent account’s “Type” field is equal to “Prospect”. Skuid components can listen to changes in Lightning components and reflect those changes immediately. Conditional rendering works across objects and dynamically displays components, fields, columns, buttons, etc. - ensuring the user sees the data they need when and where they need to see it.
 
 ## Related Links
 - [Documentation about Skuid Lightning Component](https://docs.skuid.com/latest/v2/en/skuid/deploy/salesforce/lightning/#the-skuid-page-lightning-component)
