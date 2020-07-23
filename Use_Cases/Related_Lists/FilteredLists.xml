@@ -11,9 +11,7 @@
 		<field id="CloseDate"/>
 		<field id="OwnerId"/>
 		<field id="Owner.Name"/>
-		<field id="Commission__c"/>
 		<field id="Description"/>
-		<field id="Discount_Percentage__c"/>
 		<field id="ExpectedRevenue"/>
 		<field id="LeadSource"/>
 		<field id="Type"/>
@@ -168,9 +166,7 @@
 				<field id="StageName" uniqueid="fi-1Osp-12405"/>
 				<field id="ForecastCategory" uniqueid="fi-1Osp-12406"/>
 				<field id="Owner.Name" uniqueid="fi-1Osp-12409"/>
-				<field id="Commission__c" horizontalAlignment="right" uniqueid="fi-1Osp-12410"/>
 				<field id="Description" uniqueid="fi-1Osp-12411"/>
-				<field id="Discount_Percentage__c" horizontalAlignment="right" uniqueid="fi-1Osp-12412"/>
 				<field id="ExpectedRevenue" horizontalAlignment="right" uniqueid="fi-1Osp-12413"/>
 				<field id="LeadSource" uniqueid="fi-1Osp-12414" hideable="trueShowByDefault">
 					<renderConditions logictype="and" onhidedatabehavior="keep">
