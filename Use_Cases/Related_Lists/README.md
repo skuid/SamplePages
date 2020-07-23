@@ -16,7 +16,7 @@ The Lightning Account detail page is extended by using Skuid to display related 
 
 ## Notes
 
-- End users can select which columns they want to display by clicking the 3 dot menu at the top right of the table. They also have the ability to export all the records in the table into a .csv. End users can inline edit the related records across both the Opportunity and Case object simultaneously - saving changes on both objects with just one click.
+- End users can select which columns they want to display by clicking the 3 dot menu at the top right of the table. They also have the ability to export all the records in the table into a CSV file. End users can inline edit the related records across both the Opportunity and Case objects simultaneously - saving changes on both objects with just one click.
 
 - In addition to inline editing, users can efficiently mass update related records without needing to leave the detail page.
 
