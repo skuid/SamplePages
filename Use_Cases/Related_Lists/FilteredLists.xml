@@ -1,0 +1,283 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="Skuid_Appetizer">
+<models>
+<model id="RelatedOpps" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" orderby="CloseDate DESC, Amount" nativeuiautosync="true">
+	<fields>
+		<field id="AccountId"/>
+		<field id="Account.Name"/>
+		<field id="Name"/>
+		<field id="Amount"/>
+		<field id="StageName"/>
+		<field id="ForecastCategory"/>
+		<field id="CloseDate"/>
+		<field id="OwnerId"/>
+		<field id="Owner.Name"/>
+		<field id="Commission__c"/>
+		<field id="Description"/>
+		<field id="Discount_Percentage__c"/>
+		<field id="ExpectedRevenue"/>
+		<field id="LeadSource"/>
+		<field id="Type"/>
+		<field id="Probability"/>
+		<field id="IsClosed"/>
+		<field id="Account.Type"/>
+		<field id="Account.RecordTypeId"/>
+		<field id="Account.RecordType.Name"/>
+	</fields>
+	<conditions>
+		<condition type="multiple" field="StageName" operator="in" inactive="true" enclosevalueinquotes="true" name="__autofilter__StageName" clientorserver="server" state="filterableoff" value=""/>
+		<condition type="multiple" field="LeadSource" operator="in" inactive="true" enclosevalueinquotes="true" name="__autofilter__LeadSource" clientorserver="server" state="filterableoff" value=""/>
+		<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" clientorserver="server" state="filterableoff" inactive="true" name="IsClosed"/>
+		<condition type="param" value="id" field="AccountId" fieldtargetobjects="Account" operator="=" enclosevalueinquotes="true"/>
+	</conditions>
+	<actions/>
+</model>
+<model id="RelatedCases_Open" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Case">
+	<fields>
+		<field id="Status"/>
+		<field id="Description"/>
+		<field id="Type"/>
+		<field id="Subject"/>
+	</fields>
+	<conditions>
+		<condition type="param" value="id" field="AccountId" fieldtargetobjects="Account" operator="=" enclosevalueinquotes="true" novaluebehavior="noquery"/>
+		<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" operator="!="/>
+	</conditions>
+	<actions/>
+</model>
+<model id="RelatedCases_Closed" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Case">
+	<fields>
+		<field id="Status"/>
+		<field id="Description"/>
+		<field id="Type"/>
+		<field id="Subject"/>
+	</fields>
+	<conditions>
+		<condition type="param" value="id" field="AccountId" fieldtargetobjects="Account" operator="=" enclosevalueinquotes="true" novaluebehavior="noquery"/>
+		<condition type="fieldvalue" value="true" enclosevalueinquotes="false" field="IsClosed" operator="="/>
+	</conditions>
+	<actions/>
+</model>
+</models>
+<components>
+<skuid__wrapper uniqueid="sk-1tBd-14007">
+	<components>
+		<skuid__chart model="RelatedOpps" maintitle="{{Model.labelPlural}}" type="column" uniqueid="sk-1uHR-6984" stacking="true">
+			<dataaxes>
+				<axis id="axis1"/>
+			</dataaxes>
+			<categoryaxes>
+				<axis id="categories" categorytype="field" field="LeadSource"/>
+			</categoryaxes>
+			<serieslist>
+				<series valuefield="Amount" splittype="template" aggfunction="sum" type="column" splittemplate="{{StageName}}"/>
+			</serieslist>
+			<colors/>
+			<legend layout="horizontal" halign="center" valign="bottom"/>
+			<styles>
+				<spacing/>
+			</styles>
+		</skuid__chart>
+		<skuid__text contents="Opportunities" uniqueid="sk-1vY_-6829" styleSettingsVariant="medium">
+			<styles>
+				<spacing top="2"/>
+			</styles>
+		</skuid__text>
+		<skuid__grid uniqueid="sk-1Oz2-30453" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+			<divisions>
+				<division minWidth="100px" ratio="1" alignSelf="flex-end">
+					<components>
+						<skuid__filterSet model="RelatedOpps" uniqueid="sk-1Oz4-31212">
+							<filters>
+								<skuid__filter uniqueId="sk-1Oz6-31566" type="multiselect" conditionSource="auto" filterMethod="server" labelMode="auto" conditionField="StageName" conditionName="__autofilter__StageName" conditionOperator="in" filterOffOptionLabel="All Stages"/>
+								<skuid__filter uniqueId="sk-1Oz8-32491" type="multiselect" conditionSource="auto" filterMethod="server" labelMode="auto" conditionField="LeadSource" conditionName="__autofilter__LeadSource" conditionOperator="in" filterOffOptionLabel="All Sources"/>
+								<skuid__filter uniqueId="sk-1P7H-63412" type="toggle" conditionSource="manual" filterMethod="server" labelMode="manual" label="Closed Opps">
+									<effects>
+										<effect action="activate" value="" condition="IsClosed"/>
+									</effects>
+									<positioning/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+								</skuid__filter>
+							</filters>
+							<filtering enableSearch="false" instantSearch="false" instantFilters="true"/>
+						</skuid__filterSet>
+					</components>
+				</division>
+				<division alignSelf="flex-end" minWidth="100px" ratio="1">
+					<components>
+						<skuid__buttonSet model="RelatedOpps" uniqueid="sk-1P08-35195">
+							<groups>
+								<skuid__buttonGroup displayType="detached">
+									<buttons>
+										<skuid__button label="Cancel" uniqueId="sk-1P08-35194">
+											<actions>
+												<action type="cancel">
+													<models>
+														<model>RelatedOpps</model>
+														<model>Cases</model>
+													</models>
+												</action>
+											</actions>
+											<renderConditions logictype="and"/>
+											<enableConditions logictype="or">
+												<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="RelatedOpps" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+												<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="RelatedCases_Open" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+											</enableConditions>
+											<styleVariantConditions/>
+										</skuid__button>
+									</buttons>
+								</skuid__buttonGroup>
+								<skuid__buttonGroup>
+									<buttons>
+										<skuid__button label="Save" uniqueId="sk-1P0B-36965" styleSettingsVariant="primary">
+											<actions>
+												<action type="blockUI" message="Saving..."/>
+												<action type="save">
+													<models>
+														<model>RelatedOpps</model>
+														<model>RelatedCases_Open</model>
+													</models>
+												</action>
+												<action type="unblockUI"/>
+											</actions>
+											<renderConditions logictype="and"/>
+											<enableConditions logictype="or">
+												<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="RelatedOpps" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+												<condition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="RelatedCases_Open" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+											</enableConditions>
+											<styleVariantConditions/>
+										</skuid__button>
+									</buttons>
+								</skuid__buttonGroup>
+							</groups>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__buttonSet>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing top="1"/>
+			</styles>
+		</skuid__grid>
+		<skuid__table allowColumnFreezing="dragDrop" model="RelatedOpps" uniqueid="sk-1Osp-11541" mode="read" pageSize="Infinity" allowColumnOrdering="true" allowColumnHiding="true" rowActionsOnLeft="true" showSaveCancel="false" showPageSizeSelect="false" showListFooter="false" enableExport="true">
+			<fields>
+				<field id="AccountId" uniqueid="fi-1Osp-12401"/>
+				<field id="Name" uniqueid="fi-1Osp-12403"/>
+				<field id="Amount" horizontalAlignment="right" uniqueid="fi-1Osp-12404" hideable="trueShowByDefault"/>
+				<field id="StageName" uniqueid="fi-1Osp-12405"/>
+				<field id="ForecastCategory" uniqueid="fi-1Osp-12406"/>
+				<field id="Owner.Name" uniqueid="fi-1Osp-12409"/>
+				<field id="Commission__c" horizontalAlignment="right" uniqueid="fi-1Osp-12410"/>
+				<field id="Description" uniqueid="fi-1Osp-12411"/>
+				<field id="Discount_Percentage__c" horizontalAlignment="right" uniqueid="fi-1Osp-12412"/>
+				<field id="ExpectedRevenue" horizontalAlignment="right" uniqueid="fi-1Osp-12413"/>
+				<field id="LeadSource" uniqueid="fi-1Osp-12414" hideable="trueShowByDefault">
+					<renderConditions logictype="and" onhidedatabehavior="keep">
+						<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="RelatedOpps" sourcetype="fieldvalue" field="Account.Type" value="Prospect"/>
+					</renderConditions>
+					<enableConditions/>
+				</field>
+				<field id="Type" uniqueid="fi-1Osp-12415"/>
+				<field id="Probability" horizontalAlignment="right" uniqueid="fi-1Osp-12416" hideable="trueShowByDefault"/>
+				<field id="CloseDate" uniqueid="fi-1Osp-12407" hideable="trueShowByDefault"/>
+			</fields>
+			<filtering enableSearch="false" searchMethod="client" emptySearchBehavior="query"/>
+			<rowActions>
+				<action type="multi" label="Edit" icon="sk-webicon-lightning-icons:edit">
+					<actions>
+						<action type="runComponentAction" componentid="sk-1Osp-11541" action="toggleModeRow"/>
+					</actions>
+				</action>
+			</rowActions>
+			<massActions>
+				<action type="multi" label="Mass Update">
+					<actions>
+						<action type="massUpdate"/>
+					</actions>
+				</action>
+			</massActions>
+			<filters/>
+			<exportProperties useTableColumns="true"/>
+			<styles>
+				<spacing top="2"/>
+			</styles>
+		</skuid__table>
+		<skuid__text contents="Cases" uniqueid="sk-1veD-18389" styleSettingsVariant="medium">
+			<styles>
+				<spacing top="2"/>
+			</styles>
+		</skuid__text>
+		<skuid__tabSet uniqueid="sk-1vYN-6848">
+			<tabs>
+				<skuid__tabPanel name="Open">
+					<components>
+						<skuid__table allowColumnFreezing="dragDrop" model="RelatedCases_Open" uniqueid="sk-1vYW-8712" mode="read" showSaveCancel="false" pageSize="Infinity" showPageSizeSelect="false" showListFooter="false">
+							<fields>
+								<field id="Status" uniqueid="sk-1vYW-8713"/>
+								<field id="Subject"/>
+								<field id="Description" uniqueid="sk-1vYW-8714"/>
+								<field id="Type" uniqueid="sk-1vYW-8715"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions/>
+							<massActions>
+								<action type="multi" label="Mass Update">
+									<actions>
+										<action type="massUpdate"/>
+									</actions>
+								</action>
+							</massActions>
+							<filters/>
+						</skuid__table>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Closed">
+					<components>
+						<skuid__table allowColumnFreezing="dragDrop" model="RelatedCases_Closed" uniqueid="sk-1PLl-27929" mode="readonly" showSaveCancel="false" pageSize="Infinity" showPageSizeSelect="false" showListFooter="false">
+							<fields>
+								<field id="Status" uniqueid="fi-1PLl-28419"/>
+								<field id="Subject" uniqueid="fi-1vbL-16310"/>
+								<field id="Description" uniqueid="fi-1PLl-28420"/>
+								<field id="Type" uniqueid="fi-1PLl-28421"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions/>
+							<massActions/>
+							<styles>
+								<spacing top="2"/>
+							</styles>
+							<filters/>
+						</skuid__table>
+					</components>
+				</skuid__tabPanel>
+			</tabs>
+			<styles>
+				<spacing top="1"/>
+			</styles>
+		</skuid__tabSet>
+	</components>
+	<styles>
+		<spacing bottom="3.5" left="3.5" right="3.5"/>
+	</styles>
+	<background/>
+	<renderConditions logictype="and"/>
+	<styleVariantConditions/>
+</skuid__wrapper>
+</components>
+<resources>
+	<labels/>
+	<javascript/>
+	<css/>
+	<actionsequences>
+<actionsequence id="0ac96eee-12c8-4a6f-ae5a-92313fc21ad8" label="New Sequence" type="event-triggered" event-scope="global" event-name="network.conflicts">
+	<description/>
+	<actions/>
+</actionsequence>
+</actionsequences>
+</resources>
+<styles>
+	<styleitem type="background" bgtype="none"/>
+</styles>
+<background/>
+</skuid__page>

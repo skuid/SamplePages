@@ -12,6 +12,7 @@ Samples of pages we see used commonly within business applications. Gain inspira
 -  [Mobile List](Mobile_List)
 -  [Opportunity List](Opportunity_List)
 -  [Product Catalog](Product_Selection)
+-  [Related Lists](Related_Lists) 
 -  [Service Request](Service_Request)
 -  [Simple List](Simple_List)
 -  [Task List](Task_List)
