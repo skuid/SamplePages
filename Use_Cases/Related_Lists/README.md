@@ -1,6 +1,6 @@
 # Better Related Lists
 
-The Lightning Account detail page is extended by using Skuid to display related Opportunities and Cases with advanced filtering, sorting, and interactive capabilities. The related lists have multi-field sorting, 10+ columns that can be shown/hidden by individual end users, dynamic filtering of opportunities, two views of Cases (one tab displays open cases, second tab displays closed cases), and a dashboard displaying real time opportunity information.
+The Lightning Account detail page is extended by using Skuid to display related opportunities and cases with advanced filtering, sorting, and interactive capabilities. The related lists have multi-field sorting, 10+ columns that can be shown/hidden by individual end users, dynamic filtering of opportunities, two views of cases (one tab displays open cases, second tab displays closed cases), and a dashboard displaying real time opportunity information.
 
 <img src="OppList.png" width="300"></img>
 
