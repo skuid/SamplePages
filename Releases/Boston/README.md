@@ -13,4 +13,4 @@ Once you have Skuid Boston installed in your sandbox or dev org, you can import 
 
 - API: v2
 - Design System: Download [BostonDemo Design System](BostonDemo.designsystem). In Skuid, go to Design Systems and import the downloaded design system.
-- Demo page: Download the [Demo Page](BostonDemo.xml). In Skuid, create a new page and select Import XML file to import this demo page.
+- Demo page: Download the [demo page](BostonDemo.xml). In Skuid, create a new page and select Import XML file to import this demo page.
