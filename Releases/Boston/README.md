@@ -1,6 +1,6 @@
 # Skuid Boston
 
-Resources to guide you through the features that come with Skuid Boston release (v13.X), including a demo page and an accompanying design system. 
+Resources to guide you through the features that come with Skuid Boston release (v13.x), including a demo page and an accompanying design system. 
 
 ## About Skuid Boston
 

@@ -3625,7 +3625,7 @@
 										</division>
 										<division alignSelf="auto" minWidth="0px" ratio="1">
 											<components>
-												<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Version 13.X&lt;/div&gt;&#10;" uniqueid="sk-ynh-170811" styleSettingsVariant="6a17e8eb-8bbd-4231-905f-6b239207e8e1"/>
+												<skuid__text contents="&lt;div style=&quot;text-align: right;&quot;&gt;Version 13.x&lt;/div&gt;&#10;" uniqueid="sk-ynh-170811" styleSettingsVariant="6a17e8eb-8bbd-4231-905f-6b239207e8e1"/>
 											</components>
 										</division>
 									</divisions>
