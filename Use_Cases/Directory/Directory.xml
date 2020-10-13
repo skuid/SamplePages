@@ -20,9 +20,6 @@
 				<field id="ui_photo" displaytype="FORMULA" uionly="true" label="Photo" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
 					<formula>JOIN_TEXT("","https://randomuser.me/api/portraits/thumb/",IF({{gender}}=="M","men/","women/"), {{index}}, ".jpg")</formula>
 				</field>
-				<field id="index" displaytype="FORMULA" uionly="true" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
-					<formula>{{index}}</formula>
-				</field>
 				<field id="AccountId"/>
 				<field id="Account.Name"/>
 			</fields>

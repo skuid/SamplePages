@@ -141,9 +141,6 @@
 					</picklistentries>
 				</field>
 				<field id="ssn" displaytype="DOUBLE" label="Social Security Number" defaultvaluetype="fieldvalue" ogdisplaytype="TEXT" precision="9" scale="0" helptext="Enter without dash (eg 1112223333)" defaultValue="5555555555"/>
-				<field id="index" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="1" scale="0" defaultvaluetype="fieldvalue">
-					<formula>{{index}}</formula>
-				</field>
 				<field id="borrower_number" displaytype="DOUBLE" ogdisplaytype="TEXT" precision="1" scale="0" defaultvaluetype="fieldvalue" defaultValue="1"/>
 				<field id="ssn_display" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" label="Social Security">
 					<formula>JOIN_TEXT("","***-***-",RIGHT({{ssn}},4))</formula>
