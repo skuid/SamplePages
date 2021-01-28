@@ -3,13 +3,14 @@ There are complicated features provided by Salesforce that provide TONS of value
 
 ## Contents
 
--  [Exposing the results of an APEX Class](APEX_Rest)
 -  [Approval Processes](Approval_Process_Actions) 
--  [Using Salesforce Content in Skuid](Content_Document) 
--  [Making a custom Skuid Home page](Custom_Home_Page) 
+-  [Create Record and Attach File - In One Step](Create_Record_and_File) 
 -  [Exposing Duplicate Record Warnings](Duplicate_Management) 
--  [Using Chatter "Follow" in Skuid](Follow_or_Unfollow_Records) 
+-  [Exposing the results of an APEX Class](APEX_Rest)
 -  [Extending Work.com Command Center with Skuid](Work_Dot_Com_Command_Center)
+-  [Making a custom Skuid Home page](Custom_Home_Page) 
+-  [Using Salesforce Content in Skuid](Content_Document) 
+-  [Using Chatter "Follow" in Skuid](Follow_or_Unfollow_Records) 
 
 ## Instructions
 To use one of the sample pages in these folders, follow these steps:
