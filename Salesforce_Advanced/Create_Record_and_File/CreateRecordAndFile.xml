@@ -1,0 +1,313 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" globalfeedbackenabled="false" theme="Ink">
+	<models>
+		<model id="pageRunner" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="unsavedCase" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="true"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="User" limit="1" query="true" createrowifnonefound="false" processonclient="true" datasource="salesforce" sobject="User" unloadwarningifunsavedchanges="false">
+			<fields>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="userinfo" value="" field="Id" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Case" limit="1" query="false" createrowifnonefound="true" processonclient="true" datasource="salesforce" sobject="Case" unloadwarningifunsavedchanges="false">
+			<fields>
+				<field id="SuppliedCompany"/>
+				<field id="Type"/>
+				<field id="CaseNumber"/>
+				<field id="Reason"/>
+				<field id="Origin"/>
+				<field id="Description"/>
+				<field id="SuppliedEmail"/>
+				<field id="SuppliedName"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="Id"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="contentDocument" limit="1" query="false" createrowifnonefound="false" processonclient="true" datasource="salesforce" sobject="ContentDocument" orderby="CreatedDate DESC" unloadwarningifunsavedchanges="false">
+			<fields>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="CreatedDate"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="ParentId"/>
+				<field id="Title"/>
+			</fields>
+			<conditions>
+				<condition type="userinfo" value="" field="CreatedById" inactive="false" fieldtargetobjects="User" operator="=" enclosevalueinquotes="true" userinfotype="userid"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="contentDocumentLink" limit="" query="false" createrowifnonefound="false" processonclient="true" datasource="salesforce" sobject="ContentDocumentLink" orderby="SystemModstamp DESC" unloadwarningifunsavedchanges="false">
+			<fields>
+				<field id="ContentDocumentId"/>
+				<field id="ContentDocument.Title"/>
+				<field id="SystemModstamp"/>
+				<field id="ContentDocument.CreatedById"/>
+				<field id="ContentDocument.CreatedBy.Name"/>
+				<field id="LinkedEntityId"/>
+				<field id="LinkedEntity.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="ContentDocumentId" fieldtargetobjects="ContentDocument" operator="=" userinfotype="userid" model="contentDocument" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+<skuid__grid uniqueid="sk-16ZA-31793" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+	<divisions>
+		<division minWidth="100px" ratio="1">
+			<components>
+				<skuid__wrapper uniqueid="sk-16eI-82203">
+					<components>
+						<skuid__form uniqueid="sk-16eI-82204" model="Case" mode="edit" showHeader="true" showSaveCancel="false" showErrorsInline="true">
+			<sections>
+				<section title="Section A">
+					<rows>
+						<row>
+							<fields>
+								<skuid__field uniqueid="sk-16eI-82205" id="SuppliedName"/>
+							</fields>
+						</row>
+						<row>
+							<fields>
+								<skuid__field uniqueid="sk-16eI-82206" id="SuppliedCompany"/>
+							</fields>
+						</row>
+						<row>
+							<fields>
+								<skuid__field uniqueid="sk-16eI-82207" id="SuppliedEmail"/>
+							</fields>
+						</row>
+						<row>
+							<fields>
+								<skuid__field uniqueid="sk-16eI-82208" id="Type"/>
+							</fields>
+						</row>
+					<row>
+							<fields>
+								<skuid__field uniqueid="sk-16eI-82209" id="Description"/>
+							</fields>
+						</row>
+					</rows>
+				</section>
+				
+			</sections>
+		<styles>
+					<spacing top="4" bottom="4" left="4" right="4"/>
+				</styles>
+			</skuid__form>
+			<skuid__grid uniqueid="sk-16eI-82210" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+				<divisions>
+					<division minWidth="100px" ratio="1">
+						<components>
+							<skuid__file uniqueid="sk-16eI-82211" datasource="salesforce" displayAs="filename" model="User" storeAs="contentdocumentwithrecord" useLightningUploaderIfAvailable="true" buttonLabel="Add File to Case" buttonIcon="sk-webicon-ink:add-circle">
+			<uploadSuccessActions>
+				<action type="requeryModels" behavior="standard">
+					<models>
+						<model>contentDocument</model>
+						<model>contentDocumentLink</model>
+						<model>contentVersion</model>
+					</models>
+					<onerroractions>
+						<action type="blockUI" message="There was an error" timeout="3000"/>
+					</onerroractions>
+				</action>
+				
+			</uploadSuccessActions>
+			<uploadFailureActions>
+				<action type="multi">
+					<actions>
+						<action type="custom" snippet="test"/>
+					</actions>
+				</action>
+			</uploadFailureActions>
+		<styles>
+							<spacing bottom="4" left="4" right="4"/>
+						</styles>
+					</skuid__file>
+				</components>
+			</division>
+			<division alignSelf="auto" minWidth="100px" ratio="1">
+				<components>
+					<skuid__buttonSet uniqueid="sk-16eI-82212" model="Case">
+			<groups>
+				<skuid__buttonGroup>
+					<buttons>
+						<skuid__button uniqueid="sk-16eI-82213" label="Save" styleSettingsVariant="primary">
+							<actions>
+								<action type="blockUI"/>
+								<action type="save">
+									<models>
+					<model>Case</model>
+				</models>
+									<onerroractions>
+										<action type="blockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="createRow" model="contentDocumentLink" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+									<defaults>
+										<default valuesource="modelmerge" field="LinkedEntityId" fieldtargetobjects="Account,AccountBrand,Asset,AssetRelationship,AssignedResource,Campaign,Case,ChannelProgram,ChannelProgramLevel,ChannelProgramMember,CollaborationGroup,CommSubscription,CommSubscriptionChannelType,CommSubscriptionConsent,CommSubscriptionTiming,ConsumptionSchedule,Contact,ContentWorkspace,Contract,ConversationEntry,CreditMemo,CreditMemoLine,Dashboard,DashboardComponent,DelegatedAccount,EmailMessage,EmailTemplate,EngagementChannelType,EnhancedLetterhead,Event,Invoice,InvoiceLine,Lead,ListEmail,Location,MessagingSession,Network,OperatingHours,Opportunity,Order,OrderItem,Organization,OutgoingEmail,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Product2,Report,ResourceAbsence,ResourcePreference,ReturnOrder,ReturnOrderLineItem,ServiceAppointment,ServiceResource,ServiceResourceSkill,ServiceTerritory,ServiceTerritoryMember,ServiceTerritoryWorkType,Site,SkillRequirement,Solution,Task,Topic,User,WorkType,WorkTypeGroup,WorkTypeGroupMember,skuid__Auth_Provider_Credential__c,skuid__Auth_Provider__c,skuid__Component_Pack__c,skuid__Data_Service__c,skuid__Encryption_Settings__c,skuid__Feedback_Response__c,skuid__Feedback__c,skuid__Image__c,skuid__Loader_Service_Modstamp__c,skuid__Model_Service_Adapter__c,skuid__Model_Service_Credential__c,skuid__Model_Service__c,skuid__Page_Assignment__c,skuid__Page_Interaction__c,skuid__Page_Version__c,skuid__Page__c,skuid__Personalization_Settings__c,skuid__Preferences__c,skuid__Theme__c" enclosevalueinquotes="true" sourcemodel="Case" sourcefield="Id"/>
+									</defaults>
+								</action>
+								<action type="save">
+									<models>
+										<model>contentDocumentLink</model>
+									</models>
+									<onerroractions>
+										<action type="blockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+								<action type="updateRow" fieldmodel="pageRunner" affectedrows="all">
+									<updates>
+										<update valuesource="fieldvalue" field="unsavedCase" enclosevalueinquotes="false" value="false"/>
+									</updates>
+								</action>
+								<action type="unblockUI"/>
+							</actions>
+						</skuid__button>
+						<skuid__button uniqueid="sk-16eI-82214" label="Cancel">
+							<actions>
+								<action type="cancel">
+									<models>
+										<model>case</model>
+									</models>
+								</action>
+								<action type="action-sequence" action-sequence-id="ccaddeb8-d57b-4bb9-93bb-a7cabcb8a3f3">
+									<onerroractions>
+										<action type="blockUI" message="There was an error" timeout="3000"/>
+									</onerroractions>
+								</action>
+							</actions>
+						</skuid__button>
+					</buttons>
+				</skuid__buttonGroup>
+			</groups>
+		<styles>
+				<spacing bottom="4" left="4" right="4"/>
+			</styles>
+		</skuid__buttonSet>
+	</components>
+</division>
+</divisions>
+</skuid__grid>
+</components>
+<styles>
+	<spacing top="4" bottom="4" left="4" right="4"/>
+</styles>
+<background type="color" color="white"/>
+</skuid__wrapper>
+</components>
+</division>
+<division alignSelf="auto" minWidth="100px" ratio="1">
+	<components>
+		<skuid__wrapper uniqueid="sk-16ev-11970">
+			<components>
+				<skuid__wrapper uniqueid="sk-16ZF-36917">
+					<components>
+						<skuid__table allowColumnFreezing="dragDrop" model="contentDocument" uniqueid="sk-16cm-77455" mode="read" showSaveCancel="false" title="Content Document" pageSize="10" showListFooter="false">
+							<fields>
+								<field id="CreatedById" uniqueid="fi-16cm-78074"/>
+								<field id="CreatedBy.Name" uniqueid="fi-16cm-78075"/>
+								<field id="CreatedDate" uniqueid="fi-16cm-78076"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions/>
+							<massActions/>
+						</skuid__table>
+						<skuid__table allowColumnFreezing="dragDrop" model="contentDocumentLink" uniqueid="sk-16eV-87109" mode="read" showSaveCancel="false" title="Document Link" pageSize="10" showListFooter="false">
+							<fields>
+								<field id="ContentDocument.Title" uniqueid="fi-16eV-87707"/>
+								<field id="ContentDocument.CreatedById" uniqueid="fi-16eV-87709"/>
+								<field id="LinkedEntityId" uniqueid="fi-16eV-87711"/>
+							</fields>
+							<filtering enableSearch="false"/>
+							<rowActions/>
+							<massActions/>
+							<styles>
+								<spacing top="4"/>
+							</styles>
+						</skuid__table>
+					</components>
+					<styles>
+						<spacing top="4" bottom="4" left="4" right="4"/>
+					</styles>
+					<background type="color" color="white"/>
+				</skuid__wrapper>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background type="color" color="white"/>
+		</skuid__wrapper>
+	</components>
+</division>
+</divisions>
+</skuid__grid>
+	</components>
+	<resources>
+		<javascript>
+			<jsitem location="inline" name="newInlineJS" cachelocation="false" url="">(function(skuid){
+	var $ = skuid.$;
+	$(document.body).one('pageload',function(){
+		window.onbeforeunload = function(){
+		
+            if(skuid.model.map().pageRunner.getFirstRow().unsavedCase){
+                skuid.actionSequences.getByName('deleteContentDocument').run();
+                // return false;
+            }
+            
+        };
+	});
+})(skuid);</jsitem>
+		</javascript>
+		<actionsequences uniqueid="sk-1j1T-1117">
+			<actionsequence id="ccaddeb8-d57b-4bb9-93bb-a7cabcb8a3f3" label="deleteContentDocument" type="reusable" uniqueid="sk-1jCv-1010">
+				<actions>
+					<action type="markRowsForDeletion" model="contentDocument" affectedrows="all"/>
+					<action type="save">
+						<models>
+							<model>contentDocument</model>
+						</models>
+						<onerroractions>
+							<action type="blockUI" message="There was an error" timeout="3000"/>
+						</onerroractions>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+		</actionsequences>
+		<labels/>
+	</resources>
+<pageregioncontents>
+<pageregioncontent uniqueid="__header">
+	<components>
+		<skuid__layoutRegion sticky="true">
+			<components>
+				<skuid__text contents="New Case Record with Attachment - in one step" uniqueid="sk-16Yd-16144" styleSettingsVariant="increased">
+					<styles>
+						<spacing top="2" bottom="2" left="4"/>
+					</styles>
+				</skuid__text>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background type="color" color="#92cddc"/>
+		</skuid__layoutRegion>
+	</components>
+</pageregioncontent>
+</pageregioncontents>
+<background type="color" color="#f2f2f2"/>
+</skuid__page>
