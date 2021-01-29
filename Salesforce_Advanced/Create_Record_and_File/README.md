@@ -13,7 +13,7 @@ The process is as follows.
 
 Curiously there is always a content document link record created to the user record. You can't delete it. 
 
-We also include some Javscript and an Action Sequence that deletes the uploaded file if the page is abandoned before the new record is saved.  This keeps things clean. 
+We also include some JavaScript and an action sequence that deletes the uploaded file if the page is abandoned before the new record is saved.  This keeps things clean. 
 
 <img src="OneStepForm.png" width="300"></img>
 
@@ -29,5 +29,4 @@ We also include some Javscript and an Action Sequence that deletes the uploaded 
 - [Skuid Community](https://community.skuid.com/discussion/8015548/solutions-for-uploading-a-file-to-a-new-record#latest)
 - [Salesforce Stack Exchange](https://salesforce.stackexchange.com/questions/274499/unable-to-delete-contentdocumentlink)
 - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=OneStepNewRecordAndFile) (for Skuid Employees only)
-
 
