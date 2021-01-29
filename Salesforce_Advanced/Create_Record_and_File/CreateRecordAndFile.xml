@@ -258,7 +258,7 @@
 	</components>
 	<resources>
 		<javascript>
-			<jsitem location="inline" name="newInlineJS" cachelocation="false" url="">(function(skuid){
+			<jsitem location="inline" name="unsavedRecordCheck" cachelocation="false" url="">(function(skuid){
 	var $ = skuid.$;
 	$(document.body).one('pageload',function(){
 		window.onbeforeunload = function(){
