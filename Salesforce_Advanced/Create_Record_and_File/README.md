@@ -6,7 +6,7 @@ Typically Skuid builders have used a 2 step wizard to handle this, with step one
 
 This sample page shows how to create a case and upload a file to that case in the same step. Though this method seems like a bit of hack, it's actually used behind the scenes by Salesforce in some of their standard UI. 
 
-The process is as follows. 
+The process is as follows:
 - File is initially uploaded as a content document linked to the `current user` record. (Everyone has a saved user record.) 
 - After the new record metadata is completed the save button does the following: 
     - Saves the new record. 
