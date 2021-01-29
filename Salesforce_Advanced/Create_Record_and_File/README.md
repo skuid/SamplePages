@@ -1,6 +1,8 @@
 # Create New Record and File in One Step. 
 
-Salesforce content documents and attachments have to be connected to existing records.  This means that you cannot create a new record, and upload a file for that record in the same UI step. Typically Skuid builders have used a 2 step wizard to handle this,  enabling the data entry for a new record, then forcing the user to save that record before they can upload a file or image to it. This is functional,  but not optimal. 
+Salesforce content documents and attachments have to be connected to **existing records.** This means that you cannot create a new record and upload a file for that record in the same UI step. 
+
+Typically Skuid builders have used a 2 step wizard to handle this, with step one being data entry for a new record, then forcing the user to save that record before they can upload a file or image to it in step two. This is functional, but not optimal. 
 
 This sample page shows how to create a case, and upload a file to that case in the same step. Though this method seems like a bit of hack - its actually used behind the scenes by Salesforce in some of their standard UI. 
 
@@ -29,4 +31,3 @@ We also include some JavaScript and an action sequence that deletes the uploaded
 - [Skuid Community](https://community.skuid.com/discussion/8015548/solutions-for-uploading-a-file-to-a-new-record#latest)
 - [Salesforce Stack Exchange](https://salesforce.stackexchange.com/questions/274499/unable-to-delete-contentdocumentlink)
 - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=OneStepNewRecordAndFile) (for Skuid Employees only)
-
