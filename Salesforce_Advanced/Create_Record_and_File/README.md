@@ -4,7 +4,7 @@ Salesforce content documents and attachments have to be connected to **existing 
 
 Typically Skuid builders have used a 2 step wizard to handle this, with step one being data entry for a new record, then forcing the user to save that record before they can upload a file or image to it in step two. This is functional, but not optimal. 
 
-This sample page shows how to create a case, and upload a file to that case in the same step. Though this method seems like a bit of hack - its actually used behind the scenes by Salesforce in some of their standard UI. 
+This sample page shows how to create a case and upload a file to that case in the same step. Though this method seems like a bit of hack, it's actually used behind the scenes by Salesforce in some of their standard UI. 
 
 The process is as follows. 
 - File is initially uploaded as a content document linked to the `current user` record. (Everyone has a saved user record.) 
