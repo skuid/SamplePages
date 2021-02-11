@@ -32,7 +32,7 @@ Instructions:
 Related Links:  
    - [Skuid Documentation](https://docs.skuid.com/latest/en/skuid/deploy/salesforce/user-access/#skuid-sample-page-license-management)
    - [Community Post](https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available)
-   - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=ApprovalProcessActions&id=500U0000004ieGnIAI) (for Skuid Employees only)
+   - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=LicenseManagement) (for Skuid Employees only)
 
 
 
