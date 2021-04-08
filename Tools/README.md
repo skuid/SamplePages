@@ -1,4 +1,4 @@
-# Tools for license management
+# Tools for subscription management
 
 The pages in this directory are useful for understanding how Skuid is being used in your Salesforce Org. 
 
@@ -19,20 +19,20 @@ To see your page in action, click **Preview**.
 
 ## Pages
 
-### <a href="LicenseManagement.xml" download="LicenseManagement.xml">License Management </a>  
+### <a href="SubscriptionManagement.xml" download="SubscriptionManagement.xml">Subcription Management </a>  
 
-Where are all the Skuid licenses in my Salesforce org? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users that don't normally show in the Salesforce assigned license page.
+Where are all the Skuid licenses in my Salesforce org? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users that don't normally show in the Salesforce assigned license page.  It also has a tab where you can see what Skuid Permission sets have been assigned to users in your org. 
 
 Instructions: 
-   - Page API:  V1
+   - Page API:  V2
    - Data source: Uses default Salesforce data source
    - Design System: None 
-   - Page XML:  [Copy the XML from this page](LicenseManagement.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+   - Page XML:  [Copy the XML from this page](SubscriptionManagement.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 Related Links:  
    - [Skuid Documentation](https://docs.skuid.com/latest/en/skuid/deploy/salesforce/user-access/#skuid-sample-page-license-management)
    - [Community Post](https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available)
-   - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=LicenseManagement) (for Skuid Employees only)
+   - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=SubscriptionManagement) (for Skuid Employees only)
 
 
 
