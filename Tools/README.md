@@ -60,7 +60,7 @@ Prior Releases
    - Page API:  V1   
    - Data source: Uses default Salesforce data source
    - Design System: None 
-   - Page XML:  [Copy the XML from this page](SkuidLicenseUse.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+   - Page XML:  [Copy the XML from this page](SiteLicenses_6months.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 Related Links:  
    - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=SkuidLicenseUse_V2) (for Skuid Employees only)
@@ -84,7 +84,7 @@ Prior Releases
    - Page API:  V1  
    - Data source: Uses default Salesforce data source
    - Design System: None 
-   - Page XML:  [Copy the XML from this page](SkuidLicenes_1Month.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+   - Page XML:  [Copy the XML from this page](SiteLicenses_1Month.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 Related Links:  
    - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=SkuidLicenseUse__1Month_V2) (for Skuid Employees only)
