@@ -1,4 +1,4 @@
-# Tools for subscription management
+# Tools for Subscription Management
 
 The pages in this directory are useful for understanding how Skuid is being used in your Salesforce Org. 
 
@@ -19,7 +19,7 @@ To see your page in action, click **Preview**.
 
 ## Pages
 
-### <a href="SubscriptionManagement.xml" download="SubscriptionManagement.xml">Subcription Management </a>  
+### <a href="SubscriptionManagement.xml" download="SubscriptionManagement.xml">Subscription Management </a>  
 
 Where are all the Skuid licenses in my Salesforce org? This report shows all users that have been assigned a Skuid license - even the Guest Site User and Chatter Free users that don't normally show in the Salesforce assigned license page.  It also has a tab where you can see what Skuid Permission sets have been assigned to users in your org. 
 
