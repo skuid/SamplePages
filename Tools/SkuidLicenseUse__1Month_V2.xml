@@ -1,0 +1,210 @@
+<skuid__page showsidebar="false" showheader="false" tabtooverride="UserLogin" theme="Ink" personalizationmode="server">
+	<models>
+		<model id="ProfileSelector_FromUser" limit="1" query="false" createrowifnonefound="true" sobject="User" doclone="" type="">
+			<fields>
+				<field id="ProfileId"/>
+				<field id="Profile.Name"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ProfileId" state="filterableoff" inactive="true" name="ProfileId"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="SkuidPackage" limit="1" query="true" createrowifnonefound="false" sobject="PackageLicense" doclone="" type="">
+			<fields>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Users" limit="" query="true" createrowifnonefound="false" sobject="User" doclone="" type="">
+			<fields>
+				<field id="Id"/>
+				<field id="ProfileId"/>
+				<field id="Profile.Name"/>
+				<field id="Name"/>
+			</fields>
+			<conditions>
+				<condition type="join" value="" field="Id" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
+					<conditions>
+						<condition type="modelmerge" value="" field="PackageLicenseId" operator="=" model="SkuidPackage" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+					</conditions>
+				</condition>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="ProfileId" state="filterableoff" inactive="true" name="ProfileId"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="UserLogin" limit="" query="true" createrowifnonefound="false" sobject="LoginHistory" doclone="" type="aggregate" orderby="CALENDAR_YEAR(LoginTime) DESC, CALENDAR_MONTH(LoginTime) DESC" queryallrows="true" datasource="salesforce">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+				<field id="UserId" name="countdistinctUserId" function="COUNT_DISTINCT"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="LAST_MONTH" enclosevalueinquotes="false" field="LoginTime"/>
+				<condition type="modelmerge" value="" field="UserId" operator="in" model="Users" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery" state=""/>
+				<condition type="join" value="" field="UserId" operator="in" enclosevalueinquotes="true" joinobject="UserPackageLicense" joinfield="UserId">
+					<conditions>
+						<condition type="modelmerge" value="" field="PackageLicenseId" operator="=" model="SkuidPackage" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="deactivate"/>
+					</conditions>
+				</condition>
+				<condition type="fieldvalue" value="Browser" enclosevalueinquotes="true" field="Application" state=""/>
+			</conditions>
+			<actions/>
+			<groupby method="simple">
+				<field id="LoginTime" alias="LoginYear" function="CALENDAR_YEAR" name="LoginYear"/>
+				<field id="LoginTime" alias="LoginMonth" function="CALENDAR_MONTH" name="LoginMonth"/>
+			</groupby>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2xLh-13556">
+			<components>
+				<skuid__grid flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+					<divisions>
+						<division ratio="0" alignSelf="flex-end" maxWidth="600px">
+							<components>
+								<skuid__form model="ProfileSelector_FromUser" mode="edit" labelPlacement="beside" showHeader="true" showSaveCancel="false" saveIcon="" cancelIcon="" minLabelWidth="150px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+									<columns>
+										<column maxWidth="100%">
+											<sections>
+												<section collapsible="no" showHeading="false" title="Section A">
+													<fields>
+														<skuid__field id="ProfileId" displayAs="PICKLIST" horizontalAlignment="" label="Choose Profile" addNoneOption="true" noneLabel="All Profiles"/>
+													</fields>
+												</section>
+											</sections>
+										</column>
+									</columns>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__form>
+							</components>
+						</division>
+						<division ratio="0" minWidth="350" alignSelf="center">
+							<components>
+								<skuid__buttonSet uniqueid="sk-2xLt-6735" model="UserLogin">
+									<groups>
+										<skuid__buttonGroup displayType="detached">
+											<buttons>
+												<skuid__button icon="sk-webicon-font-awesome:search" label="Filter by Profile" styleSettingsVariant="primary">
+													<actions>
+														<action type="updateCondition" model="Users" condition="ProfileId" value="{{$Model.ProfileSelector_FromUser.data.0.ProfileId}}" behavior="set"/>
+														<action type="requeryModels" model="Users" behavior="standard">
+															<models>
+																<model>Users</model>
+																<model>UserLogin</model>
+															</models>
+														</action>
+													</actions>
+												</skuid__button>
+												<skuid__button icon="" label="Show All Profiles">
+													<actions>
+														<action type="cancel">
+															<models>
+																<model>ProfileSelector_FromUser</model>
+															</models>
+														</action>
+														<action type="deactivateCondition" model="Users" condition="ProfileId"/>
+														<action type="requeryModels" behavior="standard">
+															<models>
+																<model>Users</model>
+																<model>UserLogin</model>
+															</models>
+														</action>
+														<action type="createRow" model="ProfileSelector_FromUser" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+													</actions>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+								</skuid__buttonSet>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components/>
+						</division>
+					</divisions>
+					<styles>
+						<spacing bottom="4"/>
+					</styles>
+				</skuid__grid>
+				<skuid__grid flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+					<divisions>
+						<division ratio="0" minWidth="150px" alignSelf="auto" maxWidth="150px">
+							<components>
+								<skuid__header model="UserLogin" title="{{$Model.Users.data.length}}" subtitle="Total Users">
+									<skuid__buttonSet>
+										<groups>
+											<skuid__buttonGroup>
+												<buttons/>
+											</skuid__buttonGroup>
+										</groups>
+									</skuid__buttonSet>
+									<styles>
+										<spacing top="4"/>
+									</styles>
+								</skuid__header>
+							</components>
+						</division>
+						<division ratio="1" alignSelf="auto">
+							<components>
+								<skuid__table cancelIcon="" moreActionsButtonIcon="" showListHeader="true" showListFooter="true" mode="readonly" model="UserLogin" pageSize="10" saveIcon="" showSaveCancel="false" rowHeightStrategy="fit" allowColumnHiding="true">
+									<fields>
+										<field id="LoginTime" name="LoginYear" displayAs="" horizontalAlignment="" label="Calendar Year" uniqueid="fi-2t9m-6836"/>
+										<field id="LoginTime" name="LoginMonth" displayAs="" horizontalAlignment="" label="Calendar Month" uniqueid="fi-2t9m-6837"/>
+										<field id="Id" name="countId" displayAs="" horizontalAlignment="" label="# of Logins" uniqueid="fi-2t9m-6838"/>
+										<field id="UserId" name="countdistinctUserId" label="Distinct Users"/>
+									</fields>
+									<massActions/>
+									<filtering emptySearchBehavior="query" enableSearch="false" searchMethod="server">
+										<searchFields/>
+									</filtering>
+									<exportProperties useTableColumns="true" enableExportOptionOnTable="false"/>
+									<sorting enable="false"/>
+								</skuid__table>
+							</components>
+						</division>
+					</divisions>
+				</skuid__grid>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<javascript/>
+		<labels/>
+		<actionsequences/>
+	</resources>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__header model="ProfileSelector_FromUser" title="# of Logins by Calendar Month" subtitle="Users with Skuid License">
+							<skuid__buttonSet>
+								<groups>
+									<skuid__buttonGroup>
+										<buttons/>
+									</skuid__buttonGroup>
+								</groups>
+							</skuid__buttonSet>
+							<styles>
+								<spacing top="2" bottom="2" left="4"/>
+							</styles>
+						</skuid__header>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#d8d8d8"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>
