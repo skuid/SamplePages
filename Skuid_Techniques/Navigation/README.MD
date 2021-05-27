@@ -138,7 +138,7 @@ All the values for the navigation need to be stored in a data table. This would 
 - Page include to be loaded 
 - Business rule target
 
-In the list - add an icon field type.  It's properties will merge model data - letting you dynamically show the icon defined in your data. 
+In the List - add an icon field type.  Its properties will merge model data - letting you dynamically show the icon defined in your data. 
 In a Deck there is no stand alone icon. But you can use the following html in a text component to show the icon:  
 
 ```xml
