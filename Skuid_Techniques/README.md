@@ -6,6 +6,8 @@ We know its true - some of the coolest capabilities provided by Skuid are compli
 - [Adding related records to drawers](Drawers_Related_Records)
 - [Advanced Filtering Techniques](Filters_Using_Forms)
 - [Key Indicators Dashboard](KeyIndicators)
+- [Navigation - Advanced Tehcniques](Navigation)
+
 
 
 ## Instructions

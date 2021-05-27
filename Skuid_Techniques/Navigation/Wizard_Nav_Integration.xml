@@ -1,0 +1,596 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="SkuidApp_Clone">
+	<models>
+		<model id="UIO" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field id="Counter" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" readonly="false" returntype="DOUBLE" defaultValue="3">
+					<formula>Random()</formula>
+				</field>
+				<field displaytype="TEXT" length="255" id="NavPrimary"/>
+				<field id="NavSecondary" displaytype="TEXT" length="255"/>
+				<field id="Collapsed" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="false"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__masthead uniqueid="sk-2GXF-1751">
+			<divisions>
+				<division type="logo" flex="0">
+					<components>
+						<skuid__image source="resource" height="custom" heightCustom="100%" datasource="SkuidLocal" resource="skuid_icon_logo_temp" resourceContentType="image/png" imageWidth="50px">
+							<interactions/>
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4"/>
+							</styles>
+						</skuid__image>
+					</components>
+				</division>
+				<division type="separator" flex="0" minWidth="200px"/>
+				<division type="search" flex="0">
+					<components>
+						<skuid__text contents="Navigation Study - Wizard Integration" uniqueid="sk-2GbE-9735" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4"/>
+							</styles>
+						</skuid__text>
+					</components>
+				</division>
+				<division type="separator" flex="0" minWidth="200px"/>
+				<division type="navigation" flex="3">
+					<components>
+						<skuid__navigation type="horizontal">
+							<itemGroups>
+								<itemGroup>
+									<items>
+										<item label="Header 1" uniqueid="sk-2Gg7-6472" icon="sk-webicon-ink:ban">
+											<actions>
+												<action type="redirect" window="self"/>
+											</actions>
+										</item>
+										<item label="Header 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
+											<actions>
+												<action type="redirect" window="self"/>
+											</actions>
+										</item>
+										<item label="Header 3" uniqueid="sk-2Gg8-11152" icon="sk-webicon-ink:clock">
+											<actions>
+												<action type="redirect" window="self"/>
+											</actions>
+										</item>
+									</items>
+								</itemGroup>
+							</itemGroups>
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4"/>
+							</styles>
+						</skuid__navigation>
+					</components>
+				</division>
+			</divisions>
+		</skuid__masthead>
+		<skuid__grid uniqueid="sk-2GXG-2068" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+			<divisions>
+				<division minWidth="0px" ratio="0" alignSelf="auto">
+					<components>
+						<skuid__verticalNavigation uniqueid="sk-2GXn-3202" styleSettingsVariant="borderless" allowHTML="true">
+							<items>
+								<item label="One" uniqueid="One" icon="sk-webicon-ink:bucket">
+									<actions>
+										<action type="redirect" window="self" url="#One"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="One"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="One"/>
+									</selectedConditions>
+									<items>
+										<item uniqueid="OneOne" label="Sub One" icon="sk-webicon-ink:add-page">
+											<actions>
+												<action type="redirect" window="self" url="#OneOne"/>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub1"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneOne"/>
+													</updates>
+												</action>
+											</actions>
+											<renderConditions logictype="and"/>
+											<selectedConditions logictype="and">
+												<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="OneOne"/>
+											</selectedConditions>
+										</item>
+										<item label="Sub Two" uniqueid="OneTwo" icon="sk-webicon-ink:arrow-down">
+											<actions>
+												<action type="redirect" window="self" url="#OneTwo"/>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub2"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneTwo"/>
+													</updates>
+												</action>
+											</actions>
+											<renderConditions logictype="and"/>
+											<selectedConditions logictype="and">
+												<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="OneTwo"/>
+											</selectedConditions>
+										</item>
+										<item label="Sub Three" uniqueid="OneThree" icon="sk-webicon-ink:broadcast">
+											<actions>
+												<action type="redirect" window="self" url="#OneThree"/>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub3"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneThree"/>
+													</updates>
+												</action>
+											</actions>
+											<renderConditions logictype="and"/>
+											<selectedConditions logictype="and">
+												<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="OneThree"/>
+											</selectedConditions>
+										</item>
+									</items>
+								</item>
+								<item label="Two" uniqueid="Two" icon="sk-webicon-ink:lightbulb">
+									<actions>
+										<action type="redirect" window="self" url="#Two"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Two"/>
+									</selectedConditions>
+								</item>
+								<item label="Three" uniqueid="Three" icon="sk-webicon-ink:ext-link">
+									<actions>
+										<action type="redirect" window="self" url="#Three"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Three"/>
+									</selectedConditions>
+								</item>
+								<item label="- Section Break - " uniqueid="sk-2GYz-25436" type="section">
+									<actions/>
+								</item>
+								<item label="Four" uniqueid="Four" icon="sk-webicon-ink:formula">
+									<actions>
+										<action type="redirect" window="self" url="#Four"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Four"/>
+									</selectedConditions>
+								</item>
+								<item label="Five" uniqueid="Five" icon="sk-webicon-ink:change-record-type">
+									<actions>
+										<action type="redirect" window="self" url="#Five"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Five"/>
+									</selectedConditions>
+								</item>
+								<item label="Six" uniqueid="Six" icon="sk-webicon-ink:backpack">
+									<actions>
+										<action type="redirect" window="self" url="#Six"/>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step6"/>
+										<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Six"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UIO" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Six"/>
+									</selectedConditions>
+								</item>
+							</items>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__verticalNavigation>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="1">
+					<components>
+						<skuid__wizard uniqueid="sk-2ftV-7225" hideStepLabels="true">
+							<steps>
+								<step stepId="step1" stepLabel="Step 1">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 1" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub1"/>
+												<action type="redirect" window="self" url="#OneOne"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneOne"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="stepSub1" stepLabel="Sub Step One">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Sub Step 1" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+												<action type="redirect" window="self" url="#One"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="One"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub2"/>
+												<action type="redirect" window="self" url="#OneTwo"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneTwo"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="stepSub2" stepLabel="Sub Step 2">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Sub Step 2" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub1"/>
+												<action type="redirect" window="self" url="#OneOne"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneOne"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub3"/>
+												<action type="redirect" window="self" url="#OneThree"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneThree"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="stepSub3" stepLabel="Sub Step 3">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Sub Step 3" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub2"/>
+												<action type="redirect" window="self" url="#OneTwo"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneTwo"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+												<action type="redirect" window="self" url="#Two"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step2" stepLabel="Step 2">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 2" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="stepSub3"/>
+												<action type="redirect" window="self" url="#OneThree"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="OneThree"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+												<action type="redirect" window="self" url="#Three"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step3" stepLabel="Step 3">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 3" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+												<action type="redirect" window="self" url="#Two"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+												<action type="redirect" window="self" url="#Four"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step4" stepLabel="Step 4">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 4" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+												<action type="redirect" window="self" url="#Three"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
+												<action type="redirect" window="self" url="#Five"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step5" stepLabel="Step 5">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 5" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+												<action type="redirect" window="self" url="#Four"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step6"/>
+												<action type="redirect" window="self" url="#Six"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Six"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step6" stepLabel="Step 6">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="90">
+											<components>
+												<skuid__text contents="This is Step 6" uniqueid="sk-2ftj-13130" styleSettingsVariant="huge">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#e5b9b7"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
+												<action type="redirect" window="self" url="#Five"/>
+												<action type="updateRow" fieldmodel="UIO" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+							</steps>
+						</skuid__wizard>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing top="2" bottom="2" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+</skuid__page>
