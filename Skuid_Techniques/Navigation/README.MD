@@ -113,7 +113,7 @@ We do not have Enable Condition logic for the interactions associated with Deck 
 ### Collapsable Nav 
 Just like the Vertical Navigation component  - the most straightforward method to have collapsibility is to have 2 components and use conditional rendering to only show one. 
 
-The list component needs to implement column based conditional rendering.  (Enhancement!) 
+The List component needs to implement column based conditional rendering.
 
 A deck component will not work so well here.  The collapsed state will want to wrap individual cards instead of shrinking the entire column.   This is a work in progress. 
  
