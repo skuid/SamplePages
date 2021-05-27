@@ -44,7 +44,7 @@ Note that selecting a second nav element will clear all Selected state condition
 ### Display data in the navigation element 
 You can include model data in the labels of your navigation component.  Let users know how many open tasks there are before they open that navigation element. How many questions are still outstanding in that section of the survey. You can also use conditional merge syntax to show or hide HTML elements in the navigation labels based on underlying data.  Show that goofy smiley face icon if all tasks are complete.  
 
-Note that the navigation component is not connected to a model,  so you will have to use global merge syntax  `{{$Model.modelname.data.0.fieldname}}`.  In V2, components do not yet listen to changes of data through global merge syntax.  The indicators will not change unless you reload the page.  (Coming enhancement) 
+Note that the navigation component is not connected to a model,  so you will have to use global merge syntax  `{{$Model.modelname.data.0.fieldname}}`.  In V2, components do not yet listen to changes of data through global merge syntax.  The indicators will not change unless you reload the page.
 
 This challenge might point you to using the data iterator components for your navigation. See below. 
 
