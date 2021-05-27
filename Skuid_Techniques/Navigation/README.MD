@@ -108,7 +108,7 @@ Because the iterator components are bound to model data - it is easier to use da
 You can also use style variant conditions to highlight style of a wrapper in a deck card if certain conditions are met.  Alert to “urgent” attention needed on one navigation element. 
 
 ### Disable navigation element based on data.  
-We do not have Enable Condition logic for the interactions associated with Deck Cards or List items.  (Enhancement!)   Instead use Branch Actions to prevent the action for particular scenarios.  You have to define the actions for each navigation item,  but this allows you to have different logic rules for each item.  Your failure branch can post a message about why the page load is not happening. 
+We do not have Enable Condition logic for the interactions associated with Deck cards or List items.  Instead use Branch Actions to prevent the action for particular scenarios.  You have to define the actions for each navigation item,  but this allows you to have different logic rules for each item.  Your failure branch can post a message about why the page load is not happening. 
 
 ### Collapsable Nav 
 Just like the vertical navigation component  - the most straightforward method to have collapsibility is to have 2 components and use conditional rendering to only show one. 
