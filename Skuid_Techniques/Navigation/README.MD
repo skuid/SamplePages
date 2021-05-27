@@ -111,7 +111,7 @@ You can also use style variant conditions to highlight style of a wrapper in a d
 We do not have Enable Condition logic for the interactions associated with Deck cards or List items.  Instead use Branch Actions to prevent the action for particular scenarios.  You have to define the actions for each navigation item,  but this allows you to have different logic rules for each item.  Your failure branch can post a message about why the page load is not happening. 
 
 ### Collapsable Nav 
-Just like the vertical navigation component  - the most straightforward method to have collapsibility is to have 2 components and use conditional rendering to only show one. 
+Just like the Vertical Navigation component  - the most straightforward method to have collapsibility is to have 2 components and use conditional rendering to only show one. 
 
 The list component needs to implement column based conditional rendering.  (Enhancement!) 
 
