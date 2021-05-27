@@ -128,7 +128,7 @@ With a Deck - a secondary deck can be conditionally rendered only to show when t
 Here the solution is not as straightforward as the Navigation component. The list will not listen to URL hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
 
 ### Data Driven navigation. 
-With a list - you can retrieve model data to drive exactly what will show on the page.  This would allow you to control the navigation by user, or by profile, or by progress made. 
+With a List - you can retrieve model data to drive exactly what will show on the page.  This would allow you to control the navigation by user, or by profile, or by progress made. 
 
 Here are a few notes on setting this up. 
 
