@@ -115,7 +115,7 @@ Just like the Vertical Navigation component  - the most straightforward method t
 
 The List component needs to implement column based conditional rendering.
 
-A deck component will not work so well here.  The collapsed state will want to wrap individual cards instead of shrinking the entire column.   This is a work in progress. 
+A Deck component will not work so well here.  The collapsed state will want to wrap individual cards instead of shrinking the entire column.
  
 ### Secondary navigation 
 The list component allows drawers.  You can configure the drawers to open on click or with the secondary drawer icon.   You can put a second list in the drawer and use context conditions to ensure that the correct sub nav items show up under their parents. 
