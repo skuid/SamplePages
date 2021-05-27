@@ -125,7 +125,7 @@ A current limitation is that the selected state of child lists do not interact w
 With a Deck - a secondary deck can be conditionally rendered only to show when the “selected” flag on a navigation element is true.  A branch on the interaction can set the value back to false if it is already true - and in that way reproduce the open / close toggle of the navigation component or list drawers. 
 
 ### Remember my place. 
-Here the solution is not as straightforward as the navigation component. The list will not listen to URL Hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
+Here the solution is not as straightforward as the Navigation component. The list will not listen to URL hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
 
 ### Data Driven navigation. 
 With a list - you can retrieve model data to drive exactly what will show on the page.  This would allow you to control the navigation by user, or by profile, or by progress made. 
