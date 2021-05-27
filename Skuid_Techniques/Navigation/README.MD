@@ -49,7 +49,7 @@ Note that the navigation component is not connected to a model,  so you will hav
 This challenge might point you to using the data iterator components for your navigation. See below. 
 
 ### Disable navigation element based on data.  
-We do not have Enable Condition logic for navigation items.  (Enhancement!) Instead use Branch Actions to disable the navigation item by not allowing the primary actions to be completed. You have to define the branch logic for each navigation item,  but this allows you to have different logic rules for each item.  The failure branch can post a message about why the item is disabled.  
+We do not have Enable Condition logic for navigation items.  Instead use Branch Actions to disable the navigation item by not allowing the primary actions to be completed. You have to define the branch logic for each navigation item,  but this allows you to have different logic rules for each item.  The failure branch can post a message about why the item is disabled.  
 
 ### Collapsible navigation 
 You will need to create two copies of the component (one with label and the other without) and use a ui-only field to control which shows.  Put a form control at the bottom of your navigation to let the user indicate if they want the collapsed or expanded navigation. 
