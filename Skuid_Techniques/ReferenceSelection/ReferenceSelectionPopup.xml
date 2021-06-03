@@ -1,0 +1,240 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
+	<models>
+		<model id="NewTask" limit="1" query="false" datasource="salesforce" sobject="Task" createrowifnonefound="true">
+			<fields>
+				<field id="RecordTypeId"/>
+				<field id="RecordType.Name"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="ActivityDate"/>
+				<field id="Subject"/>
+				<field id="WhatId"/>
+				<field id="What.Name"/>
+				<field id="Description"/>
+			</fields>
+			<conditions>
+				<condition type="datasourceuserinfo" value="" field="OwnerId" fieldtargetobjects="Group,User" operator="=" userinfotype="userid" enclosevalueinquotes="true"/>
+				<condition type="datasourceuserinfo" value="" field="Owner.Name" operator="=" enclosevalueinquotes="true" userinfotype="name"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Accounts" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Account" orderby="Name ASC">
+			<fields>
+				<field id="RecordTypeId"/>
+				<field id="RecordType.Name"/>
+				<field id="Name"/>
+				<field id="Type"/>
+				<field id="BillingCity"/>
+				<field id="BillingState"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__grid uniqueid="sk-Ukw-14840" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="4">
+			<divisions>
+				<division minWidth="400px" ratio="1" alignSelf="auto">
+					<components>
+						<skuid__wrapper uniqueid="sk-Un0-46780">
+							<components>
+								<skuid__form showErrorsInline="true" model="NewTask" uniqueid="sk-Ul7-18425" mode="edit">
+									<columns>
+										<column>
+											<sections>
+												<section title="New Section" showHeading="false">
+													<fields>
+														<skuid__field id="OwnerId" uniqueId="sk-UlB-19207" tokenizeSearch="false"/>
+														<skuid__field type="COMBO" label="Related To" uniqueId="sk-UlC-19767" readOnly="false" template="{{#WhatId}}{{WhatId}}{{/WhatId}}{{^WhatId}}Click to Search Account{{/WhatId}}">
+															<interactions>
+																<interaction type="tap">
+																	<action type="branch" whenfinished="continue" model="NewTask" label="If WhatId is already there - populate search on Accounts">
+																		<formula>NOT(ISBLANK({{What.Name}}))</formula>
+																		<iftrueactions>
+																			<action type="searchModel" model="Accounts" searchMethod="server" search="{{What.Name}}"/>
+																		</iftrueactions>
+																	</action>
+																	<action type="showModal">
+																		<skuid__modal title="Choose Related Account" width="640px" showCloseIcon="false">
+																			<components>
+																				<skuid__grid uniqueid="sk-Une-50861" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="2">
+																					<divisions>
+																						<division minWidth="100px" alignSelf="auto" ratio="0">
+																							<components>
+																								<skuid__filterSet model="Accounts" uniqueid="sk-UmE-33166" resetButtonBehavior="hide">
+																									<filters/>
+																									<filtering enableSearch="true" instantSearch="false" instantFilters="true" searchMethod="server" tokenizeSearch="false" emptySearchBehavior="remove" searchPlaceholder="Find Existing Account" searchButton="insetIcon"/>
+																									<sorting enable="false"/>
+																								</skuid__filterSet>
+																							</components>
+																						</division>
+																						<division alignSelf="center" minWidth="100px" ratio="0">
+																							<components>
+																								<skuid__buttonSet model="NewTask" uniqueid="sk-Unh-52648">
+																									<groups>
+																										<skuid__buttonGroup uniqueId="sk-Unh-52646">
+																											<buttons>
+																												<skuid__button label="Add New Account" uniqueId="sk-Unh-52647" icon="sk-webicon-ink:add-circle">
+																													<actions>
+																														<action type="createRow" model="Accounts" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context">
+																															<defaults>
+																																<default valuesource="fieldvalue" field="Name" enclosevalueinquotes="true" value="{{$Model.Accounts.conditions.0.value}}"/>
+																															</defaults>
+																														</action>
+																													</actions>
+																												</skuid__button>
+																											</buttons>
+																										</skuid__buttonGroup>
+																									</groups>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__buttonSet>
+																							</components>
+																						</division>
+																					</divisions>
+																					<styles>
+																						<spacing bottom="2"/>
+																					</styles>
+																					<background/>
+																				</skuid__grid>
+																				<skuid__table allowColumnFreezing="dragDrop" model="Accounts" uniqueid="sk-UmA-32656" mode="read" showSaveCancel="false" allowSortingByColumn="true">
+																					<fields>
+																						<field id="Name" uniqueid="fi-UmP-42516" label="Name"/>
+																						<field id="Type" uniqueid="fi-UmP-42517" label="Type"/>
+																						<field id="BillingCity" uniqueid="fi-UmP-42518" label="City"/>
+																						<field id="BillingState" label="State"/>
+																					</fields>
+																					<filtering enableSearch="false"/>
+																					<actions/>
+																					<rowActions>
+																						<action type="multi" icon="sk-webicon-ink:autocomplete">
+																							<tooltip position="top" text="Relate to new Task"/>
+																							<actions>
+																								<action type="updateRow" fieldmodel="NewTask" affectedrows="context">
+																									<updates>
+																										<update valuesource="fieldvalue" field="WhatId" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,DelegatedAccount,Demo_Inventory_Entry__c,EmailAlert__c,Fitting__c,Image,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Location,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c" enclosevalueinquotes="true" value="{{Id}}"/>
+																									</updates>
+																								</action>
+																								<action type="closeModals" closebehavior="topmost"/>
+																								<action type="abandonRows" model="Accounts" affectedrows="all"/>
+																							</actions>
+																							<renderConditions logictype="and">
+																								<renderCondition fieldmodel="Accounts" sourcetype="rowproperty" sourceproperty="isSaved" enclosevalueinquotes="false"/>
+																							</renderConditions>
+																						</action>
+																					</rowActions>
+																					<massActions/>
+																					<exportProperties useTableColumns="true"/>
+																					<sorting enable="false"/>
+																					<renderConditions logictype="and">
+																						<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="Accounts" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+																					</renderConditions>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing bottom="2"/>
+																					</styles>
+																				</skuid__table>
+																			</components>
+																			<buttons>
+																				<skuid__button label="Save New Account" uniqueId="sk-UoG-63505" styleSettingsVariant="primary">
+																					<actions>
+																						<action type="save">
+																							<models>
+																								<model>Accounts</model>
+																							</models>
+																						</action>
+																						<action type="updateRow" fieldmodel="NewTask" affectedrows="context">
+																							<updates>
+																								<update valuesource="fieldvalue" field="WhatId" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,DelegatedAccount,Demo_Inventory_Entry__c,EmailAlert__c,Fitting__c,Image,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Location,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c" enclosevalueinquotes="true" value="{{Id}}"/>
+																							</updates>
+																						</action>
+																						<action type="closeModals" closebehavior="close"/>
+																						<action type="abandonRows" model="Accounts" affectedrows="all"/>
+																					</actions>
+																					<renderConditions logictype="and">
+																						<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Accounts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																					</renderConditions>
+																					<enableConditions/>
+																					<styleVariantConditions/>
+																				</skuid__button>
+																				<skuid__button label="Cancel" uniqueId="sk-UoG-63855">
+																					<actions>
+																						<action type="cancel">
+																							<models>
+																								<model>Accounts</model>
+																							</models>
+																						</action>
+																					</actions>
+																					<renderConditions logictype="and">
+																						<renderCondition type="fieldvalue" enclosevalueinquotes="false" fieldmodel="Accounts" sourcetype="modelproperty" sourceproperty="hasChanged" value="true" operator="="/>
+																					</renderConditions>
+																					<enableConditions/>
+																					<styleVariantConditions/>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__modal>
+																	</action>
+																</interaction>
+															</interactions>
+														</skuid__field>
+														<skuid__field id="ActivityDate" uniqueId="sk-UlB-19220"/>
+														<skuid__field id="Subject" uniqueId="sk-UlB-19233"/>
+														<skuid__field id="Description"/>
+													</fields>
+												</section>
+											</sections>
+										</column>
+									</columns>
+									<styles>
+										<spacing top="2" bottom="2" left="2" right="2"/>
+									</styles>
+								</skuid__form>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="white"/>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="400px" ratio="1">
+					<components/>
+				</division>
+			</divisions>
+			<styles>
+				<spacing top="4" bottom="4" left="4"/>
+			</styles>
+			<background/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="New Task" uniqueid="sk-UkL-2399" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4" styleSettingsVariant="large"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#a5a5a5"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background type="color" color="#f2f2f2"/>
+</skuid__page>
