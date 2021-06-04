@@ -2,8 +2,6 @@
 	<models>
 		<model id="NewTask" limit="1" query="false" datasource="salesforce" sobject="Task" createrowifnonefound="true">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="OwnerId"/>
 				<field id="Owner.Name"/>
 				<field id="ActivityDate"/>
