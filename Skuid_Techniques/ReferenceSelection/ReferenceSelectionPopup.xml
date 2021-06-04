@@ -96,10 +96,10 @@
 																				</skuid__grid>
 																				<skuid__table allowColumnFreezing="dragDrop" model="Accounts" uniqueid="sk-UmA-32656" mode="read" showSaveCancel="false" allowSortingByColumn="true">
 																					<fields>
-																						<field id="Name" uniqueid="fi-UmP-42516" label="Name"/>
+																						<field id="Name" uniqueid="fi-UmP-42516" label="Name" redirectType="none"/>
 																						<field id="Type" uniqueid="fi-UmP-42517" label="Type"/>
 																						<field id="BillingCity" uniqueid="fi-UmP-42518" label="City"/>
-																						<field id="BillingState" label="State"/>
+																						<field id="BillingState" label="State" uniqueid="fi-3OVU-47020"/>
 																					</fields>
 																					<filtering enableSearch="false"/>
 																					<actions/>
@@ -110,6 +110,7 @@
 																								<action type="updateRow" fieldmodel="NewTask" affectedrows="context">
 																									<updates>
 																										<update valuesource="fieldvalue" field="WhatId" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,DelegatedAccount,Demo_Inventory_Entry__c,EmailAlert__c,Fitting__c,Image,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Location,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c" enclosevalueinquotes="true" value="{{Id}}"/>
+																										<update valuesource="fieldvalue" field="What.Name" enclosevalueinquotes="true" value="{{Name}}"/>
 																									</updates>
 																								</action>
 																								<action type="closeModals" closebehavior="topmost"/>
@@ -135,17 +136,21 @@
 																			<buttons>
 																				<skuid__button label="Save New Account" uniqueId="sk-UoG-63505" styleSettingsVariant="primary">
 																					<actions>
+																						<action type="blockUI" styleSettingsVariant="dark" message="Saving New Account"/>
 																						<action type="save">
 																							<models>
 																								<model>Accounts</model>
 																							</models>
 																						</action>
+																						<action type="blockUI" styleSettingsVariant="dark" message="Updating Task with New Account  ID: "/>
 																						<action type="updateRow" fieldmodel="NewTask" affectedrows="context">
 																							<updates>
-																								<update valuesource="fieldvalue" field="WhatId" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,DelegatedAccount,Demo_Inventory_Entry__c,EmailAlert__c,Fitting__c,Image,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Location,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c" enclosevalueinquotes="true" value="{{Id}}"/>
+																								<update valuesource="fieldvalue" field="WhatId" fieldtargetobjects="Account,Asset,AssetRelationship,Bundle__c,Campaign,Case,Case_Response__c,Case_Upload__c,ChannelProgram,ChannelProgramLevel,ContactRequest,Contact_Address__c,Contract,Customer__c,DelegatedAccount,Demo_Inventory_Entry__c,EmailAlert__c,Fitting__c,Image,KW_Child_1__c,KW_Child_2__c,KW_Child_3__c,KW_Master__c,ListEmail,Location,Marketing_Consent__c,NewCustomerReq__c,Opp_Child_Stale__c,Opportunity,Opportunity_Story__c,PartnerFundAllocation,PartnerFundClaim,PartnerFundRequest,PartnerMarketingBudget,PartyConsent,Phone_Product__c,Product2,Question_Response__c,Quote,Related_Product__c,Shipment__c,Solution,TestCustomObject__c,TestObject__c,TransportMethod__c,User_Story__c,Utility_Case__c,WorkOrder,WorkOrderLineItem,jSignatureTest__c,qbdialer__UserStatusLog__c" enclosevalueinquotes="true" value="{{$Model.Accounts.data.0.Id}}"/>
+																								<update valuesource="fieldvalue" field="What.Name" enclosevalueinquotes="true" value="{{$Model.Accounts.data.0.Name}}"/>
 																							</updates>
 																						</action>
 																						<action type="closeModals" closebehavior="close"/>
+																						<action type="unblockUI"/>
 																						<action type="abandonRows" model="Accounts" affectedrows="all"/>
 																					</actions>
 																					<renderConditions logictype="and">
@@ -186,6 +191,25 @@
 										<spacing top="2" bottom="2" left="2" right="2"/>
 									</styles>
 								</skuid__form>
+								<skuid__buttonSet uniqueid="sk-3OPc-4816">
+									<groups>
+										<skuid__buttonGroup uniqueId="sk-3OPc-4814">
+											<buttons>
+												<skuid__button label="Save" uniqueId="sk-3OPc-4815" styleSettingsVariant="primary">
+													<actions>
+														<action type="showToast" duration="0" position="tc" styleSettingsVariant="warning" message="&#10;This isn't a real Task Creation page.  &#10;&#10;Don't add lots of extra tasks to your org...&#10;&#10;" clickToDismiss="true"/>
+													</actions>
+													<renderConditions logictype="and"/>
+													<enableConditions logictype="and"/>
+													<styleVariantConditions/>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+									<styles>
+										<spacing bottom="2" left="2" right="2"/>
+									</styles>
+								</skuid__buttonSet>
 							</components>
 							<styles>
 								<spacing/>
