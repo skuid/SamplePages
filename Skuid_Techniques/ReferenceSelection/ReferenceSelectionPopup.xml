@@ -18,8 +18,6 @@
 		</model>
 		<model id="Accounts" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Account" orderby="Name ASC">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="Name"/>
 				<field id="Type"/>
 				<field id="BillingCity"/>
