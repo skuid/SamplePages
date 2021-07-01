@@ -38,21 +38,21 @@ Each workday is represented as a specific number:
 - Thursday = 16
 - Friday = 32
 - Saturday = 64
+
 Multiple days are represented as the sum of the numerical values. For example, Tuesday and Thursday = 4 + 16 = 20. 
 
 **If Type = Monthly, then show:**
 - Interval
 - Choice between specific day of month (5th day) or relative day (Last Tuesday). 
 
-Note: This choice is presented as a separate field, but does not exist in the data model. It controls the `RecurrenceType` value between `RecursMonthly` and `RecursMonthlyNth`. It also controls the rendering of the next set of fields
-
     - If “Specific,” then show the `RecurrenceDayofMonth` field (an integer)
     - If “Relative,” then show the `RecurrenceInstance` picklist field (1st, 2nd … Last) and the day of week field described above. 
+
+Note: This choice between specific and relative is presented as a separate field, but does not exist in the data model. It controls the `RecurrenceType` value between `RecursMonthly` and `RecursMonthlyNth`.
 
 **If Type = Yearly, then show:**
 
 - Similar choice between specific and relative. 
-
 
     - If “Specific”, no other fields are needed. The start date is repeated every year through the end date. 
     - If “Relative” - then show Recurrence Instance, and Weekday Selection, from the Monthly type. Also show a Month of year picklist field (`RecurrenceMonthOfYear`) This enables the selection of “First Tuesday in November” 
@@ -77,15 +77,58 @@ See sample page that shows this working.
 - Design system: None
 - Page XML:  [Copy the XML from this page](CreateRecurringTask.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.
 
+#### Overview
 There are four core concepts driving this page you will want to explore. 
 
-1. **Conditional Rendering**. There are sections in the form for each main recurrence type. These are conditionally rendered based on the recurrence type field. In each section there are also individual fields that are only shown based on other data conditions. All the scenarios described above “If value X show fields Y and Z” are replicated this way. 
+1. **Conditional Rendering**. There are sections in the form for each main recurrence type. These are conditionally rendered based on the recurrence type field. In each section there are also individual fields that are only shown based on other data conditions. All the scenarios described above (If value X show fields Y and Z) are replicated this way. 
 
 2. **Metadata Overrides**. A number of fields can be presented in a more pleasing UX by overriding their metadata. Examples include: Integer fields being presented as Picklists. Picklist values being limited and presented with better labels. See details below. 
 
 3. **UI-Only Fields**. As described above, there are some selections made that don’t correspond with fields. These can be replicated in Skuid with UI-only fields. 
 
 4. **Action Sequences**. In a number of places UI-only field changes trigger updates to database fields. These are done with actions sequences triggered by model changes (look for these actions in the model configuration) or triggered when the task is saved (look at the save button). 
+
+#### Field details 
+
+
+- **Recurrence Type**. The Skuid solution uses a Metadata override on this field to do the following: 
+    - Change these labels so they are better in the UI. (You can’t change these labels in SF). Make sure to use the right values in your override. See the default metadata below. 
+    - Remove the 2 “Nth” values so there are not two Monthly or Yearly options. The correct values are populated in actions triggered by the save button. (See “Specific days and relative days” below)
+
+```
+Field Metadata. 
+value: "RecursDaily", label: "Recurs Daily"
+value: "RecursEveryWeekday", label: "Recurs Every Weekday"
+value: "RecursMonthly", label: "Recurs Monthly"
+value: "RecursMonthlyNth", label: "Recurs Monthly Nth"
+value: "RecursWeekly", label: "Recurs Weekly"
+value: "RecursYearly", label: "Recurs Yearly"
+value: "RecursYearlyNth", label: "Recurs Yearly Nth"
+```
+
+- **Recurrence Day of Month** and **Recurrence Intervals**. These fields are stored as numbers. The Skuid solution overrides the metadata so they are picklists, providing a better experience in the UI and better control over possible complexity. 
+
+- **Recurrence Interval**. The custom picklist for common intervals (single, every other, and custom) is replicated in Skuid with a UI-only picklist field. Look for RecurrenceIntervalDisplay in the New Task model. Model actions populate the real Interval field whenever the UI-only field is updated. 
+
+- **Day of Week**. A completely declarative solution for this strange and wonderful field is to use a UI-only multi-picklist field to capture the days of the week when the recurrence should occur. The “Multi-button group” display method for this field makes it look very similar to the Salesforce standard layout. Then the standard `RecurrenceDayOfWeekMask`  field metadata is overridden to convert it to this formula:   
+
+```
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Sunday'),1,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Monday'),2,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Tuesday'),4,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Wednesday'),8,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Thursday'),16,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Friday'),32,0) + 
+IF(CONTAINS({{RecurrenceDayDisplay}}, 'Saturday'),64,0)
+```
+
+    This adds the right value to the integer field based on the presence of the specific day in the multi picklist field.  
+
+    Note:   When you choose formula as the metadata type,  Skuid thinks this field is now read only.  But in this case - you do want to write this value back to the server.  You have to go to the XML to change the “read only” property on the field to “false” 
+
+    See more information below on reading the integer field and converting it back to days of the week.  That is fun too. 
+
+- **Specific days and Relative days**. A UI-only picklist field enables this selection and is used to control the conditional display of other fields. Action sequences on task save change the Recurrence type based on this selection (and the Recurrence Type).
 
 #### Advanced Suggestions
 
@@ -122,10 +165,9 @@ A second page provides an initial example for managing existing tasks. This incl
 
 **Day of Week**.  `RecurrenceDayOfWeekMask`  is stored as an integer. To display that as a series of weekdays in a multi-picklist display field, we have to figure out what combination of 1,2,4,8,16,32, and 64 is in the integer. The binary equivalent of the integer is more easily translatable to the week format, so we convert the integer to binary and use that binary string to figure out what values to update in the multi-picklist display field. 
 
-In the example page the TaskDetail model has 5 extra UI-only fields with the “Weekday”prefix.  These are used in an action sequence titled “Convert To Binary” that recursively pulls the integer apart, creates the binary value, translates that into a string of weekdays and then populates that back into the multi-picklist field. 
+In the example page the TaskDetail model has 5 extra UI-only fields with the “Weekday” prefix. These are used in an action sequence titled “Convert To Binary” that recursively pulls the integer apart, creates the binary value, translates that into a string of weekdays and then populates that back into the multi-picklist field. 
 
 Also there is an action sequence that updates the  RecurrenceDayOfWeekMask with appropriate values any time the weekday multi-picklist field is updated.  
-
 
 
 ## Helpful links 
