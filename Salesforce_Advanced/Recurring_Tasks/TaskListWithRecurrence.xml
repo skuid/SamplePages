@@ -1,0 +1,811 @@
+<skuid__page unsavedchangeswarning="yes" showsidebar="false" showheader="false" tabtooverride="Task" theme="Ink" personalizationmode="server">
+	<models>
+		<model id="TaskList" limit="100" query="true" createrowifnonefound="false" sobject="Task" datasource="salesforce">
+			<fields>
+				<field id="Subject"/>
+				<field id="CreatedDate"/>
+				<field id="Id"/>
+				<field id="ActivityDate"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+				<field id="IsRecurrence"/>
+				<field id="RecurrenceActivityId"/>
+				<field id="RecurrenceType"/>
+				<field id="Description"/>
+				<field id="Status"/>
+				<field id="Priority"/>
+				<field id="AccountId"/>
+				<field id="Account.Name"/>
+				<field id="RecurrenceStartDateOnly"/>
+				<field id="What.Name"/>
+				<field id="RecurrenceInterval"/>
+			</fields>
+			<conditions logic="1 OR 2">
+				<condition type="blank" value="null" field="RecurrenceActivityId" fieldtargetobjects="Task" operator="=" enclosevalueinquotes="false" clientorserver="server" state="filterableon" inactive="false" name="RecurrenceActivityId"/>
+				<condition type="blank" value="null" field="RecurrenceType" operator="!=" enclosevalueinquotes="false" clientorserver="server" state="filterableon" inactive="false" name="RecurrenceType"/>
+				<condition type="fieldvalue" field="AccountId" operator="=" inactive="true" enclosevalueinquotes="true" name="__autofilter__AccountId" clientorserver="server" state="filterableoff" value=""/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="TaskDetails" limit="1" query="false" createrowifnonefound="false" sobject="Task" datasource="salesforce">
+			<fields>
+				<field id="OwnerId" overridemetadata="true" ogdisplaytype="REFERENCE" displaytype="REFERENCE" datasource="salesforce" targetobjects="User" keyfield="Id" rel="Name">
+					<batchfields/>
+				</field>
+				<field id="Owner.Name"/>
+				<field id="ActivityDate"/>
+				<field id="Subject"/>
+				<field id="WhatId"/>
+				<field id="What.Name"/>
+				<field id="Description"/>
+				<field id="Priority"/>
+				<field id="Status"/>
+				<field id="RecurrenceActivityId"/>
+				<field id="RecurrenceDayOfWeekMask"/>
+				<field id="RecurrenceEndDateOnly"/>
+				<field id="RecurrenceInstance"/>
+				<field id="RecurrenceMonthOfYear"/>
+				<field id="RecurrenceStartDateOnly"/>
+				<field id="RecurrenceTimeZoneSidKey"/>
+				<field id="RecurrenceType" overridemetadata="true" ogdisplaytype="PICKLIST" displaytype="PICKLIST" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="RecursDaily" label="Daily"/>
+						<entry value="RecursWeekly" label="Weekly"/>
+						<entry value="RecursMonthly" label="Monthly"/>
+						<entry value="RecursYearly" label="Yearly"/>
+						<entry value="RecursMonthlyNth" label="Monthly"/>
+						<entry value="RecursYearlyNth" label="Yearly"/>
+					</picklistentries>
+				</field>
+				<field id="RecurrenceRegeneratedType"/>
+				<field id="IsRecurrence"/>
+				<field id="RecurrenceInterval"/>
+				<field id="RecurrenceDayOfMonth"/>
+				<field id="RecurrenceIntervalDisplay" uionly="true" displaytype="PICKLIST" length="255" label="Repeat" ogdisplaytype="TEXT" picklistsource="manual" returntype="DOUBLE" defaultvaluetype="fieldvalue">
+					<picklistentries>
+						<entry value="1" label="Every One"/>
+						<entry value="2" label="Every Other"/>
+						<entry label="Custom" value="0"/>
+					</picklistentries>
+				</field>
+				<field id="RecurrenceMoYrType" uionly="true" displaytype="PICKLIST" length="255" label="When" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" defaultvaluetype="fieldvalue" defaultValue="Specific">
+					<picklistentries>
+						<entry label="Specific Day" value="Specific"/>
+						<entry value="Relative" label="Relative Day"/>
+					</picklistentries>
+				</field>
+				<field id="WeekdayRecurrenceDayDisplay" uionly="true" displaytype="MULTIPICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT" label="Repeat On" defaultvaluetype="fieldvalue">
+					<picklistentries>
+						<entry value="Sunday" label="Sunday"/>
+						<entry value="Monday" label="Monday"/>
+						<entry value="Tuesday" label="Tuesday"/>
+						<entry value="Wednesday" label="Wednesday"/>
+						<entry value="Thursday" label="Thursday"/>
+						<entry value="Friday" label="Friday"/>
+						<entry label="Saturday" value="Saturday"/>
+					</picklistentries>
+				</field>
+				<field id="WeekdayIntegerInProgress" uionly="true" displaytype="DOUBLE" length="255" label="As convert to picklist, store integer value here in UI" ogdisplaytype="TEXT" precision="9" scale="3"/>
+				<field id="WeekdayBinaryInProgress" uionly="true" displaytype="TEXT" length="255" label="As convert integer to binary, store binary string here" defaultvaluetype="fieldvalue"/>
+				<field id="WeekdayBinaryWeek" uionly="true" displaytype="FORMULA" length="255" label="Binary Week" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>CASE(LEN({{WeekdayBinaryInProgress}}), 
+0, '0000000', 
+1, '000000' + {{WeekdayBinaryInProgress}}, 
+2, '00000' + {{WeekdayBinaryInProgress}}, 
+3, '0000' + {{WeekdayBinaryInProgress}}, 
+4, '000' + {{WeekdayBinaryInProgress}}, 
+5, '00' + {{WeekdayBinaryInProgress}}, 
+6, '0' + {{WeekdayBinaryInProgress}}, 
+{{WeekdayBinaryInProgress}})</formula>
+				</field>
+				<field id="WeekdayDaysOfWeekInProgress" uionly="true" displaytype="FORMULA" length="255" label="DaysOfWeekInProgress" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>IF(RIGHT({{WeekdayBinaryWeek}},1)=='1','Sunday;','') + 
+IF(RIGHT(LEFT({{WeekdayBinaryWeek}},6),1)=='1','Monday;','') + 
+IF(RIGHT(LEFT({{WeekdayBinaryWeek}},5),1)=='1','Tuesday;','') + 
+IF(RIGHT(LEFT({{WeekdayBinaryWeek}},4),1)=='1','Wednesday;','') + 
+IF(RIGHT(LEFT({{WeekdayBinaryWeek}},3),1)=='1','Thursday;','') + 
+IF(RIGHT(LEFT({{WeekdayBinaryWeek}},2),1)=='1','Friday;','') + 
+IF(LEFT({{WeekdayBinaryWeek}},1)=='1','Saturday;','')</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" enclosevalueinquotes="true" field="Id" clientorserver="server" state="filterableoff" inactive="true" name="TaskId"/>
+			</conditions>
+			<actions>
+				<action>
+					<actions>
+						<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="RecurrenceInterval" enclosevalueinquotes="true" value="{{RecurrenceIntervalDisplay}}"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>RecurrenceIntervalDisplay</field>
+					</fields>
+				</action>
+				<action>
+					<actions>
+						<action type="branch" whenfinished="continue" model="TaskDetails">
+							<formula>{{RecurrenceInterval}}&lt;3</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="RecurrenceIntervalDisplay" enclosevalueinquotes="true" value="{{RecurrenceInterval}}"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="branch" whenfinished="continue" model="TaskDetails">
+							<formula>{{RecurrenceInterval}}&gt;=3
+
+</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="RecurrenceIntervalDisplay" enclosevalueinquotes="true" value="0"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="branch" whenfinished="stop" model="TaskDetails">
+							<formula>{{RecurrenceType}}="RecursMonthlyNth"||{{RecurrenceType}}="RecursYearlyNth"</formula>
+							<iftrueactions>
+								<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+									<updates>
+										<update valuesource="fieldvalue" field="RecurrenceMoYrType" enclosevalueinquotes="true" value="Relative"/>
+									</updates>
+								</action>
+							</iftrueactions>
+						</action>
+						<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+							<updates>
+								<update valuesource="fieldvalue" field="RecurrenceMoYrType" enclosevalueinquotes="true" value="Specific"/>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>models.loaded</event>
+					</events>
+				</action>
+				<action>
+					<actions>
+						<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+							<updates>
+								<update valuesource="formula" field="RecurrenceDayOfWeekMask" enclosevalueinquotes="false">
+									<formula>IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Sunday'),1,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Monday'),2,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Tuesday'),4,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Wednesday'),8,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Thursday'),16,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Friday'),32,0) + 
+IF(CONTAINS({{WeekdayRecurrenceDayDisplay}}, 'Saturday'),64,0)</formula>
+								</update>
+							</updates>
+						</action>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+					<fields>
+						<field>WeekdayRecurrenceDayDisplay</field>
+					</fields>
+				</action>
+			</actions>
+		</model>
+		<model id="RecurringTasks" limit="100" query="false" createrowifnonefound="false" sobject="Task" datasource="salesforce">
+			<fields>
+				<field id="Subject"/>
+				<field id="CreatedDate"/>
+				<field id="Id"/>
+				<field id="ActivityDate"/>
+				<field id="RecurrenceActivityId"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="RecurrenceActivityId" fieldtargetobjects="Task" clientorserver="server" state="filterableoff" inactive="true" name="RecurrenceActivityId"/>
+				<condition type="blank" value="null" field="RecurrenceType" operator="=" enclosevalueinquotes="false"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__grid uniqueid="sk-3tiu-167756" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+			<divisions>
+				<division minWidth="250px" ratio="0" alignSelf="auto">
+					<components>
+						<skuid__wrapper uniqueid="sk-3tpN-59141" heightStrategy="fixed" height="custom" heightCustom="100vh">
+							<components>
+								<skuid__buttonSet model="TaskDetails" uniqueid="sk-3xU5-29214" position="left">
+									<groups>
+										<skuid__buttonGroup uniqueId="sk-3xU5-29212">
+											<buttons>
+												<skuid__button label="New Task" uniqueId="sk-3xU5-29213">
+													<actions>
+														<action type="showModal">
+															<skuid__modal title="New Modal" width="700px">
+																<components>
+																	<skuid__pageInclude includeType="skuid" uniqueid="sk-3xUI-33625" pageName="CreateRecurringTasks"/>
+																</components>
+															</skuid__modal>
+														</action>
+													</actions>
+												</skuid__button>
+											</buttons>
+										</skuid__buttonGroup>
+									</groups>
+									<styles>
+										<spacing top="2" bottom="2" left="4" right="2"/>
+									</styles>
+								</skuid__buttonSet>
+								<skuid__filterSet model="TaskList" uniqueid="sk-3tnN-12095" layout="vertical" resetButtonBehavior="hide">
+									<filters>
+										<skuid__filter uniqueId="sk-3tnN-12096" type="toggle" conditionSource="manual" filterMethod="server" labelMode="manual" label="Hide Recurring Tasks">
+											<effects>
+												<effect action="activate" value="" condition="RecurrenceActivityId"/>
+												<effect action="activate" value="" condition="RecurrenceType"/>
+											</effects>
+										</skuid__filter>
+										<skuid__filter uniqueId="sk-3tnN-12097" type="select" conditionSource="auto" filterMethod="server" labelMode="manual" conditionField="AccountId" fieldtargetobjects="Account" conditionName="__autofilter__AccountId" filterOffOptionLabel="All" label="Accounts"/>
+									</filters>
+									<filtering enableSearch="true" instantSearch="false" instantFilters="true" searchMethod="server" tokenizeSearch="false" emptySearchBehavior="query"/>
+									<sorting enable="true" label="Sort"/>
+									<styles>
+										<spacing top="2" bottom="2" left="2" right="2"/>
+									</styles>
+									<positioning alignItems="flex-start"/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+								</skuid__filterSet>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#d8d8d8"/>
+						</skuid__wrapper>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="1">
+					<components>
+						<skuid__wrapper uniqueid="sk-3sDD-8230">
+							<components>
+								<skuid__list model="TaskList" uniqueid="sk-3tgH-113434" pageSize="50">
+									<columns>
+										<column fillRatio="1">
+											<items>
+												<item fieldId="Subject"/>
+												<item fieldId="Description" displayType="field" displayStyle="tertiary"/>
+											</items>
+										</column>
+										<column fillRatio="1">
+											<items>
+												<item fieldId="Status"/>
+												<item fieldId="Priority" displayType="field" displayStyle="secondary"/>
+												<item fieldId="RecurrenceInterval"/>
+											</items>
+										</column>
+										<column fillRatio="1">
+											<items>
+												<item displayType="template" template="{{{Account.Name}}}"/>
+												<item fieldId="Name" displayType="field" displayStyle="secondary"/>
+											</items>
+										</column>
+										<column fillRatio="1">
+											<items>
+												<item displayType="template" displayStyle="secondary" allowHtml="true"/>
+												<item displayType="template" template="{{^IsRecurrence}}Due {{ActivityDate}}{{/IsRecurrence}}{{#IsRecurrence}}Recurring Task{{/IsRecurrence}}" allowHtml="true"/>
+											</items>
+										</column>
+									</columns>
+									<rowActions>
+										<action type="multi" label="Details">
+											<actions>
+												<action type="updateCondition" model="RecurringTasks" behavior="set" condition="RecurrenceActivityId" valuesource="fieldvalue" value="{{Id}}"/>
+												<action type="updateCondition" model="TaskDetails" behavior="set" condition="TaskId" valuesource="fieldvalue" value="{{Id}}"/>
+												<action type="requeryModels" behavior="standard">
+													<models>
+														<model>TaskDetails</model>
+														<model>RecurringTasks</model>
+													</models>
+												</action>
+												<action type="action-sequence" action-sequence-id="31039563-a402-47c9-8113-774ddfeedc48"/>
+												<action type="openSlidingPanel" openbehavior="open">
+													<skuid__slidingPanel uniqueid="sk-3tjj-185604" size="600px" origin="right" closeOnPageClick="true" behavior="overlay">
+														<components>
+															<skuid__form showErrorsInline="true" model="TaskDetails" uniqueid="sk-3sWN-8399" mode="edit">
+																<columns>
+																	<column behavior="flex" verticalAlign="top">
+																		<sections>
+																			<section title="Details" showHeading="true">
+																				<fields>
+																					<skuid__field id="OwnerId" uniqueId="sk-3sWN-8400" tokenizeSearch="false" label="Assigned To"/>
+																					<skuid__field id="WhatId" tokenizeSearch="false"/>
+																					<skuid__field id="Subject" uniqueId="sk-3sWN-8402"/>
+																					<skuid__field id="Description"/>
+																					<columns>
+																						<column width="100%">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="ActivityDate" uniqueId="sk-3sWN-8401" label="Date Due">
+																											<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																											<enableConditions logictype="and" message="Dates applied to recurring set of tasks">
+																												<condition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="IsRecurrence" fieldtargetobjects="Task" value="false"/>
+																											</enableConditions>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="Priority"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="Status"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																				</fields>
+																			</section>
+																			<section title="Recurrence">
+																				<fields>
+																					<columns>
+																						<column width="100%" behavior="flex" verticalAlign="top">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="IsRecurrence" displayAs="SWITCH" label="Recurring Series" readOnly="true"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceType" uniqueId="sk-3sWN-8406" label="Type" readOnly="true">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="IsRecurrence" fieldtargetobjects="Task" value="true"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																				</fields>
+																				<renderConditions logictype="or">
+																					<renderCondition type="blank" operator="!=" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="null" enclosevalueinquotes="false"/>
+																					<renderCondition type="blank" operator="=" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceActivityId" fieldtargetobjects="Task" value="null" enclosevalueinquotes="false"/>
+																				</renderConditions>
+																			</section>
+																			<section title="Daily" showHeading="false">
+																				<fields>
+																					<columns>
+																						<column width="100%">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceIntervalDisplay" label="Pattern for repeating" addNoneOption="true"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceInterval" label="Every X days" displayAs="VALUE_STEPPER" step="1" min="1" max="30">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceIntervalDisplay" fieldtargetobjects="Task" value="0"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																				</fields>
+																				<renderConditions logictype="and">
+																					<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="RecursDaily"/>
+																				</renderConditions>
+																			</section>
+																			<section title="Weekly" showHeading="false">
+																				<fields>
+																					<columns>
+																						<column width="100%">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceIntervalDisplay" label="Pattern for repeating" addNoneOption="true"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceInterval" label="Every X weeks" displayAs="VALUE_STEPPER" step="1" min="1" max="10" horizontalAlignment="center">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceIntervalDisplay" fieldtargetobjects="Task" value="0"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																					<skuid__field id="WeekdayRecurrenceDayDisplay" selectedList="3" label="Weekday to Repeat" displayAs="MULTIBUTTON_GROUP"/>
+																				</fields>
+																				<renderConditions logictype="and">
+																					<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="RecursWeekly"/>
+																				</renderConditions>
+																			</section>
+																			<section title="Monthly" showHeading="false">
+																				<fields>
+																					<columns>
+																						<column width="100%">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceIntervalDisplay" label="Pattern for Repeating" addNoneOption="true"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceInterval" label="Every X Months" displayAs="VALUE_STEPPER" step="1" min="1" max="24">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceIntervalDisplay" fieldtargetobjects="Task" value="0"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																					<skuid__field id="RecurrenceMoYrType"/>
+																					<skuid__field id="RecurrenceDayOfMonth" label="Specific day of month" displayAs="VALUE_STEPPER" step="1" min="1" max="31">
+																						<renderConditions logictype="and" onhidedatabehavior="keep">
+																							<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceMoYrType" fieldtargetobjects="Task" value="Specific"/>
+																						</renderConditions>
+																						<enableConditions/>
+																						<styleVariantConditions/>
+																					</skuid__field>
+																					<columns>
+																						<column width="100%" behavior="flex" verticalAlign="top">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceInstance" label="Number" radioLayout="column">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceMoYrType" fieldtargetobjects="Task" value="Relative"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column>
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="WeekdayRecurrenceDayDisplay" selectedList="3" label="Weekday" displayAs="MULTIBUTTON_GROUP"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																				</fields>
+																				<renderConditions logictype="or">
+																					<renderCondition type="multiple" operator="in" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="" enclosevalueinquotes="true">
+																						<values>
+																							<value>RecursMonthly</value>
+																							<value>RecursMonthlyNth</value>
+																						</values>
+																					</renderCondition>
+																				</renderConditions>
+																			</section>
+																			<section title="Yearly" showHeading="false">
+																				<fields>
+																					<skuid__field id="RecurrenceMoYrType"/>
+																					<columns>
+																						<column width="100%" behavior="flex" verticalAlign="top">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceInstance" label="Number">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceMoYrType" fieldtargetobjects="Task" value="Relative"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column behavior="flex" verticalAlign="top">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="WeekdayRecurrenceDayDisplay" selectedList="3" maxSelected="1"/>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																						<column behavior="flex" verticalAlign="top">
+																							<sections>
+																								<section title="New Section" showHeading="false">
+																									<fields>
+																										<skuid__field id="RecurrenceMonthOfYear" label="Month">
+																											<renderConditions logictype="and" onhidedatabehavior="keep">
+																												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceMoYrType" fieldtargetobjects="Task" value="Relative"/>
+																											</renderConditions>
+																											<enableConditions/>
+																											<styleVariantConditions/>
+																										</skuid__field>
+																									</fields>
+																								</section>
+																							</sections>
+																						</column>
+																					</columns>
+																				</fields>
+																				<renderConditions logictype="and">
+																					<renderCondition type="multiple" operator="in" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="" enclosevalueinquotes="true">
+																						<values>
+																							<value>RecursYearly</value>
+																							<value>RecursYearlyNth</value>
+																						</values>
+																					</renderCondition>
+																				</renderConditions>
+																			</section>
+																			<section title="New Section" showHeading="false">
+																				<fields>
+																					<skuid__field id="RecurrenceStartDateOnly"/>
+																					<skuid__field id="RecurrenceEndDateOnly"/>
+																				</fields>
+																				<renderConditions logictype="and">
+																					<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="false" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="IsRecurrence" fieldtargetobjects="Task" value="true"/>
+																					<renderCondition type="blank" operator="!=" fieldmodel="TaskDetails" sourcetype="fieldvalue" field="RecurrenceType" fieldtargetobjects="Task" value="null" enclosevalueinquotes="false"/>
+																				</renderConditions>
+																			</section>
+																		</sections>
+																	</column>
+																</columns>
+																<styles>
+																	<spacing top="2" bottom="2" left="2" right="2"/>
+																</styles>
+															</skuid__form>
+															<skuid__table allowColumnFreezing="dragDrop" model="RecurringTasks" uniqueid="sk-3tnd-24698" mode="read" title="Recurring Tasks" showSaveCancel="false">
+																<fields>
+																	<field id="ActivityDate" uniqueid="fi-3tn--36488"/>
+																	<field id="Subject" uniqueid="fi-3tn--36489"/>
+																</fields>
+																<filtering enableSearch="false"/>
+																<actions/>
+																<rowActions>
+																	<action type="multi" icon="sk-webicon-ink:delete">
+																		<actions>
+																			<action type="markRowsForDeletion" model="RecurringTasks" affectedrows="context"/>
+																		</actions>
+																	</action>
+																</rowActions>
+																<massActions/>
+																<exportProperties useTableColumns="true"/>
+																<sorting enable="false"/>
+																<styles>
+																	<spacing top="4" bottom="2" left="2" right="2"/>
+																</styles>
+																<renderConditions logictype="and">
+																	<renderCondition type="fieldvalue" enclosevalueinquotes="true" fieldmodel="RecurringTasks" sourcetype="modelproperty" nosourcerowbehavior="deactivate" sourceproperty="hasRows"/>
+																</renderConditions>
+																<styleVariantConditions/>
+															</skuid__table>
+															<skuid__buttonSet uniqueid="sk-3OPc-4816" position="left">
+																<groups>
+																	<skuid__buttonGroup uniqueId="sk-3OPc-4814" displayType="detached">
+																		<buttons>
+																			<skuid__button label="Save" uniqueId="sk-3OPc-4815" styleSettingsVariant="primary" icon="sk-webicon-ink:save">
+																				<actions>
+																					<action type="branch" whenfinished="continue" label="Handle Yearly case" model="TaskDetails">
+																						<formula>{{RecurrenceType}}="RecursYearly"</formula>
+																						<iftrueactions>
+																							<action type="branch" whenfinished="continue" model="TaskDetails" label="If relative - make these changes">
+																								<formula>{{RecurrenceMoYrType}}="Relative"</formula>
+																								<iftrueactions>
+																									<action type="updateRow" fieldmodel="TaskDetails" affectedrows="all">
+																										<updates>
+																											<update valuesource="fieldvalue" field="RecurrenceType" enclosevalueinquotes="true" value="RecursYearlyNth"/>
+																										</updates>
+																									</action>
+																								</iftrueactions>
+																							</action>
+																							<action type="branch" whenfinished="continue" model="TaskDetails" label="If static - make these changes">
+																								<formula>{{RecurrenceMoYrType}}="Specific"</formula>
+																								<iftrueactions>
+																									<action type="updateRow" fieldmodel="TaskDetails" affectedrows="all">
+																										<updates>
+																											<update valuesource="formula" field="RecurrenceDayOfMonth" enclosevalueinquotes="false" value="RecursMonthlyNth">
+																												<formula>DAY({{RecurrenceStartDateOnly}})</formula>
+																											</update>
+																											<update valuesource="formula" field="RecurrenceMonthOfYear" enclosevalueinquotes="true">
+																												<formula>MONTH_NAME({{RecurrenceStartDateOnly}})</formula>
+																											</update>
+																										</updates>
+																									</action>
+																								</iftrueactions>
+																							</action>
+																						</iftrueactions>
+																					</action>
+																					<action type="branch" whenfinished="continue" model="TaskDetails" label="Handle Monthly case">
+																						<formula>{{RecurrenceType}}="RecursMonthly"</formula>
+																						<iftrueactions>
+																							<action type="branch" whenfinished="continue" model="TaskDetails" label="If relative - make these changes">
+																								<formula>{{RecurrenceMoYrType}}="Relative"</formula>
+																								<iftrueactions>
+																									<action type="updateRow" fieldmodel="TaskDetails" affectedrows="all">
+																										<updates>
+																											<update valuesource="fieldvalue" field="RecurrenceType" enclosevalueinquotes="true" value="RecursMonthlyNth"/>
+																										</updates>
+																									</action>
+																								</iftrueactions>
+																							</action>
+																						</iftrueactions>
+																					</action>
+																					<action type="save">
+																						<models>
+																							<model>TaskDetails</model>
+																							<model>RecurringTasks</model>
+																						</models>
+																					</action>
+																					<action type="showToast" duration="2" position="bl" message="Task Saved"/>
+																					<action type="requeryModels" behavior="standard">
+																						<models>
+																							<model>TaskList</model>
+																						</models>
+																					</action>
+																				</actions>
+																				<renderConditions logictype="and"/>
+																				<enableConditions logictype="and"/>
+																				<styleVariantConditions/>
+																			</skuid__button>
+																			<skuid__button label="Cancel" uniqueId="sk-3sn_-38819" icon="sk-webicon-ink:circle-close-outline">
+																				<actions>
+																					<action type="emptyModelData">
+																						<models>
+																							<model>TaskDetails</model>
+																							<model>RecurringTasks</model>
+																						</models>
+																					</action>
+																					<action type="closeSlidingPanel" closebehavior="close"/>
+																				</actions>
+																			</skuid__button>
+																		</buttons>
+																	</skuid__buttonGroup>
+																</groups>
+																<styles>
+																	<spacing bottom="2" left="2" right="2"/>
+																</styles>
+															</skuid__buttonSet>
+														</components>
+													</skuid__slidingPanel>
+												</action>
+											</actions>
+										</action>
+									</rowActions>
+									<massActions/>
+									<filtering enableSearch="false"/>
+									<sorting enable="false"/>
+								</skuid__list>
+							</components>
+							<styles>
+								<spacing top="4" bottom="4" left="4" right="4"/>
+							</styles>
+							<background/>
+						</skuid__wrapper>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing/>
+			</styles>
+			<background/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<javascript/>
+		<labels/>
+		<actionsequences>
+			<actionsequence id="31039563-a402-47c9-8113-774ddfeedc48" label="ConvertToBinary" type="reusable">
+				<description>Converts an integer to it's binary and then uses binary to update multipicklist of weekdays selected</description>
+				<actions>
+					<action type="branch" whenfinished="continue" label="if no integer yet, update it">
+						<formula>!{{$Model.TaskDetails.data.0.WeekdayIntegerInProgress}}</formula>
+						<iftrueactions>
+							<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+								<updates>
+									<update valuesource="modelmerge" field="WeekdayIntegerInProgress" enclosevalueinquotes="false" sourcemodel="TaskDetails" sourcefield="RecurrenceDayOfWeekMask"/>
+								</updates>
+							</action>
+						</iftrueactions>
+					</action>
+					<action type="updateRow" fieldmodel="TaskDetails" affectedrows="context">
+						<updates>
+							<update valuesource="formula" field="WeekdayIntegerInProgress" enclosevalueinquotes="false">
+								<formula>FLOOR({{$Model.TaskDetails.data.0.WeekdayIntegerInProgress}}/2)</formula>
+							</update>
+							<update valuesource="formula" field="WeekdayBinaryInProgress" enclosevalueinquotes="true">
+								<formula>{{$Model.TaskDetails.data.0.WeekdayIntegerInProgress}}%2 + '' + 
+IF({{$Model.TaskDetails.data.0.WeekdayBinaryInProgress}},{{$Model.TaskDetails.data.0.WeekdayBinaryInProgress}},'')</formula>
+							</update>
+						</updates>
+					</action>
+					<action type="branch" whenfinished="stop" label="if haven't finished converting to binary, carry on">
+						<formula>{{$Model.TaskDetails.data.0.WeekdayIntegerInProgress}} != 0</formula>
+						<iftrueactions>
+							<action type="action-sequence" action-sequence-id="31039563-a402-47c9-8113-774ddfeedc48"/>
+						</iftrueactions>
+					</action>
+					<action type="updateRow" fieldmodel="TaskDetails" affectedrows="all">
+						<updates>
+							<update valuesource="formula" field="WeekdayRecurrenceDayDisplay" enclosevalueinquotes="true" sourcemodel="TaskDetails">
+								<formula>LEFT({{WeekdayDaysOfWeekInProgress}},LEN({{WeekdayDaysOfWeekInProgress}}) - 1)</formula>
+							</update>
+						</updates>
+					</action>
+				</actions>
+				<inputs/>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&lt;span style=&quot;color:#ffffff;&quot;&gt;Task List&lt;/span&gt;" uniqueid="sk-3tpB-54891" styleSettingsVariant="large">
+							<styles>
+								<spacing top="2" bottom="2" left="4"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#1f497d"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>
