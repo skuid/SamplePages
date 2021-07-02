@@ -9,6 +9,7 @@ There are complicated features provided by Salesforce that provide TONS of value
 -  [Exposing the results of an APEX Class](APEX_Rest)
 -  [Extending Work.com Command Center with Skuid](Work_Dot_Com_Command_Center)
 -  [Making a custom Skuid Home page](Custom_Home_Page) 
+-  [Recurring Tasks and Events](Recurring_Tasks)
 -  [Using Salesforce Content in Skuid](Content_Document) 
 -  [Using Chatter "Follow" in Skuid](Follow_or_Unfollow_Records) 
 
