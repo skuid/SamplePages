@@ -36,7 +36,7 @@ We did six webinars walking through the build for this use case.  Each chapter d
     - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter3.xml)
 
 - [Chapter 4 | Creating Variants in the Design System Studio](https://www.youtube.com/watch?v=rBZZhlmnFo0)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter4.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries-Chapter4.xml)
 
 - [Chapter 5 | Design System Studio Style Variants Continued](https://www.youtube.com/watch?v=sYOMx_b0U2c)
     - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter5.xml)
