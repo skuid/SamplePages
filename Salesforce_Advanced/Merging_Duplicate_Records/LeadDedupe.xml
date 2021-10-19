@@ -1,0 +1,570 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="Ink">
+	<models>
+		<model id="LeadsByName" limit="" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Lead" type="aggregate" orderby="COUNT(Id) DESC">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple">
+				<field id="Name" name="name"/>
+			</groupby>
+			<havings>
+				<having field="Id" fieldfunction="COUNT" operator="gt" value="1" enclosevalueinquotes="false"/>
+			</havings>
+		</model>
+		<model id="LeadsByEmail" limit="" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Lead" type="aggregate" orderby="COUNT(Id) DESC">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+				<condition type="blank" value="null" field="Email" operator="!=" enclosevalueinquotes="false"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple">
+				<field id="Email" name="email"/>
+			</groupby>
+			<havings>
+				<having field="Id" fieldfunction="COUNT" operator="gt" value="2" enclosevalueinquotes="false"/>
+			</havings>
+		</model>
+		<model id="Master_Lead" limit="1" query="false" createrowifnonefound="false" sobject="Lead" doclone="" type="" datasource="salesforce" orderby="CreatedDate ASC">
+			<fields>
+				<field id="Name"/>
+				<field id="Email"/>
+				<field id="Id"/>
+				<field id="Company"/>
+				<field id="LeadSource"/>
+				<field id="Phone"/>
+				<field id="Address"/>
+				<field id="Country"/>
+				<field id="Status"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="CreatedDate"/>
+				<field id="City"/>
+				<field id="Street"/>
+				<field id="State"/>
+				<field id="PostalCode"/>
+				<field id="Description"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+				<condition type="fieldvalue" value="" field="Name" operator="=" mergefield="Name" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Name" enclosevalueinquotes="true" clientorserver="server"/>
+				<condition type="fieldvalue" value="" field="Email" operator="=" mergefield="Email" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Email" enclosevalueinquotes="true" clientorserver="server"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Dupe_Leads_List" limit="20" query="false" createrowifnonefound="false" sobject="Lead" doclone="" type="" datasource="salesforce">
+			<fields>
+				<field id="Name"/>
+				<field id="Email"/>
+				<field id="Id"/>
+				<field id="Company"/>
+				<field id="LeadSource"/>
+				<field id="Phone"/>
+				<field id="Address"/>
+				<field id="Country"/>
+				<field id="Status"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="City"/>
+				<field id="State"/>
+				<field id="Description"/>
+				<field id="Street"/>
+				<field id="PostalCode"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
+				<condition type="fieldvalue" value="" field="Name" operator="=" mergefield="Name" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Name" enclosevalueinquotes="true" clientorserver="server"/>
+				<condition type="fieldvalue" value="" field="Email" operator="=" mergefield="Email" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Email" enclosevalueinquotes="true" clientorserver="server"/>
+				<condition type="modelmerge" value="" field="Id" operator="!=" model="Master_Lead" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="ReparentActivities" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Task">
+			<fields>
+				<field id="RecordTypeId"/>
+				<field id="RecordType.Name"/>
+				<field id="Id"/>
+				<field id="What.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="WhoId" fieldtargetobjects="Contact,Lead" operator="in" model="Dupe_Leads_List" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="ReparentEvents" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Event">
+			<fields>
+				<field id="RecordTypeId"/>
+				<field id="RecordType.Name"/>
+				<field id="WhoId"/>
+				<field id="Who.Name"/>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="WhoId" fieldtargetobjects="Contact,Lead" operator="in" model="Dupe_Leads_List" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+			</conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wizard uniqueid="sk-20VB-19077">
+			<steps>
+				<step stepId="step1" stepLabel="Identify Duplicates">
+					<components>
+						<skuid__tabContainer deferTabRendering="true" uniqueid="sk-24hQ-69477" tabLocation="left">
+							<tabs>
+								<skuid__tabPanel name="Group by Name">
+									<components>
+										<skuid__text contents="&lt;strong&gt;Duplicate Lead Records grouped by Name.&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;&amp;nbsp;- Review Duplicates to see detail records and merge.&amp;nbsp;&lt;br /&gt;&#10;&amp;nbsp;" uniqueid="sk-20Wy-64942"/>
+										<skuid__table allowColumnFreezing="never" model="LeadsByName" uniqueid="sk-20Qx-21684" mode="readonly" showSaveCancel="false" allowSortingByColumn="false" pageSize="10">
+											<fields>
+												<field id="Name" name="name" label="Name" uniqueid="fi-20Qx-22116"/>
+												<field id="Id" name="countId" label="Number of Leads" uniqueid="fi-20Qx-22115"/>
+											</fields>
+											<filtering enableSearch="false"/>
+											<actions/>
+											<rowActions>
+												<action type="multi" label="Review Duplicates" icon="sk-webicon-ink:people">
+													<actions>
+														<action type="deactivateFilterableConditions">
+															<models>
+																<model>Master_Lead</model>
+																<model>Dupe_Leads_List</model>
+															</models>
+														</action>
+														<action type="updateCondition" model="Master_Lead" behavior="set" condition="Name" valuesource="fieldvalue" value="{{name}}"/>
+														<action type="updateCondition" model="Dupe_Leads_List" behavior="set" condition="Name" valuesource="fieldvalue" value="{{name}}"/>
+														<action type="requeryModels" behavior="standard">
+															<models>
+																<model>Master_Lead</model>
+																<model>Dupe_Leads_List</model>
+																<model>ReparentActivities</model>
+																<model>ReparentEvents</model>
+															</models>
+														</action>
+														<action type="runComponentAction" componentid="sk-20VB-19077" action="navigateToStep" stepId="step2" scrollStepLabelIntoView="true"/>
+														<action type="save">
+															<models>
+																<model>LeadsByName</model>
+															</models>
+														</action>
+													</actions>
+												</action>
+											</rowActions>
+											<massActions/>
+											<exportProperties useTableColumns="true"/>
+											<sorting enable="false"/>
+										</skuid__table>
+									</components>
+									<onInitialShowActions>
+										<action type="requeryModels" behavior="standard">
+											<models>
+												<model>LeadsByName</model>
+											</models>
+										</action>
+									</onInitialShowActions>
+									<onShowActions/>
+								</skuid__tabPanel>
+								<skuid__tabPanel name="Group by Email">
+									<components>
+										<skuid__text contents="&lt;strong&gt;Duplicate Lead Records grouped by Email.&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;- Review Duplicates to see detail records and merge.&amp;nbsp;&lt;br /&gt;&#10;&amp;nbsp;" uniqueid="sk-20XS-72571">
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__text>
+										<skuid__table allowColumnFreezing="never" model="LeadsByEmail" uniqueid="sk-20SN-32865" mode="readonly" showSaveCancel="false" pageSize="10">
+											<fields>
+												<field id="Email" name="email" label="Email" uniqueid="fi-20SN-33297"/>
+												<field id="Id" name="countId" label="Number of Leads" uniqueid="fi-20SN-33296"/>
+											</fields>
+											<filtering enableSearch="false"/>
+											<actions/>
+											<rowActions>
+												<action type="multi" label="Manage Duplicates">
+													<actions>
+														<action type="deactivateFilterableConditions">
+															<models>
+																<model>Master_Lead</model>
+																<model>Dupe_Leads_List</model>
+															</models>
+														</action>
+														<action type="updateCondition" model="Master_Lead" behavior="set" condition="Email" valuesource="fieldvalue" value="{{email}}"/>
+														<action type="updateCondition" model="Dupe_Leads_List" behavior="set" condition="Email" valuesource="fieldvalue" value="{{email}}"/>
+														<action type="requeryModels" behavior="standard">
+															<models>
+																<model>Master_Lead</model>
+																<model>Dupe_Leads_List</model>
+																<model>ReparentActivities</model>
+																<model>ReparentEvents</model>
+															</models>
+														</action>
+														<action type="runComponentAction" componentid="sk-20VB-19077" action="navigateToStep" stepId="step2" scrollStepLabelIntoView="true"/>
+													</actions>
+													<renderConditions logictype="and"/>
+													<enableconditions/>
+													<styleVariantConditions/>
+													<tooltip position="top"/>
+												</action>
+											</rowActions>
+											<massActions/>
+											<exportProperties useTableColumns="true"/>
+											<sorting enable="false"/>
+										</skuid__table>
+									</components>
+									<onInitialShowActions>
+										<action type="requeryModels" behavior="standard">
+											<models>
+												<model>LeadsByEmail</model>
+											</models>
+										</action>
+									</onInitialShowActions>
+									<onShowActions/>
+								</skuid__tabPanel>
+							</tabs>
+						</skuid__tabContainer>
+					</components>
+					<buttons/>
+				</step>
+				<step stepId="step2" stepLabel="Managed and Merge">
+					<components>
+						<skuid__table uniqueid="sk-1-yd-64887" showListHeader="true" showListFooter="false" mode="edit" model="Master_Lead" pageSize="Infinity" showSaveCancel="false" rowHeightStrategy="fit" allowColumnFreezing="dragDrop" showPageSizeSelect="false" allowSortingByColumn="false" title="Master Lead">
+							<fields>
+								<field uniqueid="sk-1-yd-64888" id="Name" readOnly="true" displayAs="" horizontalAlignment="" label="Winning Lead" hideable="trueShowByDefault" columnLabelWrap="nowrap"/>
+								<field uniqueid="sk-1-yd-64889" id="CreatedDate" displayAs="" horizontalAlignment="" label="Created" hideable="trueShowByDefault" columnLabelWrap="nowrap"/>
+								<field uniqueid="sk-1-yd-64890" id="Status" displayAs="" horizontalAlignment="" columnLabelWrap="nowrap"/>
+								<field uniqueid="sk-1-yd-64891" id="OwnerId" fieldRenderer="limitObjects" horizontalAlignment="" columnLabelWrap="nowrap" label="Owner"/>
+								<field uniqueid="sk-1-yd-64892" id="LeadSource" displayAs="" horizontalAlignment="" columnLabelWrap="nowrap"/>
+								<field id="Company" uniqueid="fi-24Fx-48427"/>
+								<field uniqueid="sk-1-yd-64893" id="Phone" displayAs="" horizontalAlignment="" columnLabelWrap="nowrap"/>
+								<field id="Email" uniqueid="fi-24Fx-48429"/>
+								<field id="Street" uniqueid="fi-24IK-25452"/>
+								<field id="City" uniqueid="fi-24Fx-48428"/>
+								<field id="State" uniqueid="fi-24Fx-48431"/>
+								<field id="PostalCode" label="Zip" uniqueid="fi-24mZ-20513"/>
+								<field uniqueid="sk-1-yd-64898" id="Country" displayAs="" horizontalAlignment="" columnLabelWrap="nowrap"/>
+								<field id="Description" uniqueid="fi-24Fx-48430"/>
+							</fields>
+							<massActions/>
+							<sorting/>
+							<filtering emptySearchBehavior="query" enableSearch="false" searchMethod="server">
+								<searchFields/>
+							</filtering>
+							<exportProperties useTableColumns="true" enableExportOptionOnTable="false"/>
+						</skuid__table>
+						<skuid__text contents="Leads that will be Merged" uniqueid="sk-24mh-22971" styleSettingsVariant="large">
+							<styles>
+								<spacing top="4"/>
+							</styles>
+						</skuid__text>
+						<skuid__text contents="-&amp;nbsp; Use Row Action to remove leads that should NOT be merged.&amp;nbsp;&lt;br /&gt;&#10;-&amp;nbsp; Click on cells in table to update data on Master Lead" uniqueid="sk-24mm-25173" styleSettingsVariant="medium"/>
+						<skuid__table uniqueid="sk-1-yd-64900" showListHeader="true" showListFooter="false" mode="readonly" model="Dupe_Leads_List" pageSize="Infinity" showSaveCancel="false" rowHeightStrategy="fit" allowColumnHiding="false" allowSortingByColumn="false" showPageSizeSelect="false">
+							<fields>
+								<field uniqueid="sk-1-yd-64901" id="Name" displayAs="" horizontalAlignment="" columnLabelWrap="clip" hideable="trueShowByDefault"/>
+								<field uniqueid="sk-1-yd-64902" id="CreatedDate" displayAs="" horizontalAlignment="" columnLabelWrap="clip" hideable="trueShowByDefault" label="Created"/>
+								<field type="COMBO" label="Status" hideable="trueShowByDefault" template="{{Status}}" redirectType="none" columnLabelWrap="clip" readOnly="true" uniqueid="sk-1-yd-64903">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Status" enclosevalueinquotes="true" value="{{Status}}">
+														<formula>{{Status}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Owner" hideable="trueShowByDefault" template="{{OwnerId}}" readOnly="true" columnLabelWrap="clip" uniqueid="sk-1-yd-64904">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="OwnerId" fieldtargetobjects="Group,User" enclosevalueinquotes="true" value="{{OwnerId}}">
+														<formula>{{OwnerId}}</formula>
+													</update>
+													<update valuesource="formula" field="Owner.Name" enclosevalueinquotes="true">
+														<formula>{{Owner.Name}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Lead Source" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64905" columnLabelWrap="clip">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="LeadSource" enclosevalueinquotes="true" value="{{LeadSource}}">
+														<formula>{{LeadSource}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Company" template="{{Company}}" readOnly="true" uniqueid="fi-24G2-50558">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Company" enclosevalueinquotes="true" value="{{Company}}">
+														<formula>{{Company}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Phone" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64906" columnLabelWrap="clip" template="{{Phone}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Phone" enclosevalueinquotes="true" value="{{Phone}}">
+														<formula>{{Phone}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Email" template="{{Email}}" readOnly="true" uniqueid="fi-24I9-21215">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Email" enclosevalueinquotes="true" value="{{Email}}">
+														<formula>{{Email}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Street" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64907" columnLabelWrap="clip" template="{{Street}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Street" enclosevalueinquotes="true" value="{{Street}}">
+														<formula>{{Street}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="City" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64908" columnLabelWrap="clip" template="{{City}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="City" enclosevalueinquotes="true" value="{{City}}">
+														<formula>{{City}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="State" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64909" columnLabelWrap="clip" template="{{State}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="State" enclosevalueinquotes="true" value="{{State}}">
+														<formula>{{State}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Zip" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64910" columnLabelWrap="clip" template="{{PostalCode}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="PostalCode" enclosevalueinquotes="true" value="{{PostalCode}}">
+														<formula>{{PostalCode}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Country" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64911" columnLabelWrap="clip" template="{{Country}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Country" enclosevalueinquotes="true" value="{{Country}}">
+														<formula>{{Country}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+								<field type="COMBO" label="Description" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64912" columnLabelWrap="clip" template="{{Description}}">
+									<interactions>
+										<interaction type="tap">
+											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+												<updates>
+													<update valuesource="formula" field="Description" enclosevalueinquotes="true" value="{{Description}}">
+														<formula>{{Description}}</formula>
+													</update>
+												</updates>
+											</action>
+										</interaction>
+									</interactions>
+								</field>
+							</fields>
+							<massActions/>
+							<sorting/>
+							<filtering emptySearchBehavior="query" enableSearch="false" searchMethod="server">
+								<searchFields/>
+							</filtering>
+							<exportProperties useTableColumns="true" enableExportOptionOnTable="false"/>
+							<rowActions>
+								<action type="multi" icon="sk-webicon-ink:dots-vertical">
+									<actions>
+										<action type="abandonRows" model="Dupe_Leads_List" affectedrows="context"/>
+										<action type="showToast" duration="4" position="bl" message="This Lead will not be Merged.  It will be retained. "/>
+										<action type="requeryModels" behavior="standard">
+											<models>
+												<model>ReparentActivities</model>
+												<model>ReparentEvents</model>
+											</models>
+										</action>
+									</actions>
+									<tooltip position="top" text="Exclude from Merge"/>
+								</action>
+							</rowActions>
+						</skuid__table>
+						<skuid__text contents="Records Related to Leads to be Merged" uniqueid="sk-20VY-30609" styleSettingsVariant="large">
+							<styles>
+								<spacing top="4" styleSettingsVariant="large" bottom="4"/>
+							</styles>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__text>
+						<skuid__grid uniqueid="sk-1-yd-64868" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+							<divisions>
+								<division minWidth="100px" ratio="1" alignSelf="auto">
+									<components>
+										<skuid__text contents="Tasks:&amp;nbsp; {{#Model.data.length}}{{Model.data.length}}{{/Model.data.length}}{{^Model.data.length}}0{{/Model.data.length}}" uniqueid="sk-258b-46289" model="ReparentActivities" styleSettingsVariant="medium"/>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__text contents="Events:&amp;nbsp; {{#Model.data.length}}{{Model.data.length}}{{/Model.data.length}}{{^Model.data.length}}0{{/Model.data.length}}" uniqueid="sk-1-yd-64869" model="ReparentEvents" styleSettingsVariant="medium"/>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components/>
+								</division>
+							</divisions>
+						</skuid__grid>
+						<skuid__text contents="Complete the Merge" uniqueid="sk-24pZ-39801" styleSettingsVariant="large">
+							<styles>
+								<spacing top="4" styleSettingsVariant="large" bottom="4"/>
+							</styles>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__text>
+						<skuid__buttonSet model="Master_Lead" uniqueid="sk-24pX-38957" position="left">
+							<groups>
+								<skuid__buttonGroup uniqueId="sk-24pX-38955">
+									<buttons>
+										<skuid__button label="Merge" uniqueId="sk-24pX-38956" styleSettingsVariant="primary">
+											<actions>
+												<action type="blockUI" message="Merging These Leads" subtext="And Cleaning up Related Records" showPlaceholder="true"/>
+												<action type="updateRow" fieldmodel="ReparentActivities" affectedrows="all">
+													<updates>
+														<update valuesource="formula" field="WhoId" fieldtargetobjects="Contact,Lead" enclosevalueinquotes="true">
+															<formula>{{$Model.Master_Lead.data.0.Id}}</formula>
+														</update>
+													</updates>
+												</action>
+												<action type="updateRow" fieldmodel="ReparentEvents" affectedrows="all">
+													<updates>
+														<update valuesource="formula" field="WhoId" fieldtargetobjects="Contact,Lead" enclosevalueinquotes="true">
+															<formula>{{$Model.Master_Lead.data.0.Id}}</formula>
+														</update>
+													</updates>
+												</action>
+												<action type="save">
+													<models>
+														<model>ReparentActivities</model>
+														<model>ReparentEvents</model>
+													</models>
+												</action>
+												<action type="markRowsForDeletion" model="Dupe_Leads_List" affectedrows="all"/>
+												<action type="save">
+													<models>
+														<model>Master_Lead</model>
+														<model>Dupe_Leads_List</model>
+													</models>
+												</action>
+												<action type="runComponentAction" componentid="sk-20VB-19077" action="navigateToStep" stepId="step1"/>
+												<action type="requeryModels" behavior="standard">
+													<models>
+														<model>LeadsByName</model>
+														<model>LeadsByEmail</model>
+													</models>
+												</action>
+												<action type="unblockUI"/>
+											</actions>
+										</skuid__button>
+									</buttons>
+								</skuid__buttonGroup>
+							</groups>
+						</skuid__buttonSet>
+					</components>
+					<buttons/>
+				</step>
+			</steps>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+		</skuid__wizard>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background/>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__header uniqueid="sk-1-wr-11285" model="LeadsByName" title="Duplicate Lead Audit and Merge">
+							<styles>
+								<spacing top="2" bottom="2" left="4"/>
+							</styles>
+						</skuid__header>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#d8d8d8"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>
