@@ -87,8 +87,6 @@
 		</model>
 		<model id="ReparentActivities" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Task">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="Id"/>
 				<field id="What.Name"/>
 				<field id="WhoId"/>
@@ -101,8 +99,6 @@
 		</model>
 		<model id="ReparentEvents" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Event">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="WhoId"/>
 				<field id="Who.Name"/>
 				<field id="Id"/>
