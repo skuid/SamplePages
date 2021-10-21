@@ -31,7 +31,7 @@
 				<having field="Id" fieldfunction="COUNT" operator="gt" value="2" enclosevalueinquotes="false"/>
 			</havings>
 		</model>
-		<model id="Master_Lead" limit="1" query="false" createrowifnonefound="false" sobject="Lead" doclone="" type="" datasource="salesforce" orderby="CreatedDate ASC">
+		<model id="Winner_Lead" limit="1" query="false" createrowifnonefound="false" sobject="Lead" doclone="" type="" datasource="salesforce" orderby="CreatedDate ASC">
 			<fields>
 				<field id="Name"/>
 				<field id="Email"/>
@@ -81,14 +81,12 @@
 				<condition type="fieldvalue" value="false" enclosevalueinquotes="false" field="IsConverted"/>
 				<condition type="fieldvalue" value="" field="Name" operator="=" mergefield="Name" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Name" enclosevalueinquotes="true" clientorserver="server"/>
 				<condition type="fieldvalue" value="" field="Email" operator="=" mergefield="Email" novaluebehavior="noquery" state="filterableoff" inactive="true" name="Email" enclosevalueinquotes="true" clientorserver="server"/>
-				<condition type="modelmerge" value="" field="Id" operator="!=" model="Master_Lead" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
+				<condition type="modelmerge" value="" field="Id" operator="!=" model="Winner_Lead" enclosevalueinquotes="true" mergefield="Id" novaluebehavior="noquery"/>
 			</conditions>
 			<actions/>
 		</model>
 		<model id="ReparentActivities" limit="20" query="false" createrowifnonefound="false" datasource="salesforce" sobject="Task">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="Id"/>
 				<field id="What.Name"/>
 				<field id="WhoId"/>
@@ -101,8 +99,6 @@
 		</model>
 		<model id="ReparentEvents" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Event">
 			<fields>
-				<field id="RecordTypeId"/>
-				<field id="RecordType.Name"/>
 				<field id="WhoId"/>
 				<field id="Who.Name"/>
 				<field id="Id"/>
@@ -135,15 +131,15 @@
 													<actions>
 														<action type="deactivateFilterableConditions">
 															<models>
-																<model>Master_Lead</model>
+																<model>Winner_Lead</model>
 																<model>Dupe_Leads_List</model>
 															</models>
 														</action>
-														<action type="updateCondition" model="Master_Lead" behavior="set" condition="Name" valuesource="fieldvalue" value="{{name}}"/>
+														<action type="updateCondition" model="Winner_Lead" behavior="set" condition="Name" valuesource="fieldvalue" value="{{name}}"/>
 														<action type="updateCondition" model="Dupe_Leads_List" behavior="set" condition="Name" valuesource="fieldvalue" value="{{name}}"/>
 														<action type="requeryModels" behavior="standard">
 															<models>
-																<model>Master_Lead</model>
+																<model>Winner_Lead</model>
 																<model>Dupe_Leads_List</model>
 																<model>ReparentActivities</model>
 																<model>ReparentEvents</model>
@@ -191,15 +187,15 @@
 													<actions>
 														<action type="deactivateFilterableConditions">
 															<models>
-																<model>Master_Lead</model>
+																<model>Winner_Lead</model>
 																<model>Dupe_Leads_List</model>
 															</models>
 														</action>
-														<action type="updateCondition" model="Master_Lead" behavior="set" condition="Email" valuesource="fieldvalue" value="{{email}}"/>
+														<action type="updateCondition" model="Winner_Lead" behavior="set" condition="Email" valuesource="fieldvalue" value="{{email}}"/>
 														<action type="updateCondition" model="Dupe_Leads_List" behavior="set" condition="Email" valuesource="fieldvalue" value="{{email}}"/>
 														<action type="requeryModels" behavior="standard">
 															<models>
-																<model>Master_Lead</model>
+																<model>Winner_Lead</model>
 																<model>Dupe_Leads_List</model>
 																<model>ReparentActivities</model>
 																<model>ReparentEvents</model>
@@ -234,7 +230,7 @@
 				</step>
 				<step stepId="step2" stepLabel="Manage and Merge">
 					<components>
-						<skuid__table uniqueid="sk-1-yd-64887" showListHeader="true" showListFooter="false" mode="edit" model="Master_Lead" pageSize="Infinity" showSaveCancel="false" rowHeightStrategy="fit" allowColumnFreezing="dragDrop" showPageSizeSelect="false" allowSortingByColumn="false" title="Master Lead">
+						<skuid__table uniqueid="sk-1-yd-64887" showListHeader="true" showListFooter="false" mode="edit" model="Winner_Lead" pageSize="Infinity" showSaveCancel="false" rowHeightStrategy="fit" allowColumnFreezing="dragDrop" showPageSizeSelect="false" allowSortingByColumn="false" title="Winning Lead">
 							<fields>
 								<field uniqueid="sk-1-yd-64888" id="Name" readOnly="true" displayAs="" horizontalAlignment="" label="Winning Lead" hideable="trueShowByDefault" columnLabelWrap="nowrap"/>
 								<field uniqueid="sk-1-yd-64889" id="CreatedDate" displayAs="" horizontalAlignment="" label="Created" hideable="trueShowByDefault" columnLabelWrap="nowrap"/>
@@ -263,7 +259,7 @@
 								<spacing top="4" styleSettingsVariant="medium"/>
 							</styles>
 						</skuid__text>
-						<skuid__text contents="-&amp;nbsp; Use Row Action to remove leads that should NOT be merged.&amp;nbsp;&lt;br /&gt;&#10;-&amp;nbsp; Click on cells in table to update data on Master Lead" uniqueid="sk-24mm-25173" styleSettingsVariant="small"/>
+						<skuid__text contents="-&amp;nbsp; Use Row Action to remove leads that should NOT be merged.&amp;nbsp;&lt;br /&gt;&#10;-&amp;nbsp; Click on cells in table to update data on Winner Lead" uniqueid="sk-24mm-25173" styleSettingsVariant="small"/>
 						<skuid__table uniqueid="sk-1-yd-64900" showListHeader="true" showListFooter="false" mode="readonly" model="Dupe_Leads_List" pageSize="Infinity" showSaveCancel="false" rowHeightStrategy="fit" allowColumnHiding="false" allowSortingByColumn="false" showPageSizeSelect="false">
 							<fields>
 								<field uniqueid="sk-1-yd-64901" id="Name" displayAs="" horizontalAlignment="" columnLabelWrap="clip" hideable="trueShowByDefault"/>
@@ -271,7 +267,7 @@
 								<field type="COMBO" label="Status" hideable="trueShowByDefault" template="{{Status}}" redirectType="none" columnLabelWrap="clip" readOnly="true" uniqueid="sk-1-yd-64903">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Status" enclosevalueinquotes="true" value="{{Status}}">
 														<formula>{{Status}}</formula>
@@ -284,7 +280,7 @@
 								<field type="COMBO" label="Owner" hideable="trueShowByDefault" template="{{OwnerId}}" readOnly="true" columnLabelWrap="clip" uniqueid="sk-1-yd-64904">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="OwnerId" fieldtargetobjects="Group,User" enclosevalueinquotes="true" value="{{OwnerId}}">
 														<formula>{{OwnerId}}</formula>
@@ -300,7 +296,7 @@
 								<field type="COMBO" label="Lead Source" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64905" columnLabelWrap="clip">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="LeadSource" enclosevalueinquotes="true" value="{{LeadSource}}">
 														<formula>{{LeadSource}}</formula>
@@ -313,7 +309,7 @@
 								<field type="COMBO" label="Company" template="{{Company}}" readOnly="true" uniqueid="fi-24G2-50558">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Company" enclosevalueinquotes="true" value="{{Company}}">
 														<formula>{{Company}}</formula>
@@ -326,7 +322,7 @@
 								<field type="COMBO" label="Phone" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64906" columnLabelWrap="clip" template="{{Phone}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Phone" enclosevalueinquotes="true" value="{{Phone}}">
 														<formula>{{Phone}}</formula>
@@ -339,7 +335,7 @@
 								<field type="COMBO" label="Email" template="{{Email}}" readOnly="true" uniqueid="fi-24I9-21215">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Email" enclosevalueinquotes="true" value="{{Email}}">
 														<formula>{{Email}}</formula>
@@ -352,7 +348,7 @@
 								<field type="COMBO" label="Street" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64907" columnLabelWrap="clip" template="{{Street}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Street" enclosevalueinquotes="true" value="{{Street}}">
 														<formula>{{Street}}</formula>
@@ -365,7 +361,7 @@
 								<field type="COMBO" label="City" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64908" columnLabelWrap="clip" template="{{City}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="City" enclosevalueinquotes="true" value="{{City}}">
 														<formula>{{City}}</formula>
@@ -378,7 +374,7 @@
 								<field type="COMBO" label="State" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64909" columnLabelWrap="clip" template="{{State}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="State" enclosevalueinquotes="true" value="{{State}}">
 														<formula>{{State}}</formula>
@@ -391,7 +387,7 @@
 								<field type="COMBO" label="Zip" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64910" columnLabelWrap="clip" template="{{PostalCode}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="PostalCode" enclosevalueinquotes="true" value="{{PostalCode}}">
 														<formula>{{PostalCode}}</formula>
@@ -404,7 +400,7 @@
 								<field type="COMBO" label="Country" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64911" columnLabelWrap="clip" template="{{Country}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Country" enclosevalueinquotes="true" value="{{Country}}">
 														<formula>{{Country}}</formula>
@@ -417,7 +413,7 @@
 								<field type="COMBO" label="Description" hideable="trueShowByDefault" readOnly="true" uniqueid="sk-1-yd-64912" columnLabelWrap="clip" template="{{Description}}">
 									<interactions>
 										<interaction type="tap">
-											<action type="updateRow" fieldmodel="Master_Lead" affectedrows="context">
+											<action type="updateRow" fieldmodel="Winner_Lead" affectedrows="context">
 												<updates>
 													<update valuesource="formula" field="Description" enclosevalueinquotes="true" value="{{Description}}">
 														<formula>{{Description}}</formula>
@@ -489,7 +485,7 @@
 							<renderConditions logictype="and"/>
 							<styleVariantConditions/>
 						</skuid__text>
-						<skuid__buttonSet model="Master_Lead" uniqueid="sk-24pX-38957" position="left">
+						<skuid__buttonSet model="Winner_Lead" uniqueid="sk-24pX-38957" position="left">
 							<groups>
 								<skuid__buttonGroup uniqueId="sk-24pX-38955">
 									<buttons>
@@ -499,14 +495,14 @@
 												<action type="updateRow" fieldmodel="ReparentActivities" affectedrows="all">
 													<updates>
 														<update valuesource="formula" field="WhoId" fieldtargetobjects="Contact,Lead" enclosevalueinquotes="true">
-															<formula>{{$Model.Master_Lead.data.0.Id}}</formula>
+															<formula>{{$Model.Winner_Lead.data.0.Id}}</formula>
 														</update>
 													</updates>
 												</action>
 												<action type="updateRow" fieldmodel="ReparentEvents" affectedrows="all">
 													<updates>
 														<update valuesource="formula" field="WhoId" fieldtargetobjects="Contact,Lead" enclosevalueinquotes="true">
-															<formula>{{$Model.Master_Lead.data.0.Id}}</formula>
+															<formula>{{$Model.Winner_Lead.data.0.Id}}</formula>
 														</update>
 													</updates>
 												</action>
@@ -519,7 +515,7 @@
 												<action type="markRowsForDeletion" model="Dupe_Leads_List" affectedrows="all"/>
 												<action type="save">
 													<models>
-														<model>Master_Lead</model>
+														<model>Winner_Lead</model>
 														<model>Dupe_Leads_List</model>
 													</models>
 												</action>
