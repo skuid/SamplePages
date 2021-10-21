@@ -10,7 +10,7 @@ This sample page shows an example of auditing lead records for duplicates. This 
 
 <img src="MergeLeads.png" width="300"></img>
 
-This example is described in more detail in a [blog post at Skuid Word](www.skuid.com/blog/how-to-mass-convert-leads-in-salesforce-using-skuid). Specific techniques and tools are described there. 
+This example is described in more detail in a [blog post at Skuid Word](https://www.skuid.com/blog/how-to-mass-convert-leads-in-salesforce-using-skuid). Specific techniques and tools are described there. 
 
 
 ## Instructions
