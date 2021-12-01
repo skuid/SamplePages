@@ -1,6 +1,6 @@
 # Multi-part Form Navigation and Real-time Completion Status
 
-Skuid can be used to create very effective complex data-entry forms.  There are two principles that can help users work through an extensive data-entry process:  
+Skuid can be used to create very effective and complex data entry forms.  There are two principles that can help users work through an extensive data entry process:  
 - Break up the form into chunks.
 - Provide wayfinding and progress status information. 
 
