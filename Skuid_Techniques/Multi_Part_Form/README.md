@@ -21,7 +21,7 @@ The example also shows how to include dynamic information within a navigation it
 Syncing the Wizard and the Vertical Navigation selected state:
 
 - A UI-only feld is used to manage selected state in the Vertical Navigation component.   (See the `NavPrimary` field in the `UI Control` Model).   All navigation items and Wizard buttons have action steps that update this field to an appropriate value. 
-- The Navigation Items and the Wizard buttons each have an wizard component action that moves the user to the correct step. 
+- The navigation items and the Wizard buttons each have a Wizard component action that moves the user to the correct step. 
 
 Including dynamic information in navigation step: 
 
