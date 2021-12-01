@@ -27,7 +27,7 @@ Including dynamic information in navigation step:
 
 - The Vertical Navigation component will allow HTML in item labels.  This allows for formatting flexibility, as well as the inclusion of merge syntax to push model data into the label. 
 - Because the component is not connected to a particular model this has to be global merge syntax, like `{{$Model.FormDetail.data.0.status1}}`.
-- In order for the display within the navigation item to be updated when the data is updated - you have to call a Javscript snippet when the data is updated.   Look at the model action on the UI Control model (where the status fields are located),  as well as the Javascript found on the page. 
+- In order for the display within the navigation item to be updated when the data is updated you have to call a JavaScript snippet when the data is updated.  Look at the model action on the UI Control model (where the status fields are located),  as well as the JavaScript found on the page. 
  
 ## Related Links
 - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=Arbitrary_Filters) (for Skuid Employees only)
