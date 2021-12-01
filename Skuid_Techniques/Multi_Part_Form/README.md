@@ -4,7 +4,7 @@ Skuid can be used to create very effective and complex data entry forms.  There 
 - Break up the form into chunks.
 - Provide wayfinding and progress status information. 
 
-The example below uses the Skuid wizard component to break up a form into several different sections, but also uses the vertical navigation component - with selected-state conditions - to provide more effective wayfinding and status information for the whole form.  The example shows how to integrate the vertical navigation items and the wizard buttons so that both components stay in synch with user action. 
+The example below uses the Wizard component to break up a form into several different sections, but also uses the Vertical Navigation component - with selected-state conditions - to provide more effective wayfinding and status information for the whole form.  The example shows how to integrate the Vertical Navigation items and the Wizard buttons so that both components stay in sync with user action. 
 
 The example also shows how to include dynamic information within a navigation item.  This could be a counter of completed questions, or a completion icon, etc.    
 
