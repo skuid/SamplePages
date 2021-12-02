@@ -226,7 +226,7 @@
 								<item label="- Details - " uniqueid="sk-KX_-31805" type="section">
 									<actions/>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Intro &lt;/H2&gt; ({{$Model.UI_Control.data.0.Sec1Summary}} / 6)" uniqueid="One" icon="sk-webicon-ink:notebook">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Intro &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec1Summary}} / 6)" uniqueid="One" icon="sk-webicon-ink:notebook">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -241,7 +241,7 @@
 									</selectedConditions>
 									<items/>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Address &lt;/H2&gt; ({{$Model.UI_Control.data.0.Sec2Summary}} / 5)" uniqueid="Two" icon="sk-webicon-ink:home">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Address &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec2Summary}} / 5)" uniqueid="Two" icon="sk-webicon-ink:home">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -255,7 +255,7 @@
 										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Two"/>
 									</selectedConditions>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Options &lt;/H2&gt; ({{$Model.UI_Control.data.0.Sec3Summary}} / 6)" uniqueid="Three" icon="sk-webicon-ink:flow">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Options &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec3Summary}} / 6)" uniqueid="Three" icon="sk-webicon-ink:flow">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -272,7 +272,7 @@
 								<item label="- Related Items - " uniqueid="sk-2GYz-25436" type="section">
 									<actions/>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Products &lt;/H2&gt; (+{{$Model.UI_Control.data.0.Sec4Summary}})" uniqueid="Four" icon="sk-webicon-ink:standard-objects">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Products &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec4Summary}})" uniqueid="Four" icon="sk-webicon-ink:standard-objects">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -286,7 +286,7 @@
 										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Four"/>
 									</selectedConditions>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Assets &lt;/H2&gt; (+{{$Model.UI_Control.data.0.Sec5Summary}})" uniqueid="Five" icon="sk-webicon-ink:custom-apps">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Assets &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec5Summary}})" uniqueid="Five" icon="sk-webicon-ink:custom-apps">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -300,7 +300,7 @@
 										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Five"/>
 									</selectedConditions>
 								</item>
-								<item label="&lt;H2 style=&quot;display:inline&quot;&gt;Contacts &lt;/H2&gt; (+{{$Model.UI_Control.data.0.Sec6Summary}})" uniqueid="Six" icon="sk-webicon-ink:people">
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Contacts &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec6Summary}})" uniqueid="Six" icon="sk-webicon-ink:people">
 									<actions>
 										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step6"/>
 										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
@@ -467,7 +467,7 @@
 																<section title="New Section" showHeading="false">
 																	<fields>
 																		<skuid__field id="Sec3Field1" uniqueId="sk-Fxa-28686"/>
-																		<skuid__field id="Sec3Field2" uniqueId="sk-Fxa-28699" displayAs="BUTTON_GROUP"/>
+																		<skuid__field id="Sec3Field2" uniqueId="sk-Fxa-28699" displayAs="BUTTON_GROUP" addNoneOption="false" noneLabel="None" radioLayout="column"/>
 																		<skuid__field id="Sec3Field3" uniqueId="sk-Fxa-28712" displayAs="BUTTON_GROUP"/>
 																		<skuid__field id="Sec3Field4" uniqueId="sk-Fxa-28725" displayAs="BUTTON_GROUP"/>
 																		<skuid__field id="Sec3Field5" uniqueId="sk-Fxa-28738" selectedList="3" displayAs="MULTIBUTTON_GROUP"/>
@@ -585,7 +585,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-G0t-28420" heightStrategy="fixed" height="60">
 											<components>
-												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec4Summary}} Assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
+												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec5Summary}} Assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
@@ -648,7 +648,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-G0v-30228" heightStrategy="fixed" height="60">
 											<components>
-												<skuid__text contents="Step 6.&amp;nbsp; &amp;nbsp;{{Sec4Summary}} contacts added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0v-30229" styleSettingsVariant="increased" model="UI_Control">
+												<skuid__text contents="Step 6.&amp;nbsp; &amp;nbsp;{{Sec6Summary}} contacts added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0v-30229" styleSettingsVariant="increased" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
