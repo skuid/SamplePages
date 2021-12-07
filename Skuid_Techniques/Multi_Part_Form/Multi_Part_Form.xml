@@ -1,0 +1,777 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="SamplePages">
+	<models>
+		<model id="UI_Control" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields>
+				<field id="Counter" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="0" defaultvaluetype="fieldvalue" readonly="false" returntype="DOUBLE" defaultValue="3">
+					<formula>Random()</formula>
+				</field>
+				<field displaytype="TEXT" length="255" id="NavPrimary" defaultvaluetype="fieldvalue" defaultValue="One"/>
+				<field id="Sec1Summary" displaytype="FORMULA" length="255" label="Section 1 Summary" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field1}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field2}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field3}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field4}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field5}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec1Field6}}),0,1)</formula>
+				</field>
+				<field id="Sec2Summary" displaytype="FORMULA" length="255" label="Section 1 Summary" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>IF(ISBLANK({{$Model.FormData1.data.0.Sec2Field1}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec2Field2}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec2Field3}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec2Field4}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec2Field5}}),0,1)</formula>
+				</field>
+				<field id="Sec3Summary" displaytype="FORMULA" length="255" label="Section 1 Summary" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field1}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field2}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field3}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field4}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field5}}),0,1)
++ IF(ISBLANK({{$Model.FormData1.data.0.Sec3Field6}}),0,1)</formula>
+				</field>
+				<field id="Sec4Summary" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>{{$Model.FormData2_List.data.length}}</formula>
+				</field>
+				<field id="Sec5Summary" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>{{$Model.FormData3_List.data.length}}</formula>
+				</field>
+				<field id="Sec6Summary" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>{{$Model.FormData4_List.data.length}}</formula>
+				</field>
+				<field id="SectionGlobalProgress" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="2" scale="0">
+					<formula>IF({{Sec1Summary}}=6,1,0)
++ IF({{Sec2Summary}}=5,1,0)
++ IF({{Sec3Summary}}=6,1,0)
++ IF({{Sec4Summary}}&gt;0,1,0)
++ IF({{Sec5Summary}}&gt;0,1,0)
++ IF({{Sec6Summary}}&gt;0,1,0)
+</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="custom" snippet="UpdateMergeInNav"/>
+					</actions>
+					<events>
+						<event>row.updated</event>
+					</events>
+				</action>
+			</actions>
+		</model>
+		<model id="FormData1" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="Sec1Field1" label="Name" displaytype="TEXT" length="255"/>
+				<field id="Sec1Field2" label="Phone" displaytype="TEXT" length="255"/>
+				<field id="Sec1Field3" label="Email Opt Out" displaytype="BOOLEAN" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" enclosevalueinquotes="false"/>
+				<field id="Sec1Field4" label="Email" displaytype="EMAIL" length="255" ogdisplaytype="TEXT"/>
+				<field id="Sec1Field5" label="Category" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+				<field id="Sec1Field6" label="Total Earnings" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="Sec2Field1" label="Street" displaytype="TEXT" length="255"/>
+				<field id="Sec2Field2" label="City" displaytype="TEXT" length="255"/>
+				<field id="Sec2Field3" label="State" displaytype="TEXT" length="2"/>
+				<field id="Sec2Field4" label="Zip" displaytype="TEXT" length="9"/>
+				<field id="Sec2Field5" label="Country" displaytype="TEXT" length="255"/>
+				<field id="Sec3Field1" label="Name" displaytype="TEXT" length="255"/>
+				<field id="Sec3Field2" label="Option 1" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+				<field id="Sec3Field3" label="Option 2" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+				<field id="Sec3Field4" label="Option 3" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+				<field id="Sec3Field5" label="Option 4" displaytype="MULTIPICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+						<entry value="Val3" label="Value 3"/>
+					</picklistentries>
+				</field>
+				<field id="Sec3Field6" label="Bonus" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="FormData2_List" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="TableField1" label="Id" displaytype="UUID" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue"/>
+				<field id="TableField2" label="Name" displaytype="TEXT" length="255"/>
+				<field id="TableField3" label="Amount" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="TableField4" label="Quantity" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="TableField5" label="Discount" displaytype="PERCENT" length="255" ogdisplaytype="TEXT" readonly="false" returntype="TEXT" precision="2" scale="0"/>
+				<field id="TableField6" label="Options" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="FormData3_List" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="TableField1" label="Id" displaytype="UUID" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue"/>
+				<field id="TableField2" label="Name" displaytype="TEXT" length="255"/>
+				<field id="TableField3" label="Cost" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="TableField4" label="Age" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="9" scale="2"/>
+				<field id="TableField5" label="Evaluation" displaytype="PERCENT" length="255" ogdisplaytype="TEXT" readonly="false" returntype="TEXT" precision="2" scale="0"/>
+				<field id="TableField6" label="Options" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="FormData4_List" limit="20" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="TableField1" label="Id" displaytype="UUID" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue"/>
+				<field id="TableField2" label="First Name" displaytype="TEXT" length="255"/>
+				<field id="TableField3" label="Last Name" displaytype="TEXT" length="255"/>
+				<field id="TableField4" displaytype="EMAIL" length="255" ogdisplaytype="TEXT" label="Email"/>
+				<field id="TableField5" label="Options" displaytype="PICKLIST" length="255" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
+					<picklistentries>
+						<entry value="Val1" label="Value 1"/>
+						<entry value="Val2" label="Value 2"/>
+					</picklistentries>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__masthead uniqueid="sk-2GXF-1751">
+			<divisions>
+				<division type="logo" flex="0">
+					<components>
+						<skuid__image source="staticresource" height="custom" heightCustom="100%" datasource="salesforce" resource="UIG_Blue_Logo" resourceContentType="image/png" imageWidth="100px">
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__image>
+					</components>
+				</division>
+				<division type="separator" flex="0"/>
+				<division type="search" flex="0">
+					<components>
+						<skuid__text contents="Navigation Wizard Integration" uniqueid="sk-2GbE-9735" styleSettingsVariant="large" model="UI_Control">
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4"/>
+							</styles>
+						</skuid__text>
+					</components>
+				</division>
+				<division type="separator" flex="3" minWidth="300px"/>
+				<division type="navigation" flex="1" minWidth="250px">
+					<components>
+						<skuid__navigation type="horizontal">
+							<itemGroups>
+								<itemGroup>
+									<items>
+										<item label="Link 1" uniqueid="sk-2Gg7-6472" icon="sk-webicon-ink:ban">
+											<actions/>
+											<renderConditions logictype="and"/>
+											<selectedConditions/>
+											<styleVariantConditions/>
+										</item>
+										<item label="LInk 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
+											<actions/>
+										</item>
+										<item label="Link 3" uniqueid="sk-2Gg8-11152" icon="sk-webicon-ink:clock">
+											<actions/>
+										</item>
+									</items>
+								</itemGroup>
+							</itemGroups>
+							<styles>
+								<spacing top="2" bottom="2" left="4" right="4"/>
+							</styles>
+						</skuid__navigation>
+					</components>
+				</division>
+			</divisions>
+		</skuid__masthead>
+		<skuid__grid uniqueid="sk-2GXG-2068" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3">
+			<divisions>
+				<division minWidth="0px" ratio="0" alignSelf="auto">
+					<components>
+						<skuid__text contents="&amp;nbsp;{{SectionGlobalProgress}} Sections Complete" uniqueid="sk-G0j-26805" model="UI_Control" styleSettingsVariant="increased">
+							<styles>
+								<spacing top="2" styleSettingsVariant="increased" left="2"/>
+							</styles>
+						</skuid__text>
+						<skuid__verticalNavigation uniqueid="Form_Vertical_Nav" styleSettingsVariant="borderless" allowHTML="true">
+							<items>
+								<item label="- Details - " uniqueid="sk-KX_-31805" type="section">
+									<actions/>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Intro &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec1Summary}} / 6)" uniqueid="One" icon="sk-webicon-ink:notebook">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="One"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="One"/>
+									</selectedConditions>
+									<items/>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Address &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec2Summary}} / 5)" uniqueid="Two" icon="sk-webicon-ink:home">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Two"/>
+									</selectedConditions>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Options &lt;/H3&gt; ({{$Model.UI_Control.data.0.Sec3Summary}} / 6)" uniqueid="Three" icon="sk-webicon-ink:flow">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Three"/>
+									</selectedConditions>
+								</item>
+								<item label="- Related Items - " uniqueid="sk-2GYz-25436" type="section">
+									<actions/>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Products &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec4Summary}})" uniqueid="Four" icon="sk-webicon-ink:standard-objects">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Four"/>
+									</selectedConditions>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Assets &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec5Summary}})" uniqueid="Five" icon="sk-webicon-ink:custom-apps">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Five"/>
+									</selectedConditions>
+								</item>
+								<item label="&lt;H3 style=&quot;display:inline&quot;&gt;Contacts &lt;/H3&gt; (+{{$Model.UI_Control.data.0.Sec6Summary}})" uniqueid="Six" icon="sk-webicon-ink:people">
+									<actions>
+										<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step6"/>
+										<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+											<updates>
+												<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Six"/>
+											</updates>
+										</action>
+									</actions>
+									<renderConditions logictype="and"/>
+									<selectedConditions logictype="and">
+										<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="UI_Control" sourcetype="fieldvalue" nosourcerowbehavior="deactivate" field="NavPrimary" value="Six"/>
+									</selectedConditions>
+								</item>
+							</items>
+							<styles>
+								<spacing top="2"/>
+							</styles>
+						</skuid__verticalNavigation>
+					</components>
+				</division>
+				<division alignSelf="auto" minWidth="100px" ratio="1">
+					<components>
+						<skuid__wizard uniqueid="sk-2ftV-7225" hideStepLabels="true">
+							<steps>
+								<step stepId="step1" stepLabel="Step 1">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="&amp;nbsp;Step 1:&amp;nbsp; &amp;nbsp; &amp;nbsp;{{Sec1Summary}} of 6 questions complete.&amp;nbsp;" uniqueid="sk-2ftj-13130" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__form showErrorsInline="true" model="FormData1" uniqueid="sk-Ffq-21200" mode="edit" labelPlacement="beside" minLabelWidth="100px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+													<columns>
+														<column behavior="flex" verticalAlign="top" maxWidth="600px" width="600px">
+															<sections>
+																<section title="New Section" showHeading="false">
+																	<fields>
+																		<skuid__field id="Sec1Field1" uniqueId="sk-Ffq-21201"/>
+																		<skuid__field id="Sec1Field2" uniqueId="sk-Ffq-21202"/>
+																		<skuid__field id="Sec1Field3" uniqueId="sk-Ffq-21203"/>
+																		<skuid__field id="Sec1Field4" uniqueId="sk-Ffq-21204"/>
+																		<skuid__field id="Sec1Field5" uniqueId="sk-Ffq-21205"/>
+																		<skuid__field id="Sec1Field6" uniqueId="sk-Ffq-21206"/>
+																	</fields>
+																</section>
+															</sections>
+														</column>
+														<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+															<sections>
+																<section showHeading="false">
+																	<fields/>
+																</section>
+															</sections>
+														</column>
+													</columns>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__form>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+													</updates>
+												</action>
+											</actions>
+											<renderConditions logictype="and"/>
+											<enableConditions logictype="and" message="Finish this section before moving ahead"/>
+											<styleVariantConditions/>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step2" stepLabel="Step 2">
+									<components>
+										<skuid__wrapper uniqueid="sk-Fw--16925" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="&amp;nbsp;Step 2:&amp;nbsp; &amp;nbsp; &amp;nbsp;{{Sec2Summary}} of 5 questions done.&amp;nbsp;" uniqueid="sk-Fw--16926" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__form showErrorsInline="true" model="FormData1" uniqueid="sk-Fw--16927" mode="edit" labelPlacement="beside" minLabelWidth="100px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+													<columns>
+														<column behavior="flex" verticalAlign="top" maxWidth="600px" width="600px">
+															<sections>
+																<section title="New Section" showHeading="false">
+																	<fields>
+																		<skuid__field id="Sec2Field1" uniqueId="sk-FxO-23184"/>
+																		<skuid__field id="Sec2Field2" uniqueId="sk-FxO-23197"/>
+																		<skuid__field id="Sec2Field3" uniqueId="sk-FxO-23210"/>
+																		<skuid__field id="Sec2Field4" uniqueId="sk-FxO-23223"/>
+																		<skuid__field id="Sec2Field5" uniqueId="sk-FxO-23236"/>
+																	</fields>
+																</section>
+															</sections>
+														</column>
+														<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+															<sections>
+																<section showHeading="false">
+																	<fields/>
+																</section>
+															</sections>
+														</column>
+													</columns>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__form>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="One"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step3" stepLabel="Step 3">
+									<components>
+										<skuid__wrapper uniqueid="sk-FxR-24183" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="&amp;nbsp;Step 3:&amp;nbsp; &amp;nbsp; &amp;nbsp;{{Sec3Summary}} of 6 questions done.&amp;nbsp;" uniqueid="sk-FxR-24184" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__form showErrorsInline="true" model="FormData1" uniqueid="sk-FxR-24185" mode="edit" labelPlacement="beside" minLabelWidth="100px" flexRatioLabel="1" minValueWidth="200px" flexRatioValue="2">
+													<columns>
+														<column behavior="flex" verticalAlign="top" maxWidth="600px" width="600px">
+															<sections>
+																<section title="New Section" showHeading="false">
+																	<fields>
+																		<skuid__field id="Sec3Field1" uniqueId="sk-Fxa-28686"/>
+																		<skuid__field id="Sec3Field2" uniqueId="sk-Fxa-28699" displayAs="BUTTON_GROUP" addNoneOption="false" noneLabel="None" radioLayout="column"/>
+																		<skuid__field id="Sec3Field3" uniqueId="sk-Fxa-28712" displayAs="BUTTON_GROUP"/>
+																		<skuid__field id="Sec3Field4" uniqueId="sk-Fxa-28725" displayAs="BUTTON_GROUP"/>
+																		<skuid__field id="Sec3Field5" uniqueId="sk-Fxa-28738" selectedList="3" displayAs="MULTIBUTTON_GROUP"/>
+																		<skuid__field id="Sec3Field6" uniqueId="sk-Fxa-28751"/>
+																	</fields>
+																</section>
+															</sections>
+														</column>
+														<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+															<sections>
+																<section showHeading="false">
+																	<fields/>
+																</section>
+															</sections>
+														</column>
+													</columns>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__form>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step2"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Two"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step4" stepLabel="Step 4">
+									<components>
+										<skuid__wrapper uniqueid="sk-2ftd-11694" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="Step 4.&amp;nbsp; &amp;nbsp;{{Sec4Summary}} products added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-2ftj-13130" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__table allowColumnFreezing="dragDrop" model="FormData2_List" uniqueid="sk-FzC-40010" mode="edit" showSaveCancel="false" allowSortingByColumn="true">
+													<fields>
+														<field id="TableField2" uniqueid="fi-FzC-40634"/>
+														<field id="TableField3" horizontalAlignment="right" uniqueid="fi-FzC-40635"/>
+														<field id="TableField4" horizontalAlignment="right" uniqueid="fi-FzC-40636"/>
+														<field id="TableField5" horizontalAlignment="right" uniqueid="fi-FzC-40637"/>
+														<field id="TableField6" uniqueid="fi-FzC-40638" displayAs="BUTTON_GROUP"/>
+													</fields>
+													<filtering enableSearch="false"/>
+													<actions>
+														<action type="multi" label="Add">
+															<actions>
+																<action type="createRow" model="FormData2_List" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context"/>
+															</actions>
+														</action>
+													</actions>
+													<rowActions/>
+													<massActions/>
+													<exportProperties useTableColumns="true"/>
+													<sorting enable="false"/>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__table>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step3"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Three"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step5" stepLabel="Step 5">
+									<components>
+										<skuid__wrapper uniqueid="sk-G0t-28420" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec5Summary}} assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__table allowColumnFreezing="dragDrop" model="FormData3_List" uniqueid="sk-G0t-28422" mode="edit" showSaveCancel="false" allowSortingByColumn="true">
+													<fields>
+														<field id="TableField2" uniqueid="fi-G17-38210"/>
+														<field id="TableField4" horizontalAlignment="right" uniqueid="fi-G17-38211"/>
+														<field id="TableField3" horizontalAlignment="right" uniqueid="fi-G17-38212"/>
+														<field id="TableField5" horizontalAlignment="right" uniqueid="fi-G17-38213"/>
+														<field id="TableField6" uniqueid="fi-G17-38214"/>
+													</fields>
+													<filtering enableSearch="false" searchMethod="client"/>
+													<actions>
+														<action type="multi" label="Add">
+															<actions>
+																<action type="createRow" model="FormData3_List" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context"/>
+															</actions>
+														</action>
+													</actions>
+													<rowActions/>
+													<massActions/>
+													<exportProperties useTableColumns="true"/>
+													<sorting enable="false"/>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__table>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step4"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Four"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+										<button label="Next" styleSettingsVariant="primary">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step6"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Six"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+								<step stepId="step6" stepLabel="Step 6">
+									<components>
+										<skuid__wrapper uniqueid="sk-G0v-30228" heightStrategy="fixed" height="60">
+											<components>
+												<skuid__text contents="Step 6.&amp;nbsp; &amp;nbsp;{{Sec6Summary}} contacts added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0v-30229" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__table allowColumnFreezing="dragDrop" model="FormData4_List" uniqueid="sk-G0v-30230" mode="edit" showSaveCancel="false" allowSortingByColumn="true">
+													<fields>
+														<field id="TableField2" uniqueid="fi-G1K-43420"/>
+														<field id="TableField3" uniqueid="fi-G1K-43421"/>
+														<field id="TableField4" uniqueid="fi-G1K-43422"/>
+														<field id="TableField5" uniqueid="fi-KYq-39182"/>
+													</fields>
+													<filtering enableSearch="false" searchMethod="client"/>
+													<actions>
+														<action type="multi" label="Add">
+															<actions>
+																<action type="createRow" model="FormData4_List" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context"/>
+															</actions>
+														</action>
+													</actions>
+													<rowActions/>
+													<massActions/>
+													<exportProperties useTableColumns="true"/>
+													<sorting enable="false"/>
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4"/>
+													</styles>
+												</skuid__table>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#f2f2f2"/>
+										</skuid__wrapper>
+									</components>
+									<buttons>
+										<button label="Back">
+											<actions>
+												<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step5"/>
+												<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+													<updates>
+														<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="Five"/>
+													</updates>
+												</action>
+											</actions>
+										</button>
+									</buttons>
+								</step>
+							</steps>
+							<styles>
+								<spacing/>
+							</styles>
+						</skuid__wizard>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing top="2" bottom="2" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__grid>
+	</components>
+	<resources>
+		<labels/>
+		<javascript>
+			<jsitem location="inlinesnippet" name="UpdateMergeInNav" cachelocation="false">/************************
+ * VERTICAL NAVIGATION ITEM
+ ************************/
+
+// What is the Unique ID of the Vertical Navigation Component (Not the item)
+const vertNavigationUniqueID = "Form_Vertical_Nav"
+// Which Nav Item needs the update? First section is 0, second is 1, etc...
+
+const vertNavigation = skuid.component.getById(vertNavigationUniqueID);
+const items = vertNavigation.get("items");
+
+// Update First Nav Entry. (first item is divider) 
+var vertNavItemIndex = 1;
+var itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);
+
+
+// Update Second Nav Entry  
+vertNavItemIndex = 2;
+itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);
+
+// Update Third Nav Entry  
+vertNavItemIndex = 3;
+itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);
+
+// Update Fourth Nav Entry. (Fourth item is divider) 
+vertNavItemIndex = 5;
+itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);
+
+// Update Fifth Nav Entry 
+vertNavItemIndex = 6;
+itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);
+
+// Update Sixth Nav Entry
+vertNavItemIndex = 7;
+itemId = items[vertNavItemIndex].id;
+vertNavigation.registerMergeText(items[vertNavItemIndex].label, `_labels:${itemId}`);</jsitem>
+		</javascript>
+		<css/>
+		<actionsequences>
+			<actionsequence id="48250560-b035-40e5-aa3c-22019c0f626f" type="reusable" event-scope="component" label="SelectFirstEntry" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="redirect" window="self" url="#One"/>
+					<action type="runComponentAction" componentid="sk-2ftV-7225" action="navigateToStep" stepId="step1"/>
+					<action type="updateRow" fieldmodel="UI_Control" affectedrows="context">
+						<updates>
+							<update valuesource="fieldvalue" field="NavPrimary" enclosevalueinquotes="true" value="One"/>
+						</updates>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+</skuid__page>
