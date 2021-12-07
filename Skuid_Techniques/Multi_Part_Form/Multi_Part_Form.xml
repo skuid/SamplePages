@@ -585,7 +585,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-G0t-28420" heightStrategy="fixed" height="60">
 											<components>
-												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec5Summary}} Assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
+												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec5Summary}} assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
