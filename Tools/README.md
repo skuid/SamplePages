@@ -41,6 +41,16 @@ Related Links:
    - [Community Post](https://community.skuid.com/skuid/topics/the-users-show-2-users-and-4-licenses-but-none-available)
    - [Internal link in Demo Org](https://skuid-demo--skuid.na137.visual.force.com/apex/skuid__ui?page=SubscriptionManagement) (for Skuid Employees only)
 
+### <a href="SubscriptionAnalysis.xml" download="SubscriptionAnalysis.xml">Subscription Analysis </a>  
+
+Skuid Licenses assigned in your Salesforce org aggregated by Profile and User Type.  This report will show you how many Customer Portal users are currently licensed to use Skuid. 
+
+Instructions: 
+
+   - Page API:  V2
+   - Data source: Uses default Salesforce data source
+   - Design System: Default 
+   - Page XML:  [Copy the XML from this page](SubscriptionAnalysis.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
  ### <a href="SkuidLicenseUse_V2.xml" download="SkuidLicenseUse_V2.xml">Skuid User Logins - Last Six Months</a>  
