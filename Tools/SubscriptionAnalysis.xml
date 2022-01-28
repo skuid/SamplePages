@@ -1,0 +1,216 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" useviewportmeta="true" showsidebar="false" showheader="false" tabtooverride="UserPackageLicense" theme="Ink">
+	<background type="none"/>
+	<models>
+		<model id="UserPackageLicense" query="false" createrowifnonefound="false" datasource="salesforce" sobject="UserPackageLicense" processonclient="true" limit="">
+			<fields>
+				<field id="UserId"/>
+				<field id="PackageLicenseId"/>
+				<field id="PackageLicense.NamespacePrefix"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Users" limit="" query="false" createrowifnonefound="false" datasource="salesforce" sobject="User" processonclient="true" orderby="Profile.Name ASC" type="aggregate">
+			<fields>
+				<field id="Id" name="countId" function="COUNT"/>
+			</fields>
+			<conditions>
+				<condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableon" inactive="false" name="YesSkuid" clientorserver="server"/>
+				<condition type="modelmerge" value="" field="Id" operator="not in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableoff" inactive="true" name="NoSkuid" clientorserver="server"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple">
+				<field id="ProfileId" name="profileId"/>
+				<field id="Profile.Name" name="profileName"/>
+				<field id="UserType" name="userType"/>
+			</groupby>
+		</model>
+		<model id="SelectedUserPackageLicense" limit="1" query="false" createrowifnonefound="false" sobject="UserPackageLicense" datasource="salesforce">
+			<fields>
+				<field id="Id"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="UserId" state="filterableoff" inactive="true" name="UserId"/>
+				<condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="PackageLicense.NamespacePrefix"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="PackageLicense" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" type="" sobject="PackageLicense">
+			<fields>
+				<field id="AllowedLicenses"/>
+				<field id="UsedLicenses"/>
+				<field id="AvailableLicenses" uionly="true" displaytype="FORMULA" label="Available Licenses" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" precision="9" scale="0">
+					<formula>{{{AllowedLicenses}}} - {{{UsedLicenses}}}</formula>
+				</field>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="skuid" enclosevalueinquotes="true" field="NamespacePrefix"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="UI" limit="20" query="true" datasource="Ui-Only" createrowifnonefound="true">
+			<fields>
+				<field id="Today" displaytype="DATE" length="255" ogdisplaytype="TEXT" defaultvaluetype="fieldvalue" defaultValue="NOW"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2oSq-17163">
+			<components>
+				<skuid__grid uniqueid="sk-2YPG-34118" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+					<divisions>
+						<division minWidth="100px" ratio="1">
+							<components>
+								<skuid__text uniqueid="sk-NRizp-268" model="PackageLicense" contents="&lt;span style=&quot;font-size:18px;&quot;&gt;You have&lt;strong&gt; {{AvailableLicenses}}&lt;/strong&gt; available Skuid licenses.&lt;/span&gt;&lt;br /&gt;&#10;-&amp;nbsp;Allowed Licenses: &lt;strong&gt;{{{AllowedLicenses}}}&lt;/strong&gt;&lt;br /&gt;&#10;- Used Licenses: &lt;strong&gt;{{{UsedLicenses}}}&lt;/strong&gt;">
+									<styles>
+										<spacing bottom="4"/>
+									</styles>
+								</skuid__text>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components>
+								<skuid__text uniqueid="sk-2YPH-36001" model="UI" contents="&lt;div style=&quot;text-align: right;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Data as of:&amp;nbsp; {{Today}}&lt;/span&gt;&lt;/div&gt;&#10;">
+									<styles>
+										<spacing bottom="4"/>
+									</styles>
+								</skuid__text>
+							</components>
+						</division>
+					</divisions>
+				</skuid__grid>
+				<skuid__tabSet uniqueid="sk-2ypQ-746" rememberActiveTab="false">
+					<tabs>
+						<skuid__tabPanel name="Users by Profile">
+							<components>
+								<skuid__table uniqueid="sk-3_VY-695" allowColumnOrdering="true" resetPaginationOnQuery="false" showListHeader="true" showListFooter="true" mode="readonly" model="Users" pageSize="Infinity" showSaveCancel="false" showErrorsInline="true" rowHeightStrategy="fit" allowColumnHiding="true">
+									<fields>
+										<field id="Id" name="countId" label="User Count" uniqueid="fi-2YPj-42070" summaries="sum"/>
+										<field id="Profile.Name" name="profileName" label="Profile" uniqueid="fi-2YPj-42071"/>
+										<field id="UserType" name="userType" label="Salesforce User License" uniqueid="fi-2YPj-42072"/>
+									</fields>
+									<filters>
+										<skuid__filter uniqueId="sk-2oT--29047" type="select" conditionSource="manual" filterMethod="server" labelMode="manual">
+											<sources>
+												<source type="manual" effectsbehavior="justdefault">
+													<options>
+														<option label="Users With Skuid" type="complex">
+															<effects>
+																<effect action="activate" value="" condition="YesSkuid"/>
+																<effect action="deactivate" value="" condition="NoSkuid"/>
+															</effects>
+														</option>
+														<option label="Users Without Skuid" type="complex">
+															<effects>
+																<effect action="deactivate" value="" condition="YesSkuid"/>
+																<effect action="activate" value="" condition="NoSkuid"/>
+															</effects>
+														</option>
+														<option label="All Users" type="complex">
+															<effects>
+																<effect action="deactivate" value="" condition="YesSkuid"/>
+																<effect action="deactivate" value="" condition="NoSkuid"/>
+															</effects>
+														</option>
+													</options>
+												</source>
+											</sources>
+										</skuid__filter>
+									</filters>
+									<massActions/>
+									<rowActions/>
+									<exportProperties useTableColumns="true" enableExportOptionOnTable="true"/>
+									<sorting/>
+									<filtering enableSearch="false" searchMethod="server" tokenizeSearch="false" emptySearchBehavior="query"/>
+								</skuid__table>
+							</components>
+						</skuid__tabPanel>
+					</tabs>
+				</skuid__tabSet>
+			</components>
+			<styles>
+				<spacing top="4" bottom="4" left="4" right="4"/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<javascript/>
+		<actionsequences uniqueid="sk-3_VY-232">
+			<actionsequence id="7c837e08-1017-4f03-a292-6f7bb1bb8b13" label="Load User License Info" type="event-triggered" event-scope="component" event-name="page.rendered" uniqueid="sk-3-8vo9-277">
+				<actions>
+					<action type="blockUI" message="Loading User License info"/>
+					<action type="requeryModels" behavior="standard">
+						<models>
+							<model>UserPackageLicense</model>
+						</models>
+						<onerroractions>
+							<action type="blockUI" message="There was an error" timeout="3000"/>
+						</onerroractions>
+					</action>
+					<action type="requeryModels" behavior="standard">
+						<models>
+							<model>Users</model>
+						</models>
+					</action>
+					<action type="unblockUI"/>
+				</actions>
+				<description/>
+			</actionsequence>
+			<actionsequence id="ff381c0e-a182-4561-b338-9e0ff2c001a2" label="SkuidLicenseAlert" type="event-triggered" event-scope="component" event-name="page.rendered" uniqueid="sk-2ynh-440">
+				<actions>
+					<action type="branch" model="PackageLicense" whenfinished="stop">
+						<formula>({{AvailableLicenses}} &lt; 100)</formula>
+						<iftrueactions>
+							<action type="showModal">
+								<skuid__modal title="WARNING" width="40%">
+									<components>
+										<skuid__text uniqueid="sk-NTB31-1434" model="PackageLicense" contents="&lt;p style=&quot;color:red;font-weight:bold; font-size:150%;&quot;&gt;Warning: You have only {{AvailableLicenses}} available Skuid licenses.&lt;/p&gt;"/>
+										<skuid__buttonSet uniqueid="sk-MGD-440">
+											<groups>
+												<skuid__buttonGroup>
+													<buttons>
+														<skuid__button uniqueid="sk-MGD-446" label="Close" styleSettingsVariant="primary">
+															<actions>
+																<action type="closeTopmostPopup"/>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</skuid__modal>
+							</action>
+						</iftrueactions>
+					</action>
+				</actions>
+				<description/>
+			</actionsequence>
+		</actionsequences>
+		<labels/>
+	</resources>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&lt;h1&gt;Skuid Package Subscription Analysis&lt;/h1&gt;&#10;" uniqueid="sk-2oAt-13173">
+							<styles>
+								<spacing top="2" bottom="2" left="4"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#d8d8d8"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+</skuid__page>
