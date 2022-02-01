@@ -15,7 +15,7 @@ This page shows an account list, with a drawer that provides additional detail a
 
 ## Notes
 Here are the key areas to be reviewed. 
--  Model properties: The contact model has a filterable condition,  and does not load data on page load. 
+-  Model properties: The contact model has a filterable condition. 
 -  Table display properties: Drawers are enabled
 -  Drawer icon:  Click icon on left of table to expose Drawer Properties. 
 -  Before Load Actions: This sequence of actions only runs the first time the drawer is opened.  You don't need to query for ACME's contacts on the second time ACME's drawer is opened.  
