@@ -15,7 +15,7 @@
 				<field id="Description"/>
 			</fields>
 			<conditions>
-				<condition type="fieldvalue" value="Hatch" enclosevalueinquotes="true" field="Owner.LastName" fieldtargetobjects="User" clientorserver="server"/>
+				<condition type="fieldvalue" enclosevalueinquotes="true" field="Owner.LastName" fieldtargetobjects="User" clientorserver="server" state="filterableoff" inactive="true" name="Owner.LastName"/>
 			</conditions>
 			<actions/>
 		</model>
