@@ -1,0 +1,203 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="Lightning">
+	<models>
+		<model id="Account" limit="25" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+			<fields>
+				<field id="Name"/>
+				<field id="Id"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="ParentId"/>
+				<field id="Parent.Name"/>
+				<field id="Site"/>
+				<field id="Type"/>
+				<field id="Industry"/>
+				<field id="AnnualRevenue"/>
+				<field id="BillingAddress"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="Description"/>
+				<field id="Rating"/>
+				<field id="Phone"/>
+				<field id="Fax"/>
+				<field id="Website"/>
+				<field id="TickerSymbol"/>
+				<field id="NumberOfEmployees"/>
+				<field id="ShippingAddress"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="CreatedDate"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2aF--41856" minHeight="custom" minHeightCustom="100vh">
+			<components>
+				<skuid__grid uniqueid="sk-2aEp-19365" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+					<divisions>
+						<division minWidth="100px" ratio="1" alignSelf="auto">
+							<components>
+								<skuid__wrapper uniqueid="sk-2aEw-21413" styleSettingsVariant="9963303a-2894-42e1-bf8e-c4608d334a5e">
+									<components>
+										<skuid__grid uniqueid="sk-2aE_-21972" flexDirection="row" justifyContent="space-between" alignItems="flex-start">
+											<divisions>
+												<division alignSelf="center" minWidth="32px" ratio="0">
+													<components>
+														<skuid__wrapper uniqueid="sk-2aIn-23059" minHeight="custom" minHeightCustom="32px" maxHeight="custom" maxHeightCustom="32px" overflowY="visible" styleSettingsVariant="4f0a1d49-5a3c-4386-a8b6-0bf8123f71c2">
+															<components>
+																<skuid__image source="url" uniqueid="sk-2aIo-23627" datasource="salesforce" model="NewModel" url="/img/icon/t4v35/standard/account_120.png" imageWidth="32px" imageHeight="32px">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__image>
+															</components>
+															<background type="color" color="#7F8DE1"/>
+															<interactions/>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division minWidth="100px" ratio="0" alignSelf="auto">
+													<components>
+														<skuid__header title="Recently Viewed" uniqueid="sk-2aFF-25059" subtitle="Accounts" model="Account">
+															<styles>
+																<spacing left="1.5"/>
+															</styles>
+														</skuid__header>
+													</components>
+												</division>
+												<division alignSelf="center" minWidth="100px" ratio="1">
+													<components>
+														<skuid__buttonSet uniqueid="sk-2aL1-33849">
+															<groups>
+																<skuid__buttonGroup uniqueId="sk-2aLB-37605" displayType="attached" styleSettingsVariant="4a37f824-f800-453a-9de3-9049b098cece">
+																	<buttons>
+																		<skuid__button label="New" uniqueId="sk-2aLD-38796"/>
+																		<skuid__button uniqueId="sk-2aLG-39550" label="Import"/>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__buttonSet>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+										<skuid__grid uniqueid="sk-2e5Q-16855" flexDirection="row" justifyContent="flex-end" alignItems="flex-start" columnGutter="1">
+											<divisions>
+												<division minWidth="100px" ratio="1" alignSelf="flex-end">
+													<components>
+														<skuid__text contents="{{$Model.Account.data.length}} Items&amp;nbsp;&amp;bull; Updated" uniqueid="sk-2e7x-70161"/>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="0">
+													<components>
+														<skuid__search uniqueid="sk-2e5T-17998" tokenizeSearch="false" placeholder="Search this list...">
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__search>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="0">
+													<components>
+														<skuid__buttonSet uniqueid="sk-2e5b-20796">
+															<groups>
+																<skuid__buttonGroup uniqueId="sk-2e5b-20794" displayType="detached" styleSettingsVariant="3426dcbf-8f1b-4602-86b6-a4fccd0d993d">
+																	<buttons>
+																		<skuid__button uniqueId="sk-2e5b-20795" icon="sk-webicon-lightning-icons:settings"/>
+																		<skuid__button uniqueId="sk-2e5m-34312" icon="sk-webicon-lightning-icons:table"/>
+																		<skuid__button uniqueId="sk-2e5q-40947" icon="sk-webicon-lightning-icons:refresh"/>
+																		<skuid__button uniqueId="sk-2e5u-43551" icon="sk-webicon-lightning-icons:edit"/>
+																	</buttons>
+																</skuid__buttonGroup>
+																<skuid__buttonGroup uniqueId="sk-2e5x-46293" displayType="attached" styleSettingsVariant="3426dcbf-8f1b-4602-86b6-a4fccd0d993d">
+																	<buttons>
+																		<skuid__button uniqueId="sk-2e5x-46294" icon="sk-webicon-lightning-icons:chart">
+																			<renderConditions logictype="and"/>
+																			<enableConditions logictype="and">
+																				<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Account" sourcetype="fieldvalue" nosourcerowbehavior="deactivate"/>
+																			</enableConditions>
+																			<styleVariantConditions/>
+																		</skuid__button>
+																		<skuid__button uniqueId="sk-2e61-58343" icon="sk-webicon-lightning-icons:filterList">
+																			<renderConditions logictype="and"/>
+																			<enableConditions logictype="and">
+																				<condition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Account" sourcetype="fieldvalue" nosourcerowbehavior="deactivate"/>
+																			</enableConditions>
+																			<styleVariantConditions/>
+																		</skuid__button>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__buttonSet>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+									</components>
+									<background type="color" color="#F3F2F2"/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+								<skuid__wrapper uniqueid="sk-2e3k-24682" heightStrategy="fixed" height="custom" heightCustom="85vh">
+									<components>
+										<skuid__table allowColumnFreezing="dragDrop" model="Account" uniqueid="sk-2e2n-18221" mode="read" showSaveCancel="false" pageSize="Infinity" showListHeader="false" showRowNumbers="true" styleSettingsVariant="275db75f-aff3-49aa-8c23-dc5aa06bedb4" enableDrawers="false">
+											<fields>
+												<field id="Name" uniqueid="fi-2e3k-25180"/>
+												<field id="Type" uniqueid="fi-2e3k-25181"/>
+												<field id="OwnerId" uniqueid="fi-2e3k-25182"/>
+												<field id="Industry" uniqueid="fi-2e3k-25183"/>
+												<field id="Description" uniqueid="fi-2e3k-25184"/>
+											</fields>
+											<filtering enableSearch="false"/>
+											<actions/>
+											<rowActions/>
+											<massActions>
+												<action type="multi" label="Run actions"/>
+											</massActions>
+											<exportProperties useTableColumns="true"/>
+											<sorting enable="false"/>
+											<drawer showDrawerIcon="true">
+												<components>
+													<skuid__image source="staticresource" uniqueid="sk-2fFe-20055" datasource="salesforce"/>
+												</components>
+											</drawer>
+										</skuid__table>
+									</components>
+									<background type="color" color="rgb(250, 250, 249)"/>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing top="1.5" right="1.5" left="1.5"/>
+					</styles>
+					<background/>
+				</skuid__grid>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background type="image" datasource="salesforce" source="url" url="/_slds/images/themes/lightning_blue/lightning_blue_background.png" size="auto" position="top center" model="NewModel" color="#B0C4DF"/>
+	<interactions/>
+</skuid__page>

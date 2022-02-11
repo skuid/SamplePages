@@ -1,0 +1,338 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="Lightning">
+	<models>
+		<model id="Account" limit="1" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Account">
+			<fields>
+				<field id="Name"/>
+				<field id="Id"/>
+				<field id="OwnerId"/>
+				<field id="Owner.Name"/>
+				<field id="ParentId"/>
+				<field id="Parent.Name"/>
+				<field id="Site"/>
+				<field id="Type"/>
+				<field id="Industry"/>
+				<field id="AnnualRevenue"/>
+				<field id="BillingAddress"/>
+				<field id="CreatedById"/>
+				<field id="CreatedBy.Name"/>
+				<field id="Description"/>
+				<field id="Rating"/>
+				<field id="Phone"/>
+				<field id="Fax"/>
+				<field id="Website"/>
+				<field id="TickerSymbol"/>
+				<field id="NumberOfEmployees"/>
+				<field id="ShippingAddress"/>
+				<field id="LastModifiedById"/>
+				<field id="LastModifiedBy.Name"/>
+				<field id="LastModifiedDate"/>
+				<field id="CreatedDate"/>
+				<field id="BillingStreet"/>
+				<field id="BillingCity"/>
+				<field id="BillingState"/>
+				<field id="BillingPostalCode"/>
+				<field id="BillingCountry"/>
+			</fields>
+			<conditions></conditions>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-2aF--41856" minHeight="custom" minHeightCustom="100vh">
+			<components>
+				<skuid__grid uniqueid="sk-2aEp-19365" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+					<divisions>
+						<division minWidth="100px" ratio="1" alignSelf="auto">
+							<components>
+								<skuid__wrapper uniqueid="sk-2aEw-21413" styleSettingsVariant="9963303a-2894-42e1-bf8e-c4608d334a5e">
+									<components>
+										<skuid__grid uniqueid="sk-2aE_-21972" flexDirection="row" justifyContent="space-between" alignItems="flex-start">
+											<divisions>
+												<division alignSelf="center" minWidth="32px" ratio="0">
+													<components>
+														<skuid__wrapper uniqueid="sk-2aIn-23059" minHeight="custom" minHeightCustom="32px" maxHeight="custom" maxHeightCustom="32px" overflowY="visible" styleSettingsVariant="4f0a1d49-5a3c-4386-a8b6-0bf8123f71c2">
+															<components>
+																<skuid__image source="url" uniqueid="sk-2aIo-23627" datasource="salesforce" model="NewModel" url="/img/icon/t4v35/standard/account_120.png" imageWidth="32px" imageHeight="32px">
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__image>
+															</components>
+															<background type="color" color="#7F8DE1"/>
+															<interactions/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__wrapper>
+													</components>
+												</division>
+												<division minWidth="100px" ratio="0" alignSelf="auto">
+													<components>
+														<skuid__header title="{{Name}}" uniqueid="sk-2aFF-25059" subtitle="Account" model="Account">
+															<styles>
+																<spacing left="1.5"/>
+															</styles>
+														</skuid__header>
+													</components>
+												</division>
+												<division alignSelf="flex-end" minWidth="0" ratio="0">
+													<components>
+														<skuid__buttonSet uniqueid="sk-2aKa-13600">
+															<groups>
+																<skuid__buttonGroup uniqueId="sk-2aKa-13598">
+																	<buttons>
+																		<skuid__button uniqueId="sk-2aKa-13599" icon="sk-webicon-lightning-icons:hierarchy" styleSettingsVariant="6a7d4423-395c-4e5e-85f1-430b33135322"/>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+															<styles>
+																<spacing left="1"/>
+															</styles>
+														</skuid__buttonSet>
+													</components>
+												</division>
+												<division alignSelf="center" minWidth="100px" ratio="1">
+													<components>
+														<skuid__buttonSet uniqueid="sk-2aL1-33849">
+															<groups>
+																<skuid__buttonGroup uniqueId="sk-2aL1-33847" displayType="detached" styleSettingsVariant="8f8d08d9-223a-47b8-9f45-a04892d69aa8">
+																	<buttons>
+																		<skuid__button label="Follow" uniqueId="sk-2aL1-33848" icon="sk-webicon-lightning-icons:add"/>
+																	</buttons>
+																</skuid__buttonGroup>
+																<skuid__buttonGroup uniqueId="sk-2aLB-37605" displayType="attached" styleSettingsVariant="8f8d08d9-223a-47b8-9f45-a04892d69aa8">
+																	<buttons>
+																		<skuid__button label="Edit" uniqueId="sk-2aLB-37606"/>
+																		<skuid__button label="New Contact" uniqueId="sk-2aLD-38796"/>
+																		<skuid__button label="New Case" uniqueId="sk-2aLG-39550"/>
+																	</buttons>
+																</skuid__buttonGroup>
+															</groups>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__buttonSet>
+													</components>
+												</division>
+											</divisions>
+										</skuid__grid>
+									</components>
+									<background type="color" color="#F3F2F2"/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+								<skuid__wrapper uniqueid="sk-2d-E-19304" styleSettingsVariant="99d03129-18a7-48fb-8f7c-98cc8100a9e0">
+									<components>
+										<skuid__form showErrorsInline="true" model="Account" uniqueid="sk-2d-K-21197" mode="readonly" styleSettingsVariant="87118168-56a1-40cf-b6b2-08f95aac555e">
+											<columns>
+												<column>
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields>
+																<skuid__field id="Type" uniqueId="sk-2d-T-26174"/>
+															</fields>
+														</section>
+													</sections>
+												</column>
+												<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields>
+																<skuid__field id="Phone" uniqueId="sk-2d-a-26992"/>
+															</fields>
+														</section>
+													</sections>
+												</column>
+												<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields>
+																<skuid__field id="Website" uniqueId="sk-2d-a-27005"/>
+															</fields>
+														</section>
+													</sections>
+												</column>
+												<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields>
+																<skuid__field id="OwnerId" uniqueId="sk-2d-a-27018" tokenizeSearch="false"/>
+															</fields>
+														</section>
+													</sections>
+												</column>
+												<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields>
+																<skuid__field id="Industry" uniqueId="sk-2d-a-27031"/>
+															</fields>
+														</section>
+													</sections>
+												</column>
+												<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+													<sections>
+														<section title="New Section" showHeading="false">
+															<fields/>
+														</section>
+													</sections>
+												</column>
+											</columns>
+											<styles>
+												<spacing top="1.5" bottom="1.5" left="2" right="2" styleSettingsVariant="87118168-56a1-40cf-b6b2-08f95aac555e"/>
+											</styles>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__form>
+									</components>
+									<background type="color" color="white"/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing top="1.5" right="1.5" left="1.5"/>
+					</styles>
+					<background/>
+				</skuid__grid>
+				<skuid__grid uniqueid="sk-2aFW-29316" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="1.5">
+					<divisions>
+						<division minWidth="100px" ratio="3" alignSelf="auto">
+							<components>
+								<skuid__wrapper uniqueid="sk-2aFl-34160" styleSettingsVariant="60eb0386-5a7a-4462-921f-0417cf4596e4">
+									<components>
+										<skuid__tabSet deferTabRendering="true" uniqueid="sk-2aFY-30400" rememberActiveTab="true" styleSettingsVariant="504cacb9-31b3-49c5-b985-c3523b02f004">
+											<tabs>
+												<skuid__tabPanel name="Related">
+													<components/>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="Details">
+													<components>
+														<skuid__wrapper uniqueid="sk-2fOY-45855">
+															<components>
+																<skuid__form showErrorsInline="true" model="Account" uniqueid="sk-2aFi-33158" mode="read">
+																	<columns columnGutter="24px">
+																		<column behavior="flex" verticalAlign="top">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<fields>
+																						<skuid__field id="OwnerId" uniqueId="sk-2aMu-78248" tokenizeSearch="false"/>
+																						<skuid__field id="Name" uniqueId="sk-2aMu-78261"/>
+																						<skuid__field id="ParentId" uniqueId="sk-2aMu-78274"/>
+																						<skuid__field id="Site" uniqueId="sk-2aMu-78300"/>
+																						<skuid__field id="Type" uniqueId="sk-2aMu-78313"/>
+																						<skuid__field id="Industry" uniqueId="sk-2aMu-78326"/>
+																						<skuid__field id="AnnualRevenue" uniqueId="sk-2aMu-78339"/>
+																						<skuid__field type="COMBO" label="Billing Address" uniqueId="sk-2ei0-27606" template="{{BillingStreet}}&lt;br&gt;&#10;{{BillingCity}}, {{BillingState}} {{BillingPostalCode}}" allowHtml="true"/>
+																						<skuid__field id="CreatedById" uniqueId="sk-2aMu-78365"/>
+																						<skuid__field id="CreatedDate" uniqueId="sk-2aMu-78378"/>
+																					</fields>
+																				</section>
+																			</sections>
+																		</column>
+																		<column behavior="flex" ratio="1" width="200px" verticalAlign="top" minWidth="100px">
+																			<sections>
+																				<section title="New Section" showHeading="false">
+																					<fields>
+																						<skuid__field id="Rating" uniqueId="sk-2aN5-82464"/>
+																						<skuid__field id="Phone" uniqueId="sk-2aN5-82477"/>
+																						<skuid__field id="Fax" uniqueId="sk-2aN5-82490"/>
+																						<skuid__field id="Website" uniqueId="sk-2aN5-82503"/>
+																						<skuid__field id="TickerSymbol" uniqueId="sk-2aN5-82516"/>
+																						<skuid__field id="NumberOfEmployees" uniqueId="sk-2aN5-82542"/>
+																						<skuid__field id="ShippingAddress" uniqueId="sk-2aN5-82568"/>
+																						<skuid__field id="LastModifiedById" uniqueId="sk-2aN5-82581"/>
+																						<skuid__field id="LastModifiedDate" uniqueId="sk-2aN5-82594"/>
+																					</fields>
+																				</section>
+																			</sections>
+																		</column>
+																	</columns>
+																	<styles>
+																		<spacing top="1.5" bottom="1.5" left="1.5" right="1.5"/>
+																	</styles>
+																</skuid__form>
+															</components>
+															<styles>
+																<spacing/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+												<skuid__tabPanel name="News">
+													<components/>
+												</skuid__tabPanel>
+											</tabs>
+											<styles>
+												<spacing top="1.5" bottom="1.5" left="2" right="2" styleSettingsVariant="504cacb9-31b3-49c5-b985-c3523b02f004"/>
+											</styles>
+										</skuid__tabSet>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+						<division alignSelf="auto" minWidth="100px" ratio="1">
+							<components>
+								<skuid__wrapper uniqueid="sk-2aFn-35286" styleSettingsVariant="60eb0386-5a7a-4462-921f-0417cf4596e4">
+									<components>
+										<skuid__tabSet deferTabRendering="true" uniqueid="sk-2aNW-106766">
+											<tabs>
+												<skuid__tabPanel name="Chatter">
+													<components>
+														<skuid__wrapper uniqueid="sk-2ehJ-20532" maxHeight="custom" maxHeightCustom="576px">
+															<components>
+																<skuid__chatter model="Account" uniqueid="sk-2aNZ-108094"/>
+															</components>
+															<styles>
+																<spacing/>
+															</styles>
+															<background/>
+														</skuid__wrapper>
+													</components>
+												</skuid__tabPanel>
+											</tabs>
+											<styles>
+												<spacing top="1.5" bottom="1.5" left="2" right="2"/>
+											</styles>
+										</skuid__tabSet>
+									</components>
+									<background/>
+									<styles>
+										<spacing/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+						</division>
+					</divisions>
+					<styles>
+						<spacing top="1.5" left="1.5" right="1.5"/>
+					</styles>
+					<background/>
+				</skuid__grid>
+			</components>
+			<styles>
+				<spacing/>
+			</styles>
+			<background/>
+		</skuid__wrapper>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<background type="image" datasource="salesforce" source="url" url="/_slds/images/themes/lightning_blue/lightning_blue_background.png" size="auto" position="top center" model="NewModel" color="#B0C4DF"/>
+</skuid__page>
