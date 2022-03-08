@@ -268,7 +268,6 @@
 				<field id="Account.Name"/>
 				<field id="CloseDate"/>
 				<field id="Description"/>
-				<field id="ExpectedRevenue"/>
 				<field id="LeadSource"/>
 				<field id="NextStep"/>
 				<field id="Id"/>
@@ -295,7 +294,6 @@
 				<field id="LastReferencedDate"/>
 				<field id="LastViewedDate"/>
 				<field id="Probability"/>
-				<field id="TotalOpportunityQuantity"/>
 				<field id="SystemModstamp"/>
 				<field id="IsWon"/>
 				<field id="Pricebook2Id"/>
