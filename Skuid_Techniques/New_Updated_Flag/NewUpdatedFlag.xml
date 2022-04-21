@@ -1,0 +1,108 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="ProductTour">
+	<models>
+		<model id="MyOpportunities" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="Opportunity" orderby="CreatedDate DESC">
+			<fields>
+				<field id="AccountId"/>
+				<field id="Amount"/>
+				<field id="Account.Name"/>
+				<field id="CloseDate"/>
+				<field id="Description"/>
+				<field id="LastModifiedDate"/>
+				<field id="CreatedDate"/>
+				<field id="Type"/>
+				<field id="Id"/>
+				<field id="StageName"/>
+				<field id="LastActivityDate"/>
+				<field id="Name"/>
+				<field id="isNew" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>DATE_DIFF({{CreatedDate}}, HOUR)==0</formula>
+				</field>
+				<field id="isUpdated" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="BOOLEAN">
+					<formula>DATE_DIFF({{LastModifiedDate}}, DAY)==0 &amp;&amp; !{{isNew}}</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions>
+				<action>
+					<actions>
+						<action type="requeryModels" behavior="standard">
+							<models>
+								<model>MyOpportunities</model>
+							</models>
+						</action>
+					</actions>
+					<events>
+						<event>models.saved</event>
+					</events>
+				</action>
+			</actions>
+		</model>
+	</models>
+	<components>
+		<skuid__wrapper uniqueid="sk-ofq-59453" minHeight="custom" minHeightCustom="100vh">
+			<components>
+				<skuid__header model="MyOpportunities" title="My Opportunities" uniqueid="sk-ofh-55211">
+					<styles>
+						<spacing bottom="2"/>
+					</styles>
+				</skuid__header>
+				<skuid__wrapper uniqueid="sk-1Dik-14447" styleSettingsVariant="e2401c23-8795-4e58-9c80-6b62d113d2a8">
+					<components>
+						<skuid__text contents="&lt;strong&gt;Notes:&lt;/strong&gt;&#10;&lt;ul&gt;&#10;&#9;&lt;li&gt;To see the Updated flag in action, make a change to a record and click Save&lt;/li&gt;&#10;&#9;&lt;li&gt;To see the New flag in action, create a new record and Save&lt;/li&gt;&#10;&#9;&lt;li&gt;The formula is currently set to show the flag if the record is new or updated within an hour. To change the unit (to a day for example), update the unit in the DATE_DIFF function from HOUR to DAY&lt;/li&gt;&#10;&lt;/ul&gt;&#10;" uniqueid="sk-1Dim-15114"/>
+					</components>
+					<background/>
+					<styles>
+						<spacing bottom="2"/>
+					</styles>
+				</skuid__wrapper>
+				<skuid__wrapper uniqueid="sk-off-54001" styleSettingsVariant="e2401c23-8795-4e58-9c80-6b62d113d2a8">
+					<components>
+						<skuid__table allowColumnFreezing="dragDrop" model="MyOpportunities" uniqueid="sk-obC-19496" mode="read" showSaveCancel="true" pageSize="10" allowColumnOrdering="true" allowColumnHiding="true">
+							<fields>
+								<field type="COMBO" allowHtml="true" template="{{#isNew}}&lt;svg width=&quot;71&quot; height=&quot;20&quot; viewBox=&quot;0 0 71 20&quot; fill=&quot;none&quot;
+									xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&#10;&lt;path d=&quot;M6.13345 1.36149C5.67958 0.817483 6.07367 0 6.78979 0H70.1515C70.6201 0 71 0.373096 71 0.833333V19.1667C71 19.6269 70.6201 20 70.1515 20H6.78978C6.07367 20 5.67958 19.1825 6.13345 18.6385L12.8999 10.5282C13.1562 10.221 13.1562 9.77898 12.8999 9.47184L6.13345 1.36149Z&quot; fill=&quot;#78BF4B&quot;/&gt;&#10;&lt;path d=&quot;M0.193795 1.36149C-0.26007 0.817483 0.134016 0 0.850133 0H65.0603C65.529 0 65.9089 0.373096 65.9089 0.833333V19.1667C65.9089 19.6269 65.529 20 65.0603 20H0.85013C0.134014 20 -0.260071 19.1825 0.193794 18.6385L6.96027 10.5282C7.21652 10.221 7.21652 9.77898 6.96027 9.47184L0.193795 1.36149Z&quot; fill=&quot;#598F38&quot;/&gt;&#10;&lt;path d=&quot;M31.1452 13.3333H29.4041L26.4919 9.00333V13.3333H24.7508V6.31333H26.4919L29.4041 10.6633V6.31333H31.1452V13.3333Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M34.1485 7.68333V9.10333H36.4803V10.4233H34.1485V11.9633H36.7857V13.3333H32.4074V6.31333H36.7857V7.68333H34.1485Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M47.7522 6.31333L45.8888 13.3333H43.7811L42.6407 8.71333L41.4595 13.3333H39.3518L37.5394 6.31333H39.4027L40.4311 11.4233L41.7039 6.31333H43.6182L44.8401 11.4233L45.8786 6.31333H47.7522Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;/svg&gt;{{/isNew}}{{#isUpdated}}&lt;svg width=&quot;70&quot; height=&quot;20&quot; viewBox=&quot;0 0 70 20&quot; fill=&quot;none&quot;
+									xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&#10;&lt;path d=&quot;M0.195231 1.36149C-0.261997 0.817483 0.135009 0 0.856431 0H69.1452C69.6173 0 70 0.373096 70 0.833333V19.1667C70 19.6269 69.6173 20 69.1452 20H0.856429C0.135007 20 -0.261998 19.1825 0.19523 18.6385L7.01184 10.5282C7.26998 10.221 7.26998 9.77898 7.01184 9.47184L0.195231 1.36149Z&quot; fill=&quot;#FFC120&quot;/&gt;&#10;&lt;path d=&quot;M0.195231 1.36149C-0.261997 0.817483 0.135009 0 0.856431 0H64.0163C64.4884 0 64.8711 0.373096 64.8711 0.833333V19.1667C64.8711 19.6269 64.4884 20 64.0163 20H0.856429C0.135007 20 -0.261998 19.1825 0.19523 18.6385L7.01184 10.5282C7.26998 10.221 7.26998 9.77898 7.01184 9.47184L0.195231 1.36149Z&quot; fill=&quot;#BF9017&quot;/&gt;&#10;&lt;path d=&quot;M15.9419 6.31333V10.5133C15.9419 10.9333 16.0479 11.2567 16.2599 11.4833C16.4719 11.71 16.7831 11.8233 17.1934 11.8233C17.6037 11.8233 17.9182 11.71 18.1371 11.4833C18.3559 11.2567 18.4653 10.9333 18.4653 10.5133V6.31333H20.2194V10.5033C20.2194 11.13 20.0826 11.66 19.8091 12.0933C19.5355 12.5267 19.1663 12.8533 18.7013 13.0733C18.2431 13.2933 17.7302 13.4033 17.1626 13.4033C16.595 13.4033 16.0855 13.2967 15.6342 13.0833C15.1897 12.8633 14.8375 12.5367 14.5777 12.1033C14.3178 11.6633 14.1879 11.13 14.1879 10.5033V6.31333H15.9419Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M26.939 8.57333C26.939 8.98 26.8432 9.35333 26.6518 9.69333C26.4603 10.0267 26.1662 10.2967 25.7696 10.5033C25.373 10.71 24.8806 10.8133 24.2925 10.8133H23.2052V13.3333H21.4511V6.31333H24.2925C24.8669 6.31333 25.3525 6.41 25.7491 6.60333C26.1457 6.79667 26.4432 7.06333 26.6415 7.40333C26.8398 7.74333 26.939 8.13333 26.939 8.57333ZM24.1591 9.45333C24.4942 9.45333 24.7438 9.37667 24.908 9.22333C25.0721 9.07 25.1541 8.85333 25.1541 8.57333C25.1541 8.29333 25.0721 8.07667 24.908 7.92333C24.7438 7.77 24.4942 7.69333 24.1591 7.69333H23.2052V9.45333H24.1591Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M30.5499 6.31333C31.309 6.31333 31.9723 6.46 32.5399 6.75333C33.1075 7.04667 33.5452 7.46 33.8529 7.99333C34.1675 8.52 34.3248 9.13 34.3248 9.82333C34.3248 10.51 34.1675 11.12 33.8529 11.6533C33.5452 12.1867 33.1041 12.6 32.5297 12.8933C31.9621 13.1867 31.3022 13.3333 30.5499 13.3333H27.8522V6.31333H30.5499ZM30.4371 11.8533C31.1004 11.8533 31.6167 11.6767 31.986 11.3233C32.3553 10.97 32.5399 10.47 32.5399 9.82333C32.5399 9.17667 32.3553 8.67333 31.986 8.31333C31.6167 7.95333 31.1004 7.77333 30.4371 7.77333H29.6062V11.8533H30.4371Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M39.7876 12.0933H37.1001L36.6693 13.3333H34.8332L37.4386 6.31333H39.4696L42.0751 13.3333H40.2185L39.7876 12.0933ZM39.3363 10.7733L38.4439 8.20333L37.5617 10.7733H39.3363Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M48.0482 6.31333V7.68333H46.1403V13.3333H44.3862V7.68333H42.4783V6.31333H48.0482Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M50.6826 7.68333V9.10333H53.0316V10.4233H50.6826V11.9633H53.3393V13.3333H48.9285V6.31333H53.3393V7.68333H50.6826Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;path d=&quot;M57.1759 6.31333C57.9349 6.31333 58.5983 6.46 59.1659 6.75333C59.7335 7.04667 60.1711 7.46 60.4789 7.99333C60.7934 8.52 60.9507 9.13 60.9507 9.82333C60.9507 10.51 60.7934 11.12 60.4789 11.6533C60.1711 12.1867 59.73 12.6 59.1556 12.8933C58.588 13.1867 57.9281 13.3333 57.1759 13.3333H54.4781V6.31333H57.1759ZM57.063 11.8533C57.7264 11.8533 58.2427 11.6767 58.612 11.3233C58.9812 10.97 59.1659 10.47 59.1659 9.82333C59.1659 9.17667 58.9812 8.67333 58.612 8.31333C58.2427 7.95333 57.7264 7.77333 57.063 7.77333H56.2322V11.8533H57.063Z&quot; fill=&quot;white&quot;/&gt;&#10;&lt;/svg&gt;{{/isUpdated}}" uniqueid="fi-odc-37695" columnWidth="100px" columnLabelWrap="clip" hideable="trueShowByDefault"/>
+									<field id="Name" uniqueid="fi-od8-32779" redirectType="none"/>
+									<field id="AccountId" uniqueid="fi-obC-20477" redirectType="none" label="Account"/>
+									<field id="Amount" horizontalAlignment="right" uniqueid="fi-obC-20478"/>
+									<field id="CloseDate" uniqueid="fi-obC-20480"/>
+									<field id="StageName" uniqueid="fi-obC-20486"/>
+									<field id="CreatedDate" hideable="trueShowByDefault" uniqueid="fi-onD-81859"/>
+								</fields>
+								<filtering enableSearch="false"/>
+								<actions>
+									<action type="multi" label="New" icon="sk-webicon-ink:add">
+										<actions>
+											<action type="createRow" model="MyOpportunities" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+										</actions>
+									</action>
+								</actions>
+								<rowActions/>
+								<massActions/>
+								<exportProperties useTableColumns="true"/>
+								<sorting enable="false"/>
+								<interactions/>
+							</skuid__table>
+						</components>
+						<background/>
+						<styles>
+							<spacing/>
+						</styles>
+					</skuid__wrapper>
+				</components>
+				<styles>
+					<spacing top="2" bottom="2" left="2" right="2"/>
+				</styles>
+				<background/>
+			</skuid__wrapper>
+		</components>
+		<resources>
+			<labels/>
+			<javascript/>
+			<css/>
+			<actionsequences/>
+		</resources>
+		<styles>
+			<styleitem type="background" bgtype="none"/>
+		</styles>
+	</skuid__page>
