@@ -10,7 +10,7 @@ This page shows a number of examples of the way Actions are used in typical Skui
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](Opportunity_Detail_Action_Showcase.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Opportunity_Detail_Action_Showcase.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 

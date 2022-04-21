@@ -6,7 +6,7 @@ This page is an example supporting this article in [Skuid Docs](https://docs.sku
 - Page API:  V1
 - Data source: Uses ApexREST datasource and Salesforce Authenication Provider.   See Doc link above for details.   
 - Design system: None 
-- Page XML:  [Copy the XML from this page](ApexREST.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](ApexREST.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links: 

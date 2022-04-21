@@ -8,7 +8,7 @@ You need a list of records on a phone - or other small form factor.
 - Page API:  V2
 - Data source: Uses default Salesforce data source.   
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Mobile_list_page.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Mobile_list_page.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 When previewing this page,  for best results use your browser's developer tools to emulate a phone or tablet form factor. 

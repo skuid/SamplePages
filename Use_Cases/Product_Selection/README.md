@@ -8,7 +8,7 @@ Present a product catalog with robust filter and search capabilities. Let users 
 - Page API:  V2
 - Data source: Uses default Salesforce data source.   
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Product_Selection.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Product_Selection.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links

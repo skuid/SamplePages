@@ -10,8 +10,8 @@ The list of Accounts on the left is filtered to only display Global/Parent accou
 ## Instructions
 - Page API:  V2
 - Data source: Uses default Salesforce data source
-- Design system: [Download this Design System file](AccountHierarchy.designsystem).  Use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Account_Hierarchy.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Design system: [Download this Design System file](AccountHierarchy.designsystem?raw=true).  Use the Import function on the Design System page to add this system to your org. 
+- Page XML:  [Copy the XML from this page](Account_Hierarchy.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Notes
@@ -26,23 +26,23 @@ The list of Accounts on the left is filtered to only display Global/Parent accou
 We did six webinars walking through the build for this use case.  Each chapter documents a different aspect of building the Skuid solution.  
 
 - [Chapter 1 | Understanding the Data Model](https://www.youtube.com/watch?v=s-99jr-zeFI)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml)
-    - Additional page to help quickly create sample data:  [Quick Create Page](WebinarSeries_QuickCreatePage.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter1.xml?raw=true)
+    - Additional page to help quickly create sample data:  [Quick Create Page](WebinarSeries_QuickCreatePage.xml?raw=true)
 
 - [Chapter 2 | Page Construction - Layout and Account Interactions](https://www.youtube.com/watch?v=7RqtbD7Hybs)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter2.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter2.xml?raw=true)
 
 - [Chapter 3 | Opportunities Chart and Tables](https://www.youtube.com/watch?v=CSk5DR54s5E)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter3.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter3.xml?raw=true)
 
 - [Chapter 4 | Creating Variants in the Design System Studio](https://www.youtube.com/watch?v=rBZZhlmnFo0)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries-Chapter4.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries-Chapter4.xml?raw=true)
 
 - [Chapter 5 | Design System Studio Style Variants Continued](https://www.youtube.com/watch?v=sYOMx_b0U2c)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter5.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter5.xml?raw=true)
 
 - [Chapter 6 | Deploying App to Lightning](https://www.youtube.com/watch?v=2DuwP8D2_8U&t=2s)
-    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter6.xml)
+    - Page XML for this Chapter:  [Copy the XML from this page](WebinarSeries_Chapter6.xml?raw=true)
 
 
 ## Related Links

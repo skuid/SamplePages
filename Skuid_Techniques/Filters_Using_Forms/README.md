@@ -8,7 +8,7 @@ While standard Skuid filters provide powerful functionality - there are times wh
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](Arbitrary_Filters.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Arbitrary_Filters.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 - Look at the actions in the "Filters" model. When changes are detected in those fields - the value is passed into a condition on the "Opportunities" model. 

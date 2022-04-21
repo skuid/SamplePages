@@ -17,7 +17,7 @@ This example leverages the standard duplicate rule "Standard Rule for Leads with
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](DuplicateLeadWarning.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](DuplicateLeadWarning.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 To see this page in action,  find a lead that matches a contact's name and email address.  Then Preview the page using that lead.
 

@@ -8,7 +8,7 @@ The combination of dynamic data access and dynamic UI components makes Skuid a g
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](KeyIndicators.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](KeyIndicators.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 Key disciplines for building a KPI block: 
