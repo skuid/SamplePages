@@ -9,7 +9,7 @@
 - Page XML:  [Copy the XML from this page](NewUpdatedFlag.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
-This sample page highlights DATE_DIFF function and template field on table component.
+This sample page highlights DATE_DIFF function and template field on a Table component.
 - To see the Updated flag in action, make a change to a record and click Save
 - To see the New flag in action, create a new record and Save
 - The formula is currently set to show the flag if the record is new or updated within an hour. To change the unit (to a day for example), update the unit in the DATE_DIFF function from HOUR to DAY
