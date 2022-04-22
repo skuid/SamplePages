@@ -81,7 +81,7 @@ Finally - because it's Skuid, it can be beautiful. We used one of the [sample de
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material.designsystem), and use the Import function on the Design System page to add this system to your org.
     - You might also want to look at the [demo page](https://github.com/skuid/SamplePages/blob/master/Design_Systems/Material/Material_DesignSystem_DemoPage.xml) for that design system. 
 
-- Page XML:  [Copy the XML from this page](WellnessForm.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](WellnessForm.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
     - IMPORTANT!  Before running this page you will need to find the `Consent` model,  open the Conditions,  look for `AuthorizationFormTextId` and replace the `ID` in its value with the one you copied in step 2 (Configure Consent Management) above. 
 
 When you preview this page - it will ask you to select an `Individual`.  Make sure an Individual you select is connected to an `Employee`.   The Work.com install script should do this - but we've seen situations where it does not work.   

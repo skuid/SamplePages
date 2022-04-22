@@ -26,8 +26,8 @@ A Skuid design system for web apps that follow [Material design guidelines](http
 
 ## Usage
 - API: v2
-- Design System: Download [Material Design System](Material.designsystem) and import it to Skuid's Design Systems.
-- Demo page: Download the [Demo Page](Material_DesignSystem_DemoPage.xml). In Skuid, create a new page and select Import XML file to import this demo page.
+- Design System: Download [Material Design System](Material.designsystem?raw=true) and import it to Skuid's Design Systems.
+- Demo page: Download the [Demo Page](Material_DesignSystem_DemoPage.xml?raw=true). In Skuid, create a new page and select Import XML file to import this demo page.
 
 ## Notes
 - For usage in Salesforce, this design system works for version [Spark Update 3](https://docs.skuid.com/v12.4.2/v2/en/release-notes.html) or higher. Older versions of Skuid can result in styling losses.

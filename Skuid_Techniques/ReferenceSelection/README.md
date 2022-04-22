@@ -12,7 +12,7 @@ In the example below - when creating a new task, account selection opens a popup
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](ReferenceSelectionPopup.xml), or save it as an XML file, and upload it as a new page.  
+- Page XML:  [Copy the XML from this page](ReferenceSelectionPopup.xml?raw=true), or save it as an XML file, and upload it as a new page.  
 
 ## Notes
 Here are the key areas to be reviewed. 

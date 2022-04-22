@@ -75,7 +75,7 @@ See sample page that shows this working.
 - Page API: V2
 - Data source: Uses default Salesforce data source. (Note that Activity Recurrence must be turned on in the org) 
 - Design system: None
-- Page XML:  [Copy the XML from this page](CreateRecurringTask.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.
+- Page XML:  [Copy the XML from this page](CreateRecurringTask.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.
 
 #### Overview
 There are four core concepts driving this page you will want to explore. 
@@ -146,7 +146,7 @@ A second page provides an initial example for managing existing tasks. This incl
 - Page API: V2
 - Data source: Uses default Salesforce data source. (Note that Activity Recurrence must be turned on in the org) 
 - Design system: None
-- Page XML: [Copy the XML from this page](TaskListWithRecurrence.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.
+- Page XML: [Copy the XML from this page](TaskListWithRecurrence.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.
 
 #### Notes about the page: 
 

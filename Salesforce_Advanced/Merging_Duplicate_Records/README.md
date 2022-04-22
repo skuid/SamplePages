@@ -17,7 +17,7 @@ This example is described in more detail in a [blog post at Skuid Word](https://
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](LeadDedupe.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](LeadDedupe.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links

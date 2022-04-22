@@ -10,7 +10,7 @@ This sample page shows both of these in action. A set of interrelated models is 
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](ApprovalProcessActions.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](ApprovalProcessActions.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 - Before this page can run - an approval process must be created on the Case object. 

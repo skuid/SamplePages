@@ -15,9 +15,9 @@ With this page you can do any of the following:
 
 - Data source: Uses default Salesforce data source
 
-- Design system: [Download this Design System file](CompactOpportunityMgt.designsystem). Use the Import function on the Design System page to add this design system to your org.
+- Design system: [Download this Design System file](CompactOpportunityMgt.designsystem?raw=true). Use the Import function on the Design System page to add this design system to your org.
 
-- Page XML: [Copy the XML from this page](Opportunity_List.xml), or save it as an XML file, and upload it as a new page in your Salesforce org.
+- Page XML: [Copy the XML from this page](Opportunity_List.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce org.
 
 ## Notes
 - Add filters through the Show Filters action, then hide them for more screen real estate while continuing to see the active filters on the table.
