@@ -16,6 +16,6 @@ This sample page highlights DATE_DIFF function and template field on a Table com
 
 
 ## Related Links
-- [Date diff function](https://docs.skuid.com/latest/en/skuid/formula-function.html#date-time-format-and-manipulation)
+- [DATE_DIFF function documentation](https://docs.skuid.com/latest/en/skuid/formula-function.html#date-time-format-and-manipulation)
 - [Merge Syntax](https://docs.skuid.com/latest/v2/en/skuid/merge-syntax/#conditional-merge-expressions)
 - [Template field](https://docs.skuid.com/latest/v2/en/skuid/fields/#template-fields)
