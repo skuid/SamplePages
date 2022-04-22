@@ -8,6 +8,7 @@ We know its true - some of the coolest capabilities provided by Skuid are compli
 - [Key Indicators Dashboard](KeyIndicators)
 - [Multi Part Forms](Multi_Part_Form)
 - [Navigation - Advanced Techniques](Navigation)
+- [Add a flag for new or recently updated records on a Table component](New_Updated_Flag)
 - [Reference Field - Custom Selection Popups](ReferenceSelection)
 
 
