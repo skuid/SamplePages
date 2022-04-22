@@ -1,4 +1,4 @@
-# Add a flag for new or recently updated records on table
+# Add a flag for new or recently updated records on a Table component
 
 <img src="new-updated-flag.png" width="400"></img>
 
