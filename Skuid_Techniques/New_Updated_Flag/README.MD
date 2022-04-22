@@ -6,7 +6,7 @@
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: ProductTour (available out of the box)
-- Page XML:  [Copy the XML from this page](NewUpdatedFlag.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](NewUpdatedFlag.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 This sample page highlights DATE_DIFF function and template field on table component.
