@@ -10,7 +10,7 @@ Skuid pages can be configured to include this process.  The example below shows 
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](FollowRecords.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](FollowRecords.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 - Chatter must be turned on in the org for this to function correctly. 

@@ -23,7 +23,7 @@ We also include some JavaScript and an action sequence that deletes the uploaded
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](CreateRecordAndFile.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](CreateRecordAndFile.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links

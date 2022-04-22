@@ -11,7 +11,7 @@ This page shows an account list, with a drawer that provides additional detail a
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](AccountChildrenTableDrawers.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](AccountChildrenTableDrawers.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 Here are the key areas to be reviewed. 

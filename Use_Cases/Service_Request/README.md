@@ -15,8 +15,8 @@ However, With Skuid you can make a very simple looking form, that creates record
         - `Additional_Contact__c`:   A lookup to contact. 
         - `Service_Requested_For__c`: A date field. 
 
-- Design system: [Download this Design System file](CrispinConstruction.designsystem).  Use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Service_Request.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Design system: [Download this Design System file](CrispinConstruction.designsystem?raw=true).  Use the Import function on the Design System page to add this system to your org. 
+- Page XML:  [Copy the XML from this page](Service_Request.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes:
 

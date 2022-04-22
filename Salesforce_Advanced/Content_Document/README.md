@@ -14,7 +14,7 @@ In each case functionality is provided to preview, download, edit metadata and r
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: None 
-- Page XML:  [Copy the XML from this page](ContentDocumentExamples.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](ContentDocumentExamples.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 
 ## Related Links

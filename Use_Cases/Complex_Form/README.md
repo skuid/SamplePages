@@ -9,7 +9,7 @@ The Mortgage Loan Application guides users applying for a mortgage with an intui
 - Page API:  V2
 - Data source: Uses default Salesforce data source
 - Design system: [Download this Design System file](https://github.com/skuid/SamplePages/blob/master/Use_Cases/SamplePages.designsystem), and use the Import function on the Design System page to add this system to your org. 
-- Page XML:  [Copy the XML from this page](Complex_Form.xml), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Complex_Form.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
 
 ## Notes
 This page shows well several Skuid Capabilities. 

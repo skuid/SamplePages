@@ -81,13 +81,13 @@ You will need to ensure the Design System used has Selected State defined so it 
 - Page API:  V2
 - Data source: None
 - Design system: See Note 
-- Page XML:  [Copy the XML from this page](Veritcal_Nav.xml), or save it as an XML file, and upload it as a new page.  
+- Page XML:  [Copy the XML from this page](Veritcal_Nav.xml?raw=true), or save it as an XML file, and upload it as a new page.  
 
 ### Integration of wizard and vertical navigation 
 - Page API:  V2
 - Data source: None
 - Design system: None 
-- Page XML:  [Copy the XML from this page](Wizard_Nav_Integration.xml), or save it as an XML file, and upload it as a new page.  
+- Page XML:  [Copy the XML from this page](Wizard_Nav_Integration.xml?raw=true), or save it as an XML file, and upload it as a new page.  
 
 
 
