@@ -14,7 +14,7 @@ The example also shows how to include dynamic information within a navigation it
 - Page API:  V2
 - Data source: Only UI-only models are used. 
 - Design system: [Download this Design System file](SamplePages.designsystem?raw=true).  Use the Import function on the Design System page to add this system to your org.  
-- Page XML:  [Copy the XML from this page](Multi_Part_Form.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce Org.  
+- Page XML:  [Copy the XML from this page](Multi_Part_Form.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce org or Skuid NLX site.  
 
 ## Notes
 
