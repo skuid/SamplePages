@@ -20,7 +20,7 @@ In each case functionality is provided to preview, download, edit metadata and r
 ## Related Links
 - [Salesforce Developer Documentation](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_erd_content.htm)
 - [Skuid Documentation - File Upload Component](https://docs.skuid.com/latest/en/skuid/components/original/file-upload/#using-the-file-upload-component)
-- [Skuid Community](https://community.skuid.com/skuid/topics/file-upload-to-salesforce-files-instead-of-attachment)
+- [Skuid Community](https://community.skuid.com/t/file-upload-to-salesforce-files-instead-of-attachment/6748)
 - [Internal link in Demo Org](https://skuid-demo--skuid.na37.visual.force.com/apex/skuid__ui?page=ContentDocumentExamples&id=0010P00001x1jtoQAA) (for Skuid Employees only)
 
 
