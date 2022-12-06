@@ -4,7 +4,7 @@ This page shows how Skuid can take a complicated data model and create very simp
 
 <img src="ServiceRequest.png" width="300"></img>
 
-In the standard CRM data model,  there is good reason to have records separated out into categories.  It makes sense to keep Accounts, Contacts, Opportunities, Cases and Tasks all in different objects.  But in the standard Lightning Experience, it is difficult to present an simple user interface while interacting with these different objects and records.  Each record in each object is often a different popup or page. 
+In the standard CRM data model,  there is good reason to have records separated out into categories.  It makes sense to keep Accounts, Contacts, Opportunities, Cases and Tasks all in different objects.  But in the standard Lightning Experience, it is difficult to present a simple user interface while interacting with these different objects and records.  Each record in each object is often a different popup or page. 
 
 However, With Skuid you can make a very simple looking form, that creates records in all these objects in one page. 
 
