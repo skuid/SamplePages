@@ -1,0 +1,1306 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true" theme="Carousel_Playground">
+	<models>
+		<model id="News" query="true" createrowifnonefound="false" datasource="Ui-Only">
+			<fields>
+				<field id="label" label="Label" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="description" label="Description" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="summary" label="Summary" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="bullets" label="Bullets" ispolymorphic="false" isnamepointing="false" displaytype="STRING" accessible="true" filterable="true"/>
+				<field id="previous" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" uionly="true" precision="9" scale="2">
+					<formula>{{index}}-1</formula>
+				</field>
+				<field id="next" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="DOUBLE" uionly="true" precision="9" scale="2">
+					<formula>{{index}}+1</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__tabSet deferTabRendering="true" uniqueid="sk-399b-33345" rememberActiveTab="true">
+			<tabs>
+				<skuid__tabPanel name="Default">
+					<components>
+						<skuid__grid uniqueid="sk-3FUh-53504" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+							<divisions>
+								<division minWidth="150px" ratio="0" alignSelf="auto">
+									<components/>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="4">
+									<components>
+										<skuid__carousel uniqueid="sk-3G_t-24023" showDots="true" slideSource="manual" slideTransition="translate" loop="true" showSlideNumber="true" showButtons="true" automaticTransition="4" enableAutoTransition="true" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+											<slides>
+												<slide slideName="Slide # 1">
+													<components>
+														<skuid__grid flexDirection="row" justifyContent="center" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="4" heightCustom="400px">
+															<divisions>
+																<division ratio="1" alignSelf="auto" maxWidth="300px" minWidth="100px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-3G_t-24024"/>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="2" maxWidth="400px">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-3G_t-24025" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=1">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background datasource="SkuidLocal" source="url" size="auto" model="News" type="color" color="#fdeada"/>
+												</slide>
+												<slide slideName="Slide # 2">
+													<components>
+														<skuid__grid flexDirection="row" justifyContent="center" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="4" heightCustom="400px">
+															<divisions>
+																<division alignSelf="auto" minWidth="100px" ratio="2" maxWidth="400px">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-3G_t-24027" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=2">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+																<division ratio="1" alignSelf="auto" maxWidth="300px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-3G_t-24026"/>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random=2" color="#c6d9f0"/>
+												</slide>
+												<slide slideName="Slide # 3">
+													<components>
+														<skuid__grid flexDirection="row" justifyContent="center" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="4" heightCustom="400px">
+															<divisions>
+																<division ratio="1" alignSelf="auto" maxWidth="300px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-3G_t-24028"/>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1" maxWidth="400px">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-3G_t-24029" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=3">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random=3" color="#e5e0ec"/>
+												</slide>
+											</slides>
+											<styles>
+												<spacing top="4" right="4" bottom="4" left="4" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a"/>
+											</styles>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__carousel>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="150px" ratio="0">
+									<components/>
+								</division>
+							</divisions>
+							<styles>
+								<spacing/>
+							</styles>
+							<background/>
+						</skuid__grid>
+						<skuid__wrapper uniqueid="sk-i0U-44514">
+							<components>
+								<skuid__text contents="&lt;strong&gt;Default Carrousel:&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;General example with all standard navigation tools used.&lt;br /&gt;&#10;Each slide configured manually,&amp;nbsp; and standard navigation buttons used" uniqueid="sk-i0Z-46625">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Outside Buttons">
+					<components>
+						<skuid__grid uniqueid="sk-1BiN-10150" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1.5">
+							<divisions>
+								<division minWidth="30px" ratio="1" alignSelf="auto">
+									<components/>
+								</division>
+								<division alignSelf="auto" minWidth="50px" ratio="0">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3G-1-45527" position="center">
+											<groups>
+												<skuid__buttonGroup uniqueId="sk-3G-1-45525" displayType="detached">
+													<buttons>
+														<skuid__button uniqueId="sk-3G-1-45526" icon="sk-webicon-ink:arrow-left" styleSettingsVariant="circular">
+															<actions>
+																<action type="runComponentAction" componentid="sk-29SK-19214" action="goToPreviousSlide"/>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="6">
+									<components>
+										<skuid__carousel uniqueid="sk-29SK-19214" showDots="false" slideSource="manual" slideTransition="fade" loop="true" showSlideNumber="true" showButtons="false" enableAutoTransition="true" automaticTransition="5" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+											<slides>
+												<slide slideName="Slide # 1">
+													<components>
+														<skuid__grid flexDirection="column" justifyContent="space-between" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="2" heightCustom="350px">
+															<divisions>
+																<division ratio="1" alignSelf="auto" maxWidth="300px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-29TP-47815"/>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-29YV-86190" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=1">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background datasource="SkuidLocal" source="url" size="auto" model="News" type="color" color="#fdeada"/>
+												</slide>
+												<slide slideName="Slide # 2">
+													<components>
+														<skuid__grid flexDirection="column" justifyContent="space-between" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="2" heightCustom="350px">
+															<divisions>
+																<division ratio="1" alignSelf="auto" maxWidth="300px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-29Z2-94859"/>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-29Z2-94860" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=2">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random=2" color="#c6d9f0"/>
+												</slide>
+												<slide slideName="Slide # 3">
+													<components>
+														<skuid__grid flexDirection="column" justifyContent="space-between" alignItems="center" heightStrategy="fixed" height="custom" columnGutter="2" heightCustom="350px">
+															<divisions>
+																<division ratio="1" alignSelf="auto" maxWidth="300px">
+																	<components>
+																		<skuid__header title="{{$SlideName}}">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__header>
+																		<skuid__text contents="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum d" uniqueid="sk-29Z8-15204"/>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="100px" ratio="1">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-29Z8-15205" datasource="SkuidLocal" model="News" url="https://picsum.photos/400/200?random=3">
+																			<styles>
+																				<spacing top="2"/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="2" bottom="2"/>
+															</styles>
+															<background/>
+														</skuid__grid>
+													</components>
+													<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random=3" color="#e5e0ec"/>
+												</slide>
+											</slides>
+										</skuid__carousel>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="50px" ratio="0">
+									<components>
+										<skuid__buttonSet uniqueid="sk-3G-2-46384" position="center">
+											<groups>
+												<skuid__buttonGroup uniqueId="sk-3G-2-46382">
+													<buttons>
+														<skuid__button uniqueId="sk-3G-2-46383" styleSettingsVariant="circular" icon="sk-webicon-ink:arrow-right">
+															<actions>
+																<action type="runComponentAction" componentid="sk-29SK-19214" action="goToNextSlide"/>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30px" ratio="1">
+									<components/>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" bottom="3" left="3" right="3"/>
+							</styles>
+							<background type="color" color="#d8d8d8"/>
+						</skuid__grid>
+						<skuid__wrapper uniqueid="sk-i12-51642">
+							<components>
+								<skuid__text contents="&lt;strong&gt;Carrousel with Outside Buttons&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;Use of custom buttons to allow placement of navigation controls anywhere on the page." uniqueid="sk-i12-51643">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#d8d8d8"/>
+						</skuid__wrapper>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Full Screen Hero">
+					<components>
+						<skuid__carousel uniqueid="sk-312S-31320" showDots="false" slideSource="manual" slideTransition="translate" loop="true" showSlideNumber="false" showButtons="true" enableAutoTransition="true" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a" automaticTransition="5">
+							<slides>
+								<slide slideName="Slide # 1">
+									<components>
+										<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="center" columnGutter="2" heightCustom="400px">
+											<divisions>
+												<division ratio="1" alignSelf="auto" minWidth="400px">
+													<components/>
+												</division>
+												<division alignSelf="auto" ratio="1" minWidth="100px">
+													<components>
+														<skuid__grid uniqueid="sk-399_-35480" flexDirection="column" justifyContent="center" alignItems="flex-end" heightStrategy="fixed" height="90">
+															<divisions>
+																<division alignSelf="auto" ratio="1" minWidth="250px">
+																	<components/>
+																</division>
+																<division alignSelf="auto" ratio="0">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-3FdB-133757">
+																			<components>
+																				<skuid__header title="{{$SlideName}}">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__header>
+																				<skuid__buttonSet uniqueid="sk-3FdB-133758">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-3FdB-133760">
+																							<buttons>
+																								<skuid__button label="Call to Action" uniqueId="sk-3FdB-133761"/>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing right="3"/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="Enim ut tellus elementum sagittis vitae. Neque aliquam vestibulum morbi blandit. Amet purus gravida quis blandit turpis cursus in hac. Scelerisque purus semper eget duis at tellus at.&amp;nbsp;" uniqueid="sk-3FdB-133759">
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																			<background type="color" color="rgba(255,255,255,0.75)"/>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="300px" ratio="1">
+																	<components/>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="3" right="3" bottom="3" left="3"/>
+															</styles>
+															<background color="transparent"/>
+															<interactions/>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+														</skuid__grid>
+													</components>
+												</division>
+											</divisions>
+											<background/>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__grid>
+									</components>
+									<background datasource="SkuidLocal" source="url" size="cover" model="News" type="image" url="https://images.unsplash.com/photo-1551899714-406fb07fb6ae?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=2971&amp;q=80" position="center right"/>
+								</slide>
+								<slide slideName="Slide # 2">
+									<components>
+										<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="center" columnGutter="2" heightCustom="400px">
+											<divisions>
+												<division alignSelf="auto" ratio="1" minWidth="100px">
+													<components>
+														<skuid__grid uniqueid="sk-315f-114246" flexDirection="column" justifyContent="center" alignItems="flex-start" heightStrategy="fixed" height="90">
+															<divisions>
+																<division alignSelf="auto" minWidth="300px" ratio="1">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-3FdX-44180">
+																			<components>
+																				<skuid__header title="{{$SlideName}}">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__header>
+																				<skuid__buttonSet uniqueid="sk-3FdX-44181" position="left">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-3FdX-44183">
+																							<buttons>
+																								<skuid__button label="Call to Action" uniqueId="sk-3FdX-44184"/>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing right="3"/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="Enim ut tellus elementum sagittis vitae. Neque aliquam vestibulum morbi blandit. Amet purus gravida quis blandit turpis cursus in hac. Scelerisque purus semper eget duis at tellus at.&amp;nbsp;" uniqueid="sk-3FdX-44182">
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																			<background type="color" color="rgba(255,255,255,0.75)"/>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="auto" ratio="1" minWidth="250px">
+																	<components/>
+																</division>
+																<division alignSelf="auto" ratio="1">
+																	<components/>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="3" right="3" bottom="3" left="3"/>
+															</styles>
+															<background color="transparent"/>
+															<interactions/>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+														</skuid__grid>
+													</components>
+												</division>
+												<division ratio="1" alignSelf="auto" minWidth="400px">
+													<components/>
+												</division>
+											</divisions>
+											<background/>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__grid>
+									</components>
+									<background type="image" datasource="SkuidLocal" source="url" size="cover" model="News" url="https://images.unsplash.com/photo-1567941537651-70be5a2aafd2?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=3132&amp;q=80" color="#c6d9f0"/>
+								</slide>
+								<slide slideName="Slide # 3">
+									<components>
+										<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="center" columnGutter="2" heightCustom="400px">
+											<divisions>
+												<division ratio="1" alignSelf="auto" minWidth="400px">
+													<components/>
+												</division>
+												<division alignSelf="auto" ratio="1" minWidth="100px">
+													<components>
+														<skuid__grid uniqueid="sk-31C--89321" flexDirection="column" justifyContent="center" alignItems="flex-end" heightStrategy="fixed" height="90">
+															<divisions>
+																<division alignSelf="auto" ratio="0">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-3Fcw-121896">
+																			<components>
+																				<skuid__header title="{{$SlideName}}">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__header>
+																				<skuid__buttonSet uniqueid="sk-31C--89322">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-31C--89324">
+																							<buttons>
+																								<skuid__button label="Call to Action" uniqueId="sk-31C--89325"/>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing right="3"/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="Enim ut tellus elementum sagittis vitae. Neque aliquam vestibulum morbi blandit. Amet purus gravida quis blandit turpis cursus in hac. Scelerisque purus semper eget duis at tellus at.&amp;nbsp;" uniqueid="sk-31C--89323">
+																					<styles>
+																						<spacing top="3" right="3" bottom="3" left="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																			<background type="color" color="rgba(255,255,255,0.75)"/>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="auto" minWidth="300px" ratio="1">
+																	<components/>
+																</division>
+															</divisions>
+															<styles>
+																<spacing top="3" right="3" bottom="3" left="3"/>
+															</styles>
+															<background color="transparent"/>
+															<interactions/>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+														</skuid__grid>
+													</components>
+												</division>
+											</divisions>
+											<background/>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__grid>
+									</components>
+									<background type="image" datasource="SkuidLocal" source="url" size="cover" model="News" url="https://images.unsplash.com/photo-1642551426207-79eadf27cbd7?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=2874&amp;q=80" color="#e5e0ec"/>
+								</slide>
+							</slides>
+						</skuid__carousel>
+						<skuid__wrapper uniqueid="sk-i14-53255">
+							<components>
+								<skuid__text contents="&lt;strong&gt;Full Screen Hero&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;For increased visual interest in header of portals or sites.&amp;nbsp;&lt;br /&gt;&#10;Unfortunately - static content cannot sit in front of carousel - so it&amp;#39;s not possible to put navigation masthead,&amp;nbsp; or thumbnail strip in front of the carousel." uniqueid="sk-i14-53256">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Box News Slider">
+					<components>
+						<skuid__grid uniqueid="sk-2DVQ-17857" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+							<divisions>
+								<division minWidth="50px" ratio="1" alignSelf="auto">
+									<components/>
+								</division>
+								<division alignSelf="auto" ratio="6" maxWidth="1000px">
+									<components>
+										<skuid__carousel uniqueid="sk-2DVQ-17858" slideSource="model" slideTransition="fade" model="News" loop="true" showDots="false" showSlideNumber="false" showButtons="true" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a" enableAutoTransition="false">
+											<slides>
+												<slide name="Slide 1">
+													<components>
+														<skuid__grid flexDirection="column" justifyContent="space-between" alignItems="stretch" height="60" overflowY="auto" heightStrategy="fixed">
+															<divisions>
+																<division alignSelf="auto" minWidth="200px" ratio="1">
+																	<components>
+																		<skuid__image source="url" uniqueid="sk-39H2-66554" datasource="SkuidLocal" model="News" url="https://picsum.photos/1000/300?random={{index}}&amp;grayscale" imageHeight="300px">
+																			<renderConditions logictype="and"/>
+																			<styleVariantConditions/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__image>
+																	</components>
+																</division>
+																<division ratio="1" alignSelf="auto">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-2DVQ-17859" height="custom" heightStrategy="fixed" heightCustom="100px">
+																			<components>
+																				<skuid__text contents="{{summary}}" uniqueid="sk-2DVQ-17860" model="News" styleSettingsVariant="medium">
+																					<styles>
+																						<spacing bottom="3" left="3" right="3" styleSettingsVariant="medium" top="3"/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																			<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random={{index}}&amp;grayscale" color="white"/>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+															</divisions>
+															<background datasource="SkuidLocal" source="url" size="auto" model="News" color="transparent"/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__grid>
+													</components>
+													<renderConditions logictype="and"/>
+													<background datasource="SkuidLocal" source="url" size="auto" model="News"/>
+												</slide>
+											</slides>
+											<styles>
+												<spacing top="4" bottom="4"/>
+											</styles>
+										</skuid__carousel>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="50px" ratio="1">
+									<components/>
+								</division>
+							</divisions>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#f2f2f2"/>
+						</skuid__grid>
+						<skuid__wrapper uniqueid="sk-i1J-58643">
+							<components>
+								<skuid__text contents="&lt;b&gt;News Headline Slider&lt;/b&gt;&lt;br /&gt;&#10;Simple example with a big image,&amp;nbsp; and a headline.&amp;nbsp;" uniqueid="sk-i1J-58644">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Custom Buttons">
+					<components>
+						<skuid__wrapper uniqueid="sk-39rF-108380">
+							<components>
+								<skuid__wrapper uniqueid="sk-39r6-105419" styleSettingsVariant="80767bcf-4869-4021-93e9-063d0693433b">
+									<components>
+										<skuid__grid uniqueid="sk-39nz-126592" flexDirection="row" justifyContent="flex-start" alignItems="center">
+											<divisions>
+												<division alignSelf="auto" minWidth="20px" ratio="0">
+													<components/>
+												</division>
+												<division alignSelf="auto" minWidth="100px" ratio="6">
+													<components>
+														<skuid__carousel uniqueid="sk-39_p-203498" showDots="false" slideSource="model" slideTransition="fade" loop="true" showSlideNumber="false" showButtons="false" model="News" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+															<slides>
+																<slide slideName="Slide # 1">
+																	<components>
+																		<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="flex-end" height="60" columnGutter="2" heightCustom="400px" heightStrategy="fixed">
+																			<divisions>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__buttonSet uniqueid="sk-39_p-203499" position="left">
+																							<groups>
+																								<skuid__buttonGroup uniqueId="sk-39_p-203506">
+																									<buttons>
+																										<skuid__button label="Run actions" uniqueId="sk-39_p-203507" styleSettingsVariant="primary"/>
+																									</buttons>
+																								</skuid__buttonGroup>
+																							</groups>
+																							<styles>
+																								<spacing top="3" right="3" bottom="3" left="3"/>
+																							</styles>
+																						</skuid__buttonSet>
+																					</components>
+																				</division>
+																				<division ratio="1" alignSelf="flex-start" minWidth="100px">
+																					<components>
+																						<skuid__wrapper uniqueid="sk-39_p-203500" height="60">
+																							<components>
+																								<skuid__text contents="{{label}}" uniqueid="sk-39_p-203501" model="News" styleSettingsVariant="f1066b46-4aa1-48f1-9a6c-9a3bd5d82219">
+																									<styles>
+																										<spacing top="3" styleSettingsVariant="f1066b46-4aa1-48f1-9a6c-9a3bd5d82219" right="3" left="3"/>
+																									</styles>
+																									<renderConditions logictype="and"/>
+																									<styleVariantConditions/>
+																								</skuid__text>
+																								<skuid__text contents="{{bullets}}" uniqueid="sk-39_p-203502" model="News" styleSettingsVariant="large">
+																									<styles>
+																										<spacing top="3" right="3" bottom="3" left="3"/>
+																									</styles>
+																								</skuid__text>
+																								<skuid__text contents="{{description}}" uniqueid="sk-39_p-203503" model="News">
+																									<styles>
+																										<spacing right="3" bottom="3" left="3" styleSettingsVariant="small"/>
+																									</styles>
+																								</skuid__text>
+																							</components>
+																							<styles>
+																								<spacing top="3" bottom="3" left="3" right="3"/>
+																							</styles>
+																							<background type="color" datasource="SkuidLocal" source="url" size="auto" model="News" url="https://picsum.photos/800/800?random={{index}}&amp;grayscale" color="rgba(255,255,255,0.75)"/>
+																						</skuid__wrapper>
+																					</components>
+																				</division>
+																				<division alignSelf="flex-end" minWidth="50px" ratio="0" maxWidth="75px">
+																					<components>
+																						<skuid__buttonSet uniqueid="sk-39_p-203504" position="center">
+																							<groups>
+																								<skuid__buttonGroup uniqueId="sk-39_p-203508" displayType="detached">
+																									<buttons>
+																										<skuid__button uniqueId="sk-39_p-203509" icon="sk-webicon-ink:arrow-left" styleSettingsVariant="circular">
+																											<actions>
+																												<action type="runComponentAction" componentid="sk-39_p-203498" action="goToPreviousSlide"/>
+																											</actions>
+																										</skuid__button>
+																									</buttons>
+																								</skuid__buttonGroup>
+																							</groups>
+																							<styles>
+																								<spacing top="1" right="1" bottom="1" left="1"/>
+																							</styles>
+																						</skuid__buttonSet>
+																						<skuid__buttonSet uniqueid="sk-39_p-203505" position="center">
+																							<groups>
+																								<skuid__buttonGroup uniqueId="sk-39_p-203510">
+																									<buttons>
+																										<skuid__button uniqueId="sk-39_p-203511" styleSettingsVariant="circular" icon="sk-webicon-ink:arrow-right">
+																											<actions>
+																												<action type="runComponentAction" componentid="sk-39_p-203498" action="goToNextSlide"/>
+																											</actions>
+																										</skuid__button>
+																									</buttons>
+																								</skuid__buttonGroup>
+																							</groups>
+																							<styles>
+																								<spacing right="1" bottom="1" left="1"/>
+																							</styles>
+																						</skuid__buttonSet>
+																					</components>
+																				</division>
+																			</divisions>
+																			<styles>
+																				<spacing top="2" bottom="2"/>
+																			</styles>
+																			<background datasource="SkuidLocal" source="url" size="cover" model="News" url="https://picsum.photos/1000/300?random={{index}}&amp;grayscale" type="image"/>
+																			<renderConditions logictype="and"/>
+																			<styleVariantConditions/>
+																		</skuid__grid>
+																	</components>
+																	<background datasource="SkuidLocal" source="url" size="auto" model="News" color="transparent"/>
+																</slide>
+															</slides>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__carousel>
+													</components>
+												</division>
+												<division alignSelf="auto" minWidth="20px" ratio="0">
+													<components/>
+												</division>
+											</divisions>
+											<styles>
+												<spacing bottom="3" left="3" right="3"/>
+											</styles>
+											<background type="color" color="white"/>
+										</skuid__grid>
+									</components>
+									<background/>
+									<styles>
+										<spacing right="6" left="6"/>
+									</styles>
+								</skuid__wrapper>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#ebf1dd"/>
+						</skuid__wrapper>
+						<skuid__wrapper uniqueid="sk-lwj-74868">
+							<components>
+								<skuid__text contents="&lt;b&gt;Custom Buttons&lt;/b&gt;&lt;br /&gt;&#10;Effective use of custom navigation buttons for positioning within the carousel.&amp;nbsp;" uniqueid="sk-lwj-74869">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+					<onInitialShowActions/>
+					<onShowActions/>
+					<renderConditions logictype="and"/>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Next / Previous Preview">
+					<components>
+						<skuid__grid uniqueid="sk-3ANs-210052" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" height="90">
+							<divisions>
+								<division minWidth="100px" ratio="1" alignSelf="flex-end">
+									<components/>
+								</division>
+								<division alignSelf="center" minWidth="800px" ratio="3">
+									<components>
+										<skuid__carousel uniqueid="sk-3ANs-210053" showDots="false" slideSource="model" slideTransition="fade" loop="true" showSlideNumber="false" showButtons="false" model="News" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+											<slides>
+												<slide slideName="Slide # 1">
+													<components>
+														<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="flex-end" height="60" columnGutter="2" heightCustom="400px" heightStrategy="fixed">
+															<divisions>
+																<division alignSelf="flex-end" minWidth="200px" ratio="1" maxWidth="200px">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-3ANs-210054" styleSettingsVariant="80767bcf-4869-4021-93e9-063d0693433b">
+																			<components>
+																				<skuid__carousel uniqueid="sk-3ANs-210055" showDots="false" slideSource="model" slideTransition="fade" loop="true" showSlideNumber="false" showButtons="false" model="News" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+																					<slides>
+																						<slide slideName="Slide # 1">
+																							<components>
+																								<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="flex-end" height="custom" columnGutter="2" heightCustom="110px" heightStrategy="fixed">
+																									<divisions>
+																										<division alignSelf="auto" minWidth="100px" ratio="1">
+																											<components/>
+																										</division>
+																									</divisions>
+																									<background datasource="SkuidLocal" source="url" size="cover" model="News"/>
+																									<renderConditions logictype="and"/>
+																									<styleVariantConditions/>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__grid>
+																							</components>
+																							<background datasource="SkuidLocal" source="url" size="contain" model="News" color="transparent" type="image" url="https://source.unsplash.com/collection/At5_35kBUtI/500x300/?sig={{previous}}"/>
+																						</slide>
+																					</slides>
+																					<styles>
+																						<spacing top="1" right="1" bottom="1" left="1"/>
+																					</styles>
+																				</skuid__carousel>
+																			</components>
+																			<background type="color" color="white"/>
+																			<styles>
+																				<spacing top="1" right="1" bottom="1" left="1"/>
+																			</styles>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+																<division alignSelf="flex-end" minWidth="400px" ratio="1">
+																	<components>
+																		<skuid__buttonSet uniqueid="sk-3ANs-210056" position="center">
+																			<groups>
+																				<skuid__buttonGroup uniqueId="sk-3ANs-210059" displayType="detached">
+																					<buttons>
+																						<skuid__button uniqueId="sk-3ANs-210060" icon="sk-webicon-ink:arrow-left" styleSettingsVariant="circular">
+																							<actions>
+																								<action type="runComponentAction" componentid="sk-3ANs-210053" action="goToPreviousSlide"/>
+																								<action type="runComponentAction" componentid="sk-3ANs-210055" action="goToPreviousSlide"/>
+																								<action type="runComponentAction" componentid="sk-3ANs-210058" action="goToPreviousSlide"/>
+																							</actions>
+																						</skuid__button>
+																					</buttons>
+																				</skuid__buttonGroup>
+																				<skuid__buttonGroup uniqueId="sk-3ANs-210061" displayType="detached">
+																					<buttons>
+																						<skuid__button uniqueId="sk-3ANs-210062" icon="sk-webicon-ink:arrow-right" styleSettingsVariant="circular">
+																							<actions>
+																								<action type="runComponentAction" componentid="sk-3ANs-210053" action="goToNextSlide"/>
+																								<action type="runComponentAction" componentid="sk-3ANs-210055" action="goToNextSlide"/>
+																								<action type="runComponentAction" componentid="sk-3ANs-210058" action="goToNextSlide"/>
+																							</actions>
+																						</skuid__button>
+																					</buttons>
+																				</skuid__buttonGroup>
+																			</groups>
+																			<styles>
+																				<spacing top="2" right="2" bottom="2" left="2"/>
+																			</styles>
+																		</skuid__buttonSet>
+																	</components>
+																</division>
+																<division alignSelf="flex-end" minWidth="200px" ratio="1" maxWidth="200px">
+																	<components>
+																		<skuid__wrapper uniqueid="sk-3ANs-210057" styleSettingsVariant="80767bcf-4869-4021-93e9-063d0693433b">
+																			<components>
+																				<skuid__carousel uniqueid="sk-3ANs-210058" showDots="false" slideSource="model" slideTransition="fade" loop="true" showSlideNumber="false" showButtons="false" model="News" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a">
+																					<slides>
+																						<slide slideName="Slide # 1">
+																							<components>
+																								<skuid__grid flexDirection="row" justifyContent="space-between" alignItems="flex-end" height="custom" columnGutter="2" heightCustom="110px" heightStrategy="fixed">
+																									<divisions>
+																										<division alignSelf="auto" minWidth="100px" ratio="1">
+																											<components/>
+																										</division>
+																									</divisions>
+																									<background datasource="SkuidLocal" source="url" size="cover" model="News"/>
+																									<renderConditions logictype="and"/>
+																									<styleVariantConditions/>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__grid>
+																							</components>
+																							<background datasource="SkuidLocal" source="url" size="contain" model="News" color="transparent" type="image" url="https://source.unsplash.com/collection/At5_35kBUtI/500x300/?sig={{next}}"/>
+																						</slide>
+																					</slides>
+																					<styles>
+																						<spacing top="1" right="1" bottom="1" left="1"/>
+																					</styles>
+																				</skuid__carousel>
+																			</components>
+																			<background type="color" color="white"/>
+																			<styles>
+																				<spacing top="1" right="1" bottom="1" left="1"/>
+																			</styles>
+																		</skuid__wrapper>
+																	</components>
+																</division>
+															</divisions>
+															<background datasource="SkuidLocal" source="url" size="cover" model="News"/>
+															<renderConditions logictype="and"/>
+															<styleVariantConditions/>
+															<styles>
+																<spacing/>
+															</styles>
+														</skuid__grid>
+													</components>
+													<background datasource="SkuidLocal" source="url" size="cover" model="News" color="transparent" type="image" url="https://source.unsplash.com/collection/At5_35kBUtI/500x300/?sig={{index}}"/>
+												</slide>
+											</slides>
+											<styles>
+												<spacing top="4" right="4" bottom="4" left="4"/>
+											</styles>
+										</skuid__carousel>
+									</components>
+								</division>
+								<division alignSelf="flex-end" minWidth="100px" ratio="1">
+									<components/>
+								</division>
+							</divisions>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__grid>
+						<skuid__wrapper uniqueid="sk-lwv-80657">
+							<components>
+								<skuid__text contents="&lt;b&gt;Next / Previous Preview&lt;/b&gt;&lt;br /&gt;&#10;This method uses 3 carousels,&amp;nbsp; bound to the same set of custom buttons.&amp;nbsp;&lt;br /&gt;&#10;Use formula fields on model to retrieve data necessary for construction of next and previous image URL.&amp;nbsp;" uniqueid="sk-lwv-80658">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Multiple Pane Carrousel">
+					<components>
+						<skuid__wrapper uniqueid="sk-3EsO-205615">
+							<components>
+								<skuid__grid uniqueid="sk-3EhN-47650" flexDirection="row" justifyContent="center" alignItems="stretch" heightStrategy="fixed" height="custom" heightCustom="660px">
+									<divisions>
+										<division minWidth="200px" ratio="3" alignSelf="auto">
+											<components>
+												<skuid__grid uniqueid="sk-3Em8-83728" flexDirection="row" justifyContent="flex-end" alignItems="stretch" heightStrategy="fixed" height="custom" columnGutter="2" heightCustom="660px">
+													<divisions>
+														<division minWidth="50px" ratio="0" alignSelf="auto" maxWidth="50px">
+															<components/>
+														</division>
+														<division alignSelf="center" minWidth="300px" ratio="1">
+															<components>
+																<skuid__carousel uniqueid="sk-3Eo7-141307" showDots="false" showButtons="false" slideSource="model" model="News" slideTransition="translate" loop="true" enableAutoTransition="true" automaticTransition="5">
+																	<slides>
+																		<slide slideName="Slide 1">
+																			<components>
+																				<skuid__text contents="SLIDE {{index}}" uniqueid="sk-3EmH-88489" styleSettingsVariant="88daccae-1470-4bd4-b815-d69c5d2f3fa2" model="News"/>
+																				<skuid__text contents="{{label}}" uniqueid="sk-3EmE-86866" styleSettingsVariant="f1066b46-4aa1-48f1-9a6c-9a3bd5d82219" model="News"/>
+																				<skuid__text contents="{{summary}}" uniqueid="sk-3EmI-89255" styleSettingsVariant="small" model="News">
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																				</skuid__text>
+																			</components>
+																			<background/>
+																		</slide>
+																	</slides>
+																</skuid__carousel>
+															</components>
+														</division>
+														<division alignSelf="flex-end" minWidth="100px" ratio="0">
+															<components>
+																<skuid__buttonSet uniqueid="sk-3Emi-100760">
+																	<groups>
+																		<skuid__buttonGroup uniqueId="sk-3Emi-100758" displayType="attached">
+																			<buttons>
+																				<skuid__button uniqueId="sk-3Emi-100759" icon="sk-webicon-ink:arrow-left" styleSettingsVariant="primary">
+																					<actions>
+																						<action type="runComponentAction" componentid="sk-3Eo7-141307" action="goToPreviousSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epf-157232" action="goToPreviousSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epb-153874" action="goToPreviousSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epi-159311" action="goToPreviousSlide"/>
+																					</actions>
+																				</skuid__button>
+																				<skuid__button uniqueId="sk-3Emn-102303" icon="sk-webicon-ink:arrow-right" styleSettingsVariant="primary">
+																					<actions>
+																						<action type="runComponentAction" componentid="sk-3Eo7-141307" action="goToNextSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epf-157232" action="goToNextSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epb-153874" action="goToNextSlide"/>
+																						<action type="runComponentAction" componentid="sk-3Epi-159311" action="goToNextSlide"/>
+																					</actions>
+																				</skuid__button>
+																			</buttons>
+																		</skuid__buttonGroup>
+																	</groups>
+																</skuid__buttonSet>
+															</components>
+														</division>
+													</divisions>
+													<styles>
+														<spacing/>
+													</styles>
+													<background/>
+												</skuid__grid>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="200px" ratio="2">
+											<components>
+												<skuid__grid uniqueid="sk-3Eho-55833" flexDirection="column" justifyContent="stretch" alignItems="stretch">
+													<divisions>
+														<division minWidth="100%" ratio="1" alignSelf="auto">
+															<components>
+																<skuid__grid uniqueid="sk-3Ejq-57457" flexDirection="row" type="color" color="#F3F3F2" justifyContent="stretch" alignItems="stretch">
+																	<divisions>
+																		<division minWidth="100px" ratio="1" alignSelf="flex-end">
+																			<components>
+																				<skuid__carousel uniqueid="sk-3Epf-157232" showDots="false" showButtons="false" slideSource="model" model="News" slideTransition="translate" loop="true" enableAutoTransition="true" automaticTransition="5">
+																					<slides>
+																						<slide slideName="Slide 1">
+																							<components>
+																								<skuid__wrapper uniqueid="sk-3Ekk-43073" height="custom" heightCustom="150px" heightStrategy="fixed">
+																									<components/>
+																									<background/>
+																									<interactions/>
+																									<renderConditions/>
+																									<styleVariantConditions/>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__wrapper>
+																							</components>
+																							<background type="image" datasource="SkuidLocal" source="url" size="cover" model="News" url="https://picsum.photos/300/250?random={{index}}&amp;grayscale"/>
+																						</slide>
+																					</slides>
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__carousel>
+																			</components>
+																			<renderConditions/>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="3">
+																			<components>
+																				<skuid__carousel uniqueid="sk-3Epb-153874" showDots="false" showButtons="false" slideSource="model" model="News" slideTransition="translate" loop="true" enableAutoTransition="true" automaticTransition="5">
+																					<slides>
+																						<slide slideName="Slide 1">
+																							<components>
+																								<skuid__wrapper uniqueid="sk-3Ekm-44412" height="custom" heightCustom="300px" heightStrategy="fixed">
+																									<components/>
+																									<background color="transparent"/>
+																									<interactions/>
+																									<renderConditions/>
+																									<styleVariantConditions/>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																								</skuid__wrapper>
+																							</components>
+																							<background type="image" datasource="SkuidLocal" source="url" size="cover" model="News" url="https://picsum.photos/300/200?random={{index}}&amp;grayscale"/>
+																						</slide>
+																					</slides>
+																				</skuid__carousel>
+																			</components>
+																			<renderConditions/>
+																		</division>
+																	</divisions>
+																	<interactions/>
+																	<renderConditions/>
+																	<styleVariantConditions/>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background/>
+																</skuid__grid>
+															</components>
+															<renderConditions/>
+														</division>
+														<division alignSelf="auto" minWidth="100%" ratio="1">
+															<components>
+																<skuid__carousel uniqueid="sk-3Epi-159311" showDots="false" showButtons="false" slideSource="model" model="News" slideTransition="translate" loop="true" enableAutoTransition="true" automaticTransition="5">
+																	<slides>
+																		<slide slideName="Slide 1">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-3EkX-136249" height="custom" heightCustom="360px" heightStrategy="fixed">
+																					<components/>
+																					<background color="transparent"/>
+																					<interactions/>
+																					<renderConditions/>
+																					<styleVariantConditions/>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__wrapper>
+																			</components>
+																			<background type="image" datasource="SkuidLocal" source="url" size="cover" model="News" url="https://picsum.photos/500/300?random={{index}}&amp;grayscale"/>
+																		</slide>
+																	</slides>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																</skuid__carousel>
+															</components>
+														</division>
+													</divisions>
+													<interactions/>
+													<renderConditions/>
+													<styleVariantConditions/>
+													<styles>
+														<spacing/>
+													</styles>
+													<background/>
+												</skuid__grid>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="6" right="3" bottom="6" left="3"/>
+									</styles>
+									<background type="color" color="white"/>
+								</skuid__grid>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+						<skuid__wrapper uniqueid="sk-lxI-87882">
+							<components>
+								<skuid__text contents="&lt;b&gt;Multiple Panes&lt;/b&gt;&lt;br /&gt;&#10;This method uses 4 carousels,&amp;nbsp; bound to the same set of custom navigation buttons.&amp;nbsp;&lt;br /&gt;&#10;Slide background is used to show image,&amp;nbsp; while wrapper height helps maintain a consistent sizing.&amp;nbsp;" uniqueid="sk-lxI-87883">
+									<styles>
+										<spacing top="2" right="2" bottom="2" left="2"/>
+									</styles>
+								</skuid__text>
+							</components>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+							<background type="color" color="#bfbfbf"/>
+						</skuid__wrapper>
+					</components>
+					<onInitialShowActions/>
+					<onShowActions/>
+					<renderConditions/>
+				</skuid__tabPanel>
+			</tabs>
+			<styles>
+				<spacing top="4"/>
+			</styles>
+			<renderConditions/>
+			<styleVariantConditions/>
+		</skuid__tabSet>
+	</components>
+	<resources>
+		<labels/>
+		<javascript/>
+		<css/>
+		<actionsequences>
+			<actionsequence id="02437f0b-034b-454b-b10d-38f6c99ee83a" label="New sequence" type="event-triggered" event-scope="component" event-name="page.rendered">
+				<description/>
+				<actions>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="The Big Sleep"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Reactive directional secured line"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="at turpis a pede posuere nonummy integer non velit donec diam neque vestibulum eget vulputate ut ultrices vel augue vestibulum ante ipsum primis in"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Mr. Belvedere Goes to College"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Triple-buffered fresh-thinking algorithm"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="diam in magna bibendum imperdiet nullam orci pede venenatis non sodales sed tincidunt eu felis fusce posuere felis sed lacus morbi sem mauris laoreet ut rhoncus aliquet pulvinar sed nisl nunc rhoncus dui vel sem sed sagittis nam congue risus semper porta volutpat quam pede"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Shaolin Temple"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Versatile methodical ability"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque quam turpis adipiscing lorem vitae mattis nibh ligula nec sem duis aliquam convallis nunc proin"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Count Yorga, Vampire"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Operative zero defect data-warehouse"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="pede ac diam cras pellentesque volutpat dui maecenas tristique est et tempus semper est quam pharetra magna ac consequat metus sapien ut nunc vestibulum ante ipsum primis"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Deathdream"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Business-focused multi-state infrastructure"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="nec condimentum neque sapien placerat ante nulla justo aliquam quis turpis eget"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Constant Nymph"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Pre-emptive bandwidth-monitored algorithm"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="eu orci mauris lacinia sapien quis libero nullam sit amet turpis elementum ligula vehicula consequat morbi a"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Only Daughter"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Face to face secondary hardware"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="non mattis pulvinar nulla pede ullamcorper augue a suscipit nulla elit ac nulla sed vel enim sit amet nunc viverra dapibus nulla suscipit ligula in lacus curabitur at ipsum ac tellus semper interdum mauris ullamcorper"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Annie"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Total tertiary process improvement"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="donec pharetra magna vestibulum aliquet ultrices erat tortor sollicitudin mi sit amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi non"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Poker House"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Quality-focused grid-enabled info-mediaries"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Donec posuere metus vitae ipsum. Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="sodales sed tincidunt eu felis fusce posuere felis sed lacus morbi sem mauris laoreet ut rhoncus aliquet pulvinar sed nisl nunc rhoncus dui vel sem"/>
+						</defaults>
+					</action>
+					<action type="createRow" model="News" appendorprepend="append" defaultmodefornewitems="edit" affectedrows="context">
+						<defaults>
+							<default valuesource="fieldvalue" field="label" enclosevalueinquotes="true" value="Ants in the Pants"/>
+							<default valuesource="fieldvalue" field="bullets" enclosevalueinquotes="true" value="Vision-oriented reciprocal interface"/>
+							<default valuesource="fieldvalue" field="description" enclosevalueinquotes="true" value="Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros."/>
+							<default valuesource="fieldvalue" field="summary" enclosevalueinquotes="true" value="accumsan odio curabitur convallis duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla rhoncus mauris enim leo rhoncus sed vestibulum sit amet cursus id turpis integer aliquet massa"/>
+						</defaults>
+					</action>
+				</actions>
+			</actionsequence>
+		</actionsequences>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__header title="Carousel Examples" uniqueid="sk-39C5-50510">
+							<skuid__buttonSet>
+								<groups/>
+							</skuid__buttonSet>
+							<styles>
+								<spacing top="2" right="2" bottom="2" left="2"/>
+							</styles>
+						</skuid__header>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#c6d9f0"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background/>
+	<interactions/>
+</skuid__page>
