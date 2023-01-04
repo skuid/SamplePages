@@ -182,7 +182,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-RPq-20391">
 											<components>
-												<skuid__text contents="Validation Rules for a Password&lt;br /&gt;&#10;- 4 different rules working together showing what must be done, and what cannot be done.&amp;nbsp;&lt;br /&gt;&#10;- Validation on &amp;quot;Field Change&amp;quot; gives real time feedback so that user knows password is valid as go.&amp;nbsp;" uniqueid="sk-RPr-20874">
+<skuid__text contents="This example shows how multiple validation rules could be used as once. In this example we&amp;#39;re validating&amp;nbsp;&lt;strong&gt;passwords:&lt;/strong&gt;&lt;br /&gt;&#10;- 4 different rules working together showing what must be done and what cannot be done.&amp;nbsp;&lt;br /&gt;&#10;- Validation occurs when user changes the field&amp;#39;s value, which gives real time feedback to the user" uniqueid="sk-RPr-20874">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
