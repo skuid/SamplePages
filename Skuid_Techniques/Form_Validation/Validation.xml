@@ -26,7 +26,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-RQB-26695">
 											<components>
-												<skuid__text contents="Validation Rules based on data Format.&amp;nbsp;​​​​​​&lt;br /&gt;&#10;- Triggered when user leaves the field and on subsequent data validations.&amp;nbsp;&lt;br /&gt;&#10;- Email has a secondary &amp;quot;Formula&amp;quot; rule preventing numbers in email address" uniqueid="sk-RQB-26696">
+												<skuid__text contents="Validation rules based on data format:​​&lt;br /&gt;&#10;- All fields throw errors if they does not match the expected format for their field type&lt;br /&gt;&#10;- Validations are triggered when user leaves the field and also on subsequent data validations.&amp;nbsp;&lt;br /&gt;&#10;- Email has a secondary formula-based rule disallowing numbers" uniqueid="sk-RQB-26696">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
