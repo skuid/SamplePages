@@ -1160,7 +1160,7 @@
 						</skuid__wrapper>
 						<skuid__wrapper uniqueid="sk-lxI-87882">
 							<components>
-								<skuid__text contents="&lt;b&gt;Multiple Panes&lt;/b&gt;&lt;br /&gt;&#10;This method uses 4 carousels,&amp;nbsp; bound to the same set of custom navigation buttons.&amp;nbsp;&lt;br /&gt;&#10;Slide background is used to show image,&amp;nbsp; while wrapper height helps maintain a consistent sizing.&amp;nbsp;" uniqueid="sk-lxI-87883">
+								<skuid__text contents="&lt;b&gt;Multiple Panes&lt;/b&gt;&lt;br /&gt;&#10;This method uses 4 Carousels,&amp;nbsp; bound to the same set of custom navigation buttons.&amp;nbsp;&lt;br /&gt;&#10;Slide backgrounds are used to show images,&amp;nbsp; while Wrapper components with set heights maintain the consistent sizing.&amp;nbsp;" uniqueid="sk-lxI-87883">
 									<styles>
 										<spacing top="2" right="2" bottom="2" left="2"/>
 									</styles>
