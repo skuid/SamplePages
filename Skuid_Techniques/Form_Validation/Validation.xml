@@ -4,7 +4,7 @@
 			<fields>
 				<field id="URL" displaytype="URL" length="255" ogdisplaytype="TEXT"/>
 				<field id="Email" displaytype="EMAIL" length="255" ogdisplaytype="TEXT"/>
-				<field id="Social" displaytype="TEXT" length="255"/>
+				<field id="Social" displaytype="TEXT" length="255" label="Social security number"/>
 				<field id="Date" displaytype="DATE" length="255" ogdisplaytype="TEXT"/>
 				<field id="Text" displaytype="TEXT" length="255" helptext="No more than 25 characters"/>
 				<field id="Amount1" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Amount 1" defaultvaluetype="fieldvalue" defaultValue="100"/>
