@@ -955,7 +955,7 @@
 						</skuid__grid>
 						<skuid__wrapper uniqueid="sk-lwv-80657">
 							<components>
-								<skuid__text contents="&lt;b&gt;Next / Previous Preview&lt;/b&gt;&lt;br /&gt;&#10;This method uses 3 carousels,&amp;nbsp; bound to the same set of custom buttons.&amp;nbsp;&lt;br /&gt;&#10;Use formula fields on model to retrieve data necessary for construction of next and previous image URL.&amp;nbsp;" uniqueid="sk-lwv-80658">
+								<skuid__text contents="&lt;b&gt;Next / Previous Preview&lt;/b&gt;&lt;br /&gt;&#10;This method uses 3 carousels,&amp;nbsp; bound to the same set of custom buttons.&amp;nbsp;&lt;br /&gt;&#10;It uses formula fields on a model to retrieve data necessary for constructing the image URLs of the previous and next slides.&amp;nbsp;" uniqueid="sk-lwv-80658">
 									<styles>
 										<spacing top="2" right="2" bottom="2" left="2"/>
 									</styles>
