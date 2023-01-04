@@ -329,7 +329,7 @@
 						</skuid__wrapper>
 					</components>
 				</skuid__tabPanel>
-				<skuid__tabPanel name="Full Screen Hero">
+				<skuid__tabPanel name="Full Width Hero">
 					<components>
 						<skuid__carousel uniqueid="sk-312S-31320" showDots="false" slideSource="manual" slideTransition="translate" loop="true" showSlideNumber="false" showButtons="true" enableAutoTransition="true" styleSettingsVariant="852703e2-4a51-4745-abd2-c98dd94f916a" automaticTransition="5">
 							<slides>
