@@ -86,7 +86,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-RQd-35647">
 											<components>
-												<skuid__text contents="Validation Rules based on data Formulas.&amp;nbsp;&lt;br /&gt;&#10;- Field will be valid if formula is true. ​​​​​​&lt;br /&gt;&#10;- Formulas don&amp;#39;t automatically have field context.&amp;nbsp; You have to explicly say &amp;quot;Amount 1=100&amp;quot;.&amp;nbsp; &amp;quot;=100&amp;quot; will not work.&amp;nbsp;&amp;nbsp;" uniqueid="sk-RQd-35648">
+												<skuid__text contents="Validation rules based on formulas:&lt;br /&gt;&#10;- These fields will be valid if their validation formula returns true. The expected value format is listed below as help text.&lt;br /&gt;&#10;- Note that validation formulas don&amp;#39;t automatically have field context. You must explicly say the field name, like in the &lt;strong&gt;Amount 2&lt;/strong&gt; validation :&lt;br /&gt;&#10;&lt;br /&gt;&#10;&amp;nbsp; VALUE({{Amount1}})&amp;lt;VALUE({{Amount2}})" uniqueid="sk-RQd-35648">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
