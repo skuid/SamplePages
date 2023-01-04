@@ -147,7 +147,7 @@
 						</skuid__grid>
 						<skuid__wrapper uniqueid="sk-i0U-44514">
 							<components>
-								<skuid__text contents="&lt;strong&gt;Default Carrousel:&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;General example with all standard navigation tools used.&lt;br /&gt;&#10;Each slide configured manually,&amp;nbsp; and standard navigation buttons used" uniqueid="sk-i0Z-46625">
+								<skuid__text contents="&lt;strong&gt;Default Carousel:&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;General example with all standard navigation tools used.&lt;br /&gt;&#10;Each slide configured manually,&amp;nbsp; and standard navigation buttons used" uniqueid="sk-i0Z-46625">
 									<styles>
 										<spacing top="2" right="2" bottom="2" left="2"/>
 									</styles>
