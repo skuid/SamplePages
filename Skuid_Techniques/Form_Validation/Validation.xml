@@ -140,7 +140,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-h5U-22430">
 											<components>
-												<skuid__text contents="Validation Rules based on Javascript Snippet&lt;br /&gt;&#10;- Field will be valid if Snippet returns true. ​​​​​​&lt;br /&gt;&#10;- Example only allows letters to be entered.&amp;nbsp;" uniqueid="sk-h5U-22431">
+												<skuid__text contents="Validation rules based on a JavaScript snippet:&lt;br /&gt;&#10;- This field will be valid if the snippet returns true. ​​​​​​&lt;br /&gt;&#10;- This example only accepts letters as valid characters." uniqueid="sk-h5U-22431">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
