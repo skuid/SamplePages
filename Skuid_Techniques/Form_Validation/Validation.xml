@@ -178,7 +178,7 @@
 										</skuid__form>
 									</components>
 								</skuid__tabPanel>
-								<skuid__tabPanel name="Password Form">
+								<skuid__tabPanel name="Password Validation Example">
 									<components>
 										<skuid__wrapper uniqueid="sk-RPq-20391">
 											<components>
