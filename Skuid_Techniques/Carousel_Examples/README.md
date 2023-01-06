@@ -12,7 +12,7 @@ But how should you use it?  The page below has seven different implementations t
 - Page API:  V2
 - Data source: Only UI-only models are used. 
 - Design system:  [Download this Design System file](Carousel_Playground.designsystem?raw=true).  Use the Import function on the Design System page to add this system to your org.     
-- Page XML:  [Copy the XML from this page](Carrousel.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce org or Skuid NLX site.  
+- Page XML:  [Copy the XML from this page](Carousel.xml?raw=true), or save it as an XML file, and upload it as a new page in your Salesforce org or Skuid NLX site.  
 
 ## Notes
 
