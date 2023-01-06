@@ -1,6 +1,6 @@
-# Examples of using Skuid Carrousel
+# Examples of using Skuid Carousel
 
-Should you use a carousel?  Skuid asked this question for a long time. As we built more portal and community implementations customers kept asking for this component. 
+Should you use a carousel?  Skuid asked this question for a long time. As we built more portal and community implementations, customers kept asking for this component. 
 
 Your wish is our command.  Now Skuid has a carousel.
 
