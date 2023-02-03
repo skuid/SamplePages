@@ -316,7 +316,7 @@
 						</skuid__grid>
 						<skuid__wrapper uniqueid="sk-i12-51642">
 							<components>
-								<skuid__text contents="&lt;strong&gt;Carrousel with Outside Buttons&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;Use of custom buttons to allow placement of navigation controls anywhere on the page." uniqueid="sk-i12-51643">
+								<skuid__text contents="&lt;strong&gt;Carousel with Outside Buttons&amp;nbsp;&lt;/strong&gt;&lt;br /&gt;&#10;&lt;br /&gt;&#10;Use of custom buttons to allow placement of navigation controls anywhere on the page." uniqueid="sk-i12-51643">
 									<styles>
 										<spacing top="2" right="2" bottom="2" left="2"/>
 									</styles>
@@ -968,7 +968,7 @@
 						</skuid__wrapper>
 					</components>
 				</skuid__tabPanel>
-				<skuid__tabPanel name="Multiple Pane Carrousel">
+				<skuid__tabPanel name="Multiple Pane Carousel">
 					<components>
 						<skuid__wrapper uniqueid="sk-3EsO-205615">
 							<components>
