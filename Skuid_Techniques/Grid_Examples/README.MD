@@ -14,9 +14,9 @@ The Responsive Grid component is the primary way to arrange elements on a Skuid 
 ## Notes
 A key thought process: 
 
-Providing space around the information you are showing to users or asking them to provide will make the work you are asking of them much easier.  A page that appropriately uses white space appears to breathe,  and invites interaction rather than simply overwhelming with data - wall to wall. Using the responsive grid as a standard part of your Skuid building habits will help.  
+Providing space around information makes it much easier for your users to work with it - either reviewing that information or updating it in some way. A page that appropriately uses white space appears to breathe, and invites interaction rather than simply overwhelming with wall to wall data. Using the responsive grid as a standard part of your Skuid building habits will help your pages breathe.  
 
-But the properties of the grid are a bit confusing to work with.  This page provides some examples.  Copy these properties into your own builds to achieve similar results. 
+But the properties of the grid are a bit confusing to work with.  This page provides some examples.  Copy these properties into your own builds to achieve better results. 
 
 Details below about each example in the page. 
 
