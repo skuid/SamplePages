@@ -1,0 +1,585 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="true" showheader="true">
+	<models>
+		<model id="SampleData1" limit="" query="false" datasource="Ui-Only">
+			<fields>
+				<field id="height" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="4" scale="0"/>
+				<field id="count" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" readonly="false" returntype="DOUBLE" precision="9" scale="0">
+					<formula>={{index}}*3-2</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="SampleData2" limit="" query="false" datasource="Ui-Only">
+			<fields>
+				<field id="height" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="4" scale="0"/>
+				<field id="count" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" readonly="false" returntype="DOUBLE" precision="9" scale="0">
+					<formula>{{index}}*3-1</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="SampleData3" limit="" query="false" datasource="Ui-Only">
+			<fields>
+				<field id="height" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" precision="4" scale="0"/>
+				<field id="count" uionly="true" displaytype="DOUBLE" length="255" ogdisplaytype="TEXT" readonly="false" returntype="DOUBLE" precision="9" scale="0">
+					<formula>{{index}}*3</formula>
+				</field>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="NewModel" limit="20" query="true" createrowifnonefound="true" datasource="Ui-Only">
+			<fields/>
+			<conditions/>
+			<actions/>
+		</model>
+	</models>
+	<components>
+		<skuid__tabSet deferTabRendering="true" uniqueid="sk-SDX-25036" rememberActiveTab="true">
+			<tabs>
+				<skuid__tabPanel name="Stretch All">
+					<components>
+						<skuid__grid uniqueid="sk-SDf-26234" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3" rowGutter="3">
+							<divisions>
+								<division minWidth="100px" ratio="1" alignSelf="auto">
+									<components>
+										<skuid__wrapper uniqueid="sk-SE2-33538" height="60" heightStrategy="fixed">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SDp-30363" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SE2-34083" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SLp-29353" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SE2-32983" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Stretch Middle">
+					<components>
+						<skuid__grid uniqueid="sk-SET-39545" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3" rowGutter="3">
+							<divisions>
+								<division minWidth="200px" alignSelf="auto" maxWidth="200px">
+									<components>
+										<skuid__wrapper uniqueid="sk-SET-39546" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="200px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SET-39547" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="200px" maxWidth="200px">
+									<components>
+										<skuid__wrapper uniqueid="sk-SET-39549" heightStrategy="fixed" height="60">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Alternating Grid">
+					<components>
+						<skuid__grid uniqueid="sk-SMY-35539" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3" rowGutter="3">
+							<divisions>
+								<division minWidth="40%" ratio="1" alignSelf="auto">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMY-35540" height="30" heightStrategy="fixed">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+											<interactions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="40%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMY-35541" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="90%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMY-35542" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="40%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMY-35543" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="40%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMY-35544" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="90%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SMr-43701" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="3 x 3 Grid">
+					<components>
+						<skuid__grid uniqueid="sk-SO_-45090" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3" rowGutter="3">
+							<divisions>
+								<division minWidth="30%" ratio="1" alignSelf="auto">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45091" height="30" heightStrategy="fixed">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+											<interactions/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45092" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45093" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45094" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45095" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SPc-58057" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SO_-45096" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SPc-58648" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="30%" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-SPc-57462" heightStrategy="fixed" height="30">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Fluid Blocks">
+					<components>
+						<skuid__grid uniqueid="sk-Spy-60435" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="3" rowGutter="3">
+							<divisions>
+								<division minWidth="25%" ratio="1" alignSelf="auto">
+									<components>
+										<skuid__deck columnGutter=".75em" rowGutter=".75em" model="SampleData1" showSaveCancel="false" verticalAlign="bottom" minWidth="100%" uniqueid="sk-Spy-60436" pageSize="Infinity" showListFooter="false" setMaxWidth="auto">
+											<components>
+												<skuid__text contents="Item {{count}}" uniqueid="sk-Spy-60438" model="SampleData1" styleSettingsVariant="medium">
+													<renderConditions logictype="and"/>
+													<styleVariantConditions/>
+													<styles>
+														<spacing bottom="2"/>
+													</styles>
+													<conditions/>
+												</skuid__text>
+												<skuid__image source="url" uniqueid="sk-Spy-60437" model="SampleData1" url="https://picsum.photos/300/{{height}}?grayscale">
+													<conditions/>
+												</skuid__image>
+											</components>
+											<filtering enableSearch="false"/>
+											<sorting enable="false"/>
+											<styles>
+												<spacing/>
+											</styles>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__deck>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="25%" ratio="1">
+									<components>
+										<skuid__deck columnGutter=".75em" rowGutter=".75em" model="SampleData2" showSaveCancel="false" verticalAlign="bottom" minWidth="100%" uniqueid="sk-Spy-60439" pageSize="Infinity" showListFooter="false" setMaxWidth="auto">
+											<components>
+												<skuid__text contents="Item {{count}}" uniqueid="sk-Spy-60441" model="SampleData2" styleSettingsVariant="medium">
+													<renderConditions logictype="and"/>
+													<conditions/>
+													<styleVariantConditions/>
+													<styles>
+														<spacing bottom="2"/>
+													</styles>
+												</skuid__text>
+												<skuid__image source="url" uniqueid="sk-Spy-60437" model="SampleData2" url="https://picsum.photos/300/{{height}}?grayscale">
+													<conditions/>
+												</skuid__image>
+											</components>
+											<filtering enableSearch="false"/>
+											<sorting enable="false"/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__deck>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="25%" ratio="1">
+									<components>
+										<skuid__deck columnGutter=".75em" rowGutter=".75em" model="SampleData3" showSaveCancel="false" verticalAlign="bottom" minWidth="100%" uniqueid="sk-Spy-60442" pageSize="Infinity" showListFooter="false" setMaxWidth="auto">
+											<components>
+												<skuid__text contents="Item {{count}}" uniqueid="sk-Spy-60444" model="SampleData3" styleSettingsVariant="medium">
+													<renderConditions logictype="and"/>
+													<styleVariantConditions/>
+													<styles>
+														<spacing bottom="2"/>
+													</styles>
+													<conditions/>
+												</skuid__text>
+												<skuid__image source="url" uniqueid="sk-Spy-60437" model="SampleData3" url="https://picsum.photos/300/{{height}}?grayscale">
+													<conditions/>
+												</skuid__image>
+											</components>
+											<filtering enableSearch="false"/>
+											<sorting enable="false"/>
+											<styles>
+												<spacing/>
+											</styles>
+										</skuid__deck>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Vertical/Horizontal Center">
+					<components>
+						<skuid__grid uniqueid="sk-ha--37240" flexDirection="row" justifyContent="center" alignItems="center" columnGutter="3" rowGutter="3" height="custom" heightStrategy="fixed" heightCustom="85vh">
+							<divisions>
+								<division alignSelf="auto" minWidth="200px" ratio="1" maxWidth="200px">
+									<components>
+										<skuid__wrapper uniqueid="sk-ha--37242" heightStrategy="fixed" height="custom" heightCustom="200px">
+											<components/>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background type="color" color="#f2f2f2"/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+				<skuid__tabPanel name="Vertical Stretch">
+					<components>
+						<skuid__grid uniqueid="sk-hcM-62667" flexDirection="row" justifyContent="center" alignItems="stretch" columnGutter="3" rowGutter="3" heightStrategy="fixed" height="90">
+							<divisions>
+								<division alignSelf="auto" ratio="1" minWidth="100px">
+									<components>
+										<skuid__wrapper uniqueid="sk-hcM-62668" heightStrategy="fixed" height="custom" heightCustom="100%">
+											<components>
+												<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;Wrapper height: &lt;/strong&gt;100%&lt;/div&gt;&#10;" uniqueid="sk-hdJ-132969">
+													<styles>
+														<spacing top="2" bottom="2"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+								<division alignSelf="auto" minWidth="100px" ratio="1">
+									<components>
+										<skuid__wrapper uniqueid="sk-hd7-117582" height="custom" heightCustom="100%">
+											<components>
+												<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;Wrapper height:&lt;/strong&gt; Fit to content&lt;/div&gt;&#10;" uniqueid="sk-hdP-135347">
+													<styles>
+														<spacing top="2" bottom="2"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing/>
+											</styles>
+											<background type="color" color="#c6d9f0"/>
+										</skuid__wrapper>
+									</components>
+								</division>
+							</divisions>
+							<styles>
+								<spacing top="3" right="3" bottom="3" left="3"/>
+							</styles>
+							<background type="color" color="#f2f2f2"/>
+						</skuid__grid>
+					</components>
+				</skuid__tabPanel>
+			</tabs>
+			<styles>
+				<spacing top="4"/>
+			</styles>
+		</skuid__tabSet>
+	</components>
+	<resources>
+		<labels/>
+		<javascript>
+			<jsitem location="inline" name="SampleData" cachelocation="false" url="">((skuid) =&gt; {
+	skuid.events.subscribeOnce("pageload", () =&gt; {
+
+        //load first model
+        const model1 = skuid.model.getModel('SampleData1');
+        for (var i = 1; i &lt; 11; i++){
+            var newRow = model1.createRow({
+                doAppend: (true), 
+                additionalConditions: [{
+                    field: "height",
+                    value: Math.floor(Math.random() * 325) + 50,
+                },{
+                    field: "count",
+                    value: (i * 3) - 2,
+                }]
+            })
+        }      
+        //load second model
+        const model2 = skuid.model.getModel('SampleData2');
+        for (var i = 1; i &lt; 11; i++){
+            var newRow = model2.createRow({
+                doAppend: (true), 
+                additionalConditions: [{
+                    field: "height",
+                    value: Math.floor(Math.random() * 325) + 50,
+                },{
+                    field: "count",
+                    value: (i * 3) - 1,
+                }]
+            })
+        }	
+
+        //load third model
+        const model3 = skuid.model.getModel('SampleData3');
+        for (var i = 1; i &lt; 11; i++){
+            var newRow = model3.createRow({
+                doAppend: (true), 
+                additionalConditions: [{
+                    field: "height",
+                    value: Math.floor(Math.random() * 325) + 50,
+                },{
+                    field: "count",
+                    value: (i * 3),
+                }]
+            })
+        }	
+	
+	});
+})(skuid)</jsitem>
+		</javascript>
+		<css/>
+		<actionsequences/>
+	</resources>
+	<styles>
+		<styleitem type="background" bgtype="none"/>
+	</styles>
+	<pageregioncontents>
+		<pageregioncontent uniqueid="__header">
+			<components>
+				<skuid__layoutRegion sticky="true">
+					<components>
+						<skuid__text contents="&amp;nbsp;Examples of Skuid&amp;#39;s Responsive Grid" uniqueid="sk-3io--17769" styleSettingsVariant="increased">
+							<styles>
+								<spacing top="2" bottom="2" left="4"/>
+							</styles>
+						</skuid__text>
+					</components>
+					<styles>
+						<spacing/>
+					</styles>
+					<background type="color" color="#c6d9f0"/>
+				</skuid__layoutRegion>
+			</components>
+		</pageregioncontent>
+	</pageregioncontents>
+	<background/>
+</skuid__page>
