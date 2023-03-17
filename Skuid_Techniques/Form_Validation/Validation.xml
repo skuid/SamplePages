@@ -4,10 +4,10 @@
 			<fields>
 				<field id="URL" displaytype="URL" length="255" ogdisplaytype="TEXT"/>
 				<field id="Email" displaytype="EMAIL" length="255" ogdisplaytype="TEXT"/>
-				<field id="Social" displaytype="TEXT" length="255" label="Social security number"/>
+				<field id="Social" displaytype="TEXT" length="11"/>
 				<field id="Date" displaytype="DATE" length="255" ogdisplaytype="TEXT"/>
-				<field id="Text" displaytype="TEXT" length="255" helptext="No more than 25 characters"/>
-				<field id="Amount1" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Amount 1" defaultvaluetype="fieldvalue" defaultValue="100"/>
+				<field id="Text" displaytype="TEXT" length="25" helptext="No more than 25 characters"/>
+				<field id="Amount1" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Amount 1" defaultvaluetype="fieldvalue"/>
 				<field id="Amount2" displaytype="CURRENCY" length="255" ogdisplaytype="TEXT" precision="9" scale="2" label="Amount 2" defaultvaluetype="fieldvalue" helptext="Must be greater than Amount 1"/>
 				<field id="Password" displaytype="TEXT" length="255"/>
 			</fields>
@@ -24,9 +24,9 @@
 							<tabs>
 								<skuid__tabPanel name="Formatting">
 									<components>
-										<skuid__wrapper uniqueid="sk-RQB-26695">
+										<skuid__wrapper uniqueid="sk-oNt-38150">
 											<components>
-												<skuid__text contents="Validation rules based on data format:​​&lt;br /&gt;&#10;- All fields throw errors if they does not match the expected format for their field type&lt;br /&gt;&#10;- Validations are triggered when user leaves the field and also on subsequent data validations.&amp;nbsp;&lt;br /&gt;&#10;- Email has a secondary formula-based rule disallowing numbers" uniqueid="sk-RQB-26696">
+												<skuid__text contents="Validation Rules based on data Format.&amp;nbsp;​​​​​​&lt;br /&gt;&#10;- Triggered when user leaves the field and on subsequent data validations.&amp;nbsp;&lt;br /&gt;&#10;- Email has a secondary &amp;quot;Formula&amp;quot; rule preventing numbers in email address" uniqueid="sk-oNt-38151">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
@@ -37,7 +37,7 @@
 											</styles>
 											<background type="color" datasource="SkuidLocal" source="resource" size="auto" color="#d8d8d8"/>
 										</skuid__wrapper>
-										<skuid__form showErrorsInline="true" model="FormData" uniqueid="sk-19Mc-21879" mode="edit" showSaveCancel="false" hideErrorMessages="false">
+										<skuid__form showErrorsInline="false" model="FormData" uniqueid="sk-oNw-41369" mode="edit" showSaveCancel="false" hideErrorMessages="false">
 											<columns>
 												<column>
 													<sections>
@@ -46,6 +46,7 @@
 																<skuid__field id="URL" showHelp="true">
 																	<validations>
 																		<validation enable="true" type="format" format="url"/>
+																		<requiredValidation type="required" enable="true"/>
 																	</validations>
 																	<renderConditions logictype="and" onhidedatabehavior="keep"/>
 																	<enableConditions/>
@@ -54,19 +55,24 @@
 																<skuid__field id="Email" showHelp="true">
 																	<validations>
 																		<validation enable="true" type="format" format="email"/>
-																		<validation enable="true" type="formula" format="" validationErrorMessage="Please don't include numbers in your Email address">
-																			<formula>NOT(CONTAINS_ANY({{Email}}, 1,2,3,4,5,6,7,8,9,0))</formula>
+																		<requiredValidation type="required" enable="true"/>
+																		<validation enable="true" type="formula" format="" validationErrorMessage="We don't allow emails that contain numbers. Sorry...">
+																			<formula>NOT(CONTAINS_ANY({{Email}}, 1,2,3,4,5,6,7,8,9,0))
+</formula>
 																		</validation>
 																	</validations>
 																</skuid__field>
 																<skuid__field id="Social" showHelp="true">
 																	<validations>
 																		<validation enable="true" type="format" format="ssn"/>
+																		<validation enable="true" type="length" format=""/>
+																		<requiredValidation type="required" enable="true"/>
 																	</validations>
 																</skuid__field>
-																<skuid__field id="Date" showHelp="true">
+																<skuid__field id="Date" showHelp="true" required="false">
 																	<validations>
 																		<validation enable="true" type="format" format="date" validationErrorMessage="This is a bogus date"/>
+																		<requiredValidation type="required" enable="false"/>
 																	</validations>
 																</skuid__field>
 															</fields>
@@ -86,7 +92,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-RQd-35647">
 											<components>
-												<skuid__text contents="Validation rules based on formulas:&lt;br /&gt;&#10;- These fields will be valid if their validation formula returns true. The expected value format is listed below as help text.&lt;br /&gt;&#10;- Note that validation formulas don&amp;#39;t automatically have field context. You must explicly say the field name, like in the &lt;strong&gt;Amount 2&lt;/strong&gt; validation :&lt;br /&gt;&#10;&lt;br /&gt;&#10;&amp;nbsp; VALUE({{Amount1}})&amp;lt;VALUE({{Amount2}})" uniqueid="sk-RQd-35648">
+												<skuid__text contents="Validation Rules based on data Formulas.&amp;nbsp;&lt;br /&gt;&#10;- Field will be valid if formula is true. ​​​​​​&lt;br /&gt;&#10;- Formulas don&amp;#39;t automatically have field context.&amp;nbsp; You have to explicly say &amp;quot;{{Amount}} 1=100&amp;quot;.&amp;nbsp; &amp;quot;=100&amp;quot; will not work.&lt;br /&gt;&#10;- If Formulas evaluate multiple fields,&amp;nbsp; validation should be implemented on all fields - so that changes will be detected anywhere they are made...&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;" uniqueid="sk-RQd-35648">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
@@ -97,30 +103,43 @@
 											</styles>
 											<background type="color" datasource="SkuidLocal" source="resource" size="auto" color="#d8d8d8"/>
 										</skuid__wrapper>
-										<skuid__form showErrorsInline="true" model="FormData" uniqueid="sk-h5V-23348" mode="edit" showSaveCancel="true">
+										<skuid__buttonSet uniqueid="sk-2Y1--33022">
+											<groups>
+												<skuid__buttonGroup uniqueId="sk-2Y1--33020">
+													<buttons>
+														<skuid__button label="Save" uniqueId="sk-2Y1--33021">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>FormData</model>
+																	</models>
+																</action>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+										<skuid__form showErrorsInline="false" model="FormData" uniqueid="sk-h5V-23348" mode="edit" showSaveCancel="true">
 											<columns>
 												<column>
 													<sections>
 														<section title="Important Form" showHeading="false">
 															<fields>
-																<skuid__field id="Text" showHelp="belowlabel" required="false" showLengthCounter="false">
-																	<validations validateOn="blur">
-																		<validation enable="true" type="formula" format="" validationErrorMessage="Please don't use more than 25 characters">
-																			<formula>LEN({{Text}})&lt;25</formula>
+																<skuid__field id="Amount1" showHelp="true">
+																	<validations validateOn="change">
+																		<requiredValidation type="required" enable="true"/>
+																		<validation enable="true" type="formula" validationErrorMessage="Amount 2 must be greater than Amount 1">
+																			<formula>VALUE({{Amount1}})&lt;VALUE({{Amount2}})</formula>
 																		</validation>
 																	</validations>
-																	<renderConditions logictype="and" onhidedatabehavior="keep"/>
-																	<enableConditions/>
-																	<styleVariantConditions/>
-																</skuid__field>
-																<skuid__field id="Amount1" showHelp="true">
-																	<validations/>
 																</skuid__field>
 																<skuid__field id="Amount2" showHelp="belowlabel">
 																	<validations validateOn="change">
-																		<validation enable="true" type="formula" validationErrorMessage="Please make me bigger than Amount 1">
+																		<validation enable="true" type="formula" validationErrorMessage="Amount 2 must be greater than Amount 1">
 																			<formula>VALUE({{Amount1}})&lt;VALUE({{Amount2}})</formula>
 																		</validation>
+																		<requiredValidation type="required" enable="true"/>
 																	</validations>
 																</skuid__field>
 															</fields>
@@ -140,7 +159,7 @@
 									<components>
 										<skuid__wrapper uniqueid="sk-h5U-22430">
 											<components>
-												<skuid__text contents="Validation rules based on a JavaScript snippet:&lt;br /&gt;&#10;- This field will be valid if the snippet returns true. ​​​​​​&lt;br /&gt;&#10;- This example only accepts letters as valid characters." uniqueid="sk-h5U-22431">
+												<skuid__text contents="Validation Rules based on Javascript Snippet&lt;br /&gt;&#10;- Field will be valid if Snippet returns true. ​​​​​​&lt;br /&gt;&#10;- Example only allows letters to be entered.&amp;nbsp;" uniqueid="sk-h5U-22431">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
@@ -157,9 +176,10 @@
 													<sections>
 														<section title="Important Form" showHeading="false">
 															<fields>
-																<skuid__field id="Text" showHelp="false" required="false" showLengthCounter="false">
+																<skuid__field id="Text" showHelp="false" required="false" showLengthCounter="false" label="Only Letters">
 																	<validations validateOn="change">
 																		<validation enable="true" type="snippet" format="" snippet="OnlyLetters" validationErrorMessage="Must only contain letters"/>
+																		<requiredValidation type="required" enable="true"/>
 																	</validations>
 																	<renderConditions logictype="and" onhidedatabehavior="keep"/>
 																	<enableConditions/>
@@ -178,11 +198,11 @@
 										</skuid__form>
 									</components>
 								</skuid__tabPanel>
-								<skuid__tabPanel name="Password Validation Example">
+								<skuid__tabPanel name="Password Form">
 									<components>
 										<skuid__wrapper uniqueid="sk-RPq-20391">
 											<components>
-<skuid__text contents="This example shows how multiple validation rules could be used as once. In this example we&amp;#39;re validating&amp;nbsp;&lt;strong&gt;passwords:&lt;/strong&gt;&lt;br /&gt;&#10;- 4 different rules working together showing what must be done and what cannot be done.&amp;nbsp;&lt;br /&gt;&#10;- Validation occurs when user changes the field&amp;#39;s value, which gives real time feedback to the user" uniqueid="sk-RPr-20874">
+												<skuid__text contents="Validation Rules for a Password&lt;br /&gt;&#10;- 4 different rules working together showing what must be done, and what cannot be done.&amp;nbsp;&lt;br /&gt;&#10;- Validation on &amp;quot;Field Change&amp;quot; gives real time feedback so that user knows password is valid as go.&amp;nbsp;" uniqueid="sk-RPr-20874">
 													<styles>
 														<spacing top="2" right="2" bottom="2" left="2"/>
 													</styles>
@@ -193,13 +213,13 @@
 											</styles>
 											<background type="color" datasource="SkuidLocal" source="resource" size="auto" color="#d8d8d8"/>
 										</skuid__wrapper>
-										<skuid__form showErrorsInline="false" model="FormData" uniqueid="sk-3ipl-28478" mode="edit" showSaveCancel="false">
+										<skuid__form showErrorsInline="false" model="FormData" uniqueid="sk-3ipl-28478" mode="edit" showSaveCancel="true">
 											<columns>
 												<column>
 													<sections>
 														<section title="Important Form" showHeading="false">
 															<fields>
-																<skuid__field id="Password" showHelp="true" displayAs="PASSWORD">
+																<skuid__field id="Password" showHelp="true" displayAs="PASSWORD" required="true">
 																	<validations validateOn="change">
 																		<validation enable="true" type="formula" format="" validationErrorMessage="Password must be at least 20 characters">
 																			<formula>LEN({{Password}})&gt;20</formula>
@@ -213,6 +233,7 @@
 																		<validation enable="true" type="formula" format="" validationErrorMessage="Password cannot include spaces, dashes or underlines">
 																			<formula>NOT(CONTAINS_ANY({{Password}}," ","-","_"))</formula>
 																		</validation>
+																		<requiredValidation type="required" enable="true"/>
 																	</validations>
 																</skuid__field>
 															</fields>
@@ -225,6 +246,96 @@
 											</styles>
 											<renderConditions logictype="and"/>
 											<styleVariantConditions/>
+										</skuid__form>
+									</components>
+								</skuid__tabPanel>
+								<skuid__tabPanel name="Length">
+									<components>
+										<skuid__wrapper uniqueid="sk-suX-38562">
+											<components>
+												<skuid__text contents="Validation Rules based on data Length.&amp;nbsp;​​​​​​&lt;br /&gt;&#10;- Triggered when user leaves the field and on subsequent data validations.&amp;nbsp;&lt;br /&gt;&#10;- Length can be read from Data Source metadata,&amp;nbsp; or defined on Model Field overrides.&amp;nbsp;" uniqueid="sk-suX-38563">
+													<styles>
+														<spacing top="2" right="2" bottom="2" left="2"/>
+													</styles>
+												</skuid__text>
+											</components>
+											<styles>
+												<spacing top="2" bottom="2"/>
+											</styles>
+											<background type="color" datasource="SkuidLocal" source="resource" size="auto" color="#d8d8d8"/>
+										</skuid__wrapper>
+										<skuid__form showErrorsInline="true" model="FormData" uniqueid="sk-19Mc-21879" mode="edit" showSaveCancel="true" hideErrorMessages="false">
+											<columns>
+												<column behavior="flex">
+													<sections>
+														<section title="Important Form" showHeading="false">
+															<fields>
+																<skuid__field id="Text" showHelp="belowlabel" showLengthCounter="true">
+																	<validations validateOn="change">
+																		<requiredValidation type="required" enable="true"/>
+																		<validation enable="true" type="length" format=""/>
+																	</validations>
+																</skuid__field>
+																<skuid__field id="Social" showHelp="true" label="Social Security Number">
+																	<validations validateOn="change">
+																		<validation enable="true" type="length" format="" validationErrorMessage="SSN cannot be longer than 9 numbers! "/>
+																		<validation enable="true" type="format" format="ssn"/>
+																		<requiredValidation type="required" enable="true"/>
+																	</validations>
+																</skuid__field>
+															</fields>
+														</section>
+													</sections>
+												</column>
+											</columns>
+											<styles>
+												<spacing/>
+											</styles>
+											<renderConditions logictype="and"/>
+											<styleVariantConditions/>
+										</skuid__form>
+									</components>
+								</skuid__tabPanel>
+								<skuid__tabPanel name="Required">
+									<components>
+										<skuid__buttonSet uniqueid="sk-2Y2F-41724">
+											<groups>
+												<skuid__buttonGroup uniqueId="sk-2Y2F-41725">
+													<buttons>
+														<skuid__button label="Save" uniqueId="sk-2Y2F-41726">
+															<actions>
+																<action type="save">
+																	<models>
+																		<model>FormData</model>
+																	</models>
+																</action>
+															</actions>
+														</skuid__button>
+													</buttons>
+												</skuid__buttonGroup>
+											</groups>
+										</skuid__buttonSet>
+										<skuid__form showErrorsInline="true" model="FormData" uniqueid="sk-2Y1G-23916" mode="edit" showSaveCancel="true" hideErrorMessages="false">
+											<columns>
+												<column>
+													<sections>
+														<section title="Required" showHeading="true">
+															<fields>
+																<skuid__field id="Text" showHelp="false" required="true" label="Required Text">
+																	<validations validateOn="blur">
+																		<requiredValidation type="required" enable="false"/>
+																	</validations>
+																</skuid__field>
+																<skuid__field id="URL" uniqueId="sk-1R3l-70759" showHelp="true" required="true">
+																	<validations validateOn="blur">
+																		<requiredValidation type="required" enable="false" validationErrorMessage="We really need the URL please "/>
+																	</validations>
+																</skuid__field>
+															</fields>
+														</section>
+													</sections>
+												</column>
+											</columns>
 										</skuid__form>
 									</components>
 								</skuid__tabPanel>
@@ -264,9 +375,9 @@ return /^[a-zA-Z]+$/.test(fieldValue);</jsitem>
 			<components>
 				<skuid__layoutRegion sticky="true">
 					<components>
-						<skuid__text contents="Client Side Validation" uniqueid="sk-3io--17769" styleSettingsVariant="increased">
+						<skuid__text contents="Examples of Form Validation" uniqueid="sk-3m0r-95624" styleSettingsVariant="increased">
 							<styles>
-								<spacing top="2" bottom="2" left="4"/>
+								<spacing top="2" right="2" bottom="2" left="2"/>
 							</styles>
 						</skuid__text>
 					</components>

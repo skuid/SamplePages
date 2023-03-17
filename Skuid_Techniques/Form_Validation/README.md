@@ -1,6 +1,6 @@
 # Validate Form Data with Client Side Capabilities
 
-Skuid can be used to create very effective and complex data entry forms.  Recently Skuid has added field validation features to its forms.  This allows you to provide feedback to users about data validity before they attempt a save. 
+Skuid can be used to create very effective and complex data entry forms.  Recently Skuid has added client side field validation features to its forms.  This allows you to provide feedback to users about data validity before they attempt a save. 
 
 The example below shows a number of examples of this field validation in action.    
 
@@ -14,4 +14,4 @@ The example below shows a number of examples of this field validation in action.
 
 ## Notes
 
-There are 4 tabs, each one showing a different model of validation.  Each tab has an explanation of the validation methods being used. 
+There are 6 tabs, each one showing a different type of validation.  Each tab has an explanation of the validation methods being used. 
