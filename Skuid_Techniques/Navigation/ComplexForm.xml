@@ -257,7 +257,7 @@
 												<rule logictype="and"/>
 											</styleVariantConditions>
 										</item>
-										<item label="Link 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
+										<item label="LInk 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
 											<actions/>
 										</item>
 										<item label="Link 3" uniqueid="sk-2Gg8-11152" icon="sk-webicon-ink:clock">
@@ -580,7 +580,7 @@
 													<divisions>
 														<division minWidth="100px" ratio="1">
 															<components>
-																<skuid__text contents="Neque porro quisquam est, qui&amp;nbsp;&lt;em&gt;dolorem ipsum&lt;/em&gt;&amp;nbsp;quia&amp;nbsp;&lt;em&gt;dolor sit amet, consectetur, adipisci velit, sed&lt;/em&gt;&amp;nbsp;quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.&lt;br /&gt;&#10;&amp;nbsp;" uniqueid="sk-2IJW-135147" model="UI_Control" styleSettingsVariant="518fdbfd-d4a7-49e4-b16d-afb82ef6c9da">
+																<skuid__text contents="We need at least one address.&amp;nbsp; Please fill out either your Work address or your Home address.&amp;nbsp; Or preferrably....&amp;nbsp; both!&amp;nbsp;&lt;br /&gt;&#10;&amp;nbsp;" uniqueid="sk-2IJW-135147" model="UI_Control" styleSettingsVariant="medium">
 																	<styles>
 																		<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="518fdbfd-d4a7-49e4-b16d-afb82ef6c9da"/>
 																	</styles>
@@ -702,6 +702,9 @@
 													</inputs>
 												</action>
 											</actions>
+											<renderConditions logictype="and"/>
+											<enableConditions/>
+											<styleVariantConditions/>
 										</button>
 									</buttons>
 									<onInitialShowActions/>
@@ -865,6 +868,11 @@
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
 												</skuid__text>
+												<skuid__text contents="At least 3 products must be added" uniqueid="sk-50M-44229" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
 												<skuid__table allowColumnFreezing="dragDrop" model="FormData2_List" uniqueid="sk-FzC-40010" mode="edit" showSaveCancel="false" allowSortingByColumn="true">
 													<fields>
 														<field id="TableField2" uniqueid="fi-FzC-40634"/>
@@ -936,6 +944,11 @@
 										<skuid__wrapper uniqueid="sk-G0t-28420" heightStrategy="fixed" height="60">
 											<components>
 												<skuid__text contents="Step 5.&amp;nbsp; &amp;nbsp;{{Sec4Summary}} Assets added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0t-28421" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__text contents="At least 3 Assets must be added" uniqueid="sk-511-61818" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
@@ -1013,6 +1026,11 @@
 										<skuid__wrapper uniqueid="sk-G0v-30228" heightStrategy="fixed" height="60">
 											<components>
 												<skuid__text contents="Step 6.&amp;nbsp; &amp;nbsp;{{Sec4Summary}} contacts added.&amp;nbsp;&amp;nbsp;" uniqueid="sk-G0v-30229" styleSettingsVariant="increased" model="UI_Control">
+													<styles>
+														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
+													</styles>
+												</skuid__text>
+												<skuid__text contents="At least 3 contacts must be added" uniqueid="sk-514-65300" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
