@@ -17,17 +17,17 @@ Minimum requirements for a navigation structure would be showing a list of secti
 
 ## Vertical Navigation component
 
-There are a number of ways you can build out this solution in Skuid.  But we are going to focus on how the vertical navigation component provides this functionality.  
+There are a number of ways you can build out this solution in Skuid.  But we are going to focus on how the Vertical Navigation component provides this functionality.  
 
 Download the design system and sample page below and follow along as we walk through those two major options and show how they are configured. 
 
 ### Highlight the users progress through a form  
 
-Each item within a vertical navigation component can use style variant conditions to control visual look based on data. Here is how: 
+Each item within a Vertical Navigation component can use style variant conditions to control visual look based on data. Here is how: 
 
 - First: Configure the design system so there are different variants for the navigation item.  In each variant, pay special attention to the selected state as it can provide additional visual interest.  Change the background color, or text font, or the border for a series of scenarios… For your testing make it obvious. 
 
-<img src="NavigationVariants.png" width="500"></img>
+    <img src="NavigationVariants.png" width="500"></img>
 
 - Second: Create a data structure that assigns values to form completion actions.  In the page below there is a `UI_Control` model that calculates progress within the form by the number of fields that are not blank.  Doing this in UI-only models allows immediate feedback to the user (Without having to save and perform the calculations on the server). 
 
@@ -38,9 +38,9 @@ Each item within a vertical navigation component can use style variant condition
 
 ### Display data in the navigation element 
 
-You can include model data in the labels of your navigation component.  Let users know how many questions there will be before they open a section of the the form . How many questions are still outstanding. You can also use conditional merge syntax to show or hide HTML elements in the navigation labels based on underlying data.  The example page below shows a check mark icon if all questions are complete.  
+You can include model data in the labels of your Vertical Navigation component.  Let users know how many questions there will be before they open a section of the the form . How many questions are still outstanding. You can also use conditional merge syntax to show or hide HTML elements in the navigation labels based on underlying data.  The example page below shows a check mark icon if all questions are complete.  
 
-Note that the navigation component is not connected to a model,  so you will have to use global merge syntax  `{{$Model.modelname.data.0.fieldname}}`.  
+Note that the Vertical Navigation component is not connected to a model,  so you will have to use global merge syntax  `{{$Model.modelname.data.0.fieldname}}`.  
 
 ### Disable navigation element based on data 
 
@@ -55,7 +55,7 @@ This feature is available out of the box with navigation components.  Hover over
 
 ### Remember my place   
 
-Navigation components support using url hashes to activate specific items. Give each nav item a unique id, then if that Id is included in the URL as a hash `#uniqueId` - it will be activated on page load, and the actions defined for the nav element will be executed on page load.  
+Vertical Navigation components support using url hashes to activate specific items. Give each nav item a unique id, then if that Id is included in the URL as a hash `#uniqueId` - it will be activated on page load, and the actions defined for the nav element will be executed on page load.  
 
 To ensure the hash is present in your URL (so the back button works) add a “Go to URL” action to each nav element that simply goes to the hash. The URL property should just be `#uniqueId`. Most browsers will not force a page reload if only the hash is changed.  But now the URL is correct and the active nav item will be restored if you reload the page, or use the back button to get back into it. 
 
@@ -63,9 +63,9 @@ To ensure the hash is present in your URL (so the back button works) add a “Go
 
 ### Wizard Integration
 
-The wizard component also has sophisticated controls that allow creation of complex flows.  In the example page below the wizard and the vertical navigation component are bound together,  so that the actions associated with each navigation item and wizard step button effect the other component as well. 
+The Wizard component also has sophisticated controls that allow creation of complex flows.  In the example page below the Wizard and the Vertical Navigation component are bound together,  so that the actions associated with each navigation item and Wizard step button effect the other component as well. 
 
-Look at the action sequences section of the example page for a sequence that is activated when a wizard button is selected, and another sequence that is activated when a navigation item is selected.  These sequences use `inputs` to control exactly what section is opened or activated.  This means the actions can be defined once and reused throughout the application. 
+Look at the action sequences section of the example page for a sequence that is activated when a Wizard button is selected, and another sequence that is activated when a navigation item is selected.  These sequences use `inputs` to control exactly what section is opened or activated.  This means the actions can be defined once and reused throughout the application. 
 
 ## Sample page
 
@@ -84,7 +84,7 @@ There are use cases where the sections of the form that are being presented to t
 
 Well,  lets talk about it...
 
-The navigation component can not be bound to a model, and so cannot be truly dynamic. But many of the requirements above can be delivered using Skuid's data iterator components (list or deck).  This facilitates building out navigation that is based on model data -- a structure that is truly flexible and variable.
+The Vertical Navigation component can not be bound to a model, and so cannot be truly dynamic. But many of the requirements above can be delivered using Skuid's data iterator components (List or Deck).  This facilitates building out navigation that is based on model data -- a structure that is truly flexible and variable.
 
 ### Data model
 
@@ -96,17 +96,17 @@ All the values for the navigation would need to be stored in a data table. This 
 
 ### Highlight the users current selection 
 
-Similar to the navigation component - the list component has “selected state control”.   It’s configured on the “Click interaction” node.  It does require a selected state to be configured for the list component of the design system.  Look for the “row” properties.  
+Similar to the Vertical Navigation component - the List component has “selected state control”.   It’s configured on the “Click interaction” node.  It does require a selected state to be configured for the List component of the design system.  Look for the “row” properties.  
 
 If the standard selected state control does not provide enough control,  or if you are using a deck - use style variant conditions on a wrapper or grid in the deck.  Update ui-only fields in your action sequence to highlight the active card.  Make sure you update all rows to “not selected” before you update the current row to “selected”.   
   
 ### Display data in the navigation element 
 
-Because the iterator components are bound to model data - you can use templates and fields to show the number of questions in a section, or progress data etc.  You can also add HTML to templates in the list. 
+Because the iterator components are bound to model data - you can use templates and fields to show the number of questions in a section, or progress data etc.  You can also add HTML to templates in the List. 
 
 You can also use style variant conditions to highlight style of a wrapper in a deck card if certain conditions are met.  Alert to “urgent” attention needed on one navigation element. 
 
-In the list component you can add an icon field type.  Its properties will merge model data - letting you dynamically show an icon defined in your data or derived from user progress.
+In the List component you can add an icon field type.  Its properties will merge model data - letting you dynamically show an icon defined in your data or derived from user progress.
 
 In the deck component there is no stand alone icon. But you can use the following html in a text component to show the icon:  
 
@@ -118,17 +118,17 @@ In the deck component there is no stand alone icon. But you can use the followin
 
 ### Disable navigation element based on data 
 
-We do not have enable condition logic for the interactions associated with deck cards or list items.  Instead use branch actions to prevent the action for particular scenarios.  You have to define the actions for each navigation item,  but this allows you to have different logic rules for each item.  Your failure branch can post a message about why the page load is not happening. 
+We do not have enable condition logic for the interactions associated with Deck cards or List items.  Instead use branch actions to prevent the action for particular scenarios.  You have to define the actions for each navigation item,  but this allows you to have different logic rules for each item.  Your failure branch can post a message about why the page load is not happening. 
  
 ### Secondary navigation 
 
-The list component allows drawers.  You can configure the drawers to open on-click or with the secondary drawer icon.   You can put a second list in the drawer and use context conditions to ensure that the correct sub nav items show up under their parents. 
+The List component allows drawers.  You can configure the drawers to open on-click or with the secondary drawer icon.   You can put a second List in the drawer and use context conditions to ensure that the correct sub nav items show up under their parents. 
 
-With a deck - a secondary deck can be conditionally rendered only to show when the “selected” flag on a navigation element is true.  A branch on the interaction can set the value back to false if it is already true - and in that way reproduce the open / close toggle of the navigation component or list drawers. 
+With a deck - a secondary deck can be conditionally rendered only to show when the “selected” flag on a navigation element is true.  A branch on the interaction can set the value back to false if it is already true - and in that way reproduce the open / close toggle of the Vertical Navigation component or List drawers. 
 
 ### Remember my place
 
-Here the solution is not as straightforward as the Navigation component. The list will not listen to URL hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
+Here the solution is not as straightforward as the Vertical Navigation component. The List will not listen to URL hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
 
 ### What about the details? 
 
