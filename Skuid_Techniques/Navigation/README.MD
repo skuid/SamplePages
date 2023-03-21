@@ -7,19 +7,19 @@ and gives clear feedback about progress.
 
 ## Advanced requirements
 
-Minimum requirements for a navigation structure would be showing a list of sections, and letting the user select one of them. However, there are a number of more advanced features that make a complex form more user friendly. It is these advanced features that make for a really interesting application. These requirements include: 
+Minimum requirements for a navigation structure would be showing a list of sections and letting the user select one of them. However, there are a number of more advanced features that make a complex form more user friendly. It is these advanced features that make for a really interesting application. These requirements include: 
 
 - Highlight the user's progress through the form, showing sections untouched, in progress, actively selected and completed. 
 - Display data in the navigation element that summarizes contents in the underlying section, or highlights need for user attention.   
 - Disable or hide navigation element based on data.  
 - Allow nesting of some sections of the form within in secondary dropdown that can be hidden.   
-- Remember my place. If the user navigates away from the form (to an underlying detail page), and then hits the back button - open the section where they were last. Similarly, retain the correct context when user refreshes the page. 
+- Remember the user's place. If the user navigates away from the form (to an underlying detail page), and then hits the back button - open the section where they were last. Similarly, retain the correct context when user refreshes the page. 
 
 ## Vertical Navigation component
 
 There are a number of ways you can build out this solution in Skuid.  But we are going to focus on how the Vertical Navigation component provides this functionality.  
 
-Download the design system and sample page below and follow along as we walk through those two major options and show how they are configured. 
+**Download the design system and sample page below**, and follow along as we walk through those two major options and show how they are configured. 
 
 ### Highlight the users progress through a form  
 
@@ -53,7 +53,7 @@ Be careful with this functionality - because it forces a rigidity to your form t
 
 This feature is available out of the box with navigation components.  Hover over a primary nav and click the plus button to add “sub navigation” elements.  
 
-### Remember my place   
+### Remember the user's place   
 
 Vertical Navigation components support using url hashes to activate specific items. Give each nav item a unique id, then if that Id is included in the URL as a hash `#uniqueId` - it will be activated on page load, and the actions defined for the nav element will be executed on page load.  
 
@@ -126,7 +126,7 @@ The List component allows drawers.  You can configure the drawers to open on-cli
 
 With a deck - a secondary deck can be conditionally rendered only to show when the “selected” flag on a navigation element is true.  A branch on the interaction can set the value back to false if it is already true - and in that way reproduce the open / close toggle of the Vertical Navigation component or List drawers. 
 
-### Remember my place
+### Remember the user's place
 
 Here the solution is not as straightforward as the Vertical Navigation component. The List will not listen to URL hashes.  If you are already doing some server side work to track progress - leverage that data to open the users view in the right place. On page load, have some separate model that loads the correct page include value and uses a style variant condition to make the correct row of the navigation look selected. 
 
