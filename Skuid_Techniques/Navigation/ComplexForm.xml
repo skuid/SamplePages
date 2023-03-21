@@ -257,7 +257,7 @@
 												<rule logictype="and"/>
 											</styleVariantConditions>
 										</item>
-										<item label="LInk 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
+										<item label="Link 2" uniqueid="sk-2Gg8-7218" icon="sk-webicon-ink:desktop">
 											<actions/>
 										</item>
 										<item label="Link 3" uniqueid="sk-2Gg8-11152" icon="sk-webicon-ink:clock">
