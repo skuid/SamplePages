@@ -948,7 +948,7 @@
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
 												</skuid__text>
-												<skuid__text contents="At least 3 Assets must be added" uniqueid="sk-511-61818" model="UI_Control">
+												<skuid__text contents="At least 3 assets must be added" uniqueid="sk-511-61818" model="UI_Control">
 													<styles>
 														<spacing top="4" bottom="4" left="4" right="4" styleSettingsVariant="increased"/>
 													</styles>
