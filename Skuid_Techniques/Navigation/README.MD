@@ -13,7 +13,7 @@ Minimum requirements for a navigation structure would be showing a list of secti
 - Display data in the navigation element that summarizes contents in the underlying section, or highlights need for user attention.   
 - Disable or hide navigation element based on data.  
 - Allow nesting of some sections of the form within in secondary dropdown that can be hidden.   
-- Remember the user's place. If the user navigates away from the form (to an underlying detail page), and then hits the back button - open the section where they were last. Similarly, retain the correct context when user refreshes the page. 
+- Remember the user's place. If the user navigates away from the form (to an underlying detail page), and then hits the back button, open the section where they were last. Similarly, retain the correct context when user refreshes the page. 
 
 ## Vertical Navigation component
 
@@ -108,7 +108,7 @@ You can also use style variant conditions to highlight style of a wrapper in a d
 
 In the List component you can add an icon field type.  Its properties will merge model data - letting you dynamically show an icon defined in your data or derived from user progress.
 
-In the deck component there is no stand alone icon. But you can use the following html in a text component to show the icon:  
+In the deck component there is no stand alone icon. But you can use the following HTML in a text component to show the icon:  
 
 ```xml
 <svg style="width:16px; height:16px">
@@ -134,7 +134,7 @@ Here the solution is not as straightforward as the Vertical Navigation component
 
 Data driven navigation is interesting, but what about the contents of each of those data driven items?  How do you define what questions should show in each of the possible navigation items.  One option is to use page includes. Build a separate page that contains the questions for each possible navigation item (or form section).  Your navigation control model can have a value for the pageName which can be merged into the page include component.   
 
-To use model data in the page include component action -  will need to add the merge syntax in the XML - like this. 
+To use model data in the page include component action, you will need to add the merge syntax in the XML:
 
 ```xml 
 <action type="runComponentAction" componentid="sk-2VJV-18225" action="loadNewPage" pageName="{{Page_Include}}"/>
@@ -146,7 +146,7 @@ You might also add a junction object that links the navigation element to profil
 
 You could also add a user status table. 
 
-At the beginning of a process - records would be created for each nav display junction. On subsequent access - these records are used to control the initially selected nav element and to show the user status information about their progress. 
+At the beginning of a process records would be created for each nav display junction. On subsequent access these records are used to control the initially selected nav element and to show the user status information about their progress. 
  
 Fields:
 - UserId
