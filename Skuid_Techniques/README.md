@@ -10,7 +10,7 @@ We know its true - some of the coolest capabilities provided by Skuid are compli
 - [Form Validation Examples](Form_Validation)
 - [Key Indicators Dashboard](KeyIndicators)
 - [Multi Part Forms](Multi_Part_Form)
-- [Navigation - Advanced Techniques](Navigation)
+- [Navigating Complex Forms](Navigation)
 - [Reference Field - Custom Selection Popups](ReferenceSelection)
 
 
