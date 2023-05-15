@@ -33,8 +33,6 @@
 			<fields>
 				<field id="id" displaytype="TEXT"/>
 				<field id="properties.booking_name" displaytype="TEXT"/>
-				<field id="properties.start_date_time" displaytype="DATE" ogdisplaytype="TEXT"/>
-				<field id="properties.end_date_time" displaytype="DATE" ogdisplaytype="TEXT"/>
 				<field id="properties.booking_type" displaytype="PICKLIST" defaultvaluetype="fieldvalue" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
 					<picklistentries>
 						<entry value="Wedding" label="Wedding"/>
@@ -46,12 +44,6 @@
 				</field>
 				<field id="UI_Name" displaytype="FORMULA" ogdisplaytype="TEXT" readonly="true" returntype="TEXT" uionly="true">
 					<formula>{{properties.booking_name}}</formula>
-				</field>
-				<field id="UI_StartDate" displaytype="FORMULA" uionly="true" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
-					<formula>{{properties.start_date_time}}</formula>
-				</field>
-				<field id="UI_EndDate" displaytype="FORMULA" uionly="true" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
-					<formula>{{properties.end_date_time}}</formula>
 				</field>
 				<field id="UI_Type" displaytype="FORMULA" uionly="true" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
 					<formula>{{properties.booking_type}}</formula>
@@ -78,7 +70,7 @@
 			<conditions/>
 			<actions/>
 			<methods>
-				<method type="query" verb="GET" payloadcontenttype="JSON" endpoint="/crm/v3/objects/2-13706548?100&amp;properties=booking_name,booking_type,start_date_time,end_date_time,enddatetime_txt,startdatetime_txt,room,booking_all_day" pathtocontent="results" fieldtargetobjects="results" useresponsesnippet="false" responsesnippet="populateUImodel" limitmethod="simple" limit="30" simplerecordslimitparameter="limit"/>
+				<method type="query" verb="GET" payloadcontenttype="JSON" endpoint="/crm/v3/objects/2-13706548?100&amp;properties=booking_name,booking_type,enddatetime_txt,startdatetime_txt,room,booking_all_day" pathtocontent="results" fieldtargetobjects="results" useresponsesnippet="false" responsesnippet="populateUImodel" limitmethod="simple" limit="30" simplerecordslimitparameter="limit"/>
 				<method type="update" verb="PATCH" payloadcontenttype="JSON" sendchanges="asjsoninbody" successif="requestsucceeds" endpoint="/crm/v3/objects/2-13706548/{{id}}">
 					<requestBodyFields/>
 				</method>
@@ -89,8 +81,6 @@
 			<fields>
 				<field id="id" displaytype="TEXT"/>
 				<field id="properties.booking_name" displaytype="TEXT"/>
-				<field id="properties.start_date_time" displaytype="DATE" ogdisplaytype="TEXT" label="Start Date/Time"/>
-				<field id="properties.end_date_time" displaytype="DATE" ogdisplaytype="TEXT" label="End Date/Time"/>
 				<field id="properties.booking_type" displaytype="PICKLIST" defaultvaluetype="fieldvalue" ogdisplaytype="TEXT" picklistsource="manual" returntype="TEXT">
 					<picklistentries>
 						<entry value="Wedding" label="Wedding"/>
@@ -111,7 +101,7 @@
 			<actions/>
 			<methods>
 				<method type="insert" verb="POST" payloadcontenttype="JSON" successif="requestsucceeds" sendchanges="asjsoninbody" insertresponse="recordinbody" endpoint="/crm/v3/objects/2-13706548" contenttype="application/json" payloadsnippet="(request body) create new booking"/>
-				<method type="query" verb="GET" payloadcontenttype="JSON" endpoint="/crm/v3/objects/2-13706548/5830840147?properties=booking_name,booking_type,start_date_time,end_date_time,enddatetime_txt,startdatetime_txt,room,booking_all_day"/>
+				<method type="query" verb="GET" payloadcontenttype="JSON" endpoint="/crm/v3/objects/2-13706548/5830840147?properties=booking_name,booking_type,enddatetime_txt,startdatetime_txt,room,booking_all_day"/>
 			</methods>
 		</model>
 	</models>
