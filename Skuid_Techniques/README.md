@@ -7,11 +7,10 @@ We know its true - some of the coolest capabilities provided by Skuid are compli
 - [Adding related records to drawers](Drawers_Related_Records)
 - [Advanced Filtering Techniques](Filters_Using_Forms)
 - [Carousel Examples](Carousel_Examples)
-- [Form Validation Examples](Form_Validation)
 - [Grid Examples](Grid_Examples)
 - [Key Indicators Dashboard](KeyIndicators)
 - [Multi Part Forms](Multi_Part_Form)
-- [Navigation - Advanced Techniques](Navigation)
+- [Navigating Complex Forms](Navigation)
 - [Reference Field - Custom Selection Popups](ReferenceSelection)
 
 
