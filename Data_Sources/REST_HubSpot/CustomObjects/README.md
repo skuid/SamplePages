@@ -1,7 +1,7 @@
 # Work with HubSpot custom object
 This sample page shows how to connect and work with HubSpot custom objects in Skuid.  
 
-# Features
+## Features
 * Query single deal record using URL parameter
 * CRUD operation on that record
 * Connect to a custom object in HubSpot called Booking
