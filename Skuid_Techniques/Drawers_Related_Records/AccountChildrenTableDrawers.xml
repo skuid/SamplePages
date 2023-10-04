@@ -50,8 +50,12 @@
 					<massActions/>
 					<drawer>
 						<beforeLoad>
-							<action type="setCondition" model="Contacts" valuesource="fieldvalue" condition="AccountId" value="{{Id}}"/>
-							<action type="requeryModel" model="Contacts" behavior="loadmore"/>
+							<action type="updateCondition" model="Contacts" behavior="set" condition="AccountId" valuesource="fieldvalue" value="{{Id}}"/>
+							<action type="requeryModels" behavior="loadmore">
+								<models>
+									<model>Contacts</model>
+								</models>
+							</action>
 						</beforeLoad>
 						<components>
 							<skuid__wrapper uniqueid="sk-3kjp-24878">
@@ -140,6 +144,7 @@
 					<styles>
 						<spacing top="4" bottom="4" left="4" right="4"/>
 					</styles>
+					<exportProperties useTableColumns="true"/>
 				</skuid__table>
 			</components>
 			<background type="color" color="white"/>
