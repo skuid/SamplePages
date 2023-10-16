@@ -189,8 +189,8 @@
 												</action>
 												<action type="requeryModels" behavior="standard">
 													<models>
-														<model>User</model>
-														<model>SkuidLicenses</model>
+														<model>UserPackageLicense</model>
+														<model>Users</model>
 													</models>
 												</action>
 												<action type="blockUI" message="License revoked." timeout="1000"/>
@@ -214,19 +214,8 @@
 										<field uniqueid="fi-2yqH-1243" id="Assignee.UserType" label="Salesforce User License"/>
 										<field uniqueid="fi-2yqH-1246" id="Assignee.IsActive"/>
 									</fields>
-									<actions>
-										<action type="multi" label="Create record" icon="sk-webicon-font-awesome:plus-circle">
-											<actions>
-												<action type="createRow" model="PermissionSetAssignments" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
-											</actions>
-										</action>
-									</actions>
+									<actions/>
 									<massActions>
-										<action type="multi" label="{{$Label.Mass_Update_Selected_Rows}}" icon="sk-webicon-ink:edit-form">
-											<actions>
-												<action type="massUpdate"/>
-											</actions>
-										</action>
 										<action type="multi" label="{{$Label.Toggle_Selected_Rows_for_Deletion}}" icon="sk-webicon-ink:circle-close-outline">
 											<actions>
 												<action type="markRowsForDeletion" model="PermissionSetAssignments" affectedrows="context"/>
@@ -234,11 +223,6 @@
 										</action>
 									</massActions>
 									<rowActions>
-										<action type="multi" label="{{$Label.Edit_Row}}" icon="sk-webicon-ink:edit">
-											<actions>
-												<action type="toggleModeRow"/>
-											</actions>
-										</action>
 										<action type="multi" label="{{$Label.Flag_For_Deletion}}" icon="sk-webicon-ink:circle-close-outline">
 											<actions>
 												<action type="markRowsForDeletion" model="PermissionSetAssignments" affectedrows="context"/>
