@@ -26,6 +26,9 @@
 				<field id="CreatedDate"/>
 				<field id="UserType"/>
 				<field id="LastLoginDate"/>
+				<field id="SkuidLicenseActive" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>MODEL_LOOKUP("UserPackageLicense", "PackageLicense.NamespacePrefix", "UserId", {{Id}})</formula>
+				</field>
 			</fields>
 			<conditions>
 				<condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableon" inactive="false" name="YesSkuid" clientorserver="server"/>
@@ -105,8 +108,7 @@
 							<components>
 								<skuid__table uniqueid="sk-3_VY-695" allowColumnOrdering="true" resetPaginationOnQuery="false" title="User List" showListHeader="true" showListFooter="true" mode="readonly" model="Users" pageSize="10" showSaveCancel="false" showErrorsInline="true" rowHeightStrategy="fit" allowColumnHiding="true">
 									<fields>
-										<field uniqueid="sk-3_VY-700" id="FirstName" displayAs="" horizontalAlignment=""/>
-										<field uniqueid="sk-3_VY-703" id="LastName" displayAs="" horizontalAlignment=""/>
+										<field type="COMBO" label="Full Name" hideable="trueShowByDefault" template="{{FirstName}} {{LastName}} " redirectType="customurl" window="blank" rootUrl="/lightning/setup/ManageUsers/page?address=/{{Id}}?noredirect%3D1%26isUserEntityOverride%3D1"/>
 										<field uniqueid="fi-3_VY-1249" hideable="trueShowByDefault" id="Username"/>
 										<field uniqueid="fi-3_VY-1194" hideable="trueShowByDefault" id="ProfileId" displayAs="" horizontalAlignment=""/>
 										<field uniqueid="fi-3_VY-1221" hideable="trueShowByDefault" id="UserRoleId" displayAs="" horizontalAlignment=""/>
@@ -189,12 +191,18 @@
 												</action>
 												<action type="requeryModels" behavior="standard">
 													<models>
-														<model>User</model>
-														<model>SkuidLicenses</model>
+														<model>UserPackageLicense</model>
+														<model>Users</model>
+														<model>PackageLicense</model>
 													</models>
 												</action>
 												<action type="blockUI" message="License revoked." timeout="1000"/>
 											</actions>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Users" sourcetype="fieldvalue" field="SkuidLicenseActive" fieldtargetobjects="User" value="skuid"/>
+											</renderConditions>
+											<enableconditions/>
+											<styleVariantConditions/>
 										</action>
 									</rowActions>
 									<exportProperties useTableColumns="true" enableExportOptionOnTable="true"/>
@@ -214,19 +222,8 @@
 										<field uniqueid="fi-2yqH-1243" id="Assignee.UserType" label="Salesforce User License"/>
 										<field uniqueid="fi-2yqH-1246" id="Assignee.IsActive"/>
 									</fields>
-									<actions>
-										<action type="multi" label="Create record" icon="sk-webicon-font-awesome:plus-circle">
-											<actions>
-												<action type="createRow" model="PermissionSetAssignments" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
-											</actions>
-										</action>
-									</actions>
+									<actions/>
 									<massActions>
-										<action type="multi" label="{{$Label.Mass_Update_Selected_Rows}}" icon="sk-webicon-ink:edit-form">
-											<actions>
-												<action type="massUpdate"/>
-											</actions>
-										</action>
 										<action type="multi" label="{{$Label.Toggle_Selected_Rows_for_Deletion}}" icon="sk-webicon-ink:circle-close-outline">
 											<actions>
 												<action type="markRowsForDeletion" model="PermissionSetAssignments" affectedrows="context"/>
@@ -234,11 +231,6 @@
 										</action>
 									</massActions>
 									<rowActions>
-										<action type="multi" label="{{$Label.Edit_Row}}" icon="sk-webicon-ink:edit">
-											<actions>
-												<action type="toggleModeRow"/>
-											</actions>
-										</action>
 										<action type="multi" label="{{$Label.Flag_For_Deletion}}" icon="sk-webicon-ink:circle-close-outline">
 											<actions>
 												<action type="markRowsForDeletion" model="PermissionSetAssignments" affectedrows="context"/>
