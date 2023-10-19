@@ -108,8 +108,7 @@
 							<components>
 								<skuid__table uniqueid="sk-3_VY-695" allowColumnOrdering="true" resetPaginationOnQuery="false" title="User List" showListHeader="true" showListFooter="true" mode="readonly" model="Users" pageSize="10" showSaveCancel="false" showErrorsInline="true" rowHeightStrategy="fit" allowColumnHiding="true">
 									<fields>
-										<field uniqueid="sk-3_VY-700" id="FirstName" displayAs="" horizontalAlignment=""/>
-										<field uniqueid="sk-3_VY-703" id="LastName" displayAs="" horizontalAlignment=""/>
+										<field type="COMBO" label="Full Name" hideable="trueShowByDefault" template="{{FirstName}} {{LastName}} " redirectType="customurl" window="blank" rootUrl="/lightning/setup/ManageUsers/page?address=/{{Id}}?noredirect%3D1%26isUserEntityOverride%3D1"/>
 										<field uniqueid="fi-3_VY-1249" hideable="trueShowByDefault" id="Username"/>
 										<field uniqueid="fi-3_VY-1194" hideable="trueShowByDefault" id="ProfileId" displayAs="" horizontalAlignment=""/>
 										<field uniqueid="fi-3_VY-1221" hideable="trueShowByDefault" id="UserRoleId" displayAs="" horizontalAlignment=""/>
