@@ -26,6 +26,9 @@
 				<field id="CreatedDate"/>
 				<field id="UserType"/>
 				<field id="LastLoginDate"/>
+				<field id="SkuidLicenseActive" uionly="true" displaytype="FORMULA" length="255" ogdisplaytype="TEXT" readonly="true" returntype="TEXT">
+					<formula>MODEL_LOOKUP("UserPackageLicense", "PackageLicense.NamespacePrefix", "UserId", {{Id}})</formula>
+				</field>
 			</fields>
 			<conditions>
 				<condition type="modelmerge" value="" field="Id" operator="in" model="UserPackageLicense" enclosevalueinquotes="true" mergefield="UserId" novaluebehavior="noquery" fieldtargetobjects="User" state="filterableon" inactive="false" name="YesSkuid" clientorserver="server"/>
@@ -191,10 +194,16 @@
 													<models>
 														<model>UserPackageLicense</model>
 														<model>Users</model>
+														<model>PackageLicense</model>
 													</models>
 												</action>
 												<action type="blockUI" message="License revoked." timeout="1000"/>
 											</actions>
+											<renderConditions logictype="and">
+												<renderCondition type="fieldvalue" operator="=" enclosevalueinquotes="true" fieldmodel="Users" sourcetype="fieldvalue" field="SkuidLicenseActive" fieldtargetobjects="User" value="skuid"/>
+											</renderConditions>
+											<enableconditions/>
+											<styleVariantConditions/>
 										</action>
 									</rowActions>
 									<exportProperties useTableColumns="true" enableExportOptionOnTable="true"/>
